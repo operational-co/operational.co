@@ -1,0 +1,77 @@
+---
+import BaseLayout from "@/layouts/base.astro";
+import PageEvent from "@/components/page-event.vue";
+import Styleguide from "@operational.co/components/ui/styleguide.vue";
+import UiDivider from "@/components/ui-divider.vue"
+import PageHeader from "@/components/page-header.vue"
+import PageCta from "@/components/page-cta.vue"
+import PageFeatures from "@/components/page-features.vue"
+import PageContent from "@/components/page-content.vue";
+import PageFaqs from "@/components/page-faqs.vue";
+
+---
+
+<BaseLayout>
+
+  <PageHeader subtitle="Open source">
+
+     <div slot="title">
+      <h1>
+        Operational open source is coming soon
+      </h1>
+    </div>
+    <div slot="body">
+      <p>
+        Want to self-host Operational? You can, eventually.
+      </p>
+    </div>
+
+  </PageHeader>
+
+  <!-- <UiDivider></UiDivider>
+  <PageCta></PageCta>
+  <UiDivider></UiDivider>
+  <PageFeatures></PageFeatures> -->
+  <PageContent>
+    <p>
+      Operational is currently closed source.
+    </p>
+    <p>
+      But I'm working on the open source version. This means you will be able to self host Operational on your own servers.
+    </p>
+    <p>
+      Unfortunately this isn't as easy as flipping the private to public switch on Github.
+    </p>
+    <p>
+      I'll need to decide:
+    </p>
+    <ul>
+      <li>
+        <p>
+          License - Need something that works for all users but disallows bigger companies from leeching off us.
+        </p>
+      </li>
+      <li>
+        <p>
+          Ease of installation - I want to recreate Wordpress's famouse 5-minute install, but make it even better.
+        </p>
+      </li>
+      <li>
+        <p>
+          Ease of install - I've seen this in a lot of SaaS open source projects like Sentry, where the code is open-source but there are so many dependencies its really hard to self-host. I want to actively avoid this.
+        </p>
+      </li>
+    </ul>
+    <p>
+      Once these variables are sorted, this page will be updated with the repo's link.
+    </p>
+    <p>
+      --- Update ---
+    </p>
+    <p>
+      Operational.co will be licensed under the AGPL V3 license.
+    </p>
+  </PageContent>
+  <!-- <PageFaqs client:load></PageFaqs> -->
+
+</BaseLayout>

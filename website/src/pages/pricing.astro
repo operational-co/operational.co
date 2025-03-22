@@ -1,0 +1,39 @@
+---
+import BaseLayout from "@/layouts/base.astro";
+import PageEvent from "@/components/page-event.vue";
+import Styleguide from "@operational.co/components/ui/styleguide.vue";
+import UiDivider from "@/components/ui-divider.vue"
+import PageHeader from "@/components/page-header.vue"
+import PageCta from "@/components/page-cta.vue"
+import PageFeatures from "@/components/page-features.vue"
+import PageContent from "@/components/page-content.vue";
+import PageFaqs from "@/components/page-faqs.vue";
+import Pricing from "@operational.co/components/pricing/index.vue";
+import Constrain from "@operational.co/components/ui/constrain.vue"
+import PageFaqs from "@/components/page-faqs.vue";
+
+---
+
+<BaseLayout>
+
+  <PageHeader subtitle="Pricing">
+
+     <div slot="title">
+      <h1>
+      Track events, without breaking the bank
+      </h1>
+    </div>
+    <div slot="body">
+      <p>
+      	Track your first 10,000 events for free — no credit card required.
+      </p>
+    </div>
+
+  </PageHeader>
+  <Constrain>
+  <Pricing client:only></Pricing>
+  </Constrain>
+  <UiDivider></UiDivider>
+  <PageFaqs client:visible></PageFaqs>
+
+</BaseLayout>

@@ -1,0 +1,109 @@
+@mixin vars() {
+  // ------ COMPONENTS
+
+  --grid-gap: 10px;
+
+  --container-sm-width: 720px;
+  --container-width: 1024px;
+
+  // ------ COLORS
+
+  --hue-p: 214; //primary
+  --hue-s: 20; // secondary
+  --hue-red: 11;
+  --hue-orange: 33;
+  --hue-green: 140;
+
+  --color-font: hsl(var(--hue-s), 8%, 97%);
+  --color-font-light: hsl(var(--hue-s), 8%, 84%);
+  --color-font-lighter: hsl(var(--hue-s), 4%, 66%);
+
+  --color-translucent: hsla(0, 0%, 100%, 0.075);
+
+  --color-bg-0: hsl(var(--hue-p), 0%, 0%);
+  --color-bg-1: hsl(var(--hue-p), 5%, 8%);
+  --color-bg-2: hsl(var(--hue-p), 5%, 12%);
+  --color-bg-3: hsl(var(--hue-p), 5%, 15%);
+  --color-bg-4: hsl(var(--hue-p), 5%, 18%);
+  --color-bg-5: hsl(var(--hue-p), 5%, 21%);
+  --color-bg-6: hsl(var(--hue-p), 5%, 24%);
+
+  --color-bg-input: hsl(var(--hue-p), 10%, 94%);
+  --color-font-input: hsl(var(--hue-p), 0%, 99%);
+  --color-focus: hsl(var(--hue-p), 50%, 50%);
+  --color-focus-danger: hsl(var(--hue-red), 50%, 40%);
+
+  --color-primary: hsl(var(--hue-p), 80%, 48%);
+  --color-primary-light: hsl(var(--hue-p), 80%, 68%);
+  --color-primary-dark: hsl(var(--hue-p), 78%, 15%);
+
+  --color-warning: hsl(var(--hue-orange), 86%, 56%);
+  --color-danger: hsl(var(--hue-red), 73%, 53%);
+  --color-success: hsl(var(--hue-green), 53%, 63%);
+
+  --color-border-2: hsl(var(--hue-p), 10%, 80%);
+  --color-border-transparent: rgba(0, 0, 0, 0.05);
+
+  --color-link: hsl(var(--hue-p), 95%, 62%);
+  --color-link-hover: hsl(var(--hue-p), 90%, 668%);
+
+  // ------ TYPOGRAPHY
+
+  --font-size-xxs: 0.625rem;
+  --font-size-xs: 0.75rem;
+  --font-size-sm: 0.875rem;
+  --font-size: 1rem;
+  --font-size-md: 1.125rem;
+  --font-size-lg: 1.25rem;
+  --font-size-xl: 1.5rem;
+  --font-size-xxl: 1.75rem;
+  --font-size-xxxl: 2.75rem;
+  --font-weight: 420;
+  --font-family-heading: "Inter", system-ui;
+  --font-family: "Inter", system-ui;
+  --font-family-monospace: "Jetbrains Mono", ui-monospace, Menlo, Monaco, "Cascadia Mono", "Segoe UI Mono",
+    "Roboto Mono", "Oxygen Mono", "Ubuntu Monospace", "Source Code Pro", "Fira Mono", "Droid Sans Mono", "Courier New",
+    monospace;
+  --line-height: 1.5;
+  --font-space: 12px;
+  --font-heading-line-height: 1.3;
+
+  // ------ FORMS
+
+  --input-radius: 10px;
+
+  --breakpoint-sm: 720px;
+
+  // ------ BORDERS
+
+  --border-radius-sm: 3px;
+  --border-radius: 8px;
+  --border-radius-lg: 16px;
+  --border-radius-xl: 24px;
+  --border-radius-full: 9999px;
+
+  // ------ SIZING
+
+  --spacer-sm: 16px;
+  --spacer: 32px;
+  --spacer-lg: 48px;
+
+  --margin-xs: 2px;
+  --margin-sm: 4px;
+  --margin: 6px;
+  --margin-lg: 12px;
+
+  /* Easings */
+  --ease-out-quad: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+
+  /* Transitions */
+  --transition-time-sm: 80ms;
+  --transition-time: 120ms;
+  --transition-time-lg: 260ms;
+
+  --transition: all 90ms ease-in-out;
+
+  /* Box shadows */
+  --box-shadow-low: 0px 2px 4px rgba(0, 0, 0, 0.1);
+  --box-shadow-high: 0px 7px 32px rgba(0, 0, 0, 0.35);
+}

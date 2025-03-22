@@ -1,0 +1,38 @@
+---
+import BaseLayout from "@/layouts/base.astro";
+import PageEvent from "@/components/page-event.vue";
+import Constrain from "@operational.co/components/ui/constrain.vue"
+import PageHeader from "@/components/page-header.vue"
+
+import * as Post from '@operational.co/content/pages/pitch.mdx';
+
+const Content = Post.Content;
+const {title, description} = Post.frontmatter;
+---
+
+<BaseLayout title={title} description={description}>
+  <PageHeader subtitle="Pitch" size="sm">
+
+     <div slot="title">
+      <h1>
+      Introducing Operational Event logger
+      </h1>
+    </div>
+    <div slot="body">
+      
+    </div>
+
+  </PageHeader>
+
+  <Constrain size="sm">
+    <div class="c-page">
+      <Content />
+    </div>
+  </Constrain>
+</BaseLayout>
+
+<style is:global>
+  .c-card {
+    margin-bottom:1rem;
+  }
+</style>

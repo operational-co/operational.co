@@ -1,0 +1,79 @@
+{
+	"name": "api.operational.co",
+	"private": false,
+	"version": "0.0.1",
+	"type": "module",
+	"scripts": {
+		"test": "nodemon test.js",
+		"dev": "nodemon index.js",
+		"ch": "/Users/shash/Documents/projects/clickhouse client --host 188.245.100.130 --port 9000 --user default --password jiapij443",
+		"build": "npm install; npx prisma generate",
+		"start": "npx prisma generate; node index.js",
+		"ssh": "ssh -i ~/.ssh/ops_server root@49.13.149.99 -p 9000",
+		"ssh-db": "ssh -i ~/.ssh/ops_server root@116.203.194.222 -p 9000",
+		"ssh-clickhouse": "ssh -i ~/.ssh/ops_server root@188.245.100.130 -p 8999"
+	},
+	"engines": {
+		"node": ">=18 <=22"
+	},
+	"nodemon": {
+		"watch": [
+			"components",
+			"lib",
+			"models",
+			"services"
+		],
+		"ext": "js,json"
+	},
+	"dependencies": {
+		"@aws-sdk/client-s3": "3.596.0",
+		"@clickhouse/client": "1.4.0",
+		"@faker-js/faker": "8.4.1",
+		"@logsnag/node": "1.0.1",
+		"@operational.co/components": "*",
+		"@operational.co/lib": "*",
+		"@operational.co/sdk": "*",
+		"@operational.co/styles": "*",
+		"@prisma/client": "6.4.1",
+		"axios": "1.7.2",
+		"bcrypt": "5.1.1",
+		"cors": "2.8.5",
+		"croner": "8.0.0",
+		"deep-email-validator": "0.1.21",
+		"diskusage": "1.2.0",
+		"dotenv": "16.3.1",
+		"eta": "3.2.0",
+		"express": "5.0.1",
+		"fastest-validator": "1.19.0",
+		"imagemin": "9.0.0",
+		"imagemin-pngquant": "10.0.0",
+		"jsonwebtoken": "9.0.2",
+		"kill-port": "2.0.1",
+		"lowdb": "7.0.1",
+		"mjml": "4.14.1",
+		"moment": "2.30.1",
+		"multer": "1.4.5-lts.1",
+		"nanoid": "5.0.7",
+		"node-cache": "5.1.2",
+		"nodemon": "3.0.2",
+		"pdfmake": "0.2.10",
+		"perfect-express-sanitizer": "1.0.13",
+		"pino": "8.16.2",
+		"pino-http": "8.5.1",
+		"pino-pretty": "10.2.3",
+		"prisma": "6.4.1",
+		"resend": "3.3.0",
+		"sharp": "0.33.5",
+		"sql-formatter": "14.0.0",
+		"stripe": "15.10.0",
+		"systeminformation": "5.25.11",
+		"uuid": "10.0.0",
+		"web-push": "3.6.6"
+	},
+	"imports": {
+		"#services/*": "./services/*",
+		"#lib/*": "./lib/*",
+		"#models/*": "./models/*",
+		"#components/*": "./components/*"
+	}
+}

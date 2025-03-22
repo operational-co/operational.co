@@ -1,0 +1,16 @@
+{
+  "name": "writings.operational.co",
+  "private": false,
+  "scripts": {
+    "start": "directus start",
+    "build": "npx directus bootstrap",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "schema": "directus schema snapshot ./schema.yaml --format yaml",
+    "ssh": "ssh -i ~/.ssh/ops_server root@49.13.149.99 -p 9000"
+  },
+  "dependencies": {
+    "directus": "10.13.4",
+    "mysql": "2.18.1",
+    "sqlite3": "5.1.6"
+  }
+}

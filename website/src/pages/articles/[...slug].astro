@@ -1,0 +1,60 @@
+---
+import helper from "@/lib/helper.js";
+import ArticleHeader from "@/components/article-header.vue";
+import ArticleSlug from "@/components/article-slug.vue";
+import BaseLayout from "@/layouts/base.astro";
+import getJsonld from "@/lib/get-jsonld.js";
+
+export async function getStaticPaths() {
+	//const posts = await getCollection('blog');
+
+	let posts = await helper.common();
+
+	posts = posts.filter((post) => {
+		if(!post) {
+			return false;
+		}
+		if(!post.slug) {
+			return false;
+		}
+		return true;
+	});
+	
+	return posts.map((p) => ({
+		params: { slug: p.slug },
+		props: p,
+	}));
+}
+
+const posts=  await helper.common();
+
+const post = Astro.props;
+
+let nextPost = null;
+
+for(let i = 0; i < posts.length; i++) {
+	let postId = posts[i].id;
+	if(postId === post.id) {
+		if(posts[i + 1]) {
+			nextPost = posts[i + 1];
+		} else {
+			nextPost = posts[0];
+		}
+		break;
+	}
+}
+
+let seoTitle = `${post.title} - Operational`;
+
+const jsonLd = getJsonld(post);
+
+---
+
+
+
+
+<BaseLayout jsonLd={jsonLd} title={seoTitle} description={post.subtitle}>
+	<ArticleHeader post={post}></ArticleHeader>
+	<ArticleSlug posts={posts} post={post} nextPost={nextPost}>
+	</ArticleSlug>
+</BaseLayout>

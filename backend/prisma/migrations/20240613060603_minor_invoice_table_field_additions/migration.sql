@@ -1,0 +1,4 @@
+-- AlterTable
+ALTER TABLE `Invoice` ADD COLUMN `periodEnd` DATETIME(3) NULL,
+    ADD COLUMN `periodStart` DATETIME(3) NULL,
+    ADD COLUMN `status` ENUM('PENDING', 'PAID') NOT NULL DEFAULT 'PENDING';

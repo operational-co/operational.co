@@ -1,0 +1,17 @@
+---
+
+import ScreenshotLayout from "@/layouts/screenshot.astro";
+
+import Spacer from "@/components/ui/spacer.vue";
+import ScreenshotUsecase from "@/components/screenshot-usecase.vue";
+
+import helper from "@/lib/helper.js";
+---
+
+<ScreenshotLayout>
+	<ScreenshotUsecase client:load></ScreenshotUsecase>
+</BaseLayout>
+
+<style lang="scss">
+	
+</style>

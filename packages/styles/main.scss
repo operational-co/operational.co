@@ -1,0 +1,199 @@
+@import "vars";
+@import "reset";
+@import "type";
+@import "fonts";
+@import "grid";
+@import "form";
+@import "globals";
+@import "highlight";
+
+@import "nprogress";
+
+:root {
+  interpolate-size: allow-keywords;
+}
+
+body {
+  @include vars();
+
+  font-family: var(--font-family);
+  font-size: var(--font-size);
+  font-weight: var(--font-weight);
+  line-height: var(--line-height);
+  color: var(--color-font);
+  background-color: var(--color-bg-1);
+
+  @media screen and (max-width: 576px) {
+    --input-radius: 6px;
+
+    --font-size-xxxl: 2.25rem;
+  }
+}
+
+.c-switch {
+  width: 40px;
+  height: 20px;
+
+  &__toggle {
+    left: 2px;
+    bottom: 2px;
+    width: 16px;
+    height: 16px;
+  }
+
+  &__slider {
+    background-color: var(--color-bg-3);
+  }
+
+  input:checked + .c-switch__slider {
+    background-color: var(--color-primary);
+
+    .c-switch__toggle {
+      transform: translateX(20px);
+    }
+  }
+}
+
+/**
+ * Helpers
+ */
+.color-success {
+  color: var(--color-success);
+}
+.color-warning {
+  color: var(--color-warning);
+}
+.color-danger {
+  color: var(--color-danger);
+}
+.text-center {
+  text-align: center;
+}
+
+@property --c-0 {
+  syntax: "<color>";
+  inherits: false;
+  initial-value: hsla(138.97058823529412, 84%, 39%, 0.08);
+}
+
+@property --y-0 {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 93%;
+}
+
+@property --s-start-0 {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 3.1665611146295123%;
+}
+
+@property --s-end-0 {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 67%;
+}
+
+@property --x-0 {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 15%;
+}
+
+@property --c-1 {
+  syntax: "<color>";
+  inherits: false;
+  initial-value: hsla(150.8823529411765, 83%, 25%, 0.85);
+}
+
+@property --x-1 {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 49%;
+}
+
+@property --y-1 {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 97%;
+}
+
+@property --s-start-1 {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 0%;
+}
+
+@property --s-end-1 {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 81%;
+}
+
+@property --c-2 {
+  syntax: "<color>";
+  inherits: false;
+  initial-value: hsla(60.882352941176485, 84%, 37%, 0.44);
+}
+
+@property --x-2 {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 92%;
+}
+
+@property --y-2 {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 67%;
+}
+
+@property --s-start-2 {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 0%;
+}
+
+@property --s-end-2 {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 81%;
+}
+
+@keyframes hero-gradient-animation {
+  0% {
+    --c-0: hsla(138.97058823529412, 84%, 39%, 0.08);
+    --y-0: 93%;
+    --s-start-0: 3.1665611146295123%;
+    --s-end-0: 67%;
+    --x-0: 15%;
+    --c-1: hsla(150.8823529411765, 83%, 25%, 0.85);
+    --x-1: 49%;
+    --y-1: 97%;
+    --s-start-1: 0%;
+    --s-end-1: 81%;
+    --c-2: hsla(60.882352941176485, 84%, 37%, 0.44);
+    --x-2: 92%;
+    --y-2: 67%;
+    --s-start-2: 0%;
+    --s-end-2: 81%;
+  }
+
+  100% {
+    --c-0: hsla(173.38235294117646, 79%, 44%, 0.73);
+    --y-0: 2%;
+    --s-start-0: 3.1665611146295123%;
+    --s-end-0: 148.69622945755324%;
+    --x-0: 65%;
+    --c-1: hsla(207.7941176470588, 81%, 36%, 1);
+    --x-1: 73%;
+    --y-1: 2%;
+    --s-start-1: 14;
+    --s-end-1: 88;
+    --c-2: hsla(78.08823529411772, 89%, 34%, 0.39);
+    --x-2: 98%;
+    --y-2: 44%;
+    --s-start-2: 14;
+    --s-end-2: 88;
+  }
+}

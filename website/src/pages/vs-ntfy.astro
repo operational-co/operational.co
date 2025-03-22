@@ -1,0 +1,34 @@
+---
+import BaseHead from '@/components/base-head.astro';
+import Header from '@/components/app/header.vue';
+import BaseLayout from "@/layouts/base.astro";
+import PageEvent from "@/components/page-event.vue";
+import Constrain from "@operational.co/components/ui/constrain.vue"
+
+import * as Post from '@operational.co/content/pages/vs-ntfy.mdx';
+import PageHeader from "@/components/page-header.vue"
+
+const {title, description} = Post.frontmatter;
+
+const Content = Post.Content;
+---
+
+<BaseLayout title={title} description={description}>
+  <PageHeader subtitle="ntfy.sh alternative">
+
+     <div slot="title">
+      <h1>
+      Operational vs ntfy.sh
+      </h1>
+    </div>
+    <div slot="body">
+      
+    </div>
+
+  </PageHeader>
+  <Constrain>
+    <div class="c-page">
+      <Content />
+    </div>
+  </Constrain>
+</BaseLayout>

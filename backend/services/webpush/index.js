@@ -1,0 +1,122 @@
+import webpush from "web-push";
+import UserModel from "#components/user/model.js";
+import WorkspaceModel from "#components/workspace/model.js";
+import prisma from "#lib/prisma.js";
+import config from "#lib/config.js";
+
+class Webpush {
+	push;
+
+	constructor() {}
+
+	async setup() {
+		webpush.setVapidDetails(
+			config.vapid.EMAIL,
+			config.vapid.PUBLIC_KEY,
+			config.vapid.PRIVATE_KEY,
+		);
+
+		this.push = webpush;
+	}
+
+	getUniqueSubscriptions(subscriptions) {
+		const seenAuths = new Set();
+		return subscriptions.filter((sub) => {
+			if (!sub.keys || !sub.keys.auth) return false; // Skip if no auth key
+			if (seenAuths.has(sub.keys.auth)) return false; // Skip duplicates
+			seenAuths.add(sub.keys.auth);
+			return true; // Keep unique items
+		});
+	}
+
+	async sendEventNotification(event) {
+		//console.log(event);
+		let notifiers = event._notifiers || [];
+
+		if (notifiers.length === 0) {
+			return;
+		}
+
+		// this can be optimized by caching
+		const sql = `
+			SELECT 
+    wu.userId,
+    JSON_ARRAYAGG(p.pushSubscription) AS pushSubscriptions,
+    wu.notify
+FROM WorkspaceUser wu
+JOIN User u ON wu.userId = u.id
+JOIN Push p ON u.id = p.userId
+WHERE wu.userId IN (${notifiers.join(",")})
+GROUP BY wu.userId, wu.notify;
+		`;
+
+		const users = await prisma.$queryRawUnsafe(sql).catch((err) => {
+			console.log(err);
+
+			return;
+		});
+
+		if (!users) {
+			return;
+		}
+
+		for (let i = 0; i < users.length; i++) {
+			let user = users[i];
+
+			if (!user.pushSubscriptions) {
+				continue;
+			}
+
+			if (!user.notify) {
+				continue;
+			}
+
+			if (user.notify == 0) {
+				continue;
+			}
+
+			user.pushSubscriptions = this.getUniqueSubscriptions(
+				user.pushSubscriptions,
+			);
+
+			let message = {
+				id: event._id,
+				message: event.searchable,
+			};
+
+			message = JSON.stringify(message);
+
+			for (let i = 0; i < user.pushSubscriptions.length; i++) {
+				const push = user.pushSubscriptions[i];
+
+				await this.sendNotification(push.endpoint, push.keys, message).catch(
+					(err) => {},
+				);
+			}
+		}
+	}
+
+	async sendNotification(endpoint, keys, message = "") {
+		const pushSubscription = {
+			endpoint,
+			keys,
+		};
+
+		if (typeof message !== "string") {
+			message = JSON.stringify(message);
+		}
+
+		const options = {
+			TTL: 3600,
+		};
+
+		const res = await this.push
+			.sendNotification(pushSubscription, message, options)
+			.catch((err) => {
+				console.log(err);
+				throw err;
+			});
+	}
+}
+
+export default new Webpush();

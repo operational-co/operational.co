@@ -1,0 +1,40 @@
+---
+import BaseLayout from "@/layouts/base.astro";
+import Constrain from "@operational.co/components/ui/constrain.vue"
+import Toc from "@operational.co/components/ui/toc.vue";
+import headings from "@/lib/get-headings.js";
+import PageApi from "@/components/page-api.vue";
+---
+
+<BaseLayout>
+  <PageApi client:load pathname={Astro.url.pathname} headings={headings}>
+    <div class="c-page">
+      <h1>
+        Welcome
+      </h1>
+
+      <h3>
+        API Documentation
+      </h3>
+      <p>
+        Learn how to integrate Operational in your product.
+      </p>
+      <a href="/api/introduction" class="btn btn-primary btn-lg">
+        Get started with event tracking.
+      </a>
+
+      <br />
+      <br />
+      
+      <h3>
+        Further reading
+      </h3>
+      <p>
+        Read the owner's manual to make the most out of event tracking. 
+      </p>
+      <a href="/manual/introduction" class="btn btn-lg">
+        View Owner's manual
+      </a>
+    </div>
+  </PageApi>
+</BaseLayout>

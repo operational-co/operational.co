@@ -1,0 +1,19 @@
+{
+  "name": "@operational.co/sdk",
+  "version": "0.2.7",
+  "main": "build/index.umd.js",
+  "module": "build/index.es.js",
+  "private": false,
+  "scripts": {
+    "build": "vite build"
+  },
+  "dependencies": {
+    "axios": "1.7.2"
+  },
+  "devDependencies": {
+    "vite": "5.4.2"
+  },
+  "author": "Shashwat Amin",
+  "license": "MIT",
+  "homepage": "https://operational.co"
+}

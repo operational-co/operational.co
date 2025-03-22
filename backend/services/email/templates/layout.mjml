@@ -1,0 +1,37 @@
+<mjml>
+  <mj-head>
+    <mj-attributes>
+      <mj-text font-size="16px" font-weight="400" line-height="1.5" color="#232323" letter-spacing="0.5px" />
+      <mj-section background-color="#fff" />
+    </mj-attributes>
+    <mj-style inline="inline">
+      * { font-family : -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Oxygen,Ubuntu,Cantarell,'Open
+      Sans','Helvetica Neue',sans-serif!important; } .mj-wrapper { border-collapse:none; } .mj-wrapper { border:#ddd
+      solid 1px; border-radius:12px; } .mj-code { font-family:'JetBrain Mono', monospace; border:#efefef solid 1px;
+      border-radius:10px; padding:15px 5px 0px 5px; }
+    </mj-style>
+  </mj-head>
+
+  <mj-body background-color="#fff">
+    <mj-section padding-top="60px" padding-bottom="60px">
+      <mj-column css-class="mj-wrapper" padding="40px 20px">
+        <mj-text font-size="14px" font-weight="600" padding-bottom="0">Operational</mj-text>
+        <mj-image src="https://app.swipekit.app/favicon.ico" width="40px" align="left" border-radius="5px" />
+        <mj-spacer height="40px" />
+        <mj-text> {{~ it.body }} </mj-text>
+        <mj-text>
+          <p>
+            Regards,<br />
+            Shash
+          </p>
+        </mj-text>
+        <mj-divider border-width="1px" border-style="solid" border-color="#ddd" />
+        <mj-text font-size="14px" font-weight="400" color="#565656">
+          <a href="https://operational.co" target="_blank">Operational</a><br />
+          Shash7<br />
+          241 City road, Melbourne, AU
+        </mj-text>
+      </mj-column>
+    </mj-section>
+  </mj-body>
+</mjml>

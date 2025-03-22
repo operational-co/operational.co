@@ -1,0 +1,639 @@
+<template>
+	<div :class="['c-app', { test: testMode === true }]" v-if="appInit">
+		<!-- <Glow></Glow> -->
+
+		<DemoBlurb
+			:active="showDemoBlurb"
+			@onClose="showDemoBlurb = false"
+		></DemoBlurb>
+
+		<!-- <Blurb v-if="!isPaying"></Blurb> -->
+
+		<!-- <TestMode></TestMode> -->
+
+		<Header v-if="isAuth"></Header>
+
+		<!-- <Sidebar v-if="isAuth"></Sidebar> -->
+
+		<div class="c-app__body">
+			<router-view v-if="isAuth" v-slot="{ Component }">
+				<transition name="fade-slide" mode="out-in">
+					<component :is="Component"></component>
+				</transition>
+			</router-view>
+		</div>
+
+		<ModalsContainer></ModalsContainer>
+		<ModalSetup :active="showSetup"></ModalSetup>
+		<ModalLogin :active="showLogin"></ModalLogin>
+		<ModalOnboarding :active="showOnboarding"></ModalOnboarding>
+		<ModalDocs :active="showDocs"></ModalDocs>
+		<ModalPermission
+			:active="showPermissionModal"
+			@onClose="$store.app.setPermissionModal(false)"
+		></ModalPermission>
+		<ModalPwa
+			:active="showPwaModal"
+			@onClose="$store.app.setPwaModal(false)"
+		></ModalPwa>
+		<ModalActivation
+			:active="showActivation"
+			@onClose="showActivation = false"
+		></ModalActivation>
+		<ModalSwitchWorkspace
+			:active="showSwitchWorkspace"
+			@onClose="showActivation = false"
+		></ModalSwitchWorkspace>
+		<ModalCreateWorkspace
+			:active="showCreateWorkspace"
+			@onClose="$store.app.setCreateWorkspace(false)"
+		></ModalCreateWorkspace>
+		<ModalPaymentStarted
+			:active="showPaymentStarted"
+			@onClose="showPaymentStarted = false"
+		></ModalPaymentStarted>
+		<ModalDeactivated
+			:active="showDeactivated"
+			@onClose="showDeactivated = false"
+		></ModalDeactivated>
+		<Message></Message>
+	</div>
+</template>
+
+<script>
+import { ModalsContainer } from "vue-final-modal";
+import Glow from "@/components/app/glow.vue";
+import Header from "@/components/app/header.vue";
+import Sidebar from "@/components/sidebar/index.vue";
+import ModalSetup from "@/components/app/modal-setup.vue";
+import ModalLogin from "@/components/app/modal-login.vue";
+import ModalDocs from "@/components/app/modal-docs.vue";
+import ModalOnboarding from "@/components/onboarding/modal-onboarding.vue";
+import ModalPermission from "@/components/app/modal-permission.vue";
+import ModalPwa from "@/components/app/modal-pwa.vue";
+import ModalActivation from "@/components/app/modal-activation.vue";
+import ModalSwitchWorkspace from "@/components/app/modal-switch-workspace.vue";
+import ModalCreateWorkspace from "@/components/app/modal-create-workspace.vue";
+import ModalPaymentStarted from "@/components/app/modal-payment-started.vue";
+import ModalDeactivated from "@/components/app/modal-deactivated.vue";
+import Message from "@/components/message/index.vue";
+import TestMode from "@/components/app/test-mode.vue";
+import Blurb from "@/components/app/blurb.vue";
+import DemoBlurb from "@/components/app/demo-blurb.vue";
+
+import Nprogress from "@/lib/nprogress.js";
+
+import { setTestMode } from "@/lib/http.js";
+import store from "store";
+
+import UAParser from "@/lib/ua-parser.js";
+
+import posthog from "posthog-js";
+
+/**
+ * 
+console.log(import.meta.env.VITE_SELFHOSTED);
+*/
+
+export default {
+	components: {
+		Glow,
+		Header,
+		Sidebar,
+		ModalsContainer,
+		ModalSetup,
+		ModalLogin,
+		ModalDocs,
+		ModalOnboarding,
+		ModalPermission,
+		ModalOnboarding,
+		ModalActivation,
+		ModalSwitchWorkspace,
+		ModalCreateWorkspace,
+		ModalPaymentStarted,
+		ModalDeactivated,
+		ModalPwa,
+		Message,
+		TestMode,
+		Blurb,
+		DemoBlurb,
+	},
+
+	data: function () {
+		return {
+			nprogress: null,
+			displayMode: "browser tab",
+			showActivation: false,
+			showPaymentStarted: false,
+			showDeactivated: false,
+			showDemoBlurb: false,
+		};
+	},
+
+	watch: {
+		appInit: function () {
+			// Basically headless login worked
+			if (this.isAuth) {
+				this.afterLogin();
+			}
+		},
+		isAuth: function () {
+			if (this.appInit && this.isAuth) {
+				this.afterLogin();
+			}
+			if (this.appInit && !this.isAuth) {
+				this.afterLogout();
+			}
+		},
+		loading: function () {
+			if (this.loading) {
+				this.nprogress.start();
+			} else {
+				this.nprogress.done();
+			}
+		},
+		testMode: {
+			handler: function () {
+				setTestMode(this.testMode);
+			},
+			immediate: true,
+		},
+		isDemo: function () {
+			if (this.isDemo) {
+				this.$nextTick(() => {
+					this.showDemoBlurb = true;
+				});
+			}
+		},
+	},
+
+	computed: {
+		isSelfHosted: function () {
+			return this.$store.app.isSelfHosted;
+		},
+		isPaying() {
+			if (!this.workspace) {
+				return null;
+			}
+			if (
+				this.workspace.status !== "TRIAL" &&
+				this.workspace.paymentStartedAt
+			) {
+				return true;
+			}
+
+			return false;
+		},
+		user: function () {
+			return this.$store.user.resource;
+		},
+		workspace: function () {
+			return this.$store.workspace.resource;
+		},
+		showPermissionModal: function () {
+			return false; // only temporarily
+			return this.$store.app.permissionModal;
+		},
+		showPwaModal: function () {
+			return this.$store.app.pwaModal;
+		},
+		showSwitchWorkspace: function () {
+			return this.$store.app.switchWorkspace;
+		},
+		showCreateWorkspace: function () {
+			return this.$store.app.createWorkspace;
+		},
+		testMode: function () {
+			return this.$store.app.testMode;
+		},
+		workspace: function () {
+			return this.$store.workspace.resource;
+		},
+		showOnboarding: function () {
+			return this.$store.app.onboarding;
+		},
+		showDocs: function () {
+			return this.$store.app.docs;
+		},
+		appInit: function () {
+			return this.$store.app.appInit;
+		},
+		isAuth: function () {
+			return this.$store.user.isAuth;
+		},
+		showSetup: function () {
+			if (!this.appInit) {
+				return false;
+			}
+
+			if (!this.isAuth && this.isSelfHosted) {
+				return true;
+			}
+
+			return false;
+		},
+		showLogin: function () {
+			if (!this.appInit) {
+				return false;
+			}
+
+			if (!this.isAuth && !this.isSelfHosted) {
+				return true;
+			}
+
+			return false;
+		},
+		loading: function () {
+			return this.$store.app.loading;
+		},
+		isDemo: function () {
+			return this.$store.workspace.isDemo;
+		},
+	},
+
+	methods: {
+		async init() {
+			this.$store.app.setLoading(true);
+
+			await this.$store.app.init();
+
+			this.$store.app.setLoading(false);
+		},
+		async afterLogout() {
+			if (typeof $crisp !== "undefined") {
+				$crisp.push(["do", "chat:hide"]);
+			}
+
+			// Also redirect to home
+			this.$router.push("/");
+
+			if ("serviceWorker" in navigator && "PushManager" in window) {
+				const registration = await navigator.serviceWorker.ready;
+				const subscription = await registration.pushManager.getSubscription();
+
+				if (subscription) {
+					await subscription.unsubscribe();
+					await this.$store.app.unsubscribePush(subscription);
+					console.log("User unsubscribed from push notifications");
+					// Optionally, send a request to your server to delete the subscription from your database
+				}
+			}
+		},
+		async afterLogin() {
+			console.log(typeof $crisp !== "undefined");
+			// activate crisp, whether afterlogin or aftersignup, doesn't matter
+			if (typeof $crisp !== "undefined") {
+				$crisp.push(["do", "chat:show"]);
+			}
+
+			if (!this.user.activated || !this.user.onboarded) {
+				this.afterSignup();
+				return;
+			}
+
+			this.registerServiceWorker();
+
+			let ask_pwa = store.get("ask_pwa");
+			let ask_permission = store.get("ask_permission");
+
+			const parser = new UAParser(navigator.userAgent);
+
+			const data = parser.getResult();
+			let width = window.screen.width;
+
+			// If on mobile and on iOS
+			if (width < 600 && data.os.name === "iOS") {
+				// If not on pwa mode, ask user to set up pwa mode
+				if (this.displayMode !== "standalone") {
+					// ask for pwa mode modal
+					//this.$store.app.setPwaModal(true);
+					return;
+				}
+
+				// If already on pwa mode but push notifications aren't enabled
+				if (
+					this.displayMode === "standalone" &&
+					!ask_permission &&
+					Notification.permission !== "granted"
+				) {
+					// ask for push notification permission modal
+					this.$store.app.setPermissionModal(true);
+					return;
+				}
+			}
+
+			// If presumably on desktop
+			if (width >= 600) {
+				// If  push notifications aren't enabled
+				if (!ask_permission && Notification.permission !== "granted") {
+					// ask for push notification permission modal
+					this.$store.app.setPermissionModal(true);
+					return;
+				}
+			}
+		},
+		async afterSignup() {
+			this.$store.app.startOnboarding();
+		},
+		onVisibilityChange: function () {
+			if (document.visibilityState === "visible") {
+				//this.$store.app.sendNotification(`Document visible!`);
+			}
+		},
+		checkActivationCode: function () {
+			// Don't do this if user is logged in and has already been activated
+			if (this.user && this.user.activated) {
+				return;
+			}
+			// If user hasn't been onboarded, the onboarding process will take care of this
+			if (this.user && !this.user.onboarded) {
+				return;
+			}
+			let route = this.$route;
+
+			if (!route.query) {
+				return;
+			}
+
+			if (!route.query.code) {
+				return;
+			}
+
+			let code = route.query.code;
+
+			this.showActivation = true;
+		},
+		checkPaymentStarted: function () {
+			let route = this.$route;
+
+			if (!route.query) {
+				return;
+			}
+
+			if (!route.query.confirm || !route.query.setup_intent) {
+				return;
+			}
+
+			this.showPaymentStarted = true;
+		},
+		checkDeactivation: function () {
+			if (this.workspace && this.workspace.status === "DEACTIVATED") {
+				this.showDeactivated = true;
+			}
+		},
+		checkDemoUser: function () {
+			let route = this.$route;
+
+			if (!route.query) {
+				return;
+			}
+
+			if (!route.query.signinas) {
+				return;
+			}
+
+			this.$store.app.sendNotification(`Hang on.. activating demo!`);
+
+			this.$store.user.attemptDemoLogin(route.query.signinas);
+		},
+		toggleDocs: function () {
+			if (this.showDocs) {
+				this.$store.app.hideDocs();
+			} else {
+				this.$store.app.showDocs();
+			}
+		},
+		handleKeyDown(event) {
+			// Check if the pressed key is the backtick key (`` ` ``)
+			if (event.key === "`") {
+				this.toggleDocs();
+			}
+		},
+		async registerServiceWorker() {
+			// register serviceworker
+
+			if (!("serviceWorker" in navigator)) {
+				return;
+			}
+
+			this.$store.app.registration = await navigator.serviceWorker
+				.register("/service-worker.js")
+				.catch((err) => {
+					this.$store.app.sendNotification(
+						`Failed to setup service worker. Push notifications won't work.`,
+					);
+					console.log(err);
+				});
+
+			//console.log(this.$store.app.registration);
+
+			if (!this.$store.app.registration) {
+				return;
+			}
+
+			const applicationServerKey = import.meta.env.VITE_PUSH_SERVER_KEY;
+
+			let subscription = await this.$store.app.registration.pushManager
+				.subscribe({
+					userVisibleOnly: true,
+					applicationServerKey,
+				})
+				.catch((err) => {
+					//this.$store.app.sendNotification(`ERROR 2 ${err}`);
+					console.log(err);
+					//this.$store.app.setPermissionModal(true);
+				});
+
+			if (!subscription) {
+				return;
+			}
+
+			//this.$store.app.sendNotification("SUBSCRIBED");
+
+			this.$store.app.subscribePush(subscription);
+		},
+		onDomContentLoaded: function () {
+			let displayMode = "browser tab";
+			if (window.matchMedia("(display-mode: standalone)").matches) {
+				displayMode = "standalone";
+			}
+			if ("serviceWorker" in navigator && navigator.serviceWorker.controller) {
+				this.$store.app.isPwa = true;
+			}
+			this.$store.app.setDisplayMode(displayMode);
+			this.displayMode = displayMode;
+
+			console.log(`DISPLAY MODE: ${displayMode}`);
+		},
+		onMessage: function (e) {
+			//console.log(`Message receivedzz`);
+			//console.log(e);
+		},
+		onOnline: function () {
+			this.$router.push("/");
+			this.$store.app.setOffline(false);
+		},
+		onOffline: function () {
+			this.$router.push("/offline");
+			this.$store.app.setOffline(true);
+		},
+	},
+
+	created: function () {
+		const store = this.$store;
+
+		this.$watch(
+			() => store.app.notification,
+			(newValue, oldValue) => {
+				this.myStateProperty = newValue; // Update the component's data property
+				// You can perform any actions you want with the new and old values here
+			},
+		);
+	},
+
+	mounted: function () {
+		if (typeof $crisp !== "undefined") {
+			//$crisp.push(["do", "chat:hide"]);
+		}
+
+		const posthogKey = import.meta.env.VITE_POSTHOG_KEY;
+
+		if (posthogKey) {
+			posthog.init(posthogKey, {
+				api_host: "https://us.i.posthog.com",
+				person_profiles: "identified_only", // or 'always' to create profiles for anonymous users as well
+			});
+		}
+
+		this.init().then(() => {
+			setTimeout(() => {
+				this.checkActivationCode();
+				this.checkPaymentStarted();
+				this.checkDeactivation();
+				this.checkDemoUser();
+			}, 60);
+		});
+
+		if (!this.nprogress) {
+			this.nprogress = new Nprogress();
+			this.nprogress.configure({ showSpinner: false });
+		}
+
+		window.addEventListener("message", this.onMessage);
+		window.document.addEventListener(
+			"visibilitychange",
+			this.onVisibilityChange,
+		);
+		window.addEventListener("DOMContentLoaded", this.onDomContentLoaded);
+		window.addEventListener("keydown", this.handleKeyDown);
+		window.addEventListener("online", this.onOnline);
+		window.addEventListener("offline", this.onOffline);
+	},
+
+	beforeDestroy: function () {
+		window.removeEventListener("message", this.onMessage);
+		window.document.removeEventListener(
+			"visibilitychange",
+			this.onVisibilityChange,
+		);
+		window.window.removeEventListener(
+			"DOMContentLoaded",
+			this.onDomContentLoaded,
+		);
+		window.removeEventListener("keydown", this.handleKeyDown);
+		window.removeEventListener("online", this.onOnline);
+		window.removeEventListener("offline", this.onOffline);
+	},
+};
+</script>
+
+<style lang="scss">
+@import "@operational.co/styles/main";
+
+// @font-face {
+// 	font-family: "iawriter";
+// 	src: url("/fonts/iawriter-quattro.woff2");
+// 	font-weight: 400 700;
+// 	font-style: normal;
+// 	font-display: swap;
+// }
+
+html {
+	height: 100%;
+}
+
+body {
+	overflow-x: hidden;
+	height: 100%;
+
+	#app {
+		height: 100%;
+	}
+}
+
+.c-app {
+	height: 100%;
+
+	.fade-slide-enter-active,
+	.fade-slide-leave-active {
+		transition:
+			opacity 90ms linear,
+			transform 90ms cubic-bezier(0.55, 0.085, 0.68, 0.53);
+	}
+
+	.fade-slide-enter {
+		opacity: 0;
+	}
+	.fade-slide-leave-to {
+		opacity: 0;
+	}
+	.fade-slide-enter-to {
+		opacity: 1;
+	}
+	.fade-slide-enter-from {
+		opacity: 0;
+	}
+	.fade-slide-leave {
+		opacity: 1;
+	}
+	.fade-slide-leave-to {
+		transform: translateX(4px);
+	}
+	.fade-slide-enter-from,
+	.fade-slide-leave {
+		transform: translateX(0);
+	}
+
+	&__body {
+		height: calc(100% - 68px);
+		position: relative;
+		isolation: isolate;
+		overflow-y: auto;
+
+		&::-webkit-scrollbar {
+			width: 10px;
+		}
+
+		&::-webkit-scrollbar-thumb {
+			background: hsl(var(--hue-p), 6%, 18%);
+			border-radius: 0;
+		}
+
+		&::-webkit-scrollbar-thumb:hover {
+			background: hsl(var(--hue-p), 6%, 18%);
+		}
+
+		&::-webkit-scrollbar-track {
+			background: transparent;
+		}
+	}
+
+	@media screen and (max-width: 576px) {
+		&__body {
+			padding-bottom: calc(64px + var(--margin-lg));
+		}
+	}
+}
+
+@import "vue-final-modal/style.css";
+</style>

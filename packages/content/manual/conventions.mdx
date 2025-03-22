@@ -1,0 +1,96 @@
+import Item from "@operational.co/components/card/index.vue";
+import CodeWrap from "@operational.co/components/code/wrap.vue";
+import Code from "@operational.co/components/code/index.vue";
+
+# Chapter 2. Conventions
+
+Ops is all about customization. No two businesses are same, and hence ops comes many options.
+However, in the beginning, its best to stick to some conventions.
+
+1. **Always use descriptive avatars.**
+
+If no avatar is passed, a tilde(~) symbol will show up.
+
+<Item
+  item={{
+    name: "server started",
+    createdAt: "2021-03-03",
+  }}
+></Item>
+
+Instead, use descriptive avatars. Use a robot for server side stuff, normal emojis to convey user actions and emotions, etc.
+
+<Item
+  item={{
+    name: "server started",
+    createdAt: "2021-03-03",
+    avatar: "🤖",
+  }}
+></Item>
+
+<Item
+  item={{
+    name: "User signed up",
+    createdAt: "2021-03-03",
+    avatar: "😀",
+  }}
+></Item>
+<Item
+  item={{
+    name: "user subscribed",
+    createdAt: "2021-03-03",
+    avatar: "🤑",
+  }}
+></Item>
+<Item
+  item={{
+    name: "user unsubscribed",
+    createdAt: "2021-03-03",
+    avatar: "😢",
+  }}
+></Item>
+
+2. **Make sure your event names don't have user properties**
+
+This is wrong:
+
+<Item
+  item={{
+    name: "Shash signed up",
+    createdAt: "2021-03-03",
+    avatar: "😀",
+  }}
+></Item>
+
+Do this instead:
+
+<Item
+  item={{
+    name: "user signed up",
+    createdAt: "2021-03-03",
+    avatar: "😀",
+    type: "rows",
+    content: [
+      {
+        label: "Name",
+        content: "Shash",
+      },
+    ],
+  }}
+>
+  {" "}
+</Item>
+
+Event names should be specific. If you add a user property or some other dynamic text inside the event name, it will become a lot harder to search for events.
+
+Also we're developing event aggregrations and not following this pattern means you won't be able to aggregrate events in the near future, eg: x number of "user signed up" events happened.
+
+3. **Use common conventions for event names**
+
+Over time, you'll have many events. This will affect everything including how quickly you can search through events, understand them and much more.
+
+Keep common conventions for events. Here are a few examples:
+
+- Denote cron jobs by `cron: {name of the cronjob}`
+- Append user before any user specific events `user: {name of event}` OR `user ${name of event}`
+- Append server before any server specific event, `server: started` OR `server: startup failed`

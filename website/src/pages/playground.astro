@@ -1,0 +1,45 @@
+---
+import BaseLayout from "@/layouts/base.astro";
+import PageEvent from "@/components/page-event.vue";
+import Styleguide from "@operational.co/components/ui/styleguide.vue";
+import UiDivider from "@/components/ui-divider.vue"
+import PageHeader from "@/components/page-header.vue"
+import PageCta from "@/components/page-cta.vue"
+import PageFeatures from "@/components/page-features.vue"
+import PageContent from "@/components/page-content.vue";
+import PageFaqs from "@/components/page-faqs.vue";
+
+import Constrain from "@operational.co/components/ui/constrain.vue";
+import Playground from "@operational.co/components/playground/index.vue";
+
+---
+
+<BaseLayout>
+
+  <PageHeader subtitle="Playground">
+
+     <div slot="title">
+      <h1>
+        Setup Event tracking in a few minutes
+      </h1>
+    </div>
+    <div slot="body">
+    	<p>
+      Use the Playground to quickly generate events for your project. Sprinkle them around and start tracking events right away!
+      </p>
+    </div>
+
+  </PageHeader>
+  <Constrain size="lg">
+  	<Playground client:load></Playground>
+  </Constrain>
+
+
+</BaseLayout>
+
+<style>
+  @media screen and (max-width:576px) {
+    .c-playground {
+    }
+  }
+</style>

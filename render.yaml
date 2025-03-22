@@ -1,0 +1,70 @@
+envVarGroups:
+  - name: mysql
+    envVars:
+      - key: MYSQL_DATABASE
+        value: mysql
+      - key: MYSQL_USER
+        value: mysql
+      - key: MYSQL_PASSWORD
+        generateValue: true
+      - key: MYSQL_ROOT_PASSWORD
+        generateValue: true
+
+services:
+  - type: pserv
+    name: mysql
+    plan: standard
+    env: docker
+    autoDeploy: false
+    disk:
+      name: mysql
+      mountPath: /var/lib/mysql
+      sizeGB: 10
+    envVars:
+      - fromGroup: mysql
+  - type: web
+    plan: free
+    autoDeploy: false
+    runtime: node
+    name: operational
+    repo: https://github.com/operational-co/operational.co
+    branch: master
+    healthCheckPath: /health
+    rootDir: backend
+    buildCommand: "npm ci && npm run build"
+
+    # Uncomment if you are on a paid plan, and remove RUN_DB_MIGRATIONS_IN_BUILD_STEP from below
+    # preDeployCommand: "bundle exec rails db:migrate"
+
+    startCommand: "node index.js"
+    envVars:
+      - key: DATABASE_URL
+
+      - key: SELF_HOSTED
+        value: true
+      - key: HOSTING_PLATFORM
+        value: render
+
+      # Since the app is self-hosted, we cannot use master.key to encrypt credentials.  App depends entirely on ENV variables
+      # https://api.rubyonrails.org/v7.1.3.2/classes/Rails/Application.html#method-i-secret_key_base
+      #
+      # To generate this, run: `openssl rand -hex 64` or `rails secret`
+      - key: SECRET_KEY_BASE
+        sync: false
+
+      # Required to allow your self-hosted instance to be able to upgrade itself
+      - key: UPGRADES_ENABLED
+        value: true
+
+      # If you upgrade your instance to a paid plan, you can set this to false (or remove it)
+      # See note in `render-build.sh` script.
+      - key: RUN_DB_MIGRATIONS_IN_BUILD_STEP
+        value: true
+
+  - type: web
+    plan: free
+    autoDeploy: false
+    runtime: static
+    buildCommand: "npm install; npm run build"
+    rootDir: app
+    staticPublishPath: ./dist
