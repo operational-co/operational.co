@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./backend
+    ports:
+      - "8080:8080"
+    environment:
+      - NODE_ENV=development
+      - DATABASE_URL=mysql://root:rootpassword@mysql:3306/operational
+      - API_URL=http://localhost:8080
+      - APP_URL=http://localhost:3000
+      - PORT=8080
+      - EVENT_STORE=mysql
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+    depends_on:
+      - mysql
+
+  frontend:
+    build:
+      context: ./app
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./app:/app
+      - /app/node_modules
+    environment:
+      - NODE_ENV=development

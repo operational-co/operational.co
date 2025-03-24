@@ -11,58 +11,40 @@ services:
       - key: NODE_ENV
         value: production
       - key: DATABASE_URL
-        value: mysql://root:${MYSQL_ROOT_PASSWORD}@operational-mysql:3306/operational
-      - key: CLICKHOUSE_URL
-        value: "" # Optional: Set if using ClickHouse
+        value: mysql://root:${MYSQL_ROOT_PASSWORD}@mysql:3306/operational
       - key: API_URL
         value: https://api.operational.co
       - key: APP_URL
         value: https://app.operational.co
-      - key: VAPID_EMAIL
-        value: ""
-      - key: VAPID_PUBLIC_KEY
-        value: ""
-      - key: VAPID_PRIVATE_KEY
-        value: ""
-      - key: RESEND
-        value: ""
-      - key: OPERATIONAL
-        value: ""
       - key: PORT
         value: 8080
       - key: SECRET
         generateValue: true
       - key: EVENT_STORE
         value: mysql
-      - key: STRIPE_TEST_KEY
-        value: "p"
-      - key: STRIPE_TEST_SECRET
-        value: ""
-      - key: STRIPE_LIVE_KEY
-        value: ""
-      - key: STRIPE_LIVE_SECRET
-        value: ""
 
   # MySQL Service
   - type: pserv
     name: mysql
     plan: starter
     runtime: docker
-    dockerfilePath: /./docker/mysql/Dockerfile
-    autoDeploy: false
+    image: mysql:8.0
     disk:
       name: mysql
       mountPath: /var/lib/mysql
       sizeGB: 10
     envVars:
-      - fromGroup: mysql
+      - key: MYSQL_DATABASE
+        value: operational
+      - key: MYSQL_ROOT_PASSWORD
+        generateValue: true
 
   # Frontend static SPA
   - type: web
     name: operational-frontend
     runtime: static
     rootDir: app
-    buildCommand: npm ci && npm run build
+    buildCommand: npm run build
     staticPublishPath: ./dist
     routes:
       - type: rewrite
@@ -75,14 +57,4 @@ envVarGroups:
       - key: JWT_SECRET
         generateValue: true
       - key: COOKIE_SECRET
-        generateValue: true
-  - name: mysql
-    envVars:
-      - key: MYSQL_DATABASE
-        value: mysql
-      - key: MYSQL_USER
-        value: mysql
-      - key: MYSQL_PASSWORD
-        generateValue: true
-      - key: MYSQL_ROOT_PASSWORD
         generateValue: true
