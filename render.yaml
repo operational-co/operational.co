@@ -48,7 +48,7 @@ services:
     name: mysql
     plan: starter
     runtime: docker
-    dockerfilePath: ./docker/mysql/Dockerfile
+    dockerfilePath: /./docker/mysql/Dockerfile
     autoDeploy: false
     disk:
       name: mysql
