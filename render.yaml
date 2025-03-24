@@ -44,20 +44,16 @@ services:
 
   # MySQL Service
   - type: pserv
-    name: operational-mysql
-    image: 
-      type: registry-image
-      name: mysql
-      tag: 8.0
-    envVars:
-      - key: MYSQL_ROOT_PASSWORD
-        generateValue: true
-      - key: MYSQL_DATABASE
-        value: operational
+    name: mysql
+    plan: standard
+    env: docker
+    autoDeploy: false
     disk:
-      name: mysql-data
+      name: mysql
       mountPath: /var/lib/mysql
       sizeGB: 10
+    envVars:
+    - fromGroup: mysql
 
   # Frontend static SPA
   - type: web
@@ -78,3 +74,13 @@ envVarGroups:
         generateValue: true
       - key: COOKIE_SECRET
         generateValue: true
+  - name: mysql
+    envVars:
+    - key: MYSQL_DATABASE
+      value: mysql
+    - key: MYSQL_USER
+      value: mysql
+    - key: MYSQL_PASSWORD
+      generateValue: true
+    - key: MYSQL_ROOT_PASSWORD
+      generateValue: true

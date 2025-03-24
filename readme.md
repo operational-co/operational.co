@@ -33,6 +33,8 @@ Right now there are two ways to use Operational
 - Join the waitlist on [Discord](https://discord.gg/QmfGeMGM)
 - Self-host [Operational](https://operational.co/selfhosted/install-on-your-server)
 
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://github.com/operational-co/operational.co)
+
 ### Highlights
 
 - Very few 3rd party dependencies. No need to install clickhouse in the open source version.
