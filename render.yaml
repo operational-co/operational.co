@@ -1,18 +1,16 @@
 services:
+  # Backend Node.js service
   - type: web
     name: operational-backend
-    env: node
-    plan: starter
-    region: oregon
-    buildCommand: cd backend && npm install
-    startCommand: cd backend && npm run start
+    runtime: node
+    rootDir: backend
+    buildCommand: npm run build
+    startCommand: npm start
     envVars:
       - key: NODE_ENV
         value: production
       - key: DATABASE_URL
-        fromDatabase:
-          name: operational-db
-          property: connectionString
+        value: mysql://root:${MYSQL_ROOT_PASSWORD}@operational-mysql:3306/operational
       - key: CLICKHOUSE_URL
         value: "" # Optional: Set if using ClickHouse
       - key: API_URL
@@ -30,9 +28,9 @@ services:
       - key: OPERATIONAL
         value: ""
       - key: PORT
-        value: "2000"
+        value: 8080
       - key: SECRET
-        value: "f81d0c71c2cf40e3a92ad194b2a9fae7" # 🔒 randomly generated
+        generateValue: true
       - key: EVENT_STORE
         value: mysql
       - key: STRIPE_TEST_KEY
@@ -44,16 +42,39 @@ services:
       - key: STRIPE_LIVE_SECRET
         value: ""
 
+  # MySQL Service
+  - type: pserv
+    name: operational-mysql
+    image: 
+      type: registry-image
+      name: mysql
+      tag: 8.0
+    envVars:
+      - key: MYSQL_ROOT_PASSWORD
+        generateValue: true
+      - key: MYSQL_DATABASE
+        value: operational
+    disk:
+      name: mysql-data
+      mountPath: /var/lib/mysql
+      sizeGB: 10
+
+  # Frontend static SPA
   - type: web
     name: operational-frontend
-    env: static
-    buildCommand: cd app && npm install && npm run build
-    staticPublishPath: app/dist
+    runtime: static
+    rootDir: app
+    buildCommand: npm ci && npm run build
+    staticPublishPath: ./dist
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
 
-databases:
-  - name: operational-db
-    databaseName: operational
-    user: operational_user
-    plan: starter
-    region: oregon
-    mysqlMajorVersion: "8"
+envVarGroups:
+  - name: operational-settings
+    envVars:
+      - key: JWT_SECRET
+        generateValue: true
+      - key: COOKIE_SECRET
+        generateValue: true

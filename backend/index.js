@@ -1,4 +1,5 @@
 import "dotenv/config";
+
 import http from "http";
 
 import Clickhouse from "#services/clickhouse/index.js";

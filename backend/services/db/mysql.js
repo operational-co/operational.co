@@ -227,9 +227,10 @@ const mysql = {
 
 			results = await this.cleanResults(results);
 
-			console.log(results);
+			const rawCount = results[0]?.event_count || 0n;
+			const count = Number(rawCount);
 
-			return results;
+			return count;
 		} catch (err) {
 			console.log(err);
 			throw err;
