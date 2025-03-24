@@ -47,7 +47,8 @@ services:
   - type: pserv
     name: mysql
     plan: starter
-    env: docker
+    runtime: docker
+    dockerfilePath: ./docker/mysql/Dockerfile
     autoDeploy: false
     disk:
       name: mysql
