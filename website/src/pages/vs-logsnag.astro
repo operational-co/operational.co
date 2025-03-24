@@ -1,0 +1,35 @@
+---
+import BaseHead from '@/components/base-head.astro';
+import Header from '@/components/app/header.vue';
+import BaseLayout from "@/layouts/base.astro";
+import PageEvent from "@/components/page-event.vue";
+import Constrain from "@operational.co/components/ui/constrain.vue"
+
+import * as Post from '@operational.co/content/pages/vs-logsnag.mdx';
+import PageHeader from "@/components/page-header.vue"
+
+const {title, description} = Post.frontmatter;
+
+const seoTitle = `Operational is the best Logsnag alternative`;
+const Content = Post.Content;
+---
+
+<BaseLayout title={seoTitle} description={description}>
+  <PageHeader subtitle="Logsnag alternative">
+
+     <div slot="title">
+      <h1>
+      Operational vs Logsnag
+      </h1>
+    </div>
+    <div slot="body">
+      
+    </div>
+
+  </PageHeader>
+  <Constrain>
+    <div class="c-page">
+      <Content />
+    </div>
+  </Constrain>
+</BaseLayout>

@@ -1,0 +1,191 @@
+---
+import BaseHead from '@/components/base-head.astro';
+import Header from '@/components/app/header.vue';
+
+import BaseLayout from "@/layouts/base.astro";
+
+import Spacer from "@/components/ui/spacer.vue";
+import LandingIntro from "@/components/landing-intro.vue";
+import Landing from "@/components/landing.vue";
+import PageWaitlist from "@/components/page-waitlist.vue";
+import Carousel from "@/components/ui/carousel.vue";
+import Accordion from "@/components/ui/accordion.vue";
+import Code from "@operational.co/components/code/index.vue";
+import CodeWrap from "@operational.co/components/code/wrap.vue";
+import Card from "@operational.co/components/card/index.vue";
+import PageContent from "@/components/page-content.vue";
+import PageCards from "@/components/page-cards.vue";
+import HeroIllustration from "@/components/ui/hero-illustration.vue";
+import helper from "@/lib/helper.js";
+
+let date = new Date();
+		date = date.toISOString();
+
+const code = `
+import Operational from "@operational.co/sdk";
+
+const ops = new Operational("API_KEY");
+
+const e = {
+  name: "user signed up",
+  avatar: "😀"
+};
+
+await ops.events.ingest(e);
+`
+const item = {
+	id : 1,
+	createdAt : date,
+	name: "user signed up",
+  avatar: "😀"
+}
+
+const posts= await helper.common();
+---
+
+<BaseLayout>
+	<Landing client:idle></Landing>
+
+	<PageContent size="md">
+
+		<h2 class="text-center">
+			You might have questions
+		</h2>
+
+		<div class="c-index-faqs">
+
+		<Accordion client:load>
+			<div slot="title">
+				How is this different than Posthog, Mixpanel, etc?
+			</div>
+			<div slot="body">
+				<p>
+					These are event analytics tools, Operational is a event tracker tool.
+				</p>
+				<p>
+					Unlike event analytics tools that show macro trends (e.g., monthly signups), Operational is an event tracker that notifies you when a critical event happens and shows you micro-level details (e.g., a specific user’s events).
+				</p>
+			</div>
+		</Accordion>
+
+		<Accordion client:only="vue">
+			<div slot="title">
+				How is this different than ntfy.sh, Mynotifier, Logsnag, etc?
+			</div>
+			<div slot="body">
+				<p>
+					Operational is purpose built for developers / tech products.
+				</p>
+				<ul>
+					<li>
+						Arguably better UI/UX, especially on mobile.
+					</li>
+					<li>
+						Expressive API. Send json logs, image urls and more.
+					</li>
+					<li>
+						<a href="/api/actions">Action buttons</a> and <a href="/api/context">Contexts</a> are our two differentiator features.
+					</li>
+					<li>
+						Open source version is coming soon.
+					</li>
+					<li>
+						Long term vision is to be a control center for your product.
+					</li>
+				</ul>
+				<p>
+					As for Logsnag, we have a <a href="/vs-logsnag">detailed breakdown of our differences here.</a>
+				</p>
+			</div>
+		</Accordion>
+
+		<Accordion client:only>
+			<div slot="title">
+				I can't be arsed integrating this in my product. It will take a lot of time!
+			</div>
+			<div slot="body">
+				<p>
+				All tools in this category have the same problem - takes ages to setup.
+				</p>
+				<p>
+					So we made a <a href="/playground">playground area</a> where you can literally copy paste code and drop it in your product!<br />This will get you up and running in like an hour.
+				</p>
+			</div>
+		</Accordion>
+
+		<Accordion client:load>
+			<div slot="title">
+				You don't have a SDK for my language/framework.
+			</div>
+			<div slot="body">
+				<p>
+					We thought of that too!
+				</p>
+				<p>
+					Since Operational is a brand new product, SDKs are limited, but we’ve got wrappers for most popular languages.
+				</p>
+			</div>
+		</Accordion>
+
+		<!-- <Accordion client:load>
+			<div slot="title">
+				What's the pricing like?
+			</div>
+			<div slot="body">
+				<p>
+					We have a pay-as-you-go pricing and its $0.001 per event.
+				</p>
+				<p>
+					Under 1,000 events? It's free. 
+				</p>
+			</div>
+		</Accordion> -->
+
+		<!-- <Accordion client:only>
+			<div slot="title">
+				What if my usage goes up? I'm building a SaaS and by next year I'll be tracking 100,000 events!
+			</div>
+			<div slot="body">
+				<p>
+					Don't worry, we have volume pricing baked in! So at 100,000 events you'll be charged $55.
+				</p>
+				<p>
+					Here's our <a href="/pricing">pricing calculator</a>.
+				</p>
+			</div>
+		</Accordion> -->
+
+		<Accordion client:only>
+			<div slot="title">
+				I'm in. But I want to know who else is using this?
+			</div>
+			<div slot="body">
+				<p>
+					Operational is very new, and as such we don't have any major customers.
+				</p>
+				<p>
+					However Operational was created to control and manage <a href="https://swipekit.app" target="_blank">Swipekit</a> remotely because its founder was sick of taking their laptop around everywhere.
+				</p>
+				<p>
+					Swipekit literally runs on Operational. This is the biggest customer we have for now.
+				</p>
+			</div>
+		</Accordion>
+
+		<Accordion client:only>
+			<div slot="title">
+				I'm sold! How do I signup?
+			</div>
+			<div slot="body">
+				<p>
+					<a href="https://discord.gg/AAn2TDYD">Join the waitlist here.</a>
+				</p>
+			</div>
+		</Accordion>
+
+		</div>
+	</PageContent>
+
+<Spacer></Spacer>
+
+</BaseLayout>

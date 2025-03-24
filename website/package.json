@@ -1,0 +1,37 @@
+{
+  "name": "@operational.co/website",
+  "type": "module",
+  "version": "0.0.1",
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build && pagefind --site dist",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "@astrojs/mdx": "4.0.8",
+    "@astrojs/rss": "4.0.7",
+    "@astrojs/sitemap": "3.1.6",
+    "@astrojs/starlight": "0.32.1",
+    "@astrojs/vue": "5.0.7",
+    "@directus/sdk": "12.0.1",
+    "@operational.co/app": "*",
+    "@operational.co/components": "*",
+    "@operational.co/content": "^1.0.1",
+    "@operational.co/lib": "*",
+    "@operational.co/styles": "*",
+    "@speed-highlight/core": "1.2.6",
+    "astro": "5.3.1",
+    "axios": "1.7.2",
+    "editorjs-parser": "1.5.3",
+    "fuse.js": "6.6.2",
+    "marked": "15.0.6",
+    "pagefind": "1.1.0",
+    "prettier": "3.4.2",
+    "rehype-slug": "6.0.0",
+    "remark-toc": "9.0.0",
+    "sass": "1.77.8",
+    "vue3-carousel": "0.14.0"
+  }
+}

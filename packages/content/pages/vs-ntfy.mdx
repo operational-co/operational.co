@@ -1,0 +1,132 @@
+---
+title: "Vs ntfy.sh"
+---
+
+import Item from "@operational.co/components/card/index.vue";
+
+Logsnag is a event tracking tool.
+
+While we solve different problems, we have one thing in common - event tracking.
+
+With Logsnag, we need to make a distinction. Logsnag is two tools in one.
+
+1. Logsnag the event notification tool.
+2. Logsnag the product analytics tool.
+
+While they are tied in hand-to-hand, we share similarities with the event notifications tool and hence this comparision will focus on that.
+
+## Feature differences
+
+With Logsnag, you can push events and you'll receive notifications. That's all.
+
+Operational answers the next logical step - What can you do with these events?
+
+With Operational, not only can you receive event notifications, you can also pass structured events to understand complex events:
+
+With Operational, not only can you receive event notifications.
+
+Want to send structured events to better understand complex situations? We have an expressive api to give structure to your logs:
+
+<Item
+  item={{
+    name: "server started",
+    createdAt: "2021-03-03",
+    avatar: "🤖",
+    type: "rows",
+    content: [
+      {
+        type: "text",
+        label: "Env",
+        content: "production",
+      },
+      {
+        type: "text",
+        label: "mailchimp working",
+        content: "true",
+      },
+      {
+        type: "text",
+        label: "stripe connected",
+        content: "true",
+      },
+    ],
+  }}
+></Item>
+
+Want to trigger something on your server through events? Operational has actions.
+
+<Item
+  item={{
+    name: "User unsubscribed",
+    createdAt: "2021-03-03",
+    avatar: "☹️",
+    type: "rows",
+    content: [
+      {
+        type: "text",
+        label: "Email",
+        content: "mick@mickgordon.com",
+      },
+      {
+        type: "text",
+        label: "Usage",
+        content: "122 bookmarks created",
+      },
+    ],
+    actions: [
+      {
+        url: "https://xyz.com",
+        buttonText: "Send feedback email",
+      },
+      {
+        url: "https://xyz.com",
+        buttonText: "Send pullback email",
+      },
+    ],
+  }}
+></Item>
+
+Want to understand contextual logs? We have that too.
+
+## Side-by-side differences
+
+I believe Logsnag and Operational to have really slick interfaces in their own way.
+
+Here's logsnag's UI on mobile.
+
+And here's operationals's UI.
+
+They are both easy on the eyes and functional.
+
+## Philosophical differences
+
+Logsnag's main modus operandi is delivering pretty product analytics. This is a great problem to solve as most people find Mixpanel, Posthog, etc too complex. And truth to be told, they haven't really working on the notifications side of things for a long time.
+
+Operational is here to solve operational issues for SaaS businesses. This puts us in a very specific domain category.
+
+## Pricing
+
+Logsnag has a traditional tiered pricing. Operational has a pay-as-you-go pricing.
+
+Operational wins out at three different levels.
+
+1. Since there are no pricing tiers, you don't need to guesstimate which plan you might want to pick. There is one standard pricing - $x.xxx per event per month.
+2. This is great for early stage companies since what you're paying is directly correlated with your usage. With Logsnag, you might be generating x no of events but you still pay the full price of their tier, whichever one you're on.
+3. We have a test mode which is free of charge. This is great when you're integrating our product and don't want to rack up bills just because you're testing us out.
+Logsnag doesn't have this.
+
+Logsnag wins on one level:
+
+1. On a per event basis, they are cheaper than us.
+
+Let's be honest here, if you're a early stage bootstrapped company, you want to save as much money as you can. Since you won't be generating a ton of events, you'll be paying a few dollars every month at most. At that stage, a dollar saved is a dollar earned.
+
+To put it bluntly, you're better off with us.
+
+## Final thoughts
+
+I hope this was a compelling pitch for using Operational for event logging.
+
+To be clear - I've used Logsnag and have paid for it in the past. I believe it is a great tool in its own right but they simply don't have a solid offer. For product analytics, we were with Logsnag but have moved to Posthog as it was better in almost every regard.
+
+Lastly, if you like our offering, feel free to give us a try.

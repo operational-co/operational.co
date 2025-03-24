@@ -1,0 +1,10 @@
+-- CreateTable
+CREATE TABLE `BanList` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `text` VARCHAR(100) NOT NULL,
+    `type` ENUM('DOMAIN', 'EMAIL', 'IP') NOT NULL DEFAULT 'EMAIL',
+    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `banTill` DATETIME(3) NULL,
+
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;

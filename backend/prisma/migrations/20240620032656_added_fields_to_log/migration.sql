@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE `Log` ADD COLUMN `muted` BOOLEAN NOT NULL DEFAULT false,
+    ADD COLUMN `test` BOOLEAN NOT NULL DEFAULT false;

@@ -1,0 +1,94 @@
+---
+import BaseHead from '@/components/base-head.astro';
+import Header from '@/components/app/header.vue';
+import Footer from '@/components/app/footer.vue';
+import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
+import helper from "@/lib/helper.js";
+
+const posts= await helper.common();
+
+import "@operational.co/styles/main.scss";
+
+const title = Astro.props.title || SITE_TITLE;
+const description = Astro.props.description || SITE_DESCRIPTION;
+let jsonLd = Astro.props.jsonLd || null;
+if(jsonLd) {
+	jsonLd = JSON.stringify(jsonLd);
+}
+
+// don't do this anymore
+let headerHidden = false;//Astro.url.pathname === '/';
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<BaseHead title={title} description={description} jsonLd={jsonLd} />
+	</head>
+	<body>
+		<div class="bg"></div>
+		<main >
+			<Header client:load hidden={headerHidden} url={Astro.url} />
+      <slot></slot>
+      <Footer posts={posts} client:load />
+		</main>
+	</body>
+</html>
+
+<style lang="scss" is:global>
+	@font-face {
+  font-family: "Caveat";
+  src: url("/fonts/caveat.woff2");
+  font-weight: 400 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+
+	body {
+		font-size:16px;
+		background-color: var(--color-bg-1);
+		overflow-x: hidden;
+		
+
+		> main {
+			position:relative;
+			z-index: 1;
+		}
+
+		.c-header {
+			backdrop-filter: none;
+		}
+
+		.c-page {
+		}
+
+		.c-card {
+			margin-bottom:1rem;
+		}
+
+		&::-webkit-scrollbar {
+			width: 10px;
+		}
+
+		&::-webkit-scrollbar-thumb {
+			background: hsl(var(--hue-p), 6%, 18%);
+			border-radius: 0;
+		}
+
+		&::-webkit-scrollbar-thumb:hover {
+			background: hsl(var(--hue-p), 6%, 18%);
+		}
+
+		&::-webkit-scrollbar-track {
+			background: transparent;
+		}
+
+		@media screen and (max-width:576px) {
+			> main {
+				padding-top:48px;
+			}
+		}
+		
+	}
+</style>

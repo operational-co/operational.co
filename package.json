@@ -1,0 +1,24 @@
+{
+  "name": "operational.co",
+  "version": "0.0.1",
+  "scripts": {
+    "start-backend": "npm install  && cd backend && npm install && npm run start",
+    "start-website": "npm install && cd website && npm install && npm run build && npm run start",
+    "ssh": "ssh ubuntu@54.224.194.81"
+  },
+  "workspaces": [
+    "packages/*",
+    "backend",
+    "app",
+    "website",
+    "website2",
+    "cms",
+    "sdk"
+  ],
+  "dependencies": {
+    "vee-validate": "4.9.4"
+  },
+  "devDependencies": {
+    "prettier": "^3.3.3"
+  }
+}

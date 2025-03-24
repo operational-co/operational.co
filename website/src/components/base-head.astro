@@ -1,0 +1,69 @@
+---
+// Import the global.css file here so that it is included on
+// all pages through the use of the <BaseHead /> component.
+//import '../styles/global.css';
+
+
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const jsonLd = Astro.props.jsonLd || null;
+const { title, description, image = '/banner.jpg' } = Astro.props;
+
+---
+
+<!-- Global Metadata -->
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<link rel="icon" type="image/x-icon" href="/favicon.ico" />
+<meta name="generator" content={Astro.generator} />
+<link rel="sitemap" href="/sitemap-index.xml" />
+
+<!-- Font preloads -->
+<link rel="preload" href="/fonts/inter4.woff2" as="font" type="font/woff2" crossorigin />
+<!-- <link rel="preload" href="/fonts/inter4italic.woff2" as="font" type="font/woff2" crossorigin /> -->
+
+<!-- <link rel="preload" href="/images/index/product-desktop.webp" as="image" />
+<link rel="preload" href="/images/index/product-mobile.webp" as="image" />
+ -->
+<!-- Font preloads -->
+<link rel="preload" href="/fonts/jetbrains-mono.woff2" as="font" type="font/woff2" crossorigin />
+<!-- <link rel="preload" href="/fonts/jetbrains-mono-italic.woff2" as="font" type="font/woff2" crossorigin /> -->
+
+<!-- Canonical URL -->
+<link rel="canonical" href={canonicalURL} />
+
+<!-- Primary Meta Tags -->
+<title>{title}</title>
+<meta name="title" content={title} />
+<meta name="description" content={description} />
+
+<!-- Open Graph / Facebook -->
+<meta property="og:type" content="website" />
+<meta property="og:url" content={Astro.url} />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:image" content={new URL(image, Astro.url)} />
+
+<!-- Twitter -->
+<meta property="twitter:card" content="summary_large_image" />
+<meta property="twitter:url" content={Astro.url} />
+<meta property="twitter:title" content={title} />
+<meta property="twitter:description" content={description} />
+<meta property="twitter:image" content={new URL(image, Astro.url)} />
+
+{jsonLd ? <script type="application/ld+json" set:html={jsonLd}>
+</script> : ''}
+
+
+
+<!-- <link href="/pagefind/pagefind-ui.css" rel="stylesheet" />
+<script src="/pagefind/pagefind-ui.js" is:inline></script> -->
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-HJBRSRJX6S"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-HJBRSRJX6S');
+</script>

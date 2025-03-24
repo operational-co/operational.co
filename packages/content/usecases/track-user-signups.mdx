@@ -1,0 +1,225 @@
+import Item from "@operational.co/components/card/index.vue";
+import Code from "@operational.co/components/code/index.vue";
+import CodeWrap from "@operational.co/components/code/wrap.vue";
+
+Often, users sign up, but you have no clue who signed up or what their details are.
+
+Understanding this, especially for an early-stage SaaS, can help you gain insights into the type of people who sign up.
+
+## Basic Implementation
+
+Send an event for user signups. In this implementation, I'm also passing a form object.
+
+During your onboarding process, it's helpful to ask basic questions, such as:
+- Where did you hear about us? (basic attribution)
+- Which industry do you work in? (ICP)
+- What are you using XYZ product for? (lead qualification)
+
+<CodeWrap client:only>
+<div slot="default">
+<Item client:only
+  item={{
+    name: "user signed up",
+    avatar: "😃",
+    createdAt: "2021-03-03",
+    type : "rows",
+    content : [
+      {
+        label : 'Name',
+        content : 'Shash'
+      },
+      {
+        label : 'Email',
+        content : 'shash@operational.co'
+      },
+      {
+        label : 'Workspace name',
+        content : 'Operational'
+      },
+      {
+        label : 'IP',
+        content : '123.456.789.1'
+      },
+      {
+        label : 'Form',
+        type : "json",
+        content : {
+          find_us : 'google',
+          industry : 'Software',
+          using_for : 'Research'
+        }
+      }
+    ]
+  }}
+></Item>
+</div>
+<div slot="node">
+<Code client:only>
+```
+const e = {
+  name: "a critical event",
+  avatar: "🤖",
+  actions : [
+    {
+      url : 'https://webhook.site',
+      buttonText : 'Press me'
+    }
+  ]
+};
+```
+</Code>
+</div>
+</CodeWrap>
+
+## Adding Action buttons
+
+This is great, but you might want to add action buttons for these scenarios:
+
+- Activate users: Sometimes, users don't receive their activation email and reach out for assistance. In this case, we can verify their email address (since they are contacting us from it) and allow them to start using their account.
+- Ban domain names: You can use this to block disposable email domains, specifically 10-minute emails, which are harder to detect manually.
+
+<CodeWrap client:only>
+<div slot="default">
+<Item client:only
+  item={{
+    name: "user signed up",
+    avatar: "😃",
+    createdAt: "2021-03-03",
+    type : "rows",
+    content : [
+      {
+        label : 'Name',
+        content : 'Shash'
+      },
+      {
+        label : 'Workspace name',
+        content : 'Operational'
+      },
+      {
+        label : 'IP',
+        content : '123.456.789.1'
+      },
+      {
+        label : 'Form',
+        type : "json",
+        content : {
+          find_us : 'google',
+          industry : 'Software',
+          using_for : 'Research'
+        }
+      }
+    ],
+    actions : [
+      {
+        buttonText : 'Activate user',
+        key : 'activate_user',
+        url : 'https://api.operational.co/demo'
+      },
+      {
+        buttonText : 'Ban domain',
+        key : 'ban_domain',
+        url : 'https://api.operational.co/demo'
+      }
+    ]
+  }}
+></Item>
+</div>
+<div slot="node">
+<Code client:only>
+```
+const e = {
+  name: "a critical event",
+  avatar: "🤖",
+  actions : [
+    {
+      url : 'https://webhook.site',
+      buttonText : 'Press me'
+    }
+  ]
+};
+```
+</Code>
+</div>
+</CodeWrap>
+
+## Contextual events
+
+Let's add some context. With user signups, you might have different steps such as:
+- Activating/verifying an email
+- Completing the onboarding process
+
+You can "group" multiple events together using contexts. You want to group signup events for a specific user together like this.
+
+<CodeWrap client:only>
+<div slot="default">
+<Item client:only
+  item={{
+    name: "user signed up",
+    avatar: "😃",
+    createdAt: "2021-03-03",
+    type : "rows",
+    content : [
+      {
+        label : 'Name',
+        content : 'Shash'
+      },
+      {
+        label : 'Workspace name',
+        content : 'Operational'
+      },
+      {
+        label : 'IP',
+        content : '123.456.789.1'
+      },
+      {
+        label : 'Form',
+        type : "json",
+        content : {
+          find_us : 'google',
+          industry : 'Software',
+          using_for : 'Research'
+        }
+      }
+    ],
+    actions : [
+      {
+        buttonText : 'Activate user',
+        key : 'activate_user',
+        url : 'https://api.operational.co/demo'
+      },
+      {
+        buttonText : 'Ban domain',
+        key : 'ban_domain',
+        url : 'https://api.operational.co/demo'
+      }
+    ],
+    contexts : [
+      {
+        name : 'User activated',
+        createdAt: "2021-03-03",
+      },
+      {
+        name : 'User onboarded',
+        createdAt: "2021-03-03",
+      }
+    ]
+  }}
+></Item>
+</div>
+<div slot="node">
+<Code client:only>
+```
+const e = {
+  name: "a critical event",
+  avatar: "🤖",
+  actions : [
+    {
+      url : 'https://webhook.site',
+      buttonText : 'Press me'
+    }
+  ]
+};
+```
+</Code>
+</div>
+</CodeWrap>

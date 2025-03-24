@@ -1,0 +1,5 @@
+{
+	"scripts": {
+		"wordpress-symlink": "ln -s '/Users/shash/Documents/projects/operational.co/packages/operational' '/Users/shash/Local Sites/operational/app/public/wp-content/plugins'"
+	}
+}

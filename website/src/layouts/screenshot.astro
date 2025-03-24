@@ -1,0 +1,55 @@
+---
+import BaseHead from '@/components/base-head.astro';
+import Header from '@/components/app/header.vue';
+import Footer from '@/components/app/footer.vue';
+import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
+
+import "@operational.co/styles/main.scss";
+
+const title = Astro.props.title || SITE_TITLE;
+const description = Astro.props.description || SITE_DESCRIPTION;
+let jsonLd = Astro.props.jsonLd || null;
+if(jsonLd) {
+	jsonLd = JSON.stringify(jsonLd);
+}
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<BaseHead title={title} description={description} jsonLd={jsonLd} />
+	</head>
+	<body>
+		<div class="bg"></div>
+		<main >
+			<slot></slot>
+		</main>
+	</body>
+</html>
+
+<style lang="scss" is:global>
+	body {
+		font-size:16px;
+		background-color: var(--color-bg-1);
+		overflow-x: hidden;
+		
+
+		main {
+			position:relative;
+			z-index: 1;
+		}
+
+		.c-header {
+			backdrop-filter: none;
+		}
+
+		.c-page {
+		}
+
+		.c-card {
+			margin-bottom:1rem;
+		}
+
+		
+	}
+</style>

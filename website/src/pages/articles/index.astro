@@ -1,0 +1,44 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from "@/layouts/base.astro";
+
+import helper from "@/lib/helper.js";
+
+const posts= await helper.common();
+
+import Articles from "@/components/articles.vue";
+import PageHeader from "@/components/page-header.vue"
+
+
+
+// let temp = posts.map((p) => {
+//   let obj = {
+//     ...p
+//   }
+//   delete obj.content_markdown;
+
+//   return obj;
+// });
+
+// console.log(JSON.stringify(temp));
+---
+
+<BaseLayout>
+	<PageHeader subtitle="Articles" size="sm">
+
+     <div slot="title">
+      <h1>
+      Findings from running an early-stage B2B SaaS.
+      </h1>
+    </div>
+    <div slot="body">
+      <p class="article-text">
+        No creator spam here. Only honest findings from bootstrapping my SaaS biz from 0 to $5k mrr and beyond.
+        <br />
+By @shash122tfu
+      </p>
+    </div>
+
+  </PageHeader>
+	<Articles posts={posts}></Articles>
+</BaseLayout>

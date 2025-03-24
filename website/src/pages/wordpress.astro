@@ -1,0 +1,76 @@
+---
+import BaseLayout from "@/layouts/base.astro";
+import PageEvent from "@/components/page-event.vue";
+import Styleguide from "@operational.co/components/ui/styleguide.vue";
+import UiDivider from "@/components/ui-divider.vue"
+import PageHeader from "@/components/page-header.vue"
+import PageCta from "@/components/page-cta.vue"
+import PageFeatures from "@/components/page-features.vue"
+import PageContent from "@/components/page-content.vue";
+import PageFaqs from "@/components/page-faqs.vue";
+
+import Constrain from "@operational.co/components/ui/constrain.vue";
+import Playground from "@operational.co/components/playground/index.vue";
+
+---
+
+<BaseLayout>
+
+  <PageHeader subtitle="Integrations / Wordpress plugin">
+
+     <div slot="title">
+      <h1>
+        Wordpress plugin for Operational
+      </h1>
+    </div>
+    <div slot="body">
+    	<p class="article-text">
+      Use our Wordpress plugin and track events across your wp-admin
+      </p>
+      <a href="/wordpress/operational-1.1.0.zip" download class="btn btn-primary btn-fancy">
+        <span>
+        Download plugin
+        </span>
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path fill-rule="evenodd" clip-rule="evenodd" d="M2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12ZM9 17C8.44771 17 8 16.5523 8 16C8 15.4477 8.44771 15 9 15H15C15.5523 15 16 15.4477 16 16C16 16.5523 15.5523 17 15 17H9ZM14.7071 11.7071L12.7071 13.7071C12.3166 14.0976 11.6834 14.0976 11.2929 13.7071L9.29289 11.7071C8.90237 11.3166 8.90237 10.6834 9.29289 10.2929C9.68342 9.90237 10.3166 9.90237 10.7071 10.2929L11 10.5858V8C11 7.44771 11.4477 7 12 7C12.5523 7 13 7.44771 13 8V10.5858L13.2929 10.2929C13.6834 9.90237 14.3166 9.90237 14.7071 10.2929C15.0976 10.6834 15.0976 11.3166 14.7071 11.7071Z" fill="currentColor"/>
+</svg>
+      </a>
+    </div>
+
+  </PageHeader>
+
+  <PageContent>
+    <h3>
+      Setup Operational for Wordpress in 4 easy steps:
+    </h3>
+    <ul>
+      <li>
+        Join the waitlist or signup if you've been given access to Operational.
+      </li>
+      <li>
+        Download the Wordpress plugin and install it.
+      </li>
+      <li>
+        Enter the Operational API Key inside your plugin's options page. 
+      </li>
+      <li>
+        No fourth step, enjoy!
+      </li>
+    </ul>
+
+    <video controls>
+      <source src="/images/wordpress/operational-wordpress.mp4" type="video/mp4"></source>
+    </video>
+  </PageContent>
+
+
+</BaseLayout>
+
+<style>
+  @media screen and (max-width:576px) {
+    .c-playground {
+      width:calc(100% + var(--margin-lg) * 2);
+      margin-left:calc(var(--margin-lg) * -1);
+    }
+  }
+</style>

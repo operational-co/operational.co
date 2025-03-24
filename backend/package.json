@@ -1,0 +1,66 @@
+{
+	"name": "api.operational.co",
+	"private": false,
+	"version": "0.0.1",
+	"type": "module",
+	"scripts": {
+		"test": "nodemon test.js",
+		"dev": "nodemon index.js",
+		"build": "npm install; npx prisma generate",
+		"start": "npx prisma generate; node index.js"
+	},
+	"engines": {
+		"node": ">=18.18 <=22"
+	},
+	"nodemon": {
+		"watch": [
+			"components",
+			"lib",
+			"models",
+			"services"
+		],
+		"ext": "js,json"
+	},
+	"dependencies": {
+		"@aws-sdk/client-s3": "3.596.0",
+		"@clickhouse/client": "1.4.0",
+		"@faker-js/faker": "8.4.1",
+		"@operational.co/components": "*",
+		"@operational.co/lib": "*",
+		"@operational.co/sdk": "*",
+		"@operational.co/styles": "*",
+		"@prisma/client": "6.4.1",
+		"axios": "1.7.2",
+		"bcrypt": "5.1.1",
+		"croner": "8.0.0",
+		"deep-email-validator": "0.1.21",
+		"diskusage": "1.2.0",
+		"dotenv": "16.3.1",
+		"eta": "3.2.0",
+		"express": "5.0.1",
+		"fastest-validator": "1.19.0",
+		"jsonwebtoken": "9.0.2",
+		"kill-port": "2.0.1",
+		"mjml": "4.14.1",
+		"moment": "2.30.1",
+		"multer": "1.4.5-lts.1",
+		"nanoid": "5.0.7",
+		"node-cache": "5.1.2",
+		"nodemon": "3.0.2",
+		"pdfmake": "0.2.10",
+		"perfect-express-sanitizer": "1.0.13",
+		"prisma": "6.4.1",
+		"resend": "3.3.0",
+		"sql-formatter": "14.0.0",
+		"stripe": "15.10.0",
+		"systeminformation": "5.25.11",
+		"uuid": "10.0.0",
+		"web-push": "3.6.6"
+	},
+	"imports": {
+		"#services/*": "./services/*",
+		"#lib/*": "./lib/*",
+		"#models/*": "./models/*",
+		"#components/*": "./components/*"
+	}
+}

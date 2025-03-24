@@ -1,0 +1,128 @@
+---
+// @ts-nocheck
+import BaseLayout from "@/layouts/base.astro";
+import Constrain from "@operational.co/components/ui/constrain.vue"
+import {apiList, manualList, usecasesList} from "@operational.co/content/list.js";
+import headings from "@/lib/get-headings.js";
+import slugify from "@/lib/slugify.js";
+import getJsonld from "@/lib/get-jsonld.js";
+
+import PageHeader from "@/components/page-header.vue"
+import UsecasesRelated from "@/components/usecases-related.vue"
+
+const posts = await Astro.glob('../../../../packages/content/usecases/*.mdx');
+const params = Astro.params;
+
+let page = null;
+
+for(let i = 0; i < usecasesList.length; i++) {
+  let p = usecasesList[i];
+  let slug = p.path.split('/');
+    slug = slug[slug.length - 1];
+
+  if(slug === params.slug) {
+    page = p;
+    break;
+  }
+}
+
+
+
+export const getStaticPaths = function() {
+  let list = [];
+  usecasesList.map((page) => {
+    let lastName = page.path.split('/');
+    lastName = lastName[lastName.length - 1];
+    if(page.path) {
+      list.push({
+        params : {
+          slug : lastName
+        }
+      })
+    }
+  });
+  return list;
+}
+
+if(!page) {
+  return;
+}
+
+let content = null;
+
+
+
+for(let  i = 0; i < posts.length; i++) {
+  let post = posts[i];
+  let file = post.file;
+
+  if(file.includes(page.path)) {
+    content = post;
+    break;
+  }
+}
+
+const Content = content.Content;
+const title = page.name;
+const pageTitle = `${title} - Operational`;
+const slugifiedTitle = page.name.toLowerCase().replace(/\s+/g, '-').replace(/[^\w\-]+/g, '');
+const ogImageUrl = `/images/usecases/banner-${slugifiedTitle}.png`;
+const url = Astro.url;
+const slug = url.pathname.split('/').pop();
+
+const jsonLd = getJsonld({
+  title,
+  subtitle : page.description,
+  slug,
+  bannerUrl : `/images/usecases/${slugifiedTitle}.png`
+}, 'page');
+
+
+---
+
+
+<BaseLayout jsonLd={jsonLd} title={pageTitle} description={jsonLd.subtitle}>
+
+    <PageHeader subtitle="Use case" size="sm" image={ogImageUrl}>
+      <div slot="title">
+        <h1>
+          {page.name}
+        </h1>
+      </div>
+      <div slot="body">
+        <p>
+          {page.description}
+        </p>
+      </div>
+
+    </PageHeader>
+    
+
+  <Constrain>
+    <div class="c-page">
+      <Content />
+    </div>
+  </Constrain>
+
+  <UsecasesRelated currentPost={page} posts={usecasesList}></UsecasesRelated>
+</BaseLayout>
+
+<style>
+  .c-page {
+    border-top:var(--color-bg-5) solid 1px;
+    padding-top:2rem;
+    width:80%;
+
+    @media screen and (max-width:800px) {
+      width:100%;
+    }
+  }
+
+  .c-page-header {
+    img {
+      aspect-ratio: 776 / 323;
+      object-fit: cover;
+      object-position:center center;
+    }
+  }
+</style>

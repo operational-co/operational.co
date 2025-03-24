@@ -1,0 +1,332 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider        = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserStatus {
+  NORMAL // Default
+  INVITED // Invited by another user in workspace but hasn't accepted the invite yet
+}
+
+enum WorkspaceStatus {
+  NORMAL // Default
+  DEMO // Just like NORMAL but for demo users. Some activites like actions, user settings, etc cannot be run while on demo
+  TRIAL // Depreciated
+  HOLD // Depreciated
+  DEACTIVATED // Workspace is deactivated, no api calls will be honored unless user enters their credit card details pays all pending invoices
+  DELETED // Workspace is persona non grata
+}
+
+enum Role {
+  MEMBER
+  ADMIN
+}
+
+// user is a user. Multiple users can be part of a workspace but only one is a admin user
+model User {
+  id        Int     @id @default(autoincrement())
+  email     String
+  firstName String?
+  lastName  String?
+
+  workspace WorkspaceUser[] @relation("workspaces") // refers to workspaceUser
+
+  pushes Push[] @relation("users")
+
+  // What workspace they are logged in right now. Has nothing to do with workspaceAdmin
+  primaryWorkspace Int?
+
+  //workspace   Workspace? @relation("users", fields: [workspaceId], references: [id], onDelete: Cascade)
+  //workspaceId Int?
+
+  avatar String?
+
+  password String?
+
+  onboardingStep String?
+
+  onboarded Boolean @default(false)
+
+  resetPasswordToken String?
+
+  // Controls whether a user's email has been activated. For team users, make this true on the application side once they accept the invite
+  activated Boolean @default(false)
+
+  // We store this to format dates in events relative to where our users are. So if an event has 1:00pm as a date, its 1:00pm relative to their timezone
+  timezone String?
+
+  // Store user settings in here
+  settings Json?
+
+  // Store hidden fields in here
+  meta Json?
+
+  //adminWorkspace Workspace? @relation("admin")
+
+  // Activation code for user to activate their account
+  activationCode String?
+
+  status UserStatus @default(NORMAL)
+
+  createdAt DateTime @default(now())
+}
+
+// Push subscription data
+model Push {
+  id Int @id @default(autoincrement())
+
+  pushSubscription Json?
+
+  user        User      @relation("users", fields: [userId], references: [id], onDelete: Cascade)
+  userId      Int
+
+  sid String?
+}
+
+model Event {
+  id          String    @id @default(uuid())
+  workspaceId Int       @db.Int
+  userId      String?
+  name        String?
+  actions     Json?
+  avatar      String?
+  content     String?   @db.VarChar(1000)
+  type        EventType @default(text)
+  test        Boolean   @default(false)
+  notify      Boolean   @default(false)
+  searchable  String?   @db.VarChar(1000)
+  contextId   String?
+  contextType Int       @default(0) @db.TinyInt
+  createdAt   DateTime
+  errors      String?
+  category    String?
+}
+
+enum EventType {
+  text
+  rows
+  json
+}
+
+// For storing login sessions
+model Session {
+  id     Int    @id @default(autoincrement())
+  sid    String @unique // A unique id that's visible in the jwt string
+  userId Int
+
+  // Store some raw user data that may be used in backend operations
+  user Json?
+
+  // Store user agent, good for debugging sessions
+  userAgent String?
+
+  // Date of when is this session deemed to be expired
+  expiresAt DateTime
+}
+
+// Workspace connects all resources(users, ..) together
+model Workspace {
+  id   Int    @id @default(autoincrement())
+  name String
+
+  // Who's the admin of this workspace?
+  adminId Int?
+
+  // All users associated with the workspace
+  users WorkspaceUser[] @relation("users")
+
+  // All invoices associated with the workspace
+  invoices Invoice[] @relation("invoices")
+
+  // All apikeys associated with the workspace
+  keys Apikey[] @relation("keys")
+
+  coupons Coupon[] @relation("coupons")
+
+  categories Category[] @relation("categories")
+
+  metrics Metric[] @relation("metrics")
+
+  actions Json?
+
+  // store non-critical stuff here
+  meta Json?
+
+  // Tracks various email sends
+  emailFlags Json?
+
+  // A list of cached event names to be used in search
+  eventNames Json?
+
+  // Stripe customerId
+  customerId String?
+
+  // Stripe default paymentMethodId
+  paymentMethodId String?
+
+  // Total free events this workspace is entitled to
+  freeEvents Int @default(10000)
+
+  usedFreeEvents Int @default(0)
+
+  // Day of the month when this workspace will be billed. Usually set on the day they enter their card details.
+  billingCycleDay Int?
+
+  // Billing flags and when they were set
+  paymentStartedAt DateTime?
+  paymentStoppedAt DateTime?
+  holdAt DateTime?
+
+  status WorkspaceStatus @default(TRIAL)
+
+  deactivatedAt DateTime? // When the workspace was deactivated (nullable if active)
+  createdAt     DateTime  @default(now())
+}
+
+// Tracks per month metric for workspaces
+model Metric {
+  id   Int    @id @default(autoincrement())
+
+  month Int @default(1)
+
+  year Int @default(2025)
+
+  events Int @default(0)
+
+  workspace   Workspace @relation("metrics", fields: [workspaceId], references: [id], onDelete: Cascade)
+  workspaceId Int
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+}
+
+model WorkspaceUser {
+  id          String    @id @default(cuid())
+  role        Role      @default(MEMBER)
+  createdAt   DateTime  @default(now())
+  user        User      @relation("workspaces", fields: [userId], references: [id], onDelete: Cascade)
+  userId      Int
+  workspace   Workspace @relation("users", fields: [workspaceId], references: [id], onDelete: Cascade)
+  workspaceId Int
+
+  // Data for push subscription
+  pushSubscription Json?
+
+  // Should user be notified?
+  notify Boolean @default(true)
+
+  @@unique([userId, workspaceId])
+  @@index([workspaceId])
+}
+
+model Category {
+  id Int @id @default(autoincrement())
+
+  workspace   Workspace? @relation("categories", fields: [workspaceId], references: [id])
+  workspaceId Int?
+
+  text String
+}
+
+model Coupon {
+  id Int @id @default(autoincrement())
+
+  workspace   Workspace? @relation("coupons", fields: [workspaceId], references: [id])
+  workspaceId Int?
+
+  // Unique code to identify this coupon, eg
+  code String @default("10000EVENTSOFF")
+
+  // Handles how coupons are applied
+  status CouponStatus @default(INACTIVE)
+
+  // The actual offer, coupon code parses this
+  offer Json?
+
+  // Is this coupon one time or recurring?
+  frequency String @default("one_time") // Or "recurring"
+
+  createdAt DateTime @default(now())
+}
+
+model Apikey {
+  id Int @id @default(autoincrement())
+
+  // the actual api key
+  key String @unique
+
+  // A description of where this key will be used
+  description String?
+
+  workspace   Workspace? @relation("keys", fields: [workspaceId], references: [id], onDelete: Cascade)
+  workspaceId Int?
+
+  createdAt DateTime @default(now())
+}
+
+model Invoice {
+  id Int @id @default(autoincrement())
+
+  code String
+
+  lineItems Json?
+
+  subTotal Decimal? @db.Decimal(10, 2) // Example: up to 10 digits with 2 decimal places
+  total    Decimal? @db.Decimal(10, 2) // Example: up to 10 digits with 2 decimal places
+
+  workspace   Workspace? @relation("invoices", fields: [workspaceId], references: [id])
+  workspaceId Int?
+
+  periodStart DateTime?
+  periodEnd   DateTime?
+
+  status InvoiceStatus @default(OPEN)
+
+  // Can be one of these: <empty>,canceled, processing, requires_action, requires_confirmation, requires_payment_method, succeeded
+  paymentStatus String?
+
+  // PaymentIntentId that will be retrived after creating a paymentIntent inside billInvoice
+  paymentIntentId String?
+
+  createdAt DateTime @default(now())
+}
+
+enum CouponStatus {
+  ACTIVE
+  INACTIVE
+}
+
+enum InvoiceStatus {
+  OPEN
+  PAID
+  VOID
+}
+
+enum BanType {
+  DOMAIN
+  EMAIL
+  IP
+}
+
+model BanList {
+  id Int @id @default(autoincrement())
+
+  // can be email, text, ip or whatever
+  text String @db.VarChar(100)
+
+  // refer to bantypes
+  type BanType @default(EMAIL)
+
+  // When this ban type was created
+  createdAt DateTime @default(now())
+
+  //  When do we want to ban these guys till
+  banTill DateTime?
+}

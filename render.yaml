@@ -1,0 +1,59 @@
+services:
+  - type: web
+    name: operational-backend
+    env: node
+    plan: starter
+    region: oregon
+    buildCommand: cd backend && npm install
+    startCommand: cd backend && npm run start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_URL
+        fromDatabase:
+          name: operational-db
+          property: connectionString
+      - key: CLICKHOUSE_URL
+        value: "" # Optional: Set if using ClickHouse
+      - key: API_URL
+        value: https://api.operational.co
+      - key: APP_URL
+        value: https://app.operational.co
+      - key: VAPID_EMAIL
+        value: ""
+      - key: VAPID_PUBLIC_KEY
+        value: ""
+      - key: VAPID_PRIVATE_KEY
+        value: ""
+      - key: RESEND
+        value: ""
+      - key: OPERATIONAL
+        value: ""
+      - key: PORT
+        value: "2000"
+      - key: SECRET
+        value: "f81d0c71c2cf40e3a92ad194b2a9fae7" # 🔒 randomly generated
+      - key: EVENT_STORE
+        value: mysql
+      - key: STRIPE_TEST_KEY
+        value: "p"
+      - key: STRIPE_TEST_SECRET
+        value: ""
+      - key: STRIPE_LIVE_KEY
+        value: ""
+      - key: STRIPE_LIVE_SECRET
+        value: ""
+
+  - type: web
+    name: operational-frontend
+    env: static
+    buildCommand: cd app && npm install && npm run build
+    staticPublishPath: app/dist
+
+databases:
+  - name: operational-db
+    databaseName: operational
+    user: operational_user
+    plan: starter
+    region: oregon
+    mysqlMajorVersion: "8"

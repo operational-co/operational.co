@@ -1,0 +1,87 @@
+---
+import BaseLayout from "@/layouts/base.astro";
+import PageEvent from "@/components/page-event.vue";
+import UiDivider from "@/components/ui-divider.vue"
+import PageHeader from "@/components/page-header.vue"
+import PageContent from "@/components/page-content.vue";
+import Constrain from "@operational.co/components/ui/constrain.vue"
+import FormVariableToStatic from "@operational.co/components/form/form-variable-to-static.vue";
+
+import getJsonld from "@/lib/get-jsonld.js";
+
+const title = "Convert variable fonts to static font";
+const subtitle = "The only free tool that transforms a variable font into a full set of static font instances."
+const params = Astro.params;
+
+const url = Astro.url;
+const slug = url.pathname.split('/').pop(); // You can get the last part of the path as a slug
+
+const jsonLd = getJsonld({
+  title,
+  subtitle,
+  slug
+}, 'page');
+
+---
+
+<BaseLayout jsonLd={jsonLd} title={title} description={subtitle}>
+
+  <PageHeader subtitle="">
+
+     <div slot="title">
+      <h1>
+      {title}
+      </h1>
+    </div>
+    <div slot="body">
+      <p>
+        {subtitle}
+      </p>
+    </div>
+
+  </PageHeader>
+
+  <Constrain size="sm">
+    <FormVariableToStatic client:load></FormVariableToStatic>
+  </Constrain>
+
+    <PageContent>
+      
+      <h3>
+Variable to static font conversion for typographers & web developers
+</h3>
+<p>
+Variable fonts offer flexibility, but sometimes you just need static versions for better compatibility. Our free tool extracts every named instance from your variable font and converts them into individual .ttf files, ready for use in any design or development project.
+</p>
+<p>
+Why use this tool?
+</p>
+<p>
+Instant Results: Upload your .ttf or .otf variable font and get a full set of static fonts in seconds.
+</p>
+<p>
+Web & Print Ready: Perfect for web design, branding, and any scenario requiring fixed font styles.
+</p>
+
+<p>
+How it works:
+</p>
+<ul>
+  <li>
+    Upload your variable font file.
+  </li>
+  <li>
+    The tool extracts and converts all named instances.
+  </li>
+  <li>
+    Download a ZIP containing the static .ttf fonts.
+  </li>
+</ul>
+
+
+  </PageContent>
+
+  <UiDivider></UiDivider>
+
+
+</BaseLayout>

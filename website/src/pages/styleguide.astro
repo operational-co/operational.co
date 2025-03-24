@@ -1,0 +1,63 @@
+---
+import BaseLayout from "@/layouts/base.astro";
+import PageEvent from "@/components/page-event.vue";
+import Styleguide from "@operational.co/components/ui/styleguide.vue";
+import UiDivider from "@/components/ui-divider.vue"
+import PageHeader from "@/components/page-header.vue"
+import PageCta from "@/components/page-cta.vue"
+import PageFeatures from "@/components/page-features.vue"
+import PageContent from "@/components/page-content.vue";
+import PageFaqs from "@/components/page-faqs.vue";
+
+---
+
+<BaseLayout>
+
+  <PageHeader subtitle="Logsnag alternative">
+
+     <div slot="title">
+      <h1>
+      Default size header
+      </h1>
+    </div>
+    <div slot="body">
+      
+    </div>
+
+  </PageHeader>
+
+  <PageHeader subtitle="Logsnag alternative" size="sm">
+
+     <div slot="title">
+      <h1>
+      Small header
+      </h1>
+    </div>
+    <div slot="body">
+      <p>
+        Here's some text to judge how big this area will be
+      </p>
+    </div>
+
+  </PageHeader>
+  <UiDivider></UiDivider>
+  <PageCta></PageCta>
+  <UiDivider></UiDivider>
+  <PageFeatures></PageFeatures>
+  <PageContent>
+    <p>
+      The minimum viable product, as many founders know it, doesn't reflect the reality of how products get built today.
+</p>
+<p>
+Building something valuable is no longer about validating a novel idea as fast as possible. Instead, the modern MVP exercise is about building a version of an idea that is different from and better than what exists today. Most of us aren’t building for a net-new market. Rather, we’re finding opportunities to improve existing categories. We need an MVP concept that helps founders and product leaders iterate on their early ideas to compete in an existing market.
+</p>
+<p>
+When we started to build our MVP for Linear, we spent a lot of time talking to users, narrowed our audience, and tested what we were building. And it taught us some important lessons about our product (and building great products in general).
+    </p>
+    <p>
+      Linear comes with pre-built workflows that can be adapted to your team’s unique way of working.
+    </p>
+  </PageContent>
+  <PageFaqs client:load></PageFaqs>
+
+</BaseLayout>

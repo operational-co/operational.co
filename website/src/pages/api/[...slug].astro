@@ -1,0 +1,98 @@
+---
+// @ts-nocheck
+import BaseLayout from "@/layouts/base.astro";
+import Constrain from "@operational.co/components/ui/constrain.vue"
+import {apiList, manualList} from "@operational.co/content/list.js";
+import headings from "@/lib/get-headings.js";
+import slugify from "@/lib/slugify.js";
+import Toc from "@operational.co/components/ui/toc.vue";
+import Prevnext from "@operational.co/components/ui/prevnext.vue";
+import PageApi from "@/components/page-api.vue";
+
+const posts = await Astro.glob('../../../../packages/content/api/*.mdx');
+const params = Astro.params;
+
+let page = null;
+let prevPage = null;
+let nextPage = null;
+
+
+for(let i = 0; i < apiList.length; i++) {
+  let p = apiList[i];
+  let slug = slugify(p.name);
+
+  if(slug === params.slug) {
+    if(apiList[i - 1]) {
+      prevPage = apiList[i - 1];
+    }
+    if(apiList[i + 1]) {
+      nextPage = apiList[i + 1];
+    } 
+    page = p;
+    break;
+  }
+}
+
+if(prevPage && prevPage.path) {
+  prevPage = {
+    title : prevPage.name,
+    path : `${prevPage.path}`
+  }
+} else {
+  prevPage = null;
+}
+if(nextPage && nextPage.path) {
+  nextPage = {
+    title : nextPage.name,
+    path : `${nextPage.path}`
+  }
+} else {
+  nextPage = null;
+}
+
+export const getStaticPaths = function() {
+  let list = [];
+  console.log(apiList);
+  apiList.map((page) => {
+    if(page.path) {
+      list.push({
+        params : {
+          slug : slugify(page.name)
+        }
+      })
+    }
+  });
+  return list;
+}
+
+if(!page) {
+  return;
+}
+
+let content = null;
+
+for(let  i = 0; i < posts.length; i++) {
+  let post = posts[i];
+  let file = post.file;
+
+  if(file.includes(page.path)) {
+    content = post;
+    break;
+  }
+}
+
+const Content = content.Content;
+
+
+---
+
+
+<BaseLayout>
+
+  <PageApi client:load pathname={Astro.url.pathname} headings={headings}>
+    <div class="c-page">
+      <Content />
+      <Prevnext prev={prevPage} next={nextPage} />
+    </div>
+  </PageApi>
+</BaseLayout>

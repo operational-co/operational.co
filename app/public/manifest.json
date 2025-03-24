@@ -1,0 +1,15 @@
+{
+  "name": "Operational",
+  "short_name": "Ops",
+  "start_url": "/",
+  "icons": [
+    {
+      "src": "/logo.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "theme_color": "#393B43",
+  "background_color": "#393B43",
+  "display": "standalone"
+}
