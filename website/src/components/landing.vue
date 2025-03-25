@@ -10,7 +10,7 @@
 				</article>
 
 				<div class="btn-container">
-					<a target="_blank" href="https://discord.gg/AAn2TDYD" class="btn btn-fancy btn-primary">
+					<a target="_blank" href="https://discord.gg/QmfGeMGM" class="btn btn-fancy btn-primary">
 						<span> Join the waitlist </span>
 
 						<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
