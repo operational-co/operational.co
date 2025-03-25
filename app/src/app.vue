@@ -90,11 +90,6 @@ import UAParser from "@/lib/ua-parser.js";
 
 import posthog from "posthog-js";
 
-/**
- * 
-console.log(import.meta.env.VITE_SELFHOSTED);
-*/
-
 export default {
 	components: {
 		Glow,
@@ -127,6 +122,8 @@ export default {
 			showPaymentStarted: false,
 			showDeactivated: false,
 			showDemoBlurb: false,
+
+			allowSetup: false,
 		};
 	},
 
@@ -169,7 +166,8 @@ export default {
 
 	computed: {
 		isSelfHosted: function () {
-			return this.$store.app.isSelfHosted;
+			const condition = this.$store.app.isSelfHosted;
+			return condition;
 		},
 		isPaying() {
 			if (!this.workspace) {
@@ -226,7 +224,7 @@ export default {
 				return false;
 			}
 
-			if (!this.isAuth && this.isSelfHosted) {
+			if (!this.isAuth && this.isSelfHosted && this.allowSetup) {
 				return true;
 			}
 
@@ -238,6 +236,10 @@ export default {
 			}
 
 			if (!this.isAuth && !this.isSelfHosted) {
+				return true;
+			}
+
+			if (!this.isAuth && this.isSelfHosted && !this.allowSetup) {
 				return true;
 			}
 
@@ -280,10 +282,13 @@ export default {
 			}
 		},
 		async afterLogin() {
-			console.log(typeof $crisp !== "undefined");
 			// activate crisp, whether afterlogin or aftersignup, doesn't matter
 			if (typeof $crisp !== "undefined") {
-				$crisp.push(["do", "chat:show"]);
+				if (!this.isSelfHosted) {
+					$crisp.push(["do", "chat:show"]);
+				} else {
+					$crisp.push(["do", "chat:hide"]);
+				}
 			}
 
 			if (!this.user.activated || !this.user.onboarded) {
@@ -334,6 +339,21 @@ export default {
 		},
 		async afterSignup() {
 			this.$store.app.startOnboarding();
+		},
+		async checkConnection() {
+			if (!this.isSelfHosted) {
+				return;
+			}
+			try {
+				const data = await this.$store.app.checkConnection();
+				if (data) {
+					this.allowSetup = true;
+				}
+			} catch (err) {
+				if (err && err.message && err.message === "Already connected") {
+					//hmm
+				}
+			}
 		},
 		onVisibilityChange: function () {
 			if (document.visibilityState === "visible") {
@@ -493,7 +513,8 @@ export default {
 
 	mounted: function () {
 		if (typeof $crisp !== "undefined") {
-			//$crisp.push(["do", "chat:hide"]);
+			console.log($crisp);
+			$crisp.push(["do", "chat:hide"]);
 		}
 
 		const posthogKey = import.meta.env.VITE_POSTHOG_KEY;
@@ -505,14 +526,19 @@ export default {
 			});
 		}
 
-		this.init().then(() => {
-			setTimeout(() => {
-				this.checkActivationCode();
-				this.checkPaymentStarted();
-				this.checkDeactivation();
-				this.checkDemoUser();
-			}, 60);
-		});
+		this.checkConnection()
+			.then(() => this.init())
+			.then(() => {
+				setTimeout(() => {
+					this.checkActivationCode();
+					this.checkPaymentStarted();
+					this.checkDeactivation();
+					this.checkDemoUser();
+				}, 60);
+			})
+			.catch((error) => {
+				console.error("Error:", error);
+			});
 
 		if (!this.nprogress) {
 			this.nprogress = new Nprogress();

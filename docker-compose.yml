@@ -1,31 +1,64 @@
-version: '3.8'
+version: "3.8"
 
 services:
   backend:
     build:
       context: ./backend
     ports:
-      - "8080:8080"
+      - "3000:8080"
     environment:
       - NODE_ENV=development
       - DATABASE_URL=mysql://root:rootpassword@mysql:3306/operational
-      - API_URL=http://localhost:8080
-      - APP_URL=http://localhost:3000
+      - API_URL=http://localhost:3000
+      - APP_URL=http://localhost:8080
       - PORT=8080
       - EVENT_STORE=mysql
     volumes:
       - ./backend:/app
       - /app/node_modules
     depends_on:
-      - mysql
+      mysql:
+        condition: service_healthy
+    command: sh -c "npx prisma migrate deploy && npm run start"
 
   frontend:
     build:
       context: ./app
     ports:
-      - "3000:3000"
+      - "8080:80"
     volumes:
       - ./app:/app
       - /app/node_modules
     environment:
       - NODE_ENV=development
+    depends_on:
+      - backend
+
+  mysql:
+    image: mysql:8.0
+    restart: always
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_DATABASE=operational
+      - MYSQL_ROOT_PASSWORD=rootpassword
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "mysqladmin",
+          "ping",
+          "-h",
+          "localhost",
+          "-u",
+          "root",
+          "-p$$MYSQL_ROOT_PASSWORD",
+        ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  mysql_data:

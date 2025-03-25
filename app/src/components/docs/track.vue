@@ -16,9 +16,6 @@
 
 <script>
 import Constrain from "@operational.co/components/ui/constrain.vue";
-import Content, {
-  frontmatter,
-} from "@operational.co/content/manual/introduction.mdx";
 import Sidebar from "./sidebar.vue";
 import Code from "@operational.co/components/code/index.vue";
 import { Tabs, Tab } from "vue3-tabs-component";
@@ -26,7 +23,6 @@ import { Tabs, Tab } from "vue3-tabs-component";
 export default {
   components: {
     Constrain,
-    Content,
     Sidebar,
     Code,
     Tabs,

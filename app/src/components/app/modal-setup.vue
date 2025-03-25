@@ -289,7 +289,7 @@ export default {
 		bottom: 1rem;
 		font-family: var(--font-family-monospace);
 		font-size: var(--font-size-sm);
-		opacity: 0.8;
+		opacity: 0.9;
 	}
 
 	.logo {

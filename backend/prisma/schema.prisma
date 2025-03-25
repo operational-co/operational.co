@@ -229,7 +229,7 @@ model WorkspaceUser {
 model Category {
   id Int @id @default(autoincrement())
 
-  workspace   Workspace? @relation("categories", fields: [workspaceId], references: [id])
+  workspace   Workspace? @relation("categories", fields: [workspaceId], references: [id], onDelete: Cascade)
   workspaceId Int?
 
   text String

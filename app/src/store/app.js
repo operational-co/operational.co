@@ -127,11 +127,11 @@ export const useAppStore = defineStore(config.name, {
 		isSelfHosted: function () {
 			if (
 				import.meta.env.VITE_SELFHOSTED &&
-				import.meta.env.VITE_SELFHOSTED === "true"
+				import.meta.env.VITE_SELFHOSTED === "false"
 			) {
-				return true;
+				return false;
 			}
-			return false;
+			return true;
 		},
 	},
 	actions: {

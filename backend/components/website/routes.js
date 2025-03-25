@@ -97,10 +97,9 @@ const checkConnection = async (req, res) => {
 	const selfHosted = config.SELFHOSTED;
 
 	if (!selfHosted) {
-		return res.status(400).send({
-			message: `Invalid server instance`,
-		});
+		return res.sendStatus(404);
 	}
+
 	try {
 		const connectionStats = await component.checkConnnection();
 		return res.status(200).send(connectionStats);

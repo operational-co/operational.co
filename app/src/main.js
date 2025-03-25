@@ -11,6 +11,13 @@ const app = createApp(App);
 
 const vfm = createVfm();
 
+if (
+	import.meta.env.VITE_SELFHOSTED &&
+	import.meta.env.VITE_SELFHOSTED === "false"
+) {
+	import("./lib/crisp.js").then(({ loadCrisp }) => loadCrisp());
+}
+
 app.use(vfm);
 
 app.use(pinia);

@@ -13,7 +13,6 @@
     "@mdx-js/rollup": "3.0.1",
     "@mdx-js/vue": "3.0.1",
     "@operational.co/components": "*",
-    "@operational.co/content": "*",
     "@operational.co/lib": "*",
     "@operational.co/styles": "*",
     "@popperjs/core": "2.11.8",

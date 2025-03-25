@@ -6,8 +6,8 @@
 	"scripts": {
 		"test": "nodemon test.js",
 		"dev": "nodemon index.js",
-		"build": "npm install; npx prisma generate",
-		"start": "npx prisma generate; node index.js"
+		"build": "npm install; npx prisma migrate deploy; npx prisma generate",
+		"start": "node index.js"
 	},
 	"engines": {
 		"node": ">=18.18 <=22"

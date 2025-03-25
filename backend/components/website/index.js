@@ -185,6 +185,16 @@ const component = {
 	},
 
 	async checkConnnection() {
+		const exists = await prisma.user.findFirst({
+			select: { id: true },
+		});
+
+		const hasUsers = !!exists;
+
+		if (hasUsers) {
+			throw "Already connected";
+		}
+
 		let stats = await this.getStats();
 
 		return {
