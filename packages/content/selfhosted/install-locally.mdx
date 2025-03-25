@@ -10,10 +10,12 @@ First, make sure nodejs 18.x and mysql 8.x is running
 1. Git clone `https://github.com/operational-co/operational.co.git`
 2. cd to the project folder, then go to `/backend` folder
 3. Then create a .env file in the folder and fill in DATABASE_URL and SECRET:
+<Code lang="bash" client:load>
 ```
 DATABASE_URL="CONNECTION_STRING_OF_MYSQL" #enter your database url
 SECRET="kjgabskjgbadkljg" #enter a random string
 ```
+</Code>
 4. Then run `npm run build`
 5. Then run `npm run start`. By default the server starts on port 2000. Go to localhost:2000 and you should see OK.
 6. Then go to `../app` and run `npm run build` and then `npm run preview`

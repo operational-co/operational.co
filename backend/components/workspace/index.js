@@ -302,6 +302,9 @@ const component = {
 	},
 
 	async sendLifecycleEmails() {
+		if (config.SELFHOSTED) {
+			return;
+		}
 		const workspaces = await prisma.workspace.findMany({
 			where: {
 				status: {
@@ -332,6 +335,9 @@ const component = {
 	},
 
 	async calculateUsedFreeEvents() {
+		if (config.SELFHOSTED) {
+			return;
+		}
 		const workspaces = await prisma.workspace.findMany({
 			where: {
 				usedFreeEvents: {

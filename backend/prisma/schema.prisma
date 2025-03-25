@@ -107,6 +107,8 @@ model Event {
   createdAt   DateTime
   errors      String?
   category    String?
+
+  @@index([workspaceId, contextType, test, createdAt])
 }
 
 enum EventType {

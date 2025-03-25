@@ -10,6 +10,32 @@ function resolveSelfHosted() {
 	return true;
 }
 
+function resolveRemoveEventsAfter() {
+	let duration = 120;
+
+	if (
+		process.env.REMOVE_EVENTS_AFTER &&
+		!isNaN(process.env.REMOVE_EVENTS_AFTER)
+	) {
+		duration = process.env.REMOVE_EVENTS_AFTER;
+	}
+
+	return duration;
+}
+
+function resolveRemoveTestEventsAfter() {
+	let duration = 7;
+
+	if (
+		process.env.REMOVE_TEST_EVENTS_AFTER &&
+		!isNaN(process.env.REMOVE_TEST_EVENTS_AFTER)
+	) {
+		duration = process.env.REMOVE_TEST_EVENTS_AFTER;
+	}
+
+	return duration;
+}
+
 const config = {
 	env: process.env.NODE_ENV || "development",
 	PORT: process.env.PORT || 2000,
@@ -22,6 +48,9 @@ const config = {
 	EVENT_STORE: process.env.EVENT_STORE || "mysql",
 
 	SELFHOSTED: resolveSelfHosted(),
+
+	REMOVE_EVENTS_AFTER: resolveRemoveEventsAfter(),
+	REMOVE_TEST_EVENTS_AFTER: resolveRemoveTestEventsAfter(),
 
 	SERVICE_URL: process.env.SERVICE_URL || null,
 

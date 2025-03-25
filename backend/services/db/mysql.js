@@ -380,16 +380,11 @@ WHERE workspaceId = ${params.workspaceId}
 		const currentDate = new Date();
 		const fortyEightHoursAgo = new Date(currentDate - 48 * 60 * 60 * 1000); // Calculate 48 hours ago
 
-		const events = await prisma.Event.findMany({
-			where: {
-				createdAt: {
-					lt: fortyEightHoursAgo,
-				},
-				test: true,
-			},
-		});
-
-		//console.log(events);
+		await prisma.$executeRaw`
+		  DELETE FROM Event
+		  WHERE createdAt < ${fortyEightHoursAgo}
+		    AND test = true
+		`;
 	},
 };
 

@@ -5,7 +5,7 @@ import Code from "@operational.co/components/code/index.vue";
 
 ## Backend setup
 
-<Code lang="bash">
+<Code lang="bash" client:load>
 ```
 # mysql database connection string, eg: mysql://mysql-user:mysql-password@host:port/db-name
 DATABASE_URL="mysql://root:gjkesbgkjak@19.43.119.82:2000/operational" 
@@ -28,7 +28,7 @@ SECRET=""
 
 ## App setup
 
-<Code lang="bash">
+<Code lang="bash" client:load>
 ```
 # Set this the to url your api server is accessible to. Defaults to http://localhost:2000
 VITE_API_URL="http://localhost:2000"
