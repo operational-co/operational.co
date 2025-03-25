@@ -43,9 +43,6 @@ const __dirname = path.resolve("");
 
 const app = express();
 
-import ch from "#lib/clickhouse.js";
-import clickhouse from "#services/db/clickhouse.js";
-
 ["log", "warn", "error"].forEach((methodName) => {
 	const originalMethod = console[methodName];
 	console[methodName] = (...args) => {
@@ -78,9 +75,7 @@ import clickhouse from "#services/db/clickhouse.js";
 });
 
 async function runExperiments() {
-	await ops.log(`avatar:🤖 Server started`).catch((err) => {
-		console.log(err);
-	});
+	await ops.log(`avatar:🤖 Server started`);
 }
 
 async function preInit() {
@@ -202,7 +197,7 @@ async function setupServer() {
 	// Define the path to the uploads directory
 	const uploadDir = path.join(__dirname, "public/uploads");
 
-	if (process.env.NODE_ENV === "development") {
+	if (config.env === "development") {
 		app.use("/uploads", express.static(uploadDir));
 	}
 
@@ -224,7 +219,7 @@ async function setupServer() {
 
 	// Run the server!
 	try {
-		app.listen({ port: config.PORT, host: "0.0.0.0" });
+		app.listen({ port: config.PORT, host: config.HOST });
 	} catch (err) {
 		console.log(err);
 		process.exit(1);

@@ -10,13 +10,25 @@ class Webpush {
 	constructor() {}
 
 	async setup() {
-		webpush.setVapidDetails(
-			config.vapid.EMAIL,
-			config.vapid.PUBLIC_KEY,
-			config.vapid.PRIVATE_KEY,
-		);
+		if (
+			config.vapid.EMAIL &&
+			config.vapid.PUBLIC_KEY &&
+			config.vapid.PRIVATE_KEY
+		) {
+			webpush.setVapidDetails(
+				config.vapid.EMAIL,
+				config.vapid.PUBLIC_KEY,
+				config.vapid.PRIVATE_KEY,
+			);
 
-		this.push = webpush;
+			this.push = webpush;
+		} else {
+			console.log(
+				"ERROR - Missing VAPID details. Please ensure config.vapid.EMAIL, config.vapid.PUBLIC_KEY, and config.vapid.PRIVATE_KEY are all set.",
+			);
+
+			this.push = null;
+		}
 	}
 
 	getUniqueSubscriptions(subscriptions) {
@@ -109,6 +121,10 @@ GROUP BY wu.userId, wu.notify;
 		const options = {
 			TTL: 3600,
 		};
+
+		if (!this.push) {
+			throw "Webpush not setup";
+		}
 
 		const res = await this.push
 			.sendNotification(pushSubscription, message, options)

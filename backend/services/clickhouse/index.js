@@ -2,6 +2,8 @@ import { createClient } from "@clickhouse/client";
 import fs from "fs";
 import path from "path";
 
+import ch from "#lib/clickhouse.js";
+
 class Clickhouse {
 	options = {
 		utcOffset: 0,
@@ -18,7 +20,7 @@ class Clickhouse {
 			},
 		};
 
-		this.ch = createClient(cfg);
+		this.ch = ch;
 	}
 
 	getCh() {

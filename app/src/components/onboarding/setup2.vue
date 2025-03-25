@@ -1,16 +1,20 @@
 <template>
-	<div class="c-onboarding-apikey">
+	<div class="c-onboarding-setup2">
 		<Constrain size="sm">
 			<article>
-				<p>👋 Welcome to Operational, {{ user.firstName }}</p>
-				<p>Here's your API key.</p>
-				<section>
-					<code>{{ apikey }}</code>
-					<Copy :text="apikey"></Copy>
-				</section>
-				<p>Copy this key and save it somewhere secure.</p>
-
-				<button class="btn btn-primary" @click="$emit('onNext')">Next</button>
+				<p>You've been onboarded.</p>
+				<p>Couple of things..</p>
+				<ul>
+					<li>
+						The Playground inside the webapp has your api key and baseUrl
+						loaded. All examples will work out of the box.
+					</li>
+					<li>
+						You can use this webapp as a progressive web app. On mobile, it
+						practically functions as a native app.
+					</li>
+				</ul>
+				<button class="btn btn-primary" @click="$emit('onNext')">Gotcha</button>
 			</article>
 		</Constrain>
 	</div>
@@ -50,19 +54,6 @@ export default {
 </script>
 
 <style lang="scss">
-.c-onboarding-setup {
-	section {
-		margin-bottom: 1rem;
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
-		background-color: var(--color-bg-3);
-		padding: var(--margin);
-		border-radius: var(--border-radius);
-
-		code {
-			margin-bottom: 0;
-		}
-	}
+.c-onboarding-setup2 {
 }
 </style>

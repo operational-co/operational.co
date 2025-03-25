@@ -168,7 +168,7 @@ export default {
 			return __APP_VERSION__;
 		},
 		apiUrl: function () {
-			return import.meta.env.VITE_API_URL;
+			return this.$store.app.baseApiUrl;
 		},
 	},
 

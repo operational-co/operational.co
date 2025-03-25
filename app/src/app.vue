@@ -350,8 +350,17 @@ export default {
 					this.allowSetup = true;
 				}
 			} catch (err) {
+				//console.log(err);
 				if (err && err.message && err.message === "Already connected") {
 					//hmm
+				}
+				if (
+					err &&
+					err.message &&
+					err.message === "No response received from the server."
+				) {
+					// let it allow setup. the setup workflow will help user debug this issue
+					this.allowSetup = true;
 				}
 			}
 		},

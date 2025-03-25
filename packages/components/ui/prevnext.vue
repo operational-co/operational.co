@@ -74,5 +74,23 @@ export default {
       filter: brightness(125%);
     }
   }
+
+  @media screen and (max-width: 576px) {
+    display: flex;
+    flex-direction: column;
+
+    &__item {
+      margin-top: 0.5rem;
+      font-size: var(--font-size-sm);
+
+      &:first-child {
+        margin-top: 0;
+      }
+
+      &.next {
+        justify-content: flex-end;
+      }
+    }
+  }
 }
 </style>

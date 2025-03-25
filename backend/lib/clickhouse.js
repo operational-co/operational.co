@@ -1,6 +1,7 @@
 import { createClient } from "@clickhouse/client";
 import fs from "fs";
 import path from "path";
+import config from "#lib/config.js";
 
 let localConfig = {
 	url: "http://localhost:8123",
@@ -10,7 +11,7 @@ let localConfig = {
 	password: "",
 };
 
-let stagingConfig = {
+let chConfig = {
 	url: process.env.CLICKHOUSE_URL,
 	//database: "operational",
 	keep_alive: {
@@ -19,8 +20,13 @@ let stagingConfig = {
 	},
 };
 
-// Create a ClickHouse client instance
-const ch = createClient(stagingConfig);
+let ch = null;
+
+if (config.EVENT_STORE === "clickhouse") {
+	createClient(chConfig);
+} else {
+	ch = () => {};
+}
 
 // Function to insert dummy data
 const insertDummyData = async () => {

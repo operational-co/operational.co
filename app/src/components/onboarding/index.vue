@@ -25,6 +25,7 @@ import Support from "./support.vue";
 import Outro from "./outro.vue";
 
 import Setup from "./setup.vue";
+import Setup2 from "./setup2.vue";
 
 export default {
 	components: {
@@ -40,6 +41,7 @@ export default {
 		Outro,
 
 		Setup,
+		Setup2,
 	},
 
 	data: function () {
@@ -57,12 +59,18 @@ export default {
 				//"support",
 				//"outro",
 			],
+
+			setupSetups: ["setup", "setup2"],
 		};
 	},
 
 	computed: {
 		user: function () {
 			return this.$store.user.resource;
+		},
+		isSelfHosted: function () {
+			const condition = this.$store.app.isSelfHosted;
+			return condition;
 		},
 	},
 
@@ -79,10 +87,14 @@ export default {
 		},
 		onNext: function () {
 			let newStep = null;
-			let i = this.steps.indexOf(this.currentStep);
+			let steps = this.steps;
+			if (this.isSelfHosted) {
+				steps = this.setupSetups;
+			}
+			let i = steps.indexOf(this.currentStep);
 
 			if (i !== -1) {
-				newStep = this.steps[i + 1];
+				newStep = steps[i + 1];
 
 				if (!newStep) {
 					//this.$store.app.sendNotification(`You're onboarded`);
@@ -102,7 +114,10 @@ export default {
 	mounted: function () {
 		let onboardingStep = this.user.onboardingStep;
 
-		console.log(this.user);
+		let steps = this.steps;
+		if (this.isSelfHosted) {
+			steps = this.setupSetups;
+		}
 
 		// If user hasn't been activated, force them to finish their activation
 		if (!this.user.activated) {
@@ -110,10 +125,10 @@ export default {
 		}
 
 		if (onboardingStep) {
-			let i = this.steps.indexOf(onboardingStep);
+			let i = steps.indexOf(onboardingStep);
 
 			if (i >= 0) {
-				this.currentStep = this.steps[i];
+				this.currentStep = steps[i];
 			}
 		}
 	},

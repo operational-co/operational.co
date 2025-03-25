@@ -1,0 +1,39 @@
+import Item from "@operational.co/components/card/index.vue";
+import Code from "@operational.co/components/code/index.vue";
+
+# Setup env vars
+
+## Backend setup
+
+<Code lang="bash">
+```
+# mysql database connection string, eg: mysql://mysql-user:mysql-password@host:port/db-name
+DATABASE_URL="mysql://root:gjkesbgkjak@19.43.119.82:2000/operational" 
+
+# Optional. Set vapid details for push notifications. Generate your vapid details from here: https://vapidkeys.com
+VAPID_EMAIL=""
+VAPID_PUBLIC_KEY=""
+VAPID_PRIVATE_KEY=""
+
+# Nodejs env, defaults to development. Set it to production when hosting online.
+NODE_ENV="development"
+
+# Port. Defaults to 2000
+PORT="2000"
+
+# Secret hash. DON'T LEAVE THIS EMPTY. Use a random id generator to generate a hash, eg: https://www.uuidgenerator.net/
+SECRET=""
+```
+</Code>
+
+## App setup
+
+<Code lang="bash">
+```
+# Set this the to url your api server is accessible to. Defaults to http://localhost:2000
+VITE_API_URL="http://localhost:2000"
+
+# Only set this if you have vapid details. Set this to the value of VAPID_PUBLIC_KEY from your backend .env
+VITE_PUSH_SERVER_KEY=""
+```
+</Code>

@@ -11,7 +11,7 @@
 			<div class="m-login__body" v-if="currentTab === 'login'">
 				<FormLogin></FormLogin>
 				<section>
-					<p>
+					<p v-if="!isSelfHosted">
 						Not a member yet?
 						<a href="#" @click.prevent="currentTab = 'signup'">Signup now</a>
 					</p>
@@ -113,6 +113,10 @@ export default {
 		if (route.query && "login" in route.query) {
 			this.currentTab = "login";
 		} else {
+		}
+
+		if (this.isSelfHosted) {
+			this.currentTab = "login";
 		}
 
 		if (this.active) {

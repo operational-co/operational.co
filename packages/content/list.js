@@ -95,6 +95,11 @@ export const selfhostedList = [
     depth: 1
   },
   {
+    name: "Setup .env",
+    path: "/selfhosted/setup-env",
+    depth: 1
+  },
+  {
     name: "Install locally",
     path: "/selfhosted/install-locally",
     depth: 1

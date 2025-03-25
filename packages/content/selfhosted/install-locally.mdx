@@ -3,4 +3,23 @@ import Code from "@operational.co/components/code/index.vue";
 
 # Install locally
 
-Guide coming soon
+Setting up Operational on your local device is extremely easy.
+
+First, make sure nodejs 18.x and mysql 8.x is running
+
+1. Git clone `https://github.com/operational-co/operational.co.git`
+2. cd to the project folder, then go to `/backend` folder
+3. Then create a .env file in the folder and fill in DATABASE_URL and SECRET:
+```
+DATABASE_URL="CONNECTION_STRING_OF_MYSQL" #enter your database url
+SECRET="kjgabskjgbadkljg" #enter a random string
+```
+4. Then run `npm run build`
+5. Then run `npm run start`. By default the server starts on port 2000. Go to localhost:2000 and you should see OK.
+6. Then go to `../app` and run `npm run build` and then `npm run preview`
+7. Go to localhost:8080 and start the onboarding process
+
+Onboarding process:
+<video width="100%" height="400px" controls>
+  <source src="/operational-open-source-onboarding.mp4" type="video/mp4" />
+</video>

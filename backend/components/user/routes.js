@@ -158,8 +158,6 @@ const switchWorkspace = async (req, res) => {
 
 	const sid = res.locals.sid;
 
-	console.log(sid);
-
 	let jwt = await component.switchWorkspace(res.locals.user, newWorkspace, sid);
 
 	res.header("x-token", jwt);
@@ -178,10 +176,6 @@ const update = async (req, res) => {
 	if (req.file) {
 		const fileBuffer = req.file.buffer;
 		const fileName = req.file.originalname;
-
-		// You can now use fileBuffer and fileName as needed
-		console.log("File name:", fileName);
-		console.log("File buffer:", fileBuffer);
 
 		let filePath = await File.saveImage(fileName, fileBuffer).catch((err) => {
 			console.log(err);
@@ -251,8 +245,6 @@ const updateEmail = async (req, res) => {
 };
 
 const createIntent = async (req, res) => {
-	console.log(res.locals.user);
-
 	try {
 		const data = await component.createIntent(res.locals.user);
 		return res.status(201).send(data);
@@ -321,8 +313,6 @@ const setup = async (req, res) => {
 			message: err,
 		});
 	}
-
-	console.log(data);
 
 	res.header("x-token", data.jwt);
 

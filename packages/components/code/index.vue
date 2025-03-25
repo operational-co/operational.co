@@ -13,6 +13,7 @@
 <script>
 import { highlightText } from "@speed-highlight/core";
 import * as jsSyntax from "/../node_modules/@speed-highlight/core/dist/languages/js.js";
+import * as bashSyntax from "/../node_modules/@speed-highlight/core/dist/languages/bash.js";
 import Copy from "@operational.co/components/ui/copy.vue";
 
 export default {
@@ -32,7 +33,8 @@ export default {
       type: Boolean,
       default: true
     },
-    text: {}
+    text: {},
+    lang: {}
   },
 
   watch: {
@@ -60,7 +62,12 @@ export default {
         return;
       }
 
-      let lang = "js";
+      let lang = this.lang || "js";
+      let sub = jsSyntax.default;
+
+      if (lang === "bash") {
+        sub = bashSyntax.default;
+      }
 
       let txt = el.textContent;
 
@@ -76,7 +83,7 @@ export default {
         .filter((className) => !className.startsWith("shj-"))
         .join(" ")} shj-lang-${lang} shj-${mode}`;
 
-      el.innerHTML = await highlightText(txt, { sub: jsSyntax.default }, mode == "multiline", opt);
+      el.innerHTML = await highlightText(txt, { sub: sub }, mode == "multiline", opt);
     }
   },
 

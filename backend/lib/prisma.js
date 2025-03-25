@@ -4,10 +4,10 @@ const prisma = new PrismaClient();
 /**
  * Prisma middleware - not being used at the moment
  */
-prisma.$use(async (params, next) => {
-  const result = await next(params);
+// prisma.$use(async (params, next) => {
+//   const result = await next(params);
 
-  return result;
-});
+//   return result;
+// });
 
 export default prisma;
