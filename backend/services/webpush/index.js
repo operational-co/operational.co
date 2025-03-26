@@ -31,6 +31,25 @@ class Webpush {
 		}
 	}
 
+	async test() {
+		let type = null;
+		let message = `Not set. Push notifications won't work`;
+		if (
+			config.vapid.EMAIL &&
+			config.vapid.PUBLIC_KEY &&
+			config.vapid.PRIVATE_KEY
+		) {
+			type = "vapid";
+			message = "";
+		}
+
+		return {
+			name: "webpush",
+			type,
+			message,
+		};
+	}
+
 	getUniqueSubscriptions(subscriptions) {
 		const seenAuths = new Set();
 		return subscriptions.filter((sub) => {

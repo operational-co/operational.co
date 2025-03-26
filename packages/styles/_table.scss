@@ -1,0 +1,29 @@
+table {
+	border: none;
+	border-collapse: collapse;
+	margin: 0;
+	margin-bottom: 1rem;
+	width: 100%;
+
+	th {
+		border: none;
+		font-weight: 500;
+		font-size: var(--font-size-xs);
+		line-height: 16px;
+		text-transform: uppercase;
+		text-align: left;
+		vertical-align: bottom;
+		padding: 0 8px 8px;
+	}
+
+	td {
+		border: none;
+		border-top: 1px solid var(--color-bg-6);
+		vertical-align: top;
+		padding: 8px;
+		font-size: var(--font-size-sm);
+
+		&:first-child {
+		}
+	}
+}

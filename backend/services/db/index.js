@@ -16,6 +16,13 @@ class Db {
 		// console.log(stats);
 	}
 
+	async test() {
+		return {
+			name: "db",
+			type: this.dbName,
+		};
+	}
+
 	cleanParams(params) {
 		if (params.skip) {
 			params.skip = parseInt(params.skip);

@@ -1,0 +1,114 @@
+import Item from "@operational.co/components/card/index.vue";
+import CodeWrap from "@operational.co/components/code/wrap.vue";
+import Code from "@operational.co/components/code/index.vue";
+
+# Install on your VPS server
+
+For under $10 p/m you can host Operational in a rock-solid environment.
+
+Here's how.
+
+## Step 1. Setup a VPS server
+
+We recommend Hetzner for the most bang-for-your-buck.
+
+But alternatives like Digital Ocean, OVHCloud, Linode, Vulrr etc are also good.
+
+## Step 2. Install requirements
+
+You'll need to have nginx installed and configured.
+
+You'll also need a domain name that's linked to your server. A subdomain is also fine.
+
+The application itself requires:
+
+- nodejs 18.x minimum
+- mysql 8.x
+
+Install these and make sure nodejs and mysql service* is running.
+
+## Step 3. Install application
+
+Install by either:
+
+Running `git clone https://github.com/operational-co/operational.co.git` (you'll need git to be installed on your server)
+
+Or download the zip package of the application from https://github.com/operational-co/operational.co and upload it to your server. Then unzip it.
+
+## Step 4. Configure the application
+
+- Go to the application folder, then to /backend and create a `.env` file.
+- Fill the .env file with your details(I've outlined this at the bottom of this page**)
+- Then run `npm run build`.
+- Then run `npm run start`. If you've installed pm2, run `pm2 start index.js` instead.
+- Now go back one folder and go to /app
+- Create a `.env` file here. Fill in the .env file with your details(I've outlined this at the bottom of the page)
+- Then run `npm run build`.
+
+## Step 5. Configuring nginx
+
+You'll need to create two sites. One for the backend and one for the app(static spa)
+
+By default, backend runs on port 2000. Create a reverse proxy on nginx for port 80 to port 2000
+
+For the app, configure nginx to serve /app/dist folder.
+
+## Step 6. Create your account
+
+Once everything is setup, open your frontend(url depends on how you've setup nginx to serve the app/dist folder)
+
+The onboarding process should startup. Follow the steps here and create your account.
+
+Once created, you should be able to track events.
+
+---
+
+#### \*Configuring mysql
+
+Make sure you have created a database and assigned a user to the database.
+
+Get the connection string ready.
+
+#### \*\*Env for backend
+
+**Vapid**
+
+Generate Vapid details from [vapidkeys](https://vapidkeys.com/)
+
+Then replace VAPID_EMAIL, VAPID_PUBLIC_KEY and VAPID_PRIVATE_KEY with those details.
+
+Vapid details are optional but we recommend setting them for push notifications.
+
+**Api url**
+Set this to the url of your backend, eg: https://ops-api.mydomain.com
+
+**App url**
+Set this to the url of your app, eg: https://ops.mydomain.com
+
+**Port**
+By default, PORT is 2000. But feel free to change it to another one.
+
+**Secret**
+Enter a random string in the SECRET.
+
+
+<Code lang="bash" client:load>
+	```
+	DATABASE_URL="mysql_connection_string"
+
+VAPID_EMAIL="mailto:shashwat.amin@yahoo.com"
+VAPID_PUBLIC_KEY="BP3td0Ocfd62J-Ggu7ma4SzWIwd5auBSG2rYD4K1uYOU1Q_LfVEKh9oYQqRLx6IITBHTIObZvAzXOJEzAmRGaoU"
+VAPID_PRIVATE_KEY="XAi5fu38VfY_Nm7JssLDxrpdHVRUPjtugWAlAqakKp4"
+
+API_URL=""
+
+APP_URL=""
+
+NODE_ENV="production"
+
+PORT="2000"
+SECRET=""
+	```
+</Code>
+
+You don't need to modify the rest

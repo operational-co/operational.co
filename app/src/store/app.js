@@ -26,7 +26,7 @@ const api = {
 			const res = await http.post("/website/subscribe-push", subscription);
 			return res.data || [];
 		} catch (err) {
-			console.log(err);
+			//console.log(err);
 			throw err;
 		}
 	},
@@ -35,7 +35,7 @@ const api = {
 			const res = await http.post("/website/unsubscribe-push", subscription);
 			return res.data || [];
 		} catch (err) {
-			console.log(err);
+			//console.log(err);
 			throw err;
 		}
 	},
@@ -44,7 +44,7 @@ const api = {
 			const res = await http.post("/workspace/activate", form);
 			return res.data || [];
 		} catch (err) {
-			console.log(err);
+			//console.log(err);
 			throw err;
 		}
 	},
@@ -53,7 +53,7 @@ const api = {
 			const res = await http.post("/website/send-test-push-notification");
 			return res.data || [];
 		} catch (err) {
-			console.log(err);
+			//console.log(err);
 			throw err;
 		}
 	},
@@ -62,7 +62,7 @@ const api = {
 			const res = await http.get("/website/stats");
 			return res.data || [];
 		} catch (err) {
-			console.log(err);
+			//console.log(err);
 			throw err;
 		}
 	},
@@ -71,7 +71,7 @@ const api = {
 			const res = await http.post("/website/connection");
 			return res.data || [];
 		} catch (err) {
-			console.log(err);
+			//console.log(err);
 			throw err;
 		}
 	},

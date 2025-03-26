@@ -105,8 +105,8 @@ export const selfhostedList = [
     depth: 1
   },
   {
-    name: "Install on your server",
-    path: "/selfhosted/install-on-your-server",
+    name: "Install on VPS",
+    path: "/selfhosted/install-on-vps",
     depth: 1
   }
 ];

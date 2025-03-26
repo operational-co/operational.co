@@ -294,7 +294,6 @@ const demoLogin = async (req, res) => {
 };
 
 const setup = async (req, res) => {
-	console.log(req.body);
 	let data = null;
 
 	await new Promise((r) => setTimeout(r, 3000));

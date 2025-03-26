@@ -31,7 +31,19 @@ class Email {
 		return true;
 	}
 
-	async test() {}
+	async test() {
+		let type = "file";
+		let message = "Not set. Emails will be logged locally to file.";
+		if (config.resend.TOKEN) {
+			type = "Resend";
+			message = "";
+		}
+		return {
+			name: "email",
+			type,
+			message,
+		};
+	}
 
 	async saveEmailToFile(payload) {
 		try {

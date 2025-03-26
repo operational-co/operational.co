@@ -30,17 +30,17 @@ export default {
             }
           }
         },
-        lastName: {
-          label: "Last name",
-          type: "InputText",
-          placeholder: "",
-          validations: {
-            required: {
-              params: null,
-              message: "Last name is required"
-            }
-          }
-        },
+        // lastName: {
+        //   label: "Last name",
+        //   type: "InputText",
+        //   placeholder: "",
+        //   validations: {
+        //     required: {
+        //       params: null,
+        //       message: "Last name is required"
+        //     }
+        //   }
+        // },
         // companyUrl: {
         //   label: "Company url",
         //   type: "InputText",

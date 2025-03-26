@@ -5,6 +5,8 @@ import os from "os";
 import si from "systeminformation";
 import diskusage from "diskusage";
 import config from "#lib/config.js";
+import Email from "#services/email/index.js";
+import Db from "#services/db/index.js";
 
 const component = {
 	async subscribe(user, subscription, sid) {
@@ -196,6 +198,16 @@ const component = {
 		}
 
 		let stats = await this.getStats();
+
+		stats.services = [];
+
+		let emailService = await Email.test();
+		let webpushService = await Webpush.test();
+		let dbService = await Db.test();
+
+		stats.services.push(emailService);
+		stats.services.push(webpushService);
+		stats.services.push(dbService);
 
 		return {
 			...stats,

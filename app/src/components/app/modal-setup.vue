@@ -65,7 +65,7 @@
 					v-else-if="currentCard === 'connection'"
 					key="connection"
 				>
-					<h2>Check connection with your backend</h2>
+					<h2 v-if="!connectionStats">Check connection with your backend</h2>
 					<div class="text-center">
 						<button
 							v-if="!connectionStats"
@@ -104,6 +104,25 @@
 							Your server has {{ connectionStats.ram }} ram and
 							{{ connectionStats.availableDiskSpace }} available disk space.
 						</p>
+						<table border="1">
+							<thead>
+								<tr>
+									<th>Service</th>
+									<th></th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr v-for="(service, i) in connectionStats.services" :key="i">
+									<td>{{ service.name }}</td>
+									<td>
+										{{ service.type }}
+										<small v-if="service.message"
+											>({{ service.message }})</small
+										>
+									</td>
+								</tr>
+							</tbody>
+						</table>
 						<p>Let's create your account.</p>
 						<div class="text-center">
 							<button
@@ -183,8 +202,6 @@ export default {
 			try {
 				const connection = await this.$store.app.checkConnection();
 
-				console.log(connection);
-
 				if (connection) {
 					this.connectionStats = connection;
 				}
@@ -225,34 +242,18 @@ export default {
 <style lang="scss">
 .m-setup {
 	.vfm__content {
-		--c-0: hsla(138.97058823529412, 84%, 39%, 0.08);
-		--y-0: 93%;
-		--x-0: 15%;
-		--c-1: hsla(150.8823529411765, 83%, 25%, 0.85);
-		--x-1: 49%;
-		--y-1: 97%;
-		--c-2: hsla(60.882352941176485, 84%, 37%, 0.44);
-		--x-2: 92%;
-		--y-2: 67%;
-		background-color: hsla(181.32352941176475, 92%, 22%, 1);
+		--x-0: 13%;
+		--c-0: hsla(227.64705882352914, 3%, 9%, 0.79);
+		--y-0: 82%;
+		background-color: hsla(219.70588235294136, 3%, 12%, 1);
 		background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 3000 3000' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E"),
 			radial-gradient(
 				circle at var(--x-0) var(--y-0),
 				var(--c-0) var(--s-start-0),
 				transparent var(--s-end-0)
-			),
-			radial-gradient(
-				circle at var(--x-1) var(--y-1),
-				var(--c-1) var(--s-start-1),
-				transparent var(--s-end-1)
-			),
-			radial-gradient(
-				circle at var(--x-2) var(--y-2),
-				var(--c-2) var(--s-start-2),
-				transparent var(--s-end-2)
 			);
-		animation: hero-gradient-animation 8000ms ease-in-out infinite alternate;
-		background-blend-mode: overlay, lighten, normal, normal;
+		animation: hero-gradient-animation 5000ms ease-in-out infinite alternate;
+		background-blend-mode: overlay, normal;
 
 		box-shadow:
 			rgb(255, 255, 255) 0px 0px 0px 0px,
@@ -264,8 +265,11 @@ export default {
 			rgba(255, 255, 255, 0.21) 0px 0px 1px 0px inset,
 			rgba(0, 0, 0, 0.16) 0px -6px 12px -4px inset;
 
-		width: 540px;
-		height: 55vh;
+		width: 500px;
+		min-height: 640px;
+		display: flex;
+		justify-content: center;
+		align-items: center;
 	}
 
 	/*
@@ -304,13 +308,9 @@ export default {
 	}
 
 	.c-constrain {
-		height: 100%;
+		//height: 100%;
 
 		&__inner {
-			display: flex;
-			flex-direction: column;
-			align-items: center;
-			justify-content: center;
 		}
 	}
 
@@ -324,10 +324,11 @@ export default {
 	}
 
 	.c-form {
-		background-color: rgba(0, 0, 0, 0.45);
-		backdrop-filter: blur(4px);
-		padding: var(--spacer);
-		border-radius: 30px;
+		width: 300px;
+		//background-color: rgba(0, 0, 0, 0.1);
+		//backdrop-filter: blur(4px);
+		//padding: var(--spacer);
+		//border-radius: 30px;
 	}
 
 	.form-control {
@@ -357,9 +358,9 @@ export default {
 		}
 	}
 
-	@media screen and (max-width: 1400px) {
+	@media screen and (max-height: 800px) {
 		.vfm__content {
-			height: 94vh;
+			min-height: 88vh;
 		}
 	}
 

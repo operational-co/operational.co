@@ -6,6 +6,7 @@
 @import "form";
 @import "globals";
 @import "highlight";
+@import "table";
 
 @import "nprogress";
 
@@ -70,130 +71,50 @@ body {
   text-align: center;
 }
 
-@property --c-0 {
-  syntax: "<color>";
-  inherits: false;
-  initial-value: hsla(138.97058823529412, 84%, 39%, 0.08);
-}
+@keyframes hero-gradient-animation {
+  0% {
+    --x-0: 13%;
+    --c-0: hsla(227.64705882352914, 3%, 9%, 0.79);
+    --y-0: 82%;
+    --s-start-0: 5%;
+    --s-end-0: 52%;
+  }
 
-@property --y-0 {
-  syntax: "<percentage>";
-  inherits: false;
-  initial-value: 93%;
-}
-
-@property --s-start-0 {
-  syntax: "<percentage>";
-  inherits: false;
-  initial-value: 3.1665611146295123%;
-}
-
-@property --s-end-0 {
-  syntax: "<percentage>";
-  inherits: false;
-  initial-value: 67%;
+  100% {
+    --x-0: 45%;
+    --c-0: hsla(232.94117647058832, 7%, 18%, 0.88);
+    --y-0: 6%;
+    --s-start-0: 8.26482712013134%;
+    --s-end-0: 123.44094627490942%;
+  }
 }
 
 @property --x-0 {
   syntax: "<percentage>";
   inherits: false;
-  initial-value: 15%;
+  initial-value: 13%;
 }
 
-@property --c-1 {
+@property --c-0 {
   syntax: "<color>";
   inherits: false;
-  initial-value: hsla(150.8823529411765, 83%, 25%, 0.85);
+  initial-value: hsla(227.64705882352914, 3%, 9%, 0.79);
 }
 
-@property --x-1 {
+@property --y-0 {
   syntax: "<percentage>";
   inherits: false;
-  initial-value: 49%;
+  initial-value: 82%;
 }
 
-@property --y-1 {
+@property --s-start-0 {
   syntax: "<percentage>";
   inherits: false;
-  initial-value: 97%;
+  initial-value: 5%;
 }
 
-@property --s-start-1 {
+@property --s-end-0 {
   syntax: "<percentage>";
   inherits: false;
-  initial-value: 0%;
-}
-
-@property --s-end-1 {
-  syntax: "<percentage>";
-  inherits: false;
-  initial-value: 81%;
-}
-
-@property --c-2 {
-  syntax: "<color>";
-  inherits: false;
-  initial-value: hsla(60.882352941176485, 84%, 37%, 0.44);
-}
-
-@property --x-2 {
-  syntax: "<percentage>";
-  inherits: false;
-  initial-value: 92%;
-}
-
-@property --y-2 {
-  syntax: "<percentage>";
-  inherits: false;
-  initial-value: 67%;
-}
-
-@property --s-start-2 {
-  syntax: "<percentage>";
-  inherits: false;
-  initial-value: 0%;
-}
-
-@property --s-end-2 {
-  syntax: "<percentage>";
-  inherits: false;
-  initial-value: 81%;
-}
-
-@keyframes hero-gradient-animation {
-  0% {
-    --c-0: hsla(138.97058823529412, 84%, 39%, 0.08);
-    --y-0: 93%;
-    --s-start-0: 3.1665611146295123%;
-    --s-end-0: 67%;
-    --x-0: 15%;
-    --c-1: hsla(150.8823529411765, 83%, 25%, 0.85);
-    --x-1: 49%;
-    --y-1: 97%;
-    --s-start-1: 0%;
-    --s-end-1: 81%;
-    --c-2: hsla(60.882352941176485, 84%, 37%, 0.44);
-    --x-2: 92%;
-    --y-2: 67%;
-    --s-start-2: 0%;
-    --s-end-2: 81%;
-  }
-
-  100% {
-    --c-0: hsla(173.38235294117646, 79%, 44%, 0.73);
-    --y-0: 2%;
-    --s-start-0: 3.1665611146295123%;
-    --s-end-0: 148.69622945755324%;
-    --x-0: 65%;
-    --c-1: hsla(207.7941176470588, 81%, 36%, 1);
-    --x-1: 73%;
-    --y-1: 2%;
-    --s-start-1: 14;
-    --s-end-1: 88;
-    --c-2: hsla(78.08823529411772, 89%, 34%, 0.39);
-    --x-2: 98%;
-    --y-2: 44%;
-    --s-start-2: 14;
-    --s-end-2: 88;
-  }
+  initial-value: 52%;
 }
