@@ -23,6 +23,18 @@ PORT="2000"
 
 # Secret hash. DON'T LEAVE THIS EMPTY. Use a random id generator to generate a hash, eg: https://www.uuidgenerator.net/
 SECRET=""
+
+# ["http://localhost:8080"] Allows cors from this url. If APP_URL is set, that will be used instead.
+# Set a cors url to override the current url
+# /api/v1/ingest is allowed from all urls so it can receive events without any cors issue.
+# Set this value to "*" to allow all urls
+CORS=""
+
+# [120] Removes events older than 120 days
+REMOVE_EVENTS_AT=""
+
+# [7] Removes old test events older than 7 days
+REMOVE_TEST_EVENTS_AT=""
 ```
 </Code>
 
