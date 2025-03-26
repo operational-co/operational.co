@@ -108,7 +108,12 @@ model Event {
   errors      String?
   category    String?
 
+  // For main query performance
   @@index([workspaceId, contextType, test, createdAt])
+  @@index([workspaceId, contextType, test, category, createdAt])
+
+  // For subquery (context lookup) performance
+  @@index([workspaceId, contextType, contextId])
 }
 
 enum EventType {

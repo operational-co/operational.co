@@ -11,7 +11,7 @@ function resolveSelfHosted() {
 }
 
 function resolveRemoveEventsAfter() {
-	let duration = 120;
+	let duration = 120; // remove events after 120 days
 
 	if (
 		process.env.REMOVE_EVENTS_AFTER &&
@@ -24,7 +24,7 @@ function resolveRemoveEventsAfter() {
 }
 
 function resolveRemoveTestEventsAfter() {
-	let duration = 7;
+	let duration = 7; // remove test events after 7 days
 
 	if (
 		process.env.REMOVE_TEST_EVENTS_AFTER &&

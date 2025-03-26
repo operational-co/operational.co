@@ -129,7 +129,7 @@ GROUP BY wu.userId, wu.notify;
 		const res = await this.push
 			.sendNotification(pushSubscription, message, options)
 			.catch((err) => {
-				console.log(err);
+				//console.log(err);
 				throw err;
 			});
 	}

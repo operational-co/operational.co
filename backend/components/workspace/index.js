@@ -379,7 +379,6 @@ const component = {
 	},
 
 	async nagWorkspace(workspace) {
-		console.log(`Nagging ${workspace.name}`);
 		const emailFlags = workspace.emailFlags || {};
 
 		let percentageDifference =
@@ -390,8 +389,6 @@ const component = {
 		percentageDifference = 100 - percentageDifference;
 
 		percentageDifference = Math.ceil(percentageDifference);
-
-		console.log(percentageDifference);
 
 		if (percentageDifference >= 50 && !emailFlags.nag50) {
 			// nag for 50%

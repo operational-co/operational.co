@@ -2,7 +2,7 @@ import { createClient } from "@clickhouse/client";
 import fs from "fs";
 import path from "path";
 
-import ch from "#lib/clickhouse.js";
+import config from "#lib/config.js";
 
 class Clickhouse {
 	options = {
@@ -11,7 +11,7 @@ class Clickhouse {
 	ch;
 
 	async setup() {
-		const cfg = {
+		const chConfig = {
 			url: process.env.CLICKHOUSE_URL,
 			//database: "operational",
 			keep_alive: {
@@ -19,6 +19,14 @@ class Clickhouse {
 				idle_socket_ttl: 2500,
 			},
 		};
+
+		let ch = null;
+
+		if (config.EVENT_STORE === "clickhouse") {
+			ch = createClient(chConfig);
+		} else {
+			ch = () => {};
+		}
 
 		this.ch = ch;
 	}

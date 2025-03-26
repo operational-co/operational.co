@@ -175,7 +175,7 @@
 							<span>Usage </span>
 						</router-link>
 					</li>
-					<!-- <li>
+					<li v-if="isSelfHosted">
 						<router-link to="/settings/server">
 							<svg
 								width="24"
@@ -200,7 +200,7 @@
 							</svg>
 							<span>Server</span>
 						</router-link>
-					</li> -->
+					</li>
 				</ul>
 			</template>
 			<template v-else>
@@ -229,6 +229,10 @@ export default {
 	},
 
 	computed: {
+		isSelfHosted: function () {
+			const condition = this.$store.app.isSelfHosted;
+			return condition;
+		},
 		currentPageName: function () {
 			return this.$route.name;
 		},

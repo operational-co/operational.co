@@ -1,6 +1,7 @@
 import prisma from "#lib/prisma.js";
 import { format } from "sql-formatter";
 import moment from "moment";
+import config from "#lib/config.js";
 
 const mysql = {
 	async cleanParams(params) {
@@ -8,6 +9,7 @@ const mysql = {
 		let take = params.take || 20;
 		let query = params.query || "";
 		let cursor = params.cursor || null;
+		let category = params.category || null;
 		let workspaceId = params.workspaceId || undefined;
 
 		let newParams = {
@@ -15,6 +17,7 @@ const mysql = {
 			take,
 			query,
 			cursor,
+			category,
 			workspaceId,
 		};
 
@@ -56,7 +59,36 @@ const mysql = {
 			b.errors,
 			b.category,
 			b.contextId,
-			b.contextType
+			b.contextType,
+
+			(
+		    CASE 
+		      WHEN b.contextId IS NOT NULL THEN (
+		        SELECT JSON_ARRAYAGG(
+		          JSON_OBJECT(
+		            'id', e.id,
+		            'name', e.name,
+		            'createdAt', e.createdAt,
+		            'content', e.content,
+		            'type', e.type,
+		            'actions', e.actions,
+		            'avatar', e.avatar,
+		            'test', e.test,
+		            'errors', e.errors,
+		            'category', e.category,
+		            'contextId', e.contextId,
+		            'contextType', e.contextType
+		          )
+		        )
+		        FROM Event e
+		        WHERE
+		          e.workspaceId = b.workspaceId
+		          AND e.contextType = 1
+		          AND e.contextId = b.contextId
+		      )
+		      ELSE NULL
+		    END
+		  ) AS contexts
 		`;
 
 		let where = [`workspaceId = ${params.workspaceId}`, `contextType = 0`];
@@ -85,10 +117,10 @@ const mysql = {
 				.replace("Z", "");
 
 			if (initialEvent) {
-				let clause = `(createdAt > '${createdAt}')`;
+				let clause = `(createdAt < '${createdAt}')`;
 				where.push(clause);
 			} else {
-				console.log(params.cursor);
+				//console.log(params.cursor);
 			}
 		}
 
@@ -112,7 +144,11 @@ const mysql = {
 			linesBetweenQueries: 2,
 		});
 
+		//console.log(sql);
+		console.time("sql");
 		let results = await this.getResults(sql);
+		console.timeEnd("sql");
+		//console.log(results);
 
 		results = await this.cleanResults(results);
 
@@ -195,6 +231,8 @@ const mysql = {
 			linesBetweenQueries: 2,
 		});
 
+		//console.log(sql);
+
 		let results = await this.getResults(sql);
 
 		results = await this.cleanResults(results);
@@ -239,13 +277,14 @@ const mysql = {
 	},
 
 	async getCategories(params) {
+		let tableName = "Event";
 		const limit = 10000;
 		let date = moment.utc().subtract(2, "hours").startOf("hour").toISOString();
 		date = date.replace("Z", "");
 
 		let query = `
 		SELECT category
-FROM Events
+FROM ${tableName}
 WHERE workspaceId = ${params.workspaceId}
   AND category != ''
   AND category IS NOT NULL
@@ -376,15 +415,34 @@ WHERE workspaceId = ${params.workspaceId}
 		return res;
 	},
 
-	async removeTestEvents() {
+	async removeOldEvents() {
+		const days = config.REMOVE_EVENTS_AFTER;
+		const hours = days * 24;
 		const currentDate = new Date();
-		const fortyEightHoursAgo = new Date(currentDate - 48 * 60 * 60 * 1000); // Calculate 48 hours ago
+		const hoursAgo = new Date(currentDate - hours * 60 * 60 * 1000);
 
-		await prisma.$executeRaw`
+		const result = await prisma.$executeRaw`
 		  DELETE FROM Event
-		  WHERE createdAt < ${fortyEightHoursAgo}
+		  WHERE createdAt < ${hoursAgo}
+		    AND test = false
+		`;
+
+		return result;
+	},
+
+	async removeTestEvents() {
+		const days = config.REMOVE_TEST_EVENTS_AFTER;
+		const hours = days * 24;
+		const currentDate = new Date();
+		const hoursAgo = new Date(currentDate - hours * 60 * 60 * 1000);
+
+		const result = await prisma.$executeRaw`
+		  DELETE FROM Event
+		  WHERE createdAt < ${hoursAgo}
 		    AND test = true
 		`;
+
+		return result;
 	},
 };
 

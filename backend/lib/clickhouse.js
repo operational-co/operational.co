@@ -3,6 +3,10 @@ import fs from "fs";
 import path from "path";
 import config from "#lib/config.js";
 
+/**
+ * Depreciated??
+ */
+
 let localConfig = {
 	url: "http://localhost:8123",
 	database: "operational",

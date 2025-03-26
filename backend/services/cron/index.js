@@ -38,9 +38,14 @@ class CronTab {
 
 	async setupJobs() {
 		/**
-		 * This one will wipe test events after 48 hours
-		 */ // 0 9 * * *
+		 * This one will wipe test events after some time
+		 */
 		new Cron("0 9 * * *", this.options, Db.removeTestEvents.bind(Db));
+
+		/**
+		 * Removes events after x num of days. Only for self_hosted for now
+		 */
+		new Cron("0 9 * * *", this.options, Db.removeOldEvents.bind(Db));
 
 		/**
 		 * Build a event name cache for all workspaces. Runs every 6 hours
@@ -95,6 +100,7 @@ class CronTab {
 			this.options,
 			Workspace.calculateUsedFreeEvents.bind(Workspace),
 		);
+
 		/**
 		 * Basic healthcheck
 		 */

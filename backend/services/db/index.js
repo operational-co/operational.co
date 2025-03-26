@@ -89,6 +89,15 @@ class Db {
 		return await db.removeTestEvents();
 	}
 
+	async removeOldEvents() {
+		// dont run if not in selfhosted mode
+		if (!config.SELFHOSTED) {
+			return;
+		}
+		const db = this.getDbInstance();
+		return await db.removeOldEvents();
+	}
+
 	async getCategories(params) {
 		const db = this.getDbInstance();
 		return await db.getCategories(params);

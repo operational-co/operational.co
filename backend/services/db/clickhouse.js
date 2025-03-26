@@ -321,6 +321,8 @@ WHERE workspaceId = '${params.workspaceId}'
 		}
 	},
 
+	async removeOldEvents() {},
+
 	async removeTestEvents() {
 		const ch = Clickhouse.getCh();
 		const currentDate = moment().utc();
