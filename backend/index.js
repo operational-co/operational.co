@@ -134,10 +134,44 @@ async function init() {
 
 async function setupServer() {
 	const corsMiddleware = (req, res, next) => {
-		const valids = ["http://localhost:8080", "https://app.operational.co"];
+		let allowAll = false;
+		let valids = ["http://localhost:8080", "https://app.operational.co"];
+
+		// Only set this for selfhosted
+		if (config.SELFHOSTED) {
+			valids = [config.CORS];
+			if (config.CORS === "*") {
+				allowAll = true;
+			}
+		}
 		const allowedPaths = ["/api/v1/ingest", "/api/v1/log"];
 
 		const origin = req.headers.origin;
+
+		// If allowAll is set, just allow all requests
+		if (allowAll) {
+			res.setHeader("Access-Control-Allow-Origin", origin || "*");
+			res.setHeader(
+				"Access-Control-Allow-Headers",
+				"Content-Type, Authorization, x-token, x-test",
+			);
+			res.setHeader(
+				"Access-Control-Expose-Headers",
+				"Content-Range, x-token, x-test",
+			);
+			res.setHeader("Access-Control-Allow-Credentials", "true");
+
+			// Handle preflight (OPTIONS) requests
+			if (req.method === "OPTIONS") {
+				res.setHeader(
+					"Access-Control-Allow-Methods",
+					"GET, POST, PUT, DELETE, OPTIONS",
+				);
+				return res.sendStatus(204);
+			}
+
+			return next();
+		}
 
 		// Allow requests if:
 		// 1. No origin (server-to-server, Postman, curl)

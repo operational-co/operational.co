@@ -7,7 +7,6 @@ import InvoiceModel from "#components/invoice/model.js";
 import SessionModel from "#models/session.js";
 
 import prisma from "#lib/prisma.js";
-import isBanned from "#lib/is-banned.js";
 import config from "#lib/config.js";
 import generateCost from "#lib/generate-cost.js";
 import generateJwt from "#lib/generate-jwt.js";

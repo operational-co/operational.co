@@ -10,7 +10,6 @@ import File from "#services/file/index.js";
 import multer from "multer";
 import path from "path";
 import config from "#lib/config.js";
-import isBanned from "#lib/is-banned.js";
 
 const __dirname = path.resolve("");
 
@@ -48,12 +47,7 @@ async function emailValidation(email) {
 		return `${name}@${tempName}`;
 	}
 
-	try {
-		await isBanned(email);
-	} catch (err) {
-		console.log(err);
-		throw err;
-	}
+	// check for malicious users
 
 	return email;
 }

@@ -5,7 +5,6 @@ import SessionModel from "#models/session.js";
 import config from "#lib/config.js";
 import generateJwt from "#lib/generate-jwt.js";
 import verifyJwt from "#lib/verify-jwt.js";
-import isBanned from "#lib/is-banned.js";
 import prisma from "#lib/prisma.js";
 
 import Pdf from "#services/pdf/index.js";
@@ -284,11 +283,6 @@ const component = {
 		if (users.length > 0) {
 			throw "This email cannot be used, please try another email.";
 		}
-
-		// Then check if it passes banned emails
-		users = await isBanned(form.email, null, true).catch((err) => {
-			console.log(err);
-		});
 
 		// first, generate a unique token
 		let token = nanoid();

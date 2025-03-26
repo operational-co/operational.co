@@ -315,25 +315,3 @@ enum InvoiceStatus {
   PAID
   VOID
 }
-
-enum BanType {
-  DOMAIN
-  EMAIL
-  IP
-}
-
-model BanList {
-  id Int @id @default(autoincrement())
-
-  // can be email, text, ip or whatever
-  text String @db.VarChar(100)
-
-  // refer to bantypes
-  type BanType @default(EMAIL)
-
-  // When this ban type was created
-  createdAt DateTime @default(now())
-
-  //  When do we want to ban these guys till
-  banTill DateTime?
-}

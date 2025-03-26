@@ -36,6 +36,20 @@ function resolveRemoveTestEventsAfter() {
 	return duration;
 }
 
+function resolveCors() {
+	let url = "http://localhost:8080";
+
+	if (process.env.APP_URL) {
+		url = process.env.APP_URL;
+	}
+
+	if (process.env.CORS) {
+		url = process.env.CORS;
+	}
+
+	return url;
+}
+
 const config = {
 	env: process.env.NODE_ENV || "development",
 	PORT: process.env.PORT || 2000,
@@ -56,6 +70,8 @@ const config = {
 
 	API_URL: process.env.API_URL || "http://localhost:2000",
 	APP_URL: process.env.APP_URL || "http://localhost:8080",
+
+	CORS: resolveCors(),
 
 	baseUrl:
 		process.env.NODE_ENV === "production"
