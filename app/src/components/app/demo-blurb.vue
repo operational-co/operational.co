@@ -89,7 +89,7 @@ export default {
 			this.$emit("onClose");
 		},
 		onSignup: function () {
-			window.location.href = "https://discord.gg/AAn2TDYD";
+			window.location.href = "https://discord.com/invite/BdTbsQhRzc";
 		},
 		checkStatus: function () {
 			if (this.isDemo) {
