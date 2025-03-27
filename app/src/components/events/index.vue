@@ -331,12 +331,13 @@ export default {
 				return;
 			}
 
-			const currentScrollPosition = window.scrollY;
+			const bodyEl = document.querySelector(".c-app__body");
+			const innerEl = document.querySelector(".c-app__body > div");
+			const currentScrollPosition = bodyEl.scrollTop;
 			// All results have been fetched, don't do this query again
 
 			// then figure out onBottomReached
-			const scrollableHeight =
-				document.documentElement.scrollHeight - window.innerHeight;
+			const scrollableHeight = innerEl.offsetHeight;
 			const threshold = this.scrollThreshold; // Adjust as needed
 
 			const condition = currentScrollPosition + threshold >= scrollableHeight;

@@ -128,13 +128,6 @@ const component = {
 				workspace: user.primaryWorkspace,
 			};
 
-			// generate session
-			console.time("session creation");
-			const session = await Session.generate(temp);
-
-			const jwt = generateJwt(session.sid);
-			console.timeEnd("session creation");
-
 			console.time("key generation");
 			// then generate api key
 			const apikey = await Key.generate(
@@ -161,6 +154,13 @@ const component = {
 			console.time("activation send");
 			await this.sendActivation(user);
 			console.timeEnd("activation send");
+
+			// generate session
+			console.time("session creation");
+			const session = await Session.generate(temp);
+
+			const jwt = generateJwt(session.sid);
+			console.timeEnd("session creation");
 
 			await ops.log(`avatar:😃 User signup`);
 

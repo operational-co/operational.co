@@ -3,6 +3,8 @@ export default function (example, ctx) {
 
   let token = ctx.token || "API_KEY";
 
+  let baseUrl = ctx.baseUrl;
+
   let type = "";
 
   if (item.type) {
@@ -26,7 +28,7 @@ export default function (example, ctx) {
     actions = `\nactions : ${JSON.stringify(item.actions, null, 2)}`;
   }
 
-  let str = `const url =  "https://api.operational.co/api/v1/ingest";
+  let str = `const url =  "${baseUrl}/api/v1/ingest";
 const form = {
 name : "${item.name}",
 avatar : "${item.avatar}",${type}${content}${notify}${actions}

@@ -191,6 +191,10 @@ const component = {
 			select: { id: true },
 		});
 
+		if (!config.SECRET) {
+			throw `SECRET is missing. Set the SECRET="random_string" env var inside /backend and restart the server`;
+		}
+
 		const hasUsers = !!exists;
 
 		if (hasUsers) {

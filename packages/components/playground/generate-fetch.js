@@ -1,6 +1,7 @@
 export default function (example, ctx) {
 	const item = example.item;
 	let token = ctx.token || "API_KEY";
+	let baseUrl = ctx.baseUrl;
 
 	let type = "";
 
@@ -26,7 +27,7 @@ export default function (example, ctx) {
 	}
 
 	let str = `
-const url = "https://api.operational.co/api/v1/ingest";
+const url = "${baseUrl}/api/v1/ingest";
 const form = {
   name : "${item.name}",
   avatar : "${item.avatar}",${type}${content}${notify}${actions}
