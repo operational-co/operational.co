@@ -1,5 +1,0 @@
-113886085702304447226||::yt-player::yt-player-lv	{"data":"{}","creation":1739847226561}	
-yt-icons-last-purged	1734576716389	
-yt-remote-connected-devices	{"data":"[]","expiration":1739933626519,"creation":1739847226519}	
-yt-remote-device-id	{"data":"5c96709d-c1e9-4342-993a-cd59b57581b1","expiration":1771383117430,"creation":1739847117430}	
-ytidb::LAST_RESULT_ENTRY_KEY	{"data":{"hasSucceededOnce":true},"expiration":1742439225525,"creation":1739847225525}	

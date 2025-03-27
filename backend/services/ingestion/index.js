@@ -249,8 +249,6 @@ class Ingestion {
 		// not part of the schema, remove it
 		delete payload._notifiers;
 
-		console.log(payload);
-
 		// To ensure objects have the keys in a specific order
 		//payload = this.reorderObjectKeys(payload);
 		await Db.insertOne(payload);
