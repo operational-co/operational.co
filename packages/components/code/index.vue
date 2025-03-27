@@ -98,10 +98,13 @@ export default {
   position: relative;
   margin: 0;
   margin-bottom: 1rem;
-  font-size: var(--font-size-sm);
   background-color: var(--color-bg-2);
   padding: var(--margin-lg);
   border-radius: var(--border-radius);
+  background-color: rgba(0, 0, 0, 0.1);
+  box-shadow:
+    inset 0 1px 4px 0 rgba(0, 0, 0, 0.075),
+    inset 0 0 1px 0 rgba(0, 0, 0, 0.05);
 
   > button {
     position: absolute;
@@ -122,7 +125,6 @@ export default {
   [class*="shj-lang-"] {
     margin: 0;
     padding: 0;
-    font-size: var(--font-size-sm);
     line-height: 1.5;
   }
 

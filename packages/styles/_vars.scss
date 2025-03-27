@@ -14,7 +14,8 @@
   --hue-orange: 33;
   --hue-green: 140;
 
-  --color-font: hsl(var(--hue-s), 8%, 97%);
+  --color-font-heading: hsl(var(--hue-s), 8%, 100%);
+  --color-font: hsl(var(--hue-s), 8%, 92%);
   --color-font-light: hsl(var(--hue-s), 8%, 84%);
   --color-font-lighter: hsl(var(--hue-s), 4%, 66%);
 
@@ -49,8 +50,8 @@
 
   // ------ TYPOGRAPHY
 
-  --font-size-xxs: 0.625rem;
-  --font-size-xs: 0.75rem;
+  --font-size-xxs: 0.75rem;
+  --font-size-xs: 0.8125rem;
   --font-size-sm: 0.875rem;
   --font-size: 1rem;
   --font-size-md: 1.125rem;

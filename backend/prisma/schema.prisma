@@ -90,7 +90,7 @@ model Push {
   sid String?
 }
 
-model Event {
+model Events {
   id          String    @id @default(uuid())
   workspaceId Int       @db.Int
   userId      String?

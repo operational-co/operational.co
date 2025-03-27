@@ -284,9 +284,6 @@ export default {
 			padding: 0;
 
 			[class*="shj-lang-"] {
-				padding: 0.5rem;
-				background-color: rgba(0, 0, 0, 0.1);
-				border-radius: var(--border-radius-sm);
 			}
 		}
 

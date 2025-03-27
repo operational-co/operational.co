@@ -154,14 +154,6 @@ export default {
 		grid-row-gap: var(--margin-lg);
 
 		.c-code {
-			margin: 0;
-			margin-top: 0.5rem;
-
-			pre {
-				margin: 0;
-				background-color: var(--color-bg-1);
-				border-radius: var(--border-radius);
-			}
 		}
 
 		section {

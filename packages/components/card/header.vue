@@ -243,7 +243,8 @@ export default {
         min-width: 64px;
         overflow: initial;
         text-overflow: initial;
-        opacity: 0.65;
+        opacity: 0.6;
+        font-variant-numeric: tabular-nums;
       }
     }
   }

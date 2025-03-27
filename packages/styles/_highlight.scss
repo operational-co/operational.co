@@ -3,9 +3,6 @@
   margin: 10px 0;
   border-radius: 10px;
   padding: var(--margin-lg);
-  background: white;
-  color: #112;
-  box-shadow: 0 0 5px #0001;
   text-shadow: none;
   line-height: 24px;
   box-sizing: border-box;
@@ -90,7 +87,6 @@
 }
 [class*="shj-lang-"] {
   color: #abb2bf;
-  background: var(--color-bg-2); //#161b22;
 }
 [class*="shj-lang-"]:before {
   color: #6f9aff;

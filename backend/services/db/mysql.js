@@ -42,7 +42,7 @@ const mysql = {
 	async find(params) {
 		params = await this.cleanParams(params);
 
-		let tableName = "Event";
+		let tableName = "Events";
 		let mode = `BOOLEAN`;
 
 		let select = `
@@ -80,7 +80,7 @@ const mysql = {
 		            'contextType', e.contextType
 		          )
 		        )
-		        FROM Event e
+		        FROM ${tableName} e
 		        WHERE
 		          e.workspaceId = b.workspaceId
 		          AND e.contextType = 1
@@ -158,7 +158,7 @@ const mysql = {
 	async findLatest(params) {
 		params = await this.cleanParams(params);
 
-		let tableName = "Event";
+		let tableName = "Events";
 		let mode = `BOOLEAN`;
 
 		let select = `
@@ -241,7 +241,7 @@ const mysql = {
 	},
 
 	async getEventCount(payload) {
-		let tableName = "Event";
+		let tableName = "Events";
 		let testCondition = "0";
 		if (payload.test) {
 			testCondition = "1";
@@ -277,7 +277,7 @@ const mysql = {
 	},
 
 	async getCategories(params) {
-		let tableName = "Event";
+		let tableName = "Events";
 		const limit = 10000;
 		let date = moment.utc().subtract(2, "hours").startOf("hour").toISOString();
 		date = date.replace("Z", "");
@@ -366,8 +366,9 @@ WHERE workspaceId = ${params.workspaceId}
 	},
 
 	async findOne(id) {
+		const tableName = "Events";
 		const res =
-			await prisma.$queryRaw`SELECT * FROM Event WHERE id = ${id} LIMIT 1`;
+			await prisma.$queryRaw`SELECT * FROM ${tableName} WHERE id = ${id} LIMIT 1`;
 		return res[0] || null;
 	},
 
@@ -375,7 +376,7 @@ WHERE workspaceId = ${params.workspaceId}
 		let id = payload.id;
 		delete payload.id;
 
-		let res = await prisma.Event.update({
+		let res = await prisma.Events.update({
 			where: {
 				id,
 			},
@@ -399,7 +400,7 @@ WHERE workspaceId = ${params.workspaceId}
 				...payload,
 			},
 		};
-		let res = await prisma.event.create(query);
+		let res = await prisma.events.create(query);
 
 		return res;
 	},

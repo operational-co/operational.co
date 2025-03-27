@@ -238,6 +238,10 @@ export const useEventsStore = defineStore(config.name, {
 
 			let newEvents = await api.latest(params).catch((err) => {});
 
+			if (!newEvents) {
+				newEvents = [];
+			}
+
 			newEvents = newEvents.reverse();
 
 			if (newEvents && newEvents.length > 0) {

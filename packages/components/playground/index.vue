@@ -259,10 +259,6 @@ export default {
 
 	overflow: hidden;
 
-	.c-code [class*="shj-lang-"] {
-		font-size: var(--font-size-xs);
-	}
-
 	&__sidebar {
 		position: relative;
 		height: 100%;
@@ -408,6 +404,7 @@ export default {
 		.c-code {
 			max-width: 500px;
 			margin-bottom: 0;
+			background-color: var(--color-bg-3);
 		}
 		.c-card {
 			width: 400px;
