@@ -1,62 +1,50 @@
 services:
+  app:
+    build:
+      context: ./app
+    ports:
+      - "80:80" # Expose Vue app on port 80
+    env_file:
+      - .env # Reference to the .env file in the root if needed
+    networks:
+      - app-network
+    volumes:
+      - ./app:/app
+      - /app/node_modules
+    command: ["nginx", "-g", "daemon off;"]
+
   backend:
     build:
       context: ./backend
     ports:
-      - "3000:8080"
+      - "2000:2000" # Expose backend on port 2000
+    env_file:
+      - .env # Reference to the .env file in the root if needed
     environment:
-      - NODE_ENV=development
-      - DATABASE_URL=mysql://root:rootpassword@mysql:3306/operational
-      - API_URL=http://localhost:3000
-      - APP_URL=http://localhost:8080
-      - PORT=8080
-      - EVENT_STORE=mysql
-    volumes:
-      - ./backend:/app
-      - /app/node_modules
+      - DATABASE_URL=mysql://root:12345678@mysql:3306/operational # MySQL connection string
+      - APP_URL="http://localhost"
+      - CORS=*
     depends_on:
-      mysql:
-        condition: service_healthy
-    command: sh -c "npx prisma migrate deploy && npm run start"
-
-  frontend:
-    build:
-      context: ./app
-    ports:
-      - "8080:80"
-    volumes:
-      - ./app:/app
-      - /app/node_modules
-    environment:
-      - NODE_ENV=development
-    depends_on:
-      - backend
+      - mysql
+    networks:
+      - app-network
 
   mysql:
     image: mysql:8.0
-    restart: always
+    command: >
+      --default-authentication-plugin=mysql_native_password
+    environment:
+      MYSQL_DATABASE: "operational"
+      MYSQL_ROOT_PASSWORD: "12345678"
     ports:
       - "3306:3306"
-    environment:
-      - MYSQL_DATABASE=operational
-      - MYSQL_ROOT_PASSWORD=rootpassword
     volumes:
-      - mysql_data:/var/lib/mysql
-    healthcheck:
-      test:
-        [
-          "CMD",
-          "mysqladmin",
-          "ping",
-          "-h",
-          "localhost",
-          "-u",
-          "root",
-          "-p$$MYSQL_ROOT_PASSWORD",
-        ]
-      interval: 5s
-      timeout: 5s
-      retries: 5
+      - ./data/conf.d:/etc/mysql/conf.d
+      - ./data/logs:/logs
+      - /usr/local/var/mysql:/var/lib/mysql
+    networks:
+      - app-network
 
-volumes:
-  mysql_data:
+networks:
+  app-network:
+    driver: bridge

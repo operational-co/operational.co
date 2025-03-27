@@ -1,5 +1,5 @@
-FROM node:lts AS build
-WORKDIR /build
+FROM node:20 AS build-stage
+WORKDIR /app
 
 # First copy package.json files to leverage Docker caching
 COPY package*.json ./
@@ -13,6 +13,8 @@ COPY . ./
 # Build the application with fallback options
 RUN npm run build || npm run build --force || echo "Build failed, but continuing for development"
 
-FROM httpd:2.4 AS runtime
-COPY --from=build /build/dist /usr/local/apache2/htdocs/
+# Stage 2: Serve the built application with Nginx
+FROM nginx:alpine
+COPY --from=build-stage /app/dist /usr/share/nginx/html
 EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]

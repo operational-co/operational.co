@@ -104,6 +104,7 @@ const checkConnection = async (req, res) => {
 		const connectionStats = await component.checkConnnection();
 		return res.status(200).send(connectionStats);
 	} catch (err) {
+		console.log(err);
 		return res.status(400).send({
 			message: err,
 		});
