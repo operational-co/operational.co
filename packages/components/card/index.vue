@@ -14,7 +14,11 @@
         class="c-card__spacer"
         v-if="(item.actions || item.content) && item.contexts && item.contexts.length > 0"
       ></div>
-      <Contexts v-if="item.contexts && item.contexts.length > 0" :item="item"></Contexts>
+      <Contexts
+        v-if="item.contexts && item.contexts.length > 0"
+        :item="item"
+        @onConfirmAction="onConfirmAction"
+      ></Contexts>
     </div>
   </div>
 </template>

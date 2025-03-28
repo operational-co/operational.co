@@ -6,6 +6,10 @@ import { Resend } from "resend";
 import prisma from "#lib/prisma.js";
 import fs from "fs";
 import moment from "moment";
+import { customAlphabet } from "nanoid";
+
+const alphabet = "abcdefghijklmnopqrstuvwxyz"; // Your custom letters
+const generateId = customAlphabet(alphabet, 4); // Generate 4-character IDs
 
 const __dirname = path.resolve("");
 
@@ -22,7 +26,7 @@ class Email {
 	resend = null;
 
 	async setup() {
-		if (config.resend.TOKEN) {
+		if (config.resend.TOKEN && config.email.FROM) {
 			const resend = new Resend(config.resend.TOKEN);
 
 			this.resend = resend;
@@ -38,6 +42,9 @@ class Email {
 			type = "Resend";
 			message = "";
 		}
+		if (!config.email.FROM) {
+			// log this
+		}
 		return {
 			name: "email",
 			type,
@@ -50,6 +57,8 @@ class Email {
 			// Destructure payload
 			const { subject, text } = payload;
 
+			const tempId = generateId();
+
 			// Generate the folder and file path
 			const folderPath = path.join(__dirname, "/private/emails");
 			const dateTime = moment().format("DD-MM-YYYY-HH-mm");
@@ -57,7 +66,7 @@ class Email {
 				.toLowerCase()
 				.replace(/[^a-z0-9]+/g, "-")
 				.replace(/(^-|-$)/g, "");
-			const fileName = `${dateTime}-${slugifiedSubject || "no-subject"}.txt`;
+			const fileName = `${dateTime}-${tempId}-${slugifiedSubject || "no-subject"}.txt`;
 			const filePath = path.join(folderPath, fileName);
 
 			// Ensure the folder exists
@@ -97,7 +106,7 @@ class Email {
 
 		let response = null;
 
-		if (!config.resend.TOKEN) {
+		if (!config.resend.TOKEN || !config.email.FROM) {
 			this.saveEmailToFile(payload);
 			response = true;
 		} else {

@@ -31,21 +31,21 @@ const upload = multer({
 });
 
 async function emailValidation(email) {
-	let splits = email.split("@");
+	// let splits = email.split("@");
 
-	let name = splits[0];
+	// let name = splits[0];
 
-	let domain = splits[1];
+	// let domain = splits[1];
 
-	let testEmail = config.email.TEST_EMAIL;
+	// let testEmail = config.email.TEST_EMAIL;
 
-	if (testEmail && domain === testEmail) {
-		let tempName = testEmail.split(".")[0];
-		tempName = tempName.split("-")[0];
-		tempName = `${tempName}.com`;
+	// if (testEmail && domain === testEmail) {
+	// 	let tempName = testEmail.split(".")[0];
+	// 	tempName = tempName.split("-")[0];
+	// 	tempName = `${tempName}.com`;
 
-		return `${name}@${tempName}`;
-	}
+	// 	return `${name}@${tempName}`;
+	// }
 
 	// check for malicious users
 

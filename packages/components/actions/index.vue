@@ -7,7 +7,8 @@
         :class="[
           action.klass,
           { 'btn-success': action.status && action.status === 'DONE' },
-          { active: activeSlug === action.slug }
+          { active: activeSlug === action.slug },
+          { 'btn-sm': size === 'sm' }
         ]"
         @click.prevent="onAction(action)"
         :title="action.url"
@@ -73,7 +74,10 @@ export default {
         return [];
       }
     },
-    createdAt: {}
+    createdAt: {},
+    size: {
+      default: ""
+    }
   },
 
   computed: {

@@ -3,8 +3,16 @@
     <template v-if="active">
       <div class="c-card-contexts__item" v-for="(item, i) in computedItems" :key="i">
         <Header :item="item" type="context"></Header>
-        <div class="c-card-contexts__item__body" v-if="showBody(item)">
-          <Resolve :payload="item"></Resolve>
+        <div class="c-card-contexts__item__body" v-if="item.content || item.actions">
+          <Resolve :payload="item" v-if="item.content"></Resolve>
+          <div class="c-card__spacer" v-if="item.content && item.actions"></div>
+          <Actions
+            :createdAt="item.createdAt"
+            @onConfirmAction="onConfirmAction"
+            v-if="item.actions"
+            :actions="item.actions"
+            size="sm"
+          ></Actions>
         </div>
       </div>
       <div class="c-card-contexts__footer">{{ item.contexts.length + 1 }} events. {{ diff }}.</div>
@@ -29,11 +37,13 @@ import moment from "moment";
 import Resolve from "./resolve.vue";
 import utils from "@operational.co/lib/utils.js";
 import Header from "./header.vue";
+import Actions from "@operational.co/components/actions/index.vue";
 
 export default {
   components: {
     Resolve,
-    Header
+    Header,
+    Actions
   },
 
   data: function () {
@@ -94,28 +104,8 @@ export default {
   },
 
   methods: {
-    showBody: function (item) {
-      if (item.actions && Object.keys(item.actions).length !== 0) {
-        return true;
-      }
-
-      if (item.type !== "text" && item.content) {
-        let json = null;
-        try {
-          json = JSON.parse(item.content);
-        } catch (err) {}
-        if (item.type === "rows" && json) {
-          return true;
-        } else {
-          return false;
-        }
-      }
-
-      if (item.contexts && item.contexts.length > 0) {
-        return true;
-      }
-
-      return false;
+    onConfirmAction: function (e) {
+      this.$emit("onConfirmAction", e);
     },
     toggle: function () {
       this.active = !this.active;

@@ -8,6 +8,7 @@ const mysql = {
 		let skip = params.skip || 0;
 		let take = params.take || 20;
 		let query = params.query || "";
+		let test = params.test || false;
 		let cursor = params.cursor || null;
 		let category = params.category || null;
 		let workspaceId = params.workspaceId || undefined;
@@ -16,6 +17,7 @@ const mysql = {
 			skip,
 			take,
 			query,
+			test,
 			cursor,
 			category,
 			workspaceId,
@@ -44,6 +46,11 @@ const mysql = {
 
 		let tableName = "Events";
 		let mode = `BOOLEAN`;
+		let testMode = "";
+
+		if (params.test) {
+			testMode = `AND e.test = 1`;
+		}
 
 		let select = `
 		SELECT
@@ -85,6 +92,7 @@ const mysql = {
 		          e.workspaceId = b.workspaceId
 		          AND e.contextType = 1
 		          AND e.contextId = b.contextId
+							${testMode}
 		      )
 		      ELSE NULL
 		    END
@@ -367,8 +375,9 @@ WHERE workspaceId = ${params.workspaceId}
 
 	async findOne(id) {
 		const tableName = "Events";
-		const res =
-			await prisma.$queryRaw`SELECT * FROM ${tableName} WHERE id = ${id} LIMIT 1`;
+		const query = `SELECT * FROM ${tableName} WHERE id = "${id}" LIMIT 1`;
+
+		const res = await prisma.$queryRawUnsafe(query);
 		return res[0] || null;
 	},
 

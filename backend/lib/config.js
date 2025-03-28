@@ -103,8 +103,7 @@ const config = {
 	},
 
 	email: {
-		FROM: "shash@operational.co",
-		TEST_EMAIL: process.env.TEST_EMAIL,
+		FROM: process.env.ADMIN_EMAIL,
 	},
 
 	stripe: {

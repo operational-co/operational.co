@@ -6,29 +6,28 @@ export default function (example, ctx) {
 	let type = "";
 
 	if (item.type) {
-		type = `\ntype : "${item.type}",`;
+		type = `\n  type : "${item.type}",`;
 	}
 
 	let content = "";
 	if (item.content) {
-		content = `\ncontent : "${item.content}",`;
+		content = `\n  content : "${item.content}",`;
 	}
 
 	let notify = "";
 
 	if (item.notify || ctx.notify) {
-		notify = `\nnotify : true,`;
+		notify = `\n  notify : true,`;
 	}
 
 	let actions = "";
 
 	if (item.actions) {
-		actions = `\nactions : ${JSON.stringify(item.actions, null, 2)}`;
+		actions = `\n  actions : ${JSON.stringify(item.actions, null, 2)}`;
 	}
 
-	let str = `
-const url = "${baseUrl}/api/v1/ingest";
-const form = {
+	let str = `const url = "${baseUrl}/api/v1/ingest";
+const event = {
   name : "${item.name}",
   avatar : "${item.avatar}",${type}${content}${notify}${actions}
 }
@@ -38,18 +37,11 @@ const headers = {
   "Content-Type": "application/json"
 };
 
-try {
-  const response = await fetch(url, {
-    method: "POST",
-    headers: headers,
-    body: JSON.stringify(form)
-  });
-
-  const data = await response.json();
-  console.log(data);
-} catch (err) {
-  console.log(err);
-}`;
+const response = await fetch(url, {
+  method: "POST",
+  headers: headers,
+  body: JSON.stringify(event)
+}).catch((err) => {});`;
 
 	return str;
 }
