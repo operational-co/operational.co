@@ -1032,6 +1032,7 @@ await ops.events.ingest({
 
 			.c-code {
 				transform: rotate(-2deg) translateX(2rem);
+				background-color: var(--color-bg-2);
 				box-shadow:
 					0px 0px 2px rgba(3, 7, 18, 0.12),
 					0px 1px 10px rgba(3, 7, 18, 0.24),
