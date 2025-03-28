@@ -95,6 +95,7 @@ export default {
 
 <style lang="scss">
 .c-code {
+  overflow-x: auto;
   position: relative;
   margin: 0;
   margin-bottom: 1rem;
@@ -103,8 +104,26 @@ export default {
   border-radius: var(--border-radius);
   background-color: rgba(0, 0, 0, 0.1);
   box-shadow:
-    inset 0 1px 4px 0 rgba(0, 0, 0, 0.075),
-    inset 0 0 1px 0 rgba(0, 0, 0, 0.05);
+    inset 0 1px 4px 0 rgba(0, 0, 0, 0.1),
+    inset 0 0 0 1px rgba(0, 0, 0, 0.125),
+    inset 0 1px 1px 0 rgba(255, 255, 255, 0.04);
+
+  &::-webkit-scrollbar {
+    height: 6px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: hsl(var(--hue-p), 6%, 18%);
+    border-radius: 0;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background: hsl(var(--hue-p), 6%, 18%);
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
 
   > button {
     position: absolute;
@@ -126,6 +145,20 @@ export default {
     margin: 0;
     padding: 0;
     line-height: 1.5;
+
+    > div {
+      overflow: initial;
+    }
+  }
+  code {
+    padding: 0;
+    box-shadow: none;
+    border-radius: 0;
+    background-color: transparent;
+  }
+  .shj-syn-cmnt {
+    font-style: normal;
+    font-weight: 400;
   }
 
   &:hover {

@@ -56,9 +56,6 @@ export default {
   }
 
   &__sidebar {
-    padding: var(--margin-lg);
-    background-color: var(--color-bg-2);
-    border-radius: var(--border-radius);
     align-self: start;
 
     > div {
@@ -80,6 +77,10 @@ export default {
 
       .c-constrain__sidebar {
         margin-bottom: 2rem;
+
+        padding: var(--margin-lg);
+        background-color: var(--color-bg-3);
+        border-radius: var(--border-radius);
       }
     }
   }

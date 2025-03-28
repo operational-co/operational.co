@@ -35,6 +35,8 @@ export default {
 <style lang="scss">
 .c-page-api {
   padding: 3rem 0;
+  background-color: var(--color-bg-2);
+  border-top: var(--color-bg-4) solid 1px;
 
   @media screen and (max-width: 576px) {
     padding-top: 0;

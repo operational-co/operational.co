@@ -95,11 +95,6 @@ export const selfhostedList = [
     depth: 1
   },
   {
-    name: "Setup .env",
-    path: "/selfhosted/setup-env",
-    depth: 1
-  },
-  {
     name: "Install locally",
     path: "/selfhosted/install-locally",
     depth: 1
@@ -107,6 +102,26 @@ export const selfhostedList = [
   {
     name: "Install on VPS",
     path: "/selfhosted/install-on-vps",
+    depth: 1
+  },
+  {
+    name: "Docker",
+    path: "/selfhosted/docker",
+    depth: 1
+  },
+  {
+    name: "Onboarding",
+    path: "/selfhosted/onboarding",
+    depth: 1
+  },
+  {
+    name: "Setup .env",
+    path: "/selfhosted/setup-env",
+    depth: 1
+  },
+  {
+    name: "Best practices",
+    path: "/selfhosted/best-practices",
     depth: 1
   }
 ];

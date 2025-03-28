@@ -1,20 +1,4 @@
 @font-face {
-  font-family: "PP Editorial New";
-  src: url("/fonts/ppeditorialnewitalic.woff2") format("woff2");
-  font-weight: 100 900;
-  font-style: italic;
-  font-display: block;
-}
-
-@font-face {
-  font-family: "PP Editorial New";
-  src: url("/fonts/ppeditorialnew.woff2") format("woff2");
-  font-weight: 100 900;
-  font-style: normal;
-  font-display: block;
-}
-
-@font-face {
   font-family: "Jetbrains Mono";
   src: url("/fonts/jetbrains-mono.woff2");
   font-weight: 100 900;
@@ -22,13 +6,13 @@
   font-display: swap;
 }
 
-@font-face {
-  font-family: "Jetbrains Mono";
-  src: url("/fonts/jetbrains-mono-italic.woff2");
-  font-weight: 100 900;
-  font-style: italic;
-  font-display: swap;
-}
+// @font-face {
+//   font-family: "Jetbrains Mono";
+//   src: url("/fonts/jetbrains-mono-italic.woff2");
+//   font-weight: 100 900;
+//   font-style: italic;
+//   font-display: swap;
+// }
 
 @font-face {
   font-family: "Inter";

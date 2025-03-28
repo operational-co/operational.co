@@ -37,7 +37,7 @@
 
 				<div class="script-container">
 					<span class="article-text">Or self host:</span>
-					<Code
+					<Code :copy="false"
 						>bash <(curl -s https://raw.githubusercontent.com/operational-co/operational.co/master/bin/setup.sh)</Code
 					>
 					<p>

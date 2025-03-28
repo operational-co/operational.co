@@ -1,27 +1,39 @@
 import Item from "@operational.co/components/card/index.vue";
 import Code from "@operational.co/components/code/index.vue";
 
-# Install locally
+## Installing locally
 
-Setting up Operational on your local device is extremely easy.
+Before installing, make sure you have nodejs 18.18.x installed and mysql installed. If mysql isn't installed, make sure you have it setup on the cloud and have a connection string ready.
 
-First, make sure nodejs 18.x and mysql 8.x is running
+### For Mac
 
-1. Git clone `https://github.com/operational-co/operational.co.git`
-2. cd to the project folder, then go to `/backend` folder
-3. Then create a .env file in the folder and fill in DATABASE_URL and SECRET:
+Fastest way to install is by running the [script](https://operational.co) on our homepage inside your terminal.
+
+This will:
+
+- make a directory(operational.co)
+- git clone the repo
+- Setup a .env file for /backend
+- Install dependencies
+
+After that, all you need to do is to run the commands the script will tell you to, and then visit localhost:8080 and follow the onboarding guide.
+
+### For Windows
+
+We don't have a terminal script. But its very easy to install.
+
+- Git clone the repo on your machine
+- cd to operational.co/backend and create an env file and add DATABASE_URL and a random SECRET env var:
 <Code lang="bash" client:load>
 ```
-DATABASE_URL="CONNECTION_STRING_OF_MYSQL" #enter your database url
-SECRET="kjgabskjgbadkljg" #enter a random string
+DATABASE_URL="your_connection_string_here"
+SECRET="any_random_string_here"
 ```
 </Code>
-4. Then run `npm run build`
-5. Then run `npm run start`. By default the server starts on port 2000. Go to localhost:2000 and you should see OK.
-6. Then go to `../app` and run `npm run build` and then `npm run preview`
-7. Go to localhost:8080 and start the onboarding process
+- Run `npm run build`
+- Run `npm run dev`
+- Then cd to `../operational.co/app`
+- Run `npm run buid`
+- Run `npm run dev`
 
-Onboarding process:
-<video width="100%" height="400px" controls>
-  <source src="/operational-open-source-onboarding.mp4" type="video/mp4" />
-</video>
+Then open up [localhost:8080](http://localhost:8080) in your browser and follow the [onboarding steps](/selfhosted/onboarding).

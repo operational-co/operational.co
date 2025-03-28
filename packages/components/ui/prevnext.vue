@@ -1,6 +1,6 @@
 <template>
   <div class="c-prevnext">
-    <a :title="prev.title" v-if="prev" class="c-prevnext__item" :href="prev.path">
+    <a :title="prev.title" v-if="prev" class="c-prevnext__item btn" :href="prev.path">
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path
           fill-rule="evenodd"
@@ -14,7 +14,7 @@
     </a>
     <span v-else></span>
 
-    <a :title="next.title" v-if="next" :class="['c-prevnext__item', 'next']" :href="next.path">
+    <a :title="next.title" v-if="next" :class="['c-prevnext__item btn', 'next']" :href="next.path">
       <span> {{ next.title }} </span>
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path
@@ -48,8 +48,7 @@ export default {
   &__item {
     display: inline-flex;
     padding: var(--margin-lg) var(--spacer-sm);
-    padding-left: 10px;
-    background-color: var(--color-primary-dark);
+    padding-left: 8px;
     border-radius: 99px;
     font-weight: 600;
     transition: all var(--transition-time) ease;
@@ -60,7 +59,7 @@ export default {
 
     &.next {
       padding-left: var(--spacer-sm);
-      padding-right: 10px;
+      padding-right: 8px;
 
       svg {
         margin-right: 0;
@@ -71,7 +70,6 @@ export default {
     &:hover,
     &:active,
     &:focus {
-      filter: brightness(125%);
     }
   }
 

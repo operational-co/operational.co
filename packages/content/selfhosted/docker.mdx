@@ -1,14 +1,39 @@
+---
+title: "The Operational Manual"
+description: "Lorem ipsum dolor sit amet"
+pubDate: "Jul 22 2024"
+heroImage: "/blog-placeholder-2.jpg"
+---
+
 import Item from "@operational.co/components/card/index.vue";
 import Code from "@operational.co/components/code/index.vue";
 
-# Setup env vars
+# Docker
 
-## Backend setup
+Operational can be installed via docker-compose.
+
+- Make sure Docker is installed on your system
+- Git clone the repo
+- cd inside the repo and run `docker-compose up --build`
+
+This will setup
+
+- mysql 8.x
+- /app directory which will serve static html via nginx
+- /backend nodejs app
+
+Docker compose will automatically create a .env file and set the SECRET and DATABASE_URL env vars.
+
+However if you're hosting via docker, you want to create a .env file in the root of the project before running docker-compose.
+
+Here's a basic .env if you want to host on https://xyz.com
 
 <Code lang="bash" client:load>
 ```
 # mysql database connection string, eg: mysql://mysql-user:mysql-password@host:port/db-name
-DATABASE_URL="mysql://root:gjkesbgkjak@19.43.119.82:2000/operational" 
+DATABASE_URL=""
+
+APP_URL="" 
 
 # Optional. Set vapid details for push notifications. Generate your vapid details from https://tools.reactpwa.com/vapid
 VAPID_EMAIL=""
@@ -24,31 +49,10 @@ PORT="2000"
 # Secret hash. DON'T LEAVE THIS EMPTY. Use a random id generator to generate a hash, eg: https://www.uuidgenerator.net/
 SECRET=""
 
-# ["http://localhost:8080"] Url of the frontend
-APP_URL=""
-
 # ["http://localhost:8080"] Allows cors from this url. If APP_URL is set, that will be used instead.
 # Set a cors url to override the current url
 # /api/v1/ingest is allowed from all urls so it can receive events without any cors issue.
 # Set this value to "*" to allow all urls
 CORS=""
-
-# [120] Removes events older than 120 days
-REMOVE_EVENTS_AT=""
-
-# [7] Removes old test events older than 7 days
-REMOVE_TEST_EVENTS_AT=""
-```
-</Code>
-
-## App setup
-
-<Code lang="bash" client:load>
-```
-# Set this the to url your api server is accessible to. Defaults to http://localhost:2000
-VITE_API_URL="http://localhost:2000"
-
-# Only set this if you have vapid details. Set this to the value of VAPID_PUBLIC_KEY from your backend .env
-VITE_PUSH_SERVER_KEY=""
 ```
 </Code>

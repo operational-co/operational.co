@@ -83,15 +83,30 @@ export default {
     padding: var(--margin-sm) var(--margin-lg);
     color: var(--color-font);
     font-weight: 500;
+    font-size: var(--font-size-sm);
     border-radius: var(--border-radius);
     transition: all var(--transition-time-sm) ease;
 
     &.d1 {
       padding-left: var(--spacer);
+      margin-bottom: 0.1rem;
     }
 
     &.active {
       background-color: var(--color-bg-4);
+
+      box-shadow:
+        inset 0 -1px 1px 0 rgba(0, 0, 0, 0.005),
+        inset 0 1px 1px 0 rgba(255, 255, 255, 0.02),
+        inset 0 5px 20px 1px rgba(255, 255, 255, 0.02),
+        0px 2px 5px 0px rgba(60, 66, 87, 0.04),
+        0px 1px 1px 0px rgba(0, 0, 0, 0.06),
+        0 0 0 1px rgba(0, 0, 0, 0.075);
+    }
+
+    &:focus {
+      background-color: var(--color-bg-4);
+      outline: none;
     }
   }
 
@@ -130,6 +145,7 @@ export default {
   @media screen and (max-width: 576px) {
     header {
       cursor: pointer;
+      padding-bottom: 0;
 
       svg {
         display: block;
