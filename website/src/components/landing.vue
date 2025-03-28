@@ -38,8 +38,8 @@
 				<div class="script-container">
 					<span class="article-text">Or self host:</span>
 					<Code :copy="false"
-						>bash <(curl -s https://raw.githubusercontent.com/operational-co/operational.co/master/bin/setup.sh)</Code
-					>
+						>bash <(curl -s https://raw.githubusercontent.com/operational-co/operational.co/v0.0.3/bin/setup.sh)
+					</Code>
 					<p>
 						Full instructions <a href="/selfhosted/install-locally">here</a>. Docker instructions
 						<a href="/selfhosted/docker">here</a>.
@@ -945,7 +945,7 @@ await ops.events.ingest({
 			}
 			.c-code {
 				margin-bottom: 0.5rem;
-				background-color: rgba(0, 0, 0.2);
+				background-color: var(--color-bg-2);
 				box-shadow:
 					inset 0 -1px 1px 0 rgba(0, 0, 0, 0.005),
 					inset 0 1px 1px 0 rgba(255, 255, 255, 0.025),

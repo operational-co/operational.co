@@ -11,10 +11,10 @@
       <template v-else>{{ item.avatar || `~` }}</template>
     </div>
     <div class="c-card-header__title">
-      <span>
+      <span :title="item.createdAt">
         {{ date }}
       </span>
-      <div class="div">&nbsp;•&nbsp;</div>
+      <!-- <div class="div">&nbsp;•&nbsp;</div> -->
       <span>
         {{ item.name }}
       </span>
@@ -245,6 +245,7 @@ export default {
         text-overflow: initial;
         opacity: 0.6;
         font-variant-numeric: tabular-nums;
+        margin-right: 8px;
       }
     }
   }
@@ -317,6 +318,7 @@ export default {
       span {
         &:first-child {
           min-width: 60px;
+          margin-right: 6px;
         }
       }
 

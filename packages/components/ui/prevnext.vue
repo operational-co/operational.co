@@ -80,6 +80,7 @@ export default {
     &__item {
       margin-top: 0.5rem;
       font-size: var(--font-size-sm);
+      justify-content: flex-start;
 
       &:first-child {
         margin-top: 0;

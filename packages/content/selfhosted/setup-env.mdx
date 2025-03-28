@@ -3,6 +3,8 @@ import Code from "@operational.co/components/code/index.vue";
 
 # Setup env vars
 
+Env vars control how the server will function. For hosted deployments, read through the env var documentation - you might need to change a few things around before going into prod.
+
 ## Backend setup
 
 <Code lang="bash" client:load>
@@ -38,6 +40,12 @@ REMOVE_EVENTS_AT=""
 
 # [7] Removes old test events older than 7 days
 REMOVE_TEST_EVENTS_AT=""
+
+# [""] Use resend.com for email sending. They have a free plan available.
+RESENT=""
+
+# [""] Set this to the url you've configured in resend. If not set, emails will saved as txt files inside /backend/private
+ADMIN_EMAIL=""
 ```
 </Code>
 
