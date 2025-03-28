@@ -5,7 +5,7 @@
 				<div class="text-center">
 					<h1>Open-source Event Tracker for your product</h1>
 				</div>
-				<article class="article-text">
+				<article class="article-container article-text">
 					<p>Understand what’s happening in your product, find issues and respond to them in realtime.</p>
 				</article>
 
@@ -33,6 +33,17 @@
 							/>
 						</svg>
 					</a>
+				</div>
+
+				<div class="script-container">
+					<span class="article-text">Or self host:</span>
+					<Code
+						>bash <(curl -s https://raw.githubusercontent.com/operational-co/operational.co/master/bin/setup.sh)</Code
+					>
+					<p>
+						Full instructions <a href="/selfhosted/install-locally">here</a>. Docker instructions
+						<a href="/selfhosted/docker">here</a>.
+					</p>
 				</div>
 
 				<nav>
@@ -815,6 +826,7 @@ await ops.events.ingest({
 <style lang="scss">
 .c-landing-intro {
 	.d-intro {
+		position: relative;
 		padding: 5rem 0;
 		padding-top: 10rem;
 
@@ -850,6 +862,8 @@ await ops.events.ingest({
 		}
 
 		nav {
+			position: relative;
+			z-index: 1;
 			width: 400px;
 			margin: 0 auto;
 
@@ -882,37 +896,24 @@ await ops.events.ingest({
 			}
 		}
 
-		.item-container {
-			position: relative;
-			max-width: 440px;
-			margin: 2.5rem auto;
+		&:after {
+			content: "";
+			position: absolute;
+			top: calc(50% - 100px);
+			left: 50%;
+			width: 0;
+			height: 200px;
+			border-radius: 99px;
+			background-color: hsl(210, 100%, 50%);
 
-			> svg {
-				position: absolute;
-				top: -1rem;
-				right: 1rem;
-				transform: scale(1.25) rotate(5deg);
-			}
+			opacity: 0.2;
 
-			&:after {
-				content: "";
-				position: absolute;
-				top: 6rem;
-				left: 50%;
-				width: 0px;
-				height: 0px;
-				border-radius: 99px;
-				background-color: hsl(210, 100%, 50%);
+			pointer-events: none;
 
-				opacity: 0.65;
-
-				pointer-events: none;
-
-				box-shadow:
-					0px 0px 512px 128px hsl(210, 100%, 20%),
-					0px 0px 128px 32px hsl(210, 100%, 20%),
-					0px 0px 32px 0px hsl(210, 100%, 20%);
-			}
+			box-shadow:
+				0px 0px 512px 128px hsl(230, 100%, 20%),
+				0px 0px 128px 32px hsl(230, 100%, 20%),
+				0px 0px 32px 0px hsl(230, 100%, 20%);
 		}
 
 		.btn-container {
@@ -924,6 +925,42 @@ await ops.events.ingest({
 			a {
 				margin: 0 var(--margin);
 				min-width: 183px;
+			}
+		}
+
+		.article-container {
+			display: none;
+		}
+
+		.script-container {
+			margin-top: -1rem;
+			margin-bottom: 2rem;
+			position: relative;
+			z-index: 1;
+			> span {
+				display: block;
+				margin: 0 auto;
+				margin-bottom: 0.5rem;
+				text-align: center;
+			}
+			.c-code {
+				margin-bottom: 0.5rem;
+				background-color: rgba(0, 0, 0.2);
+				box-shadow:
+					inset 0 -1px 1px 0 rgba(0, 0, 0, 0.005),
+					inset 0 1px 1px 0 rgba(255, 255, 255, 0.025),
+					inset 0 5px 20px 1px rgba(255, 255, 255, 0.025),
+					0px 2px 5px 0px rgba(60, 66, 87, 0.08),
+					0px 1px 1px 0px rgba(0, 0, 0, 0.12),
+					0 0 0 1px rgba(0, 0, 0, 0.15);
+
+				code {
+					font-size: var(--font-size-sm);
+				}
+			}
+			> p {
+				font-size: var(--font-size-xs);
+				text-align: center;
 			}
 		}
 
@@ -944,6 +981,10 @@ await ops.events.ingest({
 				}
 			}
 
+			.article-container {
+				display: block;
+			}
+
 			.item-container {
 				margin-top: 1.5rem;
 				max-width: 380px;
@@ -962,6 +1003,10 @@ await ops.events.ingest({
 					width: 100%;
 					margin-bottom: 1rem;
 				}
+			}
+
+			.script-container {
+				display: none;
 			}
 		}
 	}

@@ -3,7 +3,7 @@
 {
 
 # === Step 0: Check if the 'operational.co' directory already exists ===
-if [ -d "operational-test" ]; then
+if [ -d "operational.co" ]; then
   echo "⚠️  The directory 'operational.co' already exists in this location."
   echo "🛑 Script will now exit to avoid overwriting existing files."
   exit 1
@@ -25,10 +25,10 @@ read -p "Press ENTER to continue..."
 
 # Step 1: Create the directory
 echo "[1] Creating directory" 
-mkdir -p operational-test
+mkdir -p operational.co
 echo "[1] Created directory 'operational.co'"
 
-cd operational-test || exit
+cd operational.co || exit
 echo "[1] Changed into 'operational.co' directory"
 
 # Step 2: Clone the GitHub repository
@@ -125,13 +125,13 @@ echo ""
 echo "✅ Operational.co has been installed locally."
 echo ""
 echo "▶️ To start the frontend:"
-echo "   cd app && npm run dev"
+echo "   cd operational.co/app && npm run dev"
 echo ""
 echo "▶️ To start the backend:"
-echo "   cd backend && npm run build && npm run dev"
+echo "   cd opeartional.co/backend && npm run build && npm run dev"
 echo ""
 echo "📘 For deployment, hosting, or troubleshooting:"
-echo "   Visit the official docs 👉 https://operational.co/api"
+echo "   Visit the official docs 👉 https://operational.co/selfhosted/introduction"
 echo ""
 
 }

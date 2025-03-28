@@ -104,6 +104,8 @@ export default {
 
 <style lang="scss">
 .c-roller {
+  position: relative;
+  z-index: 1;
   margin: 0 auto;
   width: 500px;
   height: calc(256px + 64px);
