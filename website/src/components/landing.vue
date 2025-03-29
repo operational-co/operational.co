@@ -828,7 +828,7 @@ await ops.events.ingest({
 	.d-intro {
 		position: relative;
 		padding: 5rem 0;
-		padding-top: 10rem;
+		padding-top: 9rem;
 
 		.subtitle {
 			position: relative;
@@ -906,14 +906,14 @@ await ops.events.ingest({
 			border-radius: 99px;
 			background-color: hsl(210, 100%, 50%);
 
-			opacity: 0.2;
+			opacity: 0.225;
 
 			pointer-events: none;
 
 			box-shadow:
-				0px 0px 512px 128px hsl(230, 100%, 20%),
-				0px 0px 128px 32px hsl(230, 100%, 20%),
-				0px 0px 32px 0px hsl(230, 100%, 20%);
+				0px 0px 512px 128px hsl(var(--hue-p), 100%, 20%),
+				0px 0px 128px 32px hsl(var(--hue-p), 100%, 20%),
+				0px 0px 32px 0px hsl(var(--hue-p), 100%, 20%);
 		}
 
 		.btn-container {
@@ -965,7 +965,7 @@ await ops.events.ingest({
 		}
 
 		@media screen and (max-width: 1300px) {
-			padding-top: 5rem;
+			padding-top: 4rem;
 		}
 
 		@media screen and (max-width: 576px) {
