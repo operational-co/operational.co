@@ -12,9 +12,28 @@ import Code from "@operational.co/components/code/index.vue";
 
 Operational can be installed via docker-compose.
 
-- Make sure Docker is installed on your system
-- Git clone the repo
-- cd inside the repo and run `docker-compose up --build`
+### Step 1. Install Docker
+
+For local installations, you can install [Docker desktop from here](https://docs.docker.com/desktop/setup/install/windows-install/).
+
+On your server, you'll install docker and docker-compose via the command line.
+
+### Step 2. Clone the repo
+
+Now clone the repo at https://github.com/operational-co/operational.co
+
+### Step 3. Create .env files
+
+- Once cloned, cd into the repo.
+- Create a .env file in the folder
+- Create a .env file in the /backend folder
+- Add this in the .env for /backend:
+DATABASE_URL=""
+
+
+### Step 4. Run docker compose
+
+In the repo folder, run `docker-compose up`
 
 This will setup
 
@@ -22,17 +41,17 @@ This will setup
 - /app directory which will serve static html via nginx
 - /backend nodejs app
 
-Docker compose will automatically create a .env file and set the SECRET and DATABASE_URL env vars.
+## Hosting via docker
 
-However if you're hosting via docker, you want to create a .env file in the root of the project before running docker-compose.
+The above setup is great for getting started locally.
 
-Here's a basic .env if you want to host on https://xyz.com
+However for your main setup, you want to add this .env to /backend
 
 <Code lang="bash" client:load>
 ```
-# mysql database connection string, eg: mysql://mysql-user:mysql-password@host:port/db-name
 DATABASE_URL=""
 
+# Eg https://xyz.com
 APP_URL="" 
 
 # Optional. Set vapid details for push notifications. Generate your vapid details from https://tools.reactpwa.com/vapid
