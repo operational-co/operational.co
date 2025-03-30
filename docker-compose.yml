@@ -3,8 +3,6 @@ services:
     build:
       context: .
       dockerfile: ./app/Dockerfile
-    ports:
-      - "80:80" # Expose Vue app on port 80
     networks:
       - app-network
     volumes:
