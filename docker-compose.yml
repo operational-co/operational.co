@@ -4,7 +4,7 @@ services:
       context: .
       dockerfile: ./app/Dockerfile
     ports:
-      - "8080:8080" # Expose Vue app on port 8080
+      - "1337:1337" # Expose Vue app on port 1337
     networks:
       - app-network
     volumes:
