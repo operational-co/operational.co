@@ -71,7 +71,7 @@ const ingest = async (req, res) => {
 		return res.send("success");
 	} catch (err) {
 		//console.log(err);
-		return res.status(401).send(err);
+		return res.status(400).send(err);
 	}
 };
 

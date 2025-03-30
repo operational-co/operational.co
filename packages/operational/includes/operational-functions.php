@@ -27,12 +27,14 @@ if (!function_exists('Operational\ops')) {
         
         // Get the API key from WordPress options
         $token = get_option('operational_api_key', '');
+
+        $baseurl = get_option('operational_baseurl', 'https://api.operational.co');
         
         if (empty($token)) {
             return "Error: API key not set";
         }
 
-        $url = "https://api.operational.co/api/v1/ingest";
+        $url = $baseurl . "/api/v1/ingest";
         
         $args = array(
             'body' => json_encode(array_merge(['notify' => true], $data)),

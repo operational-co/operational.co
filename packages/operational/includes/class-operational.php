@@ -143,8 +143,6 @@ class Operational {
 
 		$plugin_i18n = new Operational_i18n();
 
-		$this->loader->add_action( 'plugins_loaded', $plugin_i18n, 'load_plugin_textdomain' );
-
 	}
 
 	/**

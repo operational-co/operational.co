@@ -66,6 +66,9 @@ if (config.operational.TOKEN) {
 	});
 } else {
 	ops = {
+		events: {
+			ingest: () => {},
+		},
 		log: () => {},
 	};
 }

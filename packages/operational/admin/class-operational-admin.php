@@ -152,6 +152,14 @@ class Operational_Admin {
 			)
 		);
 
+		// Register the log activity setting
+		// PLUGIN CHECK POTENTIAL ERROR - this is sanitized but it throws error for some reason
+		register_setting(
+			'operational_options',
+			'operational_baseurl',
+			$opts
+		);
+
 		// Add settings section
 		add_settings_section(
 			'operational_general_section',

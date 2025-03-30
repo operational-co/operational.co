@@ -162,7 +162,13 @@ const component = {
 			const jwt = generateJwt(session.sid);
 			console.timeEnd("session creation");
 
-			await ops.log(`avatar:😃 User signup`);
+			await ops.events.ingest({
+				avatar: "😃",
+				name: `User signup`,
+				category: "user",
+				contextStart: true,
+				contextId: `user-signup-${user.id}`,
+			});
 
 			return {
 				jwt,
@@ -188,6 +194,12 @@ const component = {
 		const workspace = await Workspace.findById(user.primaryWorkspace);
 
 		await Email.sendActivationEmail(user, workspace, code);
+
+		await ops.events.ingest({
+			avatar: "✉️",
+			name: `User activation email sent`,
+			contextId: `user-signup-${user.id}`,
+		});
 	},
 
 	async logout(token) {
@@ -199,10 +211,26 @@ const component = {
 			return;
 		}
 
+		await ops.events.ingest({
+			avatar: "🚪",
+			name: `User logged out`,
+			category: "user",
+			type: "json",
+			content: decoded,
+		});
+
 		await Session.invalidate(sid);
 	},
 
 	async update(form) {
+		await ops.events.ingest({
+			avatar: "📋",
+			name: `User updated their settings`,
+			category: "user",
+			type: "json",
+			content: form,
+		});
+
 		if (form.hasOwnProperty("notify")) {
 			await prisma.workspaceUser.update({
 				where: {
