@@ -31,6 +31,7 @@ import Events from "#components/events/index.js";
 import config from "#lib/config.js";
 import UserComponent from "#components/user/index.js";
 import MetricComponent from "#components/metric/index.js";
+import Website from "#components/website/index.js";
 
 import loggerMiddleware from "#components/middleware/logger.js";
 

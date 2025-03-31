@@ -3,7 +3,6 @@ import prisma from "#lib/prisma.js";
 import Webpush from "#services/webpush/index.js";
 import os from "os";
 import si from "systeminformation";
-import diskusage from "diskusage";
 import config from "#lib/config.js";
 import Email from "#services/email/index.js";
 import Db from "#services/db/index.js";
@@ -147,16 +146,22 @@ const component = {
 			// Get total memory (RAM) in bytes
 			const totalMemory = os.totalmem();
 
-			// Get disk space information
-			const diskInfo = await diskusage.check("/"); // Replace '/' with your specific disk path if needed
+			// get disk usage(size and stuff) information
+			const diskLayout = await si.diskLayout();
+
+			const primaryDisk = diskLayout[0] || {
+				total: 0,
+			};
 
 			const systemStats = {
 				os: osInfo.os,
 				osVersion: osInfo.osVersion,
 				cpuBrand: cpuBrand,
 				ram: this.formatBytes(totalMemory),
-				totalDiskSpace: this.formatBytes(diskInfo.total),
-				availableDiskSpace: this.formatBytes(diskInfo.available),
+				totalDisks: diskLayout.length,
+				diskName: primaryDisk.name,
+				totalDiskSpace: this.formatBytes(primaryDisk.size),
+				availableDiskSpace: `N/A`, //this.formatBytes(diskInfo.available),
 			};
 
 			return systemStats;
