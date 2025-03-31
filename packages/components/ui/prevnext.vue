@@ -47,19 +47,25 @@ export default {
 
   &__item {
     display: inline-flex;
-    padding: var(--margin-lg) var(--spacer-sm);
-    padding-left: 8px;
+
     border-radius: 99px;
     font-weight: 600;
     transition: all var(--transition-time) ease;
+
+    &.btn {
+      padding: var(--margin-lg) var(--spacer-sm);
+      padding-left: 8px;
+    }
 
     svg {
       margin-right: var(--margin);
     }
 
     &.next {
-      padding-left: var(--spacer-sm);
-      padding-right: 8px;
+      &.btn {
+        padding-left: var(--spacer-sm);
+        padding-right: 8px;
+      }
 
       svg {
         margin-right: 0;

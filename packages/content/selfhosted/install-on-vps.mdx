@@ -10,9 +10,9 @@ Here's how.
 
 ## Install on a fresh VPS server
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/k-S-7thuHM8?si=h5p01Oqa4-9P-CRM" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+<iframe width="100%" height="315" src="https://www.youtube.com/embed/k-S-7thuHM8?si=h5p01Oqa4-9P-CRM" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 
-This is the fasted method to install Operational. This method requires that:
+This is the fastest method to install Operational. This method requires that:
 
 - You have setup a VPS server and are logged in as root
 - You have configured 2 domain names(one for frontend, one for backend) for your instance.
@@ -38,11 +38,13 @@ This script will:
 - Create .env files
 - Start the server
 
+This method doesn't setup Vapid keys for push notifications. This can be easily done by generating your vapid keys from https://www.attheminute.com/au/vapid-key-generator and setting them as [env vars](/selfhosted/setup-env) inside `/backend`.
+
 ## Install manually on your VPS
 
-These are the steps you need to follow if you want to install Operational manually.
+Follow these steps to install Operational manually on your VPS.
 
-### Step 1. Setup a VPS server
+### Step 1. Setup a Virtual private server(VPS)
 
 We recommend Hetzner for the most bang-for-your-buck.
 
@@ -52,7 +54,10 @@ Alternatives like Digital Ocean, OVHCloud, Linode, Vultr etc are also good.
 
 You'll need to have nginx installed and configured.
 
-You'll also need a domain name that's linked to your server. A subdomain is also fine.
+You'll also need 2 domains that's linked to your server. Subdomains is also fine.
+
+First domain points to the frontend `/app`
+Second domain points to the backend `/backend`
 
 The application itself requires:
 
@@ -60,6 +65,8 @@ The application itself requires:
 - mysql 8.x
 
 Install these and make sure nodejs and mysql service* is running.
+
+If you're hosting mysql elsewhere, make sure you have the connection string ready.
 
 ### Step 3. Install application
 
@@ -71,31 +78,22 @@ or,
 
 Running `git clone https://github.com/operational-co/operational.co.git` (you'll need git to be installed on your server)
 
-or,
+Once done, create .env files inside `/app` and `/backend`.
 
-Or download the zip package of the application from https://github.com/operational-co/operational.co and upload it to your server. Then unzip it.
+Configure your env vars. [Here's the guide for env](/selfhosted/setup-env).
 
-### Step 4. Configure the application
+Once done, run `npm run build` inside both `/app` and `/backend`
 
-Do this only if you aren't going with the first installation option.
+### Step 4. Make sure everything is installed
 
-- Go to the application folder, then to /backend and create a `.env` file.
-- Fill the .env file with your details(I've outlined this at the bottom of this page**)
-- Then run `npm run build`.
-- Then run `npm run start`. If you've installed pm2, run `pm2 start index.js` instead.
-- Now go back one folder and go to /app
-- Create a `.env` file here. Fill in the .env file with your details(I've outlined this at the bottom of the page)
-- Then run `npm run build`.
+Check for this:
 
-### Step 5. Configuring nginx
+- Is your nginx configured to serve static content from `/app/dist`
+- Make sure nginx has a reverse proxy setup for localhost:2000 (2000 is the default port for the backend)
+- Make sure certbot is setup(optional, for ssl)
+- Install pm2 and make sure it has started running
 
-You'll need to create two sites. One for the backend and one for the app(static spa)
-
-By default, backend runs on port 2000. Create a reverse proxy on nginx for port 80 to port 2000
-
-For the app, configure nginx to serve /app/dist folder.
-
-### Step 6. Create your account
+### Step 5. Create your account
 
 Once everything is setup, open your frontend(url depends on how you've setup nginx to serve the app/dist folder)
 
@@ -105,52 +103,14 @@ Once created, you should be able to track events.
 
 ---
 
-#### \*Configuring mysql
+## Security
 
-Make sure you have created a database and assigned a user to the database.
+Both these guides should get you up and runnings, however we recommend:
 
-Get the connection string ready.
+- You install fail2ban and configure it
+- Make sure your server has ssh key auth and not password auth
+- Firewall has been setup and works
+- Make sure either mysql doesn't have internet access(via firewall) or the default root user cannot be accessed via password auth
+- Configure ssh to work on a non-default port
 
-#### \*\*Env for backend
-
-**Vapid**
-
-Generate Vapid details from [vapidkeys](https://vapidkeys.com/)
-
-Then replace VAPID_EMAIL, VAPID_PUBLIC_KEY and VAPID_PRIVATE_KEY with those details.
-
-Vapid details are optional but we recommend setting them for push notifications.
-
-**Api url**
-Set this to the url of your backend, eg: https://ops-api.mydomain.com
-
-**App url**
-Set this to the url of your app, eg: https://ops.mydomain.com
-
-**Port**
-By default, PORT is 2000. But feel free to change it to another one.
-
-**Secret**
-Enter a random string in the SECRET.
-
-
-<Code lang="bash" client:load>
-	```
-	DATABASE_URL="mysql_connection_string"
-
-VAPID_EMAIL="mailto:shashwat.amin@yahoo.com"
-VAPID_PUBLIC_KEY="BP3td0Ocfd62J-Ggu7ma4SzWIwd5auBSG2rYD4K1uYOU1Q_LfVEKh9oYQqRLx6IITBHTIObZvAzXOJEzAmRGaoU"
-VAPID_PRIVATE_KEY="XAi5fu38VfY_Nm7JssLDxrpdHVRUPjtugWAlAqakKp4"
-
-API_URL=""
-
-APP_URL=""
-
-NODE_ENV="production"
-
-PORT="2000"
-SECRET=""
-	```
-</Code>
-
-You don't need to modify the rest
+These steps are a bit overkill if you're using Operational as a internal tool, but we recommend doing this for complete peace of mind.

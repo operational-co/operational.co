@@ -8,7 +8,7 @@ heroImage: "/blog-placeholder-2.jpg"
 import Item from "@operational.co/components/card/index.vue";
 import Code from "@operational.co/components/code/index.vue";
 
-# Docker
+# Install via Docker
 
 Operational can be installed via docker-compose.
 
@@ -16,11 +16,11 @@ Operational can be installed via docker-compose.
 
 For local installations, you can install [Docker desktop from here](https://docs.docker.com/desktop/setup/install/windows-install/).
 
-On your server, you'll install docker and docker-compose via the command line.
+On your server, you'll need to install docker and docker-compose via the command line.
 
 ### Step 2. Clone the repo
 
-Now clone the repo at https://github.com/operational-co/operational.co
+Clone the repo at https://github.com/operational-co/operational.co
 
 ### Step 3. Create .env files
 
@@ -35,11 +35,11 @@ DATABASE_URL=""
 
 In the repo folder, run `docker-compose up`
 
-This will setup
+This will setup:
 
 - mysql 8.x
-- /app directory which will serve static html via nginx
-- /backend nodejs app
+- `/app` directory which will serve static html via nginx
+- `/backend` nodejs app
 
 ## Hosting via docker
 
