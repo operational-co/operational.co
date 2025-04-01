@@ -157,7 +157,13 @@ class Operational_Admin {
 		register_setting(
 			'operational_options',
 			'operational_baseurl',
-			$opts
+			array(
+				'type' => 'string',
+				'sanitize_callback' => function($value) {
+					return sanitize_text_field($value);
+				},
+				'default' => ''
+			)
 		);
 
 		// Add settings section
@@ -182,6 +188,15 @@ class Operational_Admin {
 			'operational_log_activity',
 			'Log User Activity',
 			array($this, 'log_activity_field_callback'),
+			'operational_options',
+			'operational_general_section'
+		);
+
+		// Add BaseUrl field
+		add_settings_field(
+			'operational_baseurl',
+			'Base url',
+			array($this, 'baseurl_field_callback'),
 			'operational_options',
 			'operational_general_section'
 		);
@@ -535,6 +550,14 @@ class Operational_Admin {
 	public function api_key_field_callback() {
 		$api_key = get_option('operational_api_key');
 		echo '<input type="text" id="operational_api_key" name="operational_api_key" value="' . esc_attr($api_key) . '" class="regular-text">';
+	}
+
+	/**
+	 * Callback for Baseurl field
+	 */
+	public function baseurl_field_callback() {
+		$api_key = get_option('operational_baseurl');
+		echo '<input placeholder="https://api.operational.co" type="text" id="operational_baseurl" name="operational_baseurl" value="' . esc_attr($api_key) . '" class="regular-text">';
 	}
 
 	/**

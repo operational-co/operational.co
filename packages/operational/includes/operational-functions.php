@@ -29,6 +29,8 @@ if (!function_exists('Operational\ops')) {
         $token = get_option('operational_api_key', '');
 
         $baseurl = get_option('operational_baseurl', 'https://api.operational.co');
+
+        $url = $baseurl . "/api/v1/ingest";
         
         if (empty($token)) {
             return "Error: API key not set";

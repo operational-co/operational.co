@@ -110,12 +110,6 @@ class Operational {
 		require_once plugin_dir_path(dirname(__FILE__)) . 'includes/class-operational-loader.php';
 
 		/**
-		 * The class responsible for defining internationalization functionality
-		 * of the plugin.
-		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-operational-i18n.php';
-
-		/**
 		 * The class responsible for defining all actions that occur in the admin area.
 		 */
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-operational-admin.php';
@@ -140,8 +134,6 @@ class Operational {
 	 * @access   private
 	 */
 	private function set_locale() {
-
-		$plugin_i18n = new Operational_i18n();
 
 	}
 

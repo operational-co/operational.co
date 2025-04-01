@@ -70,7 +70,9 @@ const ingest = async (req, res) => {
 		res.status(201);
 		return res.send("success");
 	} catch (err) {
-		//console.log(err);
+		console.log(`INGESTION ERROR`);
+		console.log(err);
+		console.log(payload);
 		return res.status(400).send(err);
 	}
 };

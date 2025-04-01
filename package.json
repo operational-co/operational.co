@@ -1,6 +1,6 @@
 {
   "name": "operational.co",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "scripts": {
     "start-backend": "npm install  && cd backend && npm install && npm run start",
     "start-website": "npm install && cd website && npm install && npm run build && npm run start",

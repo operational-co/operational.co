@@ -30,6 +30,7 @@ class Operational_Deactivator {
 	 * @since    1.0.0
 	 */
 	public static function deactivate() {
+		delete_option('operational_baseurl');
 		delete_option('operational_log_activity');
 		delete_option('operational_api_key');
 	}
