@@ -5,8 +5,6 @@ services:
       dockerfile: ./app/Dockerfile
     ports:
       - "3000:80" # Expose Vue app on port 80
-    networks:
-      - app-network
     volumes:
       - ./app:/app
       - /app/node_modules
@@ -25,8 +23,6 @@ services:
       - NODE_ENV=production
     depends_on:
       - mysql
-    networks:
-      - app-network
 
   mysql:
     image: mysql:8.0
@@ -41,9 +37,3 @@ services:
       - ./data/conf.d:/etc/mysql/conf.d
       - ./data/logs:/logs
       - /usr/local/var/mysql:/var/lib/mysql
-    networks:
-      - app-network
-
-networks:
-  app-network:
-    driver: bridge
