@@ -140,12 +140,15 @@ export default {
 	},
 
 	computed: {
+		appVersion: function () {
+			return __APP_VERSION__;
+		},
 		isSelfHosted: function () {
 			return this.$store.app.isSelfHosted;
 		},
 		subtitleText: function () {
 			if (this.isSelfHosted) {
-				return `Self-hosted`;
+				return `Self-hosted ${this.appVersion}`;
 			} else {
 				return "Beta";
 			}
@@ -308,10 +311,10 @@ export default {
 
 			span {
 				display: inline-block;
-				padding: var(--margin);
+				padding: var(--margin-sm) var(--margin);
 				margin-left: var(--margin);
-				font-size: var(--font-size-sm);
-				font-weight: 500;
+				font-size: var(--font-size-xs);
+				font-weight: 600;
 				font-family: var(--font-family-monospace);
 				line-height: 1;
 				color: var(--color-font-light);

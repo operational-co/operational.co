@@ -84,7 +84,8 @@ const sendTestPushNotification = async (req, res) => {
 
 const getStats = async (req, res) => {
 	try {
-		const stats = await component.getStats(res.locals.user.id);
+		let stats = await component.getStats(res.locals.user.id);
+		stats.services = await component.doTests();
 		return res.status(200).send(stats);
 	} catch (err) {
 		return res.status(400).send({

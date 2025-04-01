@@ -146,23 +146,21 @@ const component = {
 			// Get total memory (RAM) in bytes
 			const totalMemory = os.totalmem();
 
-			// get disk usage(size and stuff) information
-			const diskLayout = await si.diskLayout();
+			const fsData = await si.fsSize();
 
-			const primaryDisk = diskLayout[0] || {
-				total: 0,
-			};
+			// Pick the root volume (mounted at `/`)
+			const rootFs = fsData.find((fs) => fs.mount === "/");
 
 			const systemStats = {
 				os: osInfo.os,
 				osVersion: osInfo.osVersion,
 				cpuBrand: cpuBrand,
 				ram: this.formatBytes(totalMemory),
-				totalDisks: diskLayout.length,
-				diskName: primaryDisk.name,
-				totalDiskSpace: this.formatBytes(primaryDisk.size),
-				availableDiskSpace: `N/A`, //this.formatBytes(diskInfo.available),
+				totalDiskSpace: this.formatBytes(rootFs.size),
+				availableDiskSpace: this.formatBytes(rootFs.available),
 			};
+
+			console.log(systemStats);
 
 			return systemStats;
 		} catch (error) {
@@ -191,6 +189,20 @@ const component = {
 		return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
 	},
 
+	async doTests() {
+		let tests = [];
+
+		let emailService = await Email.test();
+		let webpushService = await Webpush.test();
+		let dbService = await Db.test();
+
+		tests.push(emailService);
+		tests.push(webpushService);
+		tests.push(dbService);
+
+		return tests;
+	},
+
 	async checkConnnection() {
 		const exists = await prisma.user.findFirst({
 			select: { id: true },
@@ -208,15 +220,7 @@ const component = {
 
 		let stats = await this.getStats();
 
-		stats.services = [];
-
-		let emailService = await Email.test();
-		let webpushService = await Webpush.test();
-		let dbService = await Db.test();
-
-		stats.services.push(emailService);
-		stats.services.push(webpushService);
-		stats.services.push(dbService);
+		stats.services = await this.doTests();
 
 		return {
 			...stats,

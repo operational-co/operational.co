@@ -191,7 +191,7 @@ model Workspace {
   paymentStoppedAt DateTime?
   holdAt DateTime?
 
-  status WorkspaceStatus @default(TRIAL)
+  status WorkspaceStatus @default(NORMAL)
 
   deactivatedAt DateTime? // When the workspace was deactivated (nullable if active)
   createdAt     DateTime  @default(now())

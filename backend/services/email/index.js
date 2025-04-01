@@ -36,19 +36,27 @@ class Email {
 	}
 
 	async test() {
-		let type = "file";
-		let message = "Not set. Emails will be logged locally to file.";
-		if (config.resend.TOKEN) {
-			type = "Resend";
-			message = "";
+		let value = "file";
+		let info = "";
+
+		if (config.resend.TOKEN && config.email.FROM) {
+			value = "resend";
 		}
-		if (!config.email.FROM) {
-			// log this
+		if (config.resend.TOKEN && !config.email.FROM) {
+			value = "file";
+			info = "FROM env var needs to be set to receive emails from RESEND";
 		}
+		if (!config.resend.TOKEN) {
+			value = "file";
+			info =
+				"Resend setup not found. Emails will be written as text files inside /backend/private";
+		}
+
 		return {
 			name: "email",
-			type,
-			message,
+			value: value,
+			status: "active",
+			info: info,
 		};
 	}
 

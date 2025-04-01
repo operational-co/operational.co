@@ -77,6 +77,8 @@ const app = express();
 
 async function runExperiments() {
 	await ops.log(`avatar:🤖 Server started`);
+
+	//await Website.getStats();
 }
 
 async function preInit() {

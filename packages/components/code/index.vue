@@ -102,7 +102,7 @@ export default {
   background-color: var(--color-bg-2);
   padding: var(--margin-lg);
   border-radius: var(--border-radius);
-  background-color: rgba(0, 0, 0, 0.1);
+  background-color: rgba(0, 0, 0, 0.15);
   box-shadow:
     inset 0 1px 4px 0 rgba(0, 0, 0, 0.1),
     inset 0 0 0 1px rgba(0, 0, 0, 0.125),
@@ -169,7 +169,7 @@ export default {
 
   .c-copy {
     position: absolute;
-    top: 8px;
+    top: 11px;
     right: var(--margin);
   }
 }

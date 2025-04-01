@@ -89,12 +89,15 @@ export default {
 	},
 
 	computed: {
+		appVersion: function () {
+			return __APP_VERSION__;
+		},
 		isSelfHosted: function () {
 			return this.$store.app.isSelfHosted;
 		},
 		subtitleText: function () {
 			if (this.isSelfHosted) {
-				return `Self-hosted`;
+				return `Self-hosted ${this.appVersion}`;
 			} else {
 				return "Beta";
 			}

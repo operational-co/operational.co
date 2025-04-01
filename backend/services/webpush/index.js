@@ -32,21 +32,24 @@ class Webpush {
 	}
 
 	async test() {
+		let status = "inactive";
 		let type = null;
-		let message = `Not set. Push notifications won't work`;
+		let info = `Not set. Push notifications won't work`;
 		if (
 			config.vapid.EMAIL &&
 			config.vapid.PUBLIC_KEY &&
 			config.vapid.PRIVATE_KEY
 		) {
 			type = "vapid";
-			message = "";
+			info = "";
+			status = "active";
 		}
 
 		return {
 			name: "webpush",
-			type,
-			message,
+			value: this.dbName,
+			status: status,
+			info: info,
 		};
 	}
 

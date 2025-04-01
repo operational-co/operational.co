@@ -49,7 +49,9 @@ fi
 # Step 3
 echo "3. Installing web-push and generating VAPID keys"
 sudo npm install -g web-push
-web-push generate-vapid-keys --json
+VAPID_KEYS=$(web-push generate-vapid-keys --json)
+VAPID_PUBLIC_KEY=$(echo $VAPID_KEYS | jq -r '.publicKey')
+VAPID_PRIVATE_KEY=$(echo $VAPID_KEYS | jq -r '.privateKey')
 
 # Step 4
 echo "4. Checking and Installing Nginx"
@@ -69,6 +71,7 @@ sudo npm install
 cat <<EOL > .env
 VITE_APP_URL=https://$frontend_domain
 VITE_API_URL=https://$backend_domain
+VITE_PUSH_SERVER_KEY="$VAPID_PUBLIC_KEY"
 EOL
 sudo npm run build
 
@@ -84,6 +87,9 @@ APP_URL=https://$frontend_domain
 NODE_ENV=production
 PORT=2000
 SECRET=$SECRET
+VAPID_EMAIL="mailto:placeholder@gmail.com" #REPLACE THIS with your own email
+VAPID_PUBLIC_KEY="$VAPID_PUBLIC_KEY"
+VAPID_PRIVATE_KEY="$VAPID_PRIVATE_KEY"
 EOL
 sudo npm run build
 

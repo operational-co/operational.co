@@ -124,7 +124,8 @@ const ingestSchema = {
 			type: "boolean",
 		},
 		contextId: {
-			type: "boolean",
+			type: "string",
+			convert: true,
 		},
 		contextType: {
 			type: "boolean",

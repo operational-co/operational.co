@@ -19,7 +19,8 @@ class Db {
 	async test() {
 		return {
 			name: "db",
-			type: this.dbName,
+			value: this.dbName,
+			status: "active",
 		};
 	}
 

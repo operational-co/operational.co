@@ -11,7 +11,7 @@ function resolveSelfHosted() {
 }
 
 function resolveRemoveEventsAfter() {
-	let duration = 120; // remove events after 120 days
+	let duration = 365; // remove events after 365 days(1 year)
 
 	if (
 		process.env.REMOVE_EVENTS_AFTER &&
