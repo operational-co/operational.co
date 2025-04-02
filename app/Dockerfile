@@ -17,7 +17,14 @@ RUN echo "VITE_APP_URL=$VITE_API_URL" && echo "VITE_PUSH_SERVER_KEY=$VITE_PUSH_S
 
 RUN npm run build
 
-FROM nginx:stable-alpine as production-stage
+FROM nginx:stable-alpine AS production-stage
+
+# Copy build output
 COPY --from=build /monorepo/app/dist /usr/share/nginx/html
+
+# Add custom nginx config
+COPY ./app/nginx.conf /etc/nginx/conf.d/default.conf
+
 EXPOSE 80
+
 CMD ["nginx", "-g", "daemon off;"]
