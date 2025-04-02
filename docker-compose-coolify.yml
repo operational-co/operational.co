@@ -6,6 +6,9 @@ services:
     volumes:
       - ./app:/app
       - /app/node_modules
+    environment:
+      - VITE_APP_URL=${VITE_APP_URL}
+      - VITE_PUSH_SERVER_KEY=${VITE_PUSH_SERVER_KEY}
 
   backend:
     build:
@@ -13,10 +16,15 @@ services:
       args:
         DATABASE_URL: mysql://root:12345678@mysql:3306/operational
     environment:
-      - DATABASE_URL=mysql://root:12345678@mysql:3306/operational # MySQL connection string
-      - APP_URL="http://localhost"
+      - DATABASE_URL=mysql://root:12345678@mysql:3306/operational
+      - APP_URL=${APP_URL}
+      - API_URL=${API_URL}
       - CORS=*
       - NODE_ENV=production
+      - VAPID_EMAIL=${VAPID_EMAIL}
+      - VAPID_PUBLIC_KEY=${VAPID_PUBLIC_KEY}
+      - VAPID_PRIVATE_KEY=${VAPID_PRIVATE_KEY}
+      - ADMIN_EMAIL=${ADMIN_EMAIL}
     depends_on:
       - mysql
 
