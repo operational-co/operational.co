@@ -7,7 +7,7 @@ services:
       - ./app:/app
       - /app/node_modules
     environment:
-      - VITE_API_URL=${VITE_APP_URL}
+      - VITE_API_URL=${VITE_API_URL}
       - VITE_PUSH_SERVER_KEY=${VITE_PUSH_SERVER_KEY}
 
   backend:
