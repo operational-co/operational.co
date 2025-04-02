@@ -3,6 +3,9 @@ services:
     build:
       context: .
       dockerfile: ./app/Dockerfile
+      args:
+        VITE_API_URL:
+        VITE_PUSH_SERVER_KEY:
     volumes:
       - ./app:/app
       - /app/node_modules
