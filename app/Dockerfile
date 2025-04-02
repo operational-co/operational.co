@@ -12,6 +12,9 @@ COPY . .
 RUN npm install
 
 WORKDIR /monorepo/app
+
+RUN echo "VITE_APP_URL=$VITE_APP_URL" && echo "VITE_PUSH_SERVER_KEY=$VITE_PUSH_SERVER_KEY"
+
 RUN npm run build
 
 FROM nginx:stable-alpine as production-stage
