@@ -105,6 +105,11 @@ export const selfhostedList = [
     depth: 1
   },
   {
+    name: "Install on Render",
+    path: "/selfhosted/install-on-render",
+    depth: 1
+  },
+  {
     name: "Docker",
     path: "/selfhosted/docker",
     depth: 1

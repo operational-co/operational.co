@@ -38,11 +38,13 @@
 				<div class="script-container">
 					<span class="article-text">Or self host:</span>
 					<Code :copy="false"
-						>bash <(curl -s https://raw.githubusercontent.com/operational-co/operational.co/v0.0.3/bin/setup.sh)
+						>curl -fsSL https://raw.githubusercontent.com/operational-co/operational.co/master/bin/setup-vps.sh -o
+						setup-vps.sh && sudo bash setup-vps.sh
 					</Code>
 					<p>
-						Full instructions <a href="/selfhosted/install-locally">here</a>. Docker instructions
-						<a href="/selfhosted/docker">here</a>.
+						Or install on <a href="/selfhosted/install-on-render">Render.com</a>,
+						<a href="/selfhosted/docker">with Coolify</a>, <a href="/selfhosted/docker">docker compose</a> or
+						<a href="/selfhosted/install-locally">install locally.</a>
 					</p>
 				</div>
 
@@ -944,8 +946,10 @@ await ops.events.ingest({
 				text-align: center;
 			}
 			.c-code {
+				position: relative;
 				margin-bottom: 0.5rem;
 				background-color: var(--color-bg-2);
+				overflow: initial;
 				box-shadow:
 					inset 0 -1px 1px 0 rgba(0, 0, 0, 0.005),
 					inset 0 1px 1px 0 rgba(255, 255, 255, 0.025),
@@ -956,6 +960,17 @@ await ops.events.ingest({
 
 				code {
 					font-size: var(--font-size-sm);
+				}
+
+				&:after {
+					content: "Run this inside your VPS";
+					position: absolute;
+					top: -1.75rem;
+					left: -1rem;
+					font-size: var(--font-size-lg);
+					font-weight: 600;
+					font-family: "Caveat";
+					transform: rotate(-2deg);
 				}
 			}
 			> p {
