@@ -11,6 +11,8 @@ import { useReportsStore } from "./reports";
 import { useWorkspaceStore } from "./workspace";
 import { useMetricStore } from "./metric";
 
+const STATIC_API_URL = import.meta.env.VITE_API_URL || undefined;
+
 const api = {
 	refresh: async function () {
 		try {
@@ -118,7 +120,6 @@ export const useAppStore = defineStore(config.name, {
 			registration: null,
 
 			baseUrl: import.meta.env.VITE_APP_URL || `http://localhost:8080`,
-			baseApiUrl: import.meta.env.VITE_API_URL || `http://localhost:2000`,
 		};
 	},
 	getters: {
@@ -132,6 +133,18 @@ export const useAppStore = defineStore(config.name, {
 				return false;
 			}
 			return true;
+		},
+
+		baseApiUrl: function () {
+			let baseUrl = `http://localhost:2000`;
+			if (window?.__APP_CONFIG__?.VITE_API_URL) {
+				console.log("using baseUrl from window?.__APP_CONFIG__?.VITE_API_URL");
+				baseUrl = window?.__APP_CONFIG__?.VITE_API_URL;
+			} else if (STATIC_API_URL) {
+				console.log("Using build-time API URL");
+				baseUrl = STATIC_API_URL;
+			}
+			return baseUrl;
 		},
 	},
 	actions: {

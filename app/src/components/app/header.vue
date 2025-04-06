@@ -140,6 +140,9 @@ export default {
 	},
 
 	computed: {
+		baseApiUrl : function() {
+			return this.$store.app.baseApiUrl;
+		},
 		appVersion: function () {
 			return __APP_VERSION__;
 		},
@@ -166,11 +169,8 @@ export default {
 			return this.$store.workspace.resource;
 		},
 		assetPath: function () {
-			let baseUrl = "http://localhost:2000";
-
-			if (import.meta && import.meta.env.VITE_API_URL) {
-				baseUrl = import.meta.env.VITE_API_URL;
-			}
+			let baseUrl = this.baseApiUrl;
+			
 			return `${baseUrl}/uploads`;
 		},
 	},
