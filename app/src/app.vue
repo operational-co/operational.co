@@ -484,7 +484,7 @@ export default {
 			let subscription =
 				await this.$store.app.registration.pushManager.getSubscription();
 
-			//console.log(subscription);
+			console.log(subscription);
 
 			if (subscription) {
 				const currentSubscriptionServerKey = this.arrayBufferToBase64Url(
@@ -494,10 +494,13 @@ export default {
 				//console.log(applicationServerKey);
 				// This check isn't working!!
 				if (currentSubscriptionServerKey !== applicationServerKey) {
+					console.log("applicationServerKey mismatch, unsubscribing");
+					console.log(currentSubscriptionServerKey, applicationServerKey);
 					//console.log("application keys are different!");
 					// Unsubscribe if the existing subscription has a different applicationServerKey
 					await subscription.unsubscribe();
 				} else {
+					console.log("push already subscribed");
 					//console.log("Already subscribed with the correct applicationServerKey");
 					return;
 				}
