@@ -118,11 +118,19 @@ export const useAppStore = defineStore(config.name, {
 			registration: null,
 
 			baseUrl: import.meta.env.VITE_APP_URL || `http://localhost:8080`,
-			baseApiUrl: import.meta.env.VITE_API_URL || `http://localhost:2000`,
 		};
 	},
 	getters: {
 		...appStore.exportGetters(),
+
+		baseApiUrl: function () {
+			const API_URL =
+				window?.__APP_CONFIG__?.VITE_API_URL ||
+				import.meta.env.VITE_API_URL ||
+				`http://localhost:2000`;
+
+			return API_URL;
+		},
 
 		isSelfHosted: function () {
 			if (

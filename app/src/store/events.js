@@ -149,6 +149,10 @@ export const useEventsStore = defineStore(config.name, {
 			this.resources = [];
 		},
 
+		clear: function () {
+			this.resources = [];
+		},
+
 		setParams: async function (params, refresh = false) {
 			if (typeof params.skip === "number") {
 				this.skip = params.skip;

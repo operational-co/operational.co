@@ -9,17 +9,17 @@ import Db from "#services/db/index.js";
 
 const component = {
 	async subscribe(user, subscription, sid) {
-		let condition = await prisma.workspaceUser.update({
-			where: {
-				userId_workspaceId: {
-					userId: user.id,
-					workspaceId: user.primaryWorkspace,
-				},
-			},
-			data: {
-				pushSubscription: subscription,
-			},
-		});
+		// let condition = await prisma.workspaceUser.update({
+		// 	where: {
+		// 		userId_workspaceId: {
+		// 			userId: user.id,
+		// 			workspaceId: user.primaryWorkspace,
+		// 		},
+		// 	},
+		// 	data: {
+		// 		pushSubscription: subscription,
+		// 	},
+		// });
 
 		// first, find if push exists with the current sid.
 		let session = null;
@@ -123,10 +123,15 @@ const component = {
 
 			return pushSubscriptions;
 		} catch (err) {
-			if (err.statusCode === 401 || err.statusCode === 404) {
+			console.log(err);
+			if (
+				err.statusCode === 401 ||
+				err.statusCode === 403 ||
+				err.statusCode === 404
+			) {
 				throw `Push subscription expired or invalid.`;
 			} else {
-				throw `Push notification failed ${err}`;
+				throw `Push notification failed ${err.body}`;
 			}
 		}
 	},

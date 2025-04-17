@@ -2,7 +2,7 @@ import Key from "#services/key/index.js";
 import Webpush from "#services/webpush/index.js";
 import moment from "moment";
 import { customAlphabet } from "nanoid";
-import { v7 as uuidv7 } from "uuid";
+import { v4 as uuidv4 } from "uuid";
 import { writeFile } from "fs/promises";
 import path from "path";
 
@@ -238,8 +238,7 @@ class Ingestion {
 	}
 
 	async part2(payload) {
-		// knight the payload with uuid
-		//payload._id = uuidv7();
+		payload.id = uuidv4();
 
 		if (payload.notify) {
 			let newPayload = JSON.parse(JSON.stringify(payload));

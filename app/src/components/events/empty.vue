@@ -3,7 +3,10 @@
 		<div class="c-events-empty__loader" v-if="!loaded">
 			<span class="c-spinner"></span>
 		</div>
-		<div class="c-events-empty__inner" v-if="loaded && items.length === 0">
+		<div
+			class="c-events-empty__inner"
+			v-if="loaded && items.length === 0 && !loading"
+		>
 			<template v-if="!testMode">
 				<p>
 					👋 Hello {{ user.firstName
@@ -196,6 +199,9 @@ export default {
 	},
 
 	computed: {
+		loading: function () {
+			return this.$store.app.loading;
+		},
 		testMode: function () {
 			return this.$store.app.testMode;
 		},

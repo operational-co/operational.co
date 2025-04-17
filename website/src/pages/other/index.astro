@@ -1,0 +1,24 @@
+---
+import BaseLayout from "@/layouts/base.astro";
+import Constrain from "@operational.co/components/ui/constrain.vue"
+import Toc from "@operational.co/components/ui/toc.vue";
+import headings from "@/lib/get-headings.js";
+import * as Index from "@operational.co/content/other/introduction.mdx";
+const Content =Index.Content;
+
+
+
+---
+
+<BaseLayout>
+  <Constrain size="lg">
+    <div slot="sidebar">
+      <Toc client:load pathname={Astro.url.pathname} headings={headings}></Toc>
+    </div>
+    <div slot="default">
+      <div class="c-page">
+        <Content />
+      </div>
+    </div>
+  </Constrain>
+</BaseLayout>

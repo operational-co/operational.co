@@ -16,7 +16,7 @@
 				<h5>API Key</h5>
 				<Code v-if="apikey" :text="apikey.key"> </Code>
 			</section>
-			<section>
+			<section v-if="workspace">
 				<h5>Project</h5>
 				<span> {{ workspace.name }} - {{ workspace.status }} </span>
 			</section>
@@ -69,12 +69,12 @@ export default {
 		workspace: function () {
 			return this.$store.workspace.resource;
 		},
+		baseApiUrl: function () {
+			return this.$store.app.baseApiUrl;
+		},
 		assetPath: function () {
-			let baseUrl = "http://localhost:2000";
+			let baseUrl = this.baseApiUrl;
 
-			if (import.meta && import.meta.env.VITE_API_URL) {
-				baseUrl = import.meta.env.VITE_API_URL;
-			}
 			return `${baseUrl}/uploads`;
 		},
 		apikeys: function () {

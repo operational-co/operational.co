@@ -15,7 +15,7 @@
 				@onClear="onClear"
 				@onCategorySelected="onCategorySelected"
 			></Search>
-			<Main @click="onListClick">
+			<main @click="onListClick">
 				<transition-group name="list" tag="div">
 					<div
 						:class="[
@@ -23,6 +23,7 @@
 							{ date: item && item.type === 'date' },
 							{ log: item && item.type !== 'date' },
 						]"
+						:data-id="item.id"
 						v-for="(item, i) in computedItems"
 						:key="item.id"
 					>
@@ -41,7 +42,7 @@
 						</div>
 					</div>
 				</transition-group>
-			</Main>
+			</main>
 			<Bottom v-if="hasEnded && items.length > 0"></Bottom>
 			<Empty
 				:items="items"
@@ -58,6 +59,11 @@
 			@onClose="modalConfirmActive = false"
 		>
 		</ModalConfirm>
+		<ModalView
+			:active="modalView"
+			:eventId="modalView"
+			:onClose="(modalView = false)"
+		></ModalView>
 	</div>
 </template>
 
@@ -72,6 +78,7 @@ import Bottom from "./bottom.vue";
 import Item from "./item.vue";
 import Empty from "./empty.vue";
 import Toggle from "./toggle.vue";
+import ModalView from "./modal-view.vue";
 import ModalConfirm from "./modal-confirm.vue";
 
 export default {
@@ -82,6 +89,7 @@ export default {
 		Search,
 		Empty,
 		Toggle,
+		ModalView,
 		ModalConfirm,
 	},
 
@@ -91,9 +99,11 @@ export default {
 			query: "",
 			category: "",
 			lock: false,
-			modalConfirmActive: false,
 			currentAction: null,
 			hasEnded: false,
+
+			modalView: false,
+			modalConfirmActive: false,
 
 			touchstartY: 0,
 			pullActive: false,
@@ -250,23 +260,40 @@ export default {
 			this.modalConfirmActive = true;
 		},
 		onRefresh: function () {
-			this.onClear();
+			this.onClearButKeepSearchAndCategory();
 		},
 		onConfirm: function (e) {
 			this.modalConfirmActive = false;
 		},
 		onClear: function () {
 			this.query = "";
+			this.category = "";
 
 			const params = {
-				query: "",
 				muted: this.showArchive,
 				mentions: [],
 				cursor: -1,
-				category: "",
+				query: this.query,
+				category: this.category,
 			};
 			this.hasEnded = false; // Expect search has been refreshed
 			this.$store.app.setLoading(true);
+			this.$store.events.clear();
+			this.$store.events.setParams(params, true).then(() => {
+				this.$store.app.setLoading(false);
+			});
+		},
+		onClearButKeepSearchAndCategory: function () {
+			const params = {
+				muted: this.showArchive,
+				mentions: [],
+				cursor: -1,
+				query: this.query,
+				category: this.category,
+			};
+			this.hasEnded = false; // Expect search has been refreshed
+			this.$store.app.setLoading(true);
+			this.$store.events.clear();
 			this.$store.events.setParams(params, true).then(() => {
 				this.$store.app.setLoading(false);
 			});
@@ -288,6 +315,51 @@ export default {
 			if ((newEvents && newEvents.length === 0) || !newEvents) {
 				this.hasEnded = true;
 			}
+
+			// now check for eventId param
+			this.checkEventId();
+		},
+		checkEventId: function () {
+			let url = new URL(window.location.href);
+
+			if (!url.searchParams) {
+				return;
+			}
+
+			let eventId = null;
+
+			url.searchParams.forEach((value, key) => {
+				if (key === "eventId" && value) {
+					eventId = value;
+				}
+			});
+
+			url.searchParams.delete("eventId"); // Remove the query parameter
+			window.history.replaceState({}, "", url);
+
+			if (!eventId) {
+				return;
+			}
+
+			let event = null;
+
+			for (let i = 0; i < this.items.length; i++) {
+				let item = this.items[i];
+
+				if (item.id === eventId) {
+					event = item;
+				}
+			}
+
+			this.modalView = event.id;
+			return;
+
+			if (!event) {
+				// open modal instead
+				return;
+			}
+
+			this.scrollToEvent(event);
 		},
 		async onBottomReached() {
 			if (this.lock) {
@@ -326,14 +398,39 @@ export default {
 			await new Promise((r) => setTimeout(r, 100));
 			this.lock = false;
 		},
+		scrollToEvent: function (event) {
+			const dataId = event.id;
+			const element = document.querySelector(`[data-id="${dataId}"]`);
+			const container = document.querySelector(".c-app__body");
+
+			if (!element) {
+				return;
+			}
+
+			setTimeout(() => {
+				container.scrollTo({
+					top: element.offsetTop - 56,
+					behaviour: "smooth",
+				});
+
+				element.classList.add("flash-highlight");
+
+				setTimeout(() => {
+					element.classList.remove("flash-highlight");
+				}, 1500);
+			}, 200);
+		},
 		handleScroll() {
 			if (this.hasEnded) {
 				return;
 			}
 
 			const bodyEl = document.querySelector(".c-app__body");
+			const height = bodyEl.offsetHeight;
+
 			const innerEl = document.querySelector(".c-app__body > div");
-			const currentScrollPosition = bodyEl.scrollTop;
+			const currentScrollPosition = bodyEl.scrollTop + height;
+
 			// All results have been fetched, don't do this query again
 
 			// then figure out onBottomReached
@@ -514,6 +611,12 @@ export default {
 
 		&.log {
 			padding-bottom: var(--margin);
+		}
+
+		&.flash-highlight {
+			.c-card {
+				animation: flash-bg 1.5s ease-in-out;
+			}
 		}
 	}
 

@@ -9,10 +9,42 @@
 				@enter:event="onEnter"
 			>
 				<template v-slot:pre-input>
-					<Icon></Icon>
+					<!-- <Icon></Icon> -->
+					<svg
+						class="icon-search"
+						width="24"
+						height="24"
+						viewBox="0 0 24 24"
+						fill="none"
+						xmlns="http://www.w3.org/2000/svg"
+					>
+						<path
+							d="M20 20L16.05 16.05M18 11C18 14.866 14.866 18 11 18C7.13401 18 4 14.866 4 11C4 7.13401 7.13401 4 11 4C14.866 4 18 7.13401 18 11Z"
+							stroke="currentColor"
+							stroke-width="2"
+							stroke-linecap="round"
+						/>
+					</svg>
 				</template>
 				<template v-slot:post-input>
-					<Icon name="cross" v-if="text" @click="onClear"></Icon>
+					<svg
+						v-if="text || currentCategory"
+						@click="onClear"
+						width="24"
+						height="24"
+						viewBox="0 0 24 24"
+						fill="none"
+						xmlns="http://www.w3.org/2000/svg"
+					>
+						<path
+							fill-rule="evenodd"
+							clip-rule="evenodd"
+							d="M4.18934 4.18934C4.77513 3.60355 5.72487 3.60355 6.31066 4.18934L12 9.87868L17.6893 4.18934C18.2751 3.60355 19.2249 3.60355 19.8107 4.18934C20.3964 4.77513 20.3964 5.72487 19.8107 6.31066L14.1213 12L19.8107 17.6893C20.3964 18.2751 20.3964 19.2249 19.8107 19.8107C19.2249 20.3964 18.2751 20.3964 17.6893 19.8107L12 14.1213L6.31066 19.8107C5.72487 20.3964 4.77513 20.3964 4.18934 19.8107C3.60355 19.2249 3.60355 18.2751 4.18934 17.6893L9.87868 12L4.18934 6.31066C3.60355 5.72487 3.60355 4.77513 4.18934 4.18934Z"
+							fill="currentColor"
+						/>
+					</svg>
+
+					<!-- <Icon name="cross" v-if="text" @click="onClear"></Icon> -->
 				</template>
 			</InputText>
 		</div>
@@ -27,7 +59,25 @@
 						href="#"
 						@click.prevent="onClick(category.text)"
 					>
-						{{ category.text }}
+						<span>
+							{{ category.text }}
+						</span>
+
+						<svg
+							v-if="currentCategory === category.text"
+							width="20"
+							height="20"
+							viewBox="0 0 24 24"
+							fill="none"
+							xmlns="http://www.w3.org/2000/svg"
+						>
+							<path
+								d="M5 5L19 19M19 5L5 19"
+								stroke="currentColor"
+								stroke-width="2"
+								stroke-linecap="round"
+							/>
+						</svg>
 					</a>
 				</div>
 			</div>
@@ -179,6 +229,7 @@ export default {
 		},
 		onClear: function () {
 			this.text = "";
+			this.currentCategory = "";
 			this.$emit("onClear");
 		},
 		onEnter: function () {
@@ -232,7 +283,7 @@ export default {
 		justify-content: center;
 	}
 
-	.c-icon {
+	.c-input-text svg {
 		position: absolute;
 		z-index: 1;
 		top: 0;
@@ -259,7 +310,7 @@ export default {
 		padding-right: 38px;
 	}
 
-	.form-control + .c-icon {
+	.form-control + svg {
 		left: auto;
 		right: 8px;
 
@@ -285,6 +336,24 @@ export default {
 			width: 100%;
 			height: 100%;
 			overflow-y: auto;
+
+			&::-webkit-scrollbar {
+				width: 10px;
+			}
+
+			&::-webkit-scrollbar-thumb {
+				background: hsl(var(--hue-p), 6%, 18%);
+				border-radius: 0;
+				border-radius: 5px;
+			}
+
+			&::-webkit-scrollbar-thumb:hover {
+				background: hsl(var(--hue-p), 6%, 18%);
+			}
+
+			&::-webkit-scrollbar-track {
+				background: transparent;
+			}
 		}
 
 		a {
@@ -356,7 +425,9 @@ export default {
 		}
 
 		a {
-			display: inline-block;
+			display: inline-flex;
+			min-height: 32px;
+			align-items: center;
 			margin-right: var(--margin);
 			padding: var(--margin) var(--margin-lg);
 			border-radius: var(--border-radius-full);
@@ -368,6 +439,12 @@ export default {
 			white-space: nowrap;
 
 			transition: all var(--transition-time) linear;
+
+			svg {
+				display: inline-block;
+				min-width: 20px;
+				margin-left: 4px;
+			}
 
 			&:last-child {
 				margin-right: 0;

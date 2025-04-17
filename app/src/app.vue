@@ -350,7 +350,6 @@ export default {
 					this.allowSetup = true;
 				}
 			} catch (err) {
-				console.log(err);
 				if (err && err.message && err.message === "Already connected") {
 					//hmm
 				}
@@ -447,6 +446,19 @@ export default {
 				this.toggleDocs();
 			}
 		},
+		arrayBufferToBase64(buffer) {
+			const bytes = new Uint8Array(buffer);
+			let binary = "";
+			for (let i = 0; i < bytes.byteLength; i++) {
+				binary += String.fromCharCode(bytes[i]);
+			}
+			return btoa(binary);
+		},
+		arrayBufferToBase64Url(buffer) {
+			const base64 = this.arrayBufferToBase64(buffer); // from earlier
+			// Convert to base64url
+			return base64.replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+		},
 		async registerServiceWorker() {
 			// register serviceworker
 
@@ -463,24 +475,46 @@ export default {
 					console.log(err);
 				});
 
-			//console.log(this.$store.app.registration);
+			const applicationServerKey = import.meta.env.VITE_PUSH_SERVER_KEY;
 
 			if (!this.$store.app.registration) {
 				return;
 			}
 
-			const applicationServerKey = import.meta.env.VITE_PUSH_SERVER_KEY;
+			let subscription =
+				await this.$store.app.registration.pushManager.getSubscription();
 
-			let subscription = await this.$store.app.registration.pushManager
-				.subscribe({
-					userVisibleOnly: true,
-					applicationServerKey,
-				})
-				.catch((err) => {
-					//this.$store.app.sendNotification(`ERROR 2 ${err}`);
-					console.log(err);
-					//this.$store.app.setPermissionModal(true);
-				});
+			//console.log(subscription);
+
+			if (subscription) {
+				const currentSubscriptionServerKey = this.arrayBufferToBase64Url(
+					subscription.options.applicationServerKey,
+				);
+				//console.log(currentSubscriptionServerKey);
+				//console.log(applicationServerKey);
+				// This check isn't working!!
+				if (currentSubscriptionServerKey !== applicationServerKey) {
+					//console.log("application keys are different!");
+					// Unsubscribe if the existing subscription has a different applicationServerKey
+					await subscription.unsubscribe();
+				} else {
+					//console.log("Already subscribed with the correct applicationServerKey");
+					return;
+				}
+			}
+
+			if (!subscription) {
+				let subscription = await this.$store.app.registration.pushManager
+					.subscribe({
+						userVisibleOnly: true,
+						applicationServerKey,
+					})
+					.catch((err) => {
+						//this.$store.app.sendNotification(`ERROR 2 ${err}`);
+						console.log(err);
+						//this.$store.app.setPermissionModal(true);
+					});
+			}
 
 			if (!subscription) {
 				return;
@@ -649,7 +683,7 @@ body {
 	}
 
 	&__body {
-		height: calc(100% - 68px);
+		height: calc(100% - 56px);
 		position: relative;
 		isolation: isolate;
 		overflow-y: auto;

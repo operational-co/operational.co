@@ -1,6 +1,5 @@
 import moment from "moment";
 import config from "#lib/config.js";
-import { v4 as uuidv4 } from "uuid";
 import { performance } from "perf_hooks";
 import Clickhouse from "#services/clickhouse/index.js";
 
@@ -268,7 +267,6 @@ WHERE workspaceId = '${params.workspaceId}'
 
 	async insertOne(payload) {
 		const ch = Clickhouse.getCh();
-		payload.id = uuidv4();
 		if (payload.content && typeof payload.content !== "string") {
 			payload.content = JSON.stringify(payload.content);
 		}

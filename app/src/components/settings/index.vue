@@ -13,7 +13,7 @@
 						<path
 							d="M14.9998 20L7.70696 12.7071C7.31643 12.3166 7.31643 11.6834 7.70695 11.2929L14.9998 4"
 							stroke="currentColor"
-							stroke-width="1.5"
+							stroke-width="2"
 							stroke-linecap="round"
 							stroke-linejoin="round"
 						/>
@@ -113,7 +113,7 @@
 							<span> Project </span>
 						</router-link>
 					</li>
-					<li>
+					<li v-if="!isSelfHosted">
 						<router-link to="/settings/billing">
 							<svg
 								width="24"
@@ -294,12 +294,16 @@ export default {
 
 			h3 {
 				display: inline-block;
-				font-weight: 400;
+				font-weight: 500;
 			}
 
 			&:hover,
 			&:active {
 				color: var(--color-link);
+
+				h3 {
+					color: var(--color-link);
+				}
 			}
 		}
 	}

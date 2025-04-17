@@ -131,6 +131,17 @@ export const selfhostedList = [
   }
 ];
 
+export const otherList = [
+  {
+    name: "Other"
+  },
+  {
+    name: "Introduction",
+    path: "/other/introduction",
+    depth: 1
+  }
+];
+
 export const usecasesList = [
   {
     name: "Track user sign ups",

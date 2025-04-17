@@ -2,6 +2,8 @@
 self.addEventListener("push", (event) => {
 	let data = event.data ? event.data.text() : "No payload";
 
+	console.log(data);
+
 	let body = "";
 
 	try {
@@ -21,6 +23,7 @@ self.addEventListener("push", (event) => {
 		body: body, //event.data ? event.data.text() : "No payload",
 		icon: "/favicons/android-chrome-192x192.png", // Add a small icon image in your public directory
 		badge: "/favicons/android-chrome-192x192.png", // Add a badge image in your public directory
+		data: data,
 		actions: [
 			{
 				action: "view",
@@ -43,17 +46,36 @@ self.addEventListener("pushsubscriptionchange", (event) => {
 self.addEventListener("notificationclick", (event) => {
 	event.notification.close();
 
-	let data = event.data ? event.data.text() : "No payload";
+	let data = event.notification.data || {};
 
-	try {
-		data = JSON.parse(data);
-	} catch (err) {
-		data = "";
-	}
+	let eventId = "na";
 
-	// if (data) {
-	// 	self.postMessage(data);
-	// }
+	//if(typeof data === 'object' &&)
+
+	console.log(data);
+
+	// Focus or open the web app with a query param
+	const urlToOpen = new URL(`/?eventId=${data.id}`, self.location.origin).href;
+
+	event.waitUntil(
+		clients
+			.matchAll({ type: "window", includeUncontrolled: true })
+			.then((clientList) => {
+				// If an existing tab is open, focus it
+				for (const client of clientList) {
+					let url = new URL(client.url);
+
+					if (url.pathname === "/") {
+						client.navigate(urlToOpen);
+						return client.focus();
+					}
+				}
+				// Otherwise, open a new tab
+				if (clients.openWindow) {
+					return clients.openWindow(urlToOpen);
+				}
+			}),
+	);
 });
 
 self.addEventListener("fetch", (e) => {

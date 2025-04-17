@@ -9,6 +9,13 @@
 					<p>Understand what’s happening in your product, find issues and respond to them in realtime.</p>
 				</article>
 
+				<!-- <div class="mark">
+					<span></span>
+					<span></span>
+					<span></span>
+					<img src="/favicons/android-chrome-512x512.png" />
+				</div> -->
+
 				<div class="btn-container">
 					<a target="_blank" href="https://discord.gg/BdTbsQhRzc" class="btn btn-fancy btn-primary">
 						<span> Join the waitlist </span>
@@ -827,6 +834,54 @@ await ops.events.ingest({
 
 <style lang="scss">
 .c-landing-intro {
+	.mark {
+		width: 64px;
+		height: 64px;
+		background-color: red;
+		position: relative;
+
+		> span {
+			display: block;
+			position: absolute;
+			top: 35%;
+			left: 36%;
+			width: 28%;
+			height: 30%;
+
+			&:after {
+				content: "";
+				display: block;
+				width: 100%;
+				height: 100%;
+				background-color: #fff;
+
+				transform-style: preserve-3d;
+
+				transform: skew(0, 26.5deg);
+
+				box-shadow: 0.5px -0.5px 0 0 #fff;
+			}
+
+			&:nth-child(2) {
+				transform: translateX(50%) translateY(-23%);
+			}
+
+			&:nth-child(3) {
+				transform: translateX(-55%) translateY(25%);
+			}
+		}
+
+		> img {
+			display: none;
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			opacity: 0.25;
+		}
+	}
+
 	.d-intro {
 		position: relative;
 		padding: 5rem 0;

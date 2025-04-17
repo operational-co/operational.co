@@ -114,7 +114,7 @@ GROUP BY wu.userId, wu.notify;
 			);
 
 			let message = {
-				id: event._id,
+				id: event.id,
 				message: event.searchable,
 			};
 

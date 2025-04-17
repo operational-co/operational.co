@@ -185,11 +185,28 @@
 				<span v-if="notifyProcessing" class="c-spinner"></span>
 			</div>
 		</section>
+
+		<section>
+			<strong>Details</strong>
+			<template v-if="isSelfHosted">
+				<p v-if="serverKey">Vapid public key(VITE_PUSH_SERVER_KEY):</p>
+				<code>{{ serverKey }}</code>
+			</template>
+			<Code v-if="subscription" :copy="false">
+				<pre>{{ JSON.stringify(subscription, null, 4) }}</pre>
+			</Code>
+		</section>
 	</div>
 </template>
 
 <script>
+import Code from "@operational.co/components/code/index.vue";
+
 export default {
+	components: {
+		Code,
+	},
+
 	data: function () {
 		return {
 			notifyProcessing: false,
@@ -201,6 +218,8 @@ export default {
 			pushNotificationError: "",
 
 			load: false,
+
+			subscription: null,
 		};
 	},
 
@@ -214,6 +233,13 @@ export default {
 	},
 
 	computed: {
+		isSelfHosted: function () {
+			const condition = this.$store.app.isSelfHosted;
+			return condition;
+		},
+		serverKey: function () {
+			return import.meta.env.VITE_PUSH_SERVER_KEY;
+		},
 		isNotify: function () {
 			if (!this.user) {
 				return;
@@ -376,6 +402,15 @@ export default {
 
 			this.trigger = !this.trigger;
 		},
+
+		async loadPushSubscription() {
+			try {
+				const registration = await navigator.serviceWorker.ready;
+				this.subscription = await registration.pushManager.getSubscription();
+			} catch (err) {
+				console.log(err);
+			}
+		},
 	},
 
 	created: function () {
@@ -387,6 +422,8 @@ export default {
 
 	mounted: function () {
 		this.load = true;
+
+		this.loadPushSubscription();
 	},
 };
 </script>
