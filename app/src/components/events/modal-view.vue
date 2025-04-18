@@ -1,5 +1,5 @@
 <template>
-	<Modal klass="modal-view" @onClose="active = false" :active="active">
+	<Modal klass="modal-view" @onClose="onClose" :active="active">
 		<article>
 			<header>
 				<strong>Event details </strong>
