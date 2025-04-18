@@ -502,4 +502,8 @@ export default {
 		}
 	}
 }
+
+.is-ios .c-app-header {
+	height: 76px;
+}
 </style>

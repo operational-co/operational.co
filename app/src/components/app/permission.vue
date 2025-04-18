@@ -188,7 +188,7 @@
 
 		<section>
 			<strong>Details</strong>
-			<template v-if="isSelfHosted">
+			<template>
 				<p v-if="serverKey">Vapid public key(VITE_PUSH_SERVER_KEY):</p>
 				<code>{{ serverKey }}</code>
 			</template>

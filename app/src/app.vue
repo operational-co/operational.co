@@ -1,5 +1,12 @@
 <template>
-	<div :class="['c-app', { test: testMode === true }]" v-if="appInit">
+	<div
+		:class="[
+			'c-app',
+			{ 'is-ios': isIOS === true },
+			{ test: testMode === true },
+		]"
+		v-if="appInit"
+	>
 		<!-- <Glow></Glow> -->
 
 		<DemoBlurb
@@ -250,6 +257,9 @@ export default {
 		},
 		isDemo: function () {
 			return this.$store.workspace.isDemo;
+		},
+		isIOS: function () {
+			return this.$store.app.isIOS;
 		},
 	},
 
