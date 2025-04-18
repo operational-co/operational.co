@@ -512,7 +512,7 @@ export default {
 				} else {
 					console.log("push already subscribed");
 					//console.log("Already subscribed with the correct applicationServerKey");
-					return;
+					//return;
 				}
 			}
 
