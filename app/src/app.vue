@@ -470,61 +470,63 @@ export default {
 			return base64.replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
 		},
 		async registerServiceWorker() {
-			// register serviceworker
+			let logs = [];
+			logs.push(`[Push] Registering subscription`);
 
+			const applicationServerKey = import.meta.env.VITE_PUSH_SERVER_KEY;
+			logs.push(`[Push] Application server key: ${applicationServerKey}`);
+
+			// register serviceworker
 			if (!("serviceWorker" in navigator)) {
+				logs.push(`[Push] No serviceWorker. Push won't work`);
 				return;
 			}
 
 			this.$store.app.registration = await navigator.serviceWorker
 				.register("/service-worker.js")
 				.catch((err) => {
+					logs.push(`[Push] Service worker registration failed`);
 					this.$store.app.sendNotification(
 						`Failed to setup service worker. Push notifications won't work.`,
 					);
 					console.log(err);
 				});
 
-			const applicationServerKey = import.meta.env.VITE_PUSH_SERVER_KEY;
-
 			if (!this.$store.app.registration) {
 				return;
 			}
 
+			logs.push(`[Push] Getting current subscription`);
+
 			let subscription =
 				await this.$store.app.registration.pushManager.getSubscription();
 
-			console.log(subscription);
-
 			if (subscription) {
+				logs.push(
+					`[Push] Subscription found, checking match against current server key`,
+				);
 				const currentSubscriptionServerKey = this.arrayBufferToBase64Url(
 					subscription.options.applicationServerKey,
 				);
-				//console.log(currentSubscriptionServerKey);
-				//console.log(applicationServerKey);
-				// This check isn't working!!
 				if (currentSubscriptionServerKey !== applicationServerKey) {
-					console.log("applicationServerKey mismatch, unsubscribing");
-					console.log(currentSubscriptionServerKey, applicationServerKey);
-					//console.log("application keys are different!");
-					// Unsubscribe if the existing subscription has a different applicationServerKey
+					logs.push(`[Push] applicationServerKey mismatch, unsubscribing`);
 					await subscription.unsubscribe();
 				} else {
-					console.log("push already subscribed");
-					//console.log("Already subscribed with the correct applicationServerKey");
-					//return;
+					logs.push(`[Push] applicationServerKey matches!`);
 				}
 			}
 
 			if (!subscription) {
+				logs.push(`[Push] Subscription not found, subscribing to subscription`);
 				let subscription = await this.$store.app.registration.pushManager
 					.subscribe({
 						userVisibleOnly: true,
 						applicationServerKey,
 					})
 					.catch((err) => {
+						logs.push(`[Push] Couldn't subscribe. Err ${err}`);
 						//this.$store.app.sendNotification(`ERROR 2 ${err}`);
-						console.log(err);
+						//console.log(err);
 						//this.$store.app.setPermissionModal(true);
 					});
 			}
@@ -535,7 +537,11 @@ export default {
 
 			//this.$store.app.sendNotification("SUBSCRIBED");
 
+			logs.push(`[Push] Updating server with the subscription data`);
+
 			this.$store.app.subscribePush(subscription);
+
+			console.log(logs);
 		},
 		onDomContentLoaded: function () {
 			let displayMode = "browser tab";
