@@ -335,7 +335,7 @@ export default {
 			});
 
 			url.searchParams.delete("eventId"); // Remove the query parameter
-			//window.history.replaceState({}, "", url);
+			window.history.replaceState({}, "", url);
 
 			if (!eventId) {
 				return;
