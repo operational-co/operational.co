@@ -26,6 +26,53 @@
 
 			<template v-if="$route.path === '/settings'">
 				<ProfileCard></ProfileCard>
+
+				<!--
+				<ul>
+					<li>
+						<router-link to="/settings/project">
+							<svg
+								width="24"
+								height="24"
+								viewBox="0 0 24 24"
+								fill="none"
+								xmlns="http://www.w3.org/2000/svg"
+							>
+								<path
+									d="M4 19H14M4 19V4H14V8M4 19H2M20 19H14M20 19V8H14M20 19H22M14 19V8M10 9H8M8 13H10"
+									stroke="currentColor"
+									stroke-width="1.5"
+									stroke-linecap="round"
+									stroke-linejoin="round"
+								/>
+							</svg>
+							<span> Project </span>
+						</router-link>
+					</li>
+					<li>
+						<router-link to="/settings/project-users">
+							<svg
+								width="24"
+								height="24"
+								viewBox="0 0 24 24"
+								fill="none"
+								xmlns="http://www.w3.org/2000/svg"
+							>
+								<path
+									d="M15.001 3C16.934 3 18.501 4.567 18.501 6.5C18.501 8.433 16.934 10 15.001 10M20.501 20H22.001C22.5533 20 23.0094 19.5492 22.9207 19.0041C22.5135 16.5029 20.5954 14.4277 18.001 13.5088M9.00104 10C7.06805 10 5.50104 8.433 5.50104 6.5C5.50104 4.567 7.06805 3 9.00104 3C10.934 3 12.501 4.567 12.501 6.5C12.501 8.433 10.934 10 9.00104 10ZM1.08141 19.004C1.63399 15.6098 4.96921 13 9.00104 13C13.0329 13 16.3681 15.6098 16.9207 19.004C17.0094 19.5491 16.5533 20 16.001 20H2.00104C1.44876 20 0.992665 19.5491 1.08141 19.004Z"
+									stroke="currentColor"
+									stroke-width="1.5"
+									stroke-linecap="round"
+									stroke-linejoin="round"
+								/>
+							</svg>
+
+							<span>Project Users</span>
+						</router-link>
+					</li>
+				</ul>
+				-->
+
 				<ul>
 					<!-- <li>
 						<router-link to="/settings/token">

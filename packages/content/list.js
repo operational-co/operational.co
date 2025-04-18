@@ -136,8 +136,18 @@ export const otherList = [
     name: "Other"
   },
   {
-    name: "Introduction",
-    path: "/other/introduction",
+    name: "Vision",
+    path: "/other/vision",
+    depth: 1
+  },
+  {
+    name: "Roadmap",
+    path: "/other/roadmap",
+    depth: 1
+  },
+  {
+    name: "Contributing",
+    path: "/other/contributing",
     depth: 1
   }
 ];
