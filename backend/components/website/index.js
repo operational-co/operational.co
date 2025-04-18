@@ -9,6 +9,7 @@ import Db from "#services/db/index.js";
 
 const component = {
 	async subscribe(user, subscription, sid) {
+		console.log(`Subscribing user ${user.id} with sid: ${sid}`);
 		// let condition = await prisma.workspaceUser.update({
 		// 	where: {
 		// 		userId_workspaceId: {
@@ -32,6 +33,7 @@ const component = {
 		}
 
 		if (session) {
+			console.log(`session found`);
 			let pushes = await prisma.push.findMany({
 				take: 1,
 				where: {
@@ -40,6 +42,7 @@ const component = {
 				},
 			});
 			if (pushes.length === 0) {
+				console.log(`pushes not found. Creating one`);
 				// create the push
 				let push = await prisma.push.create({
 					data: {
@@ -48,9 +51,11 @@ const component = {
 						pushSubscription: subscription,
 					},
 				});
+				console.log(push);
 			} else {
 				// update the push
 				let push = pushes[0];
+				console.log(`push found, updating it: ${push.id}`);
 				push = await prisma.push.update({
 					where: {
 						id: push.id,
@@ -59,7 +64,11 @@ const component = {
 						pushSubscription: subscription,
 					},
 				});
+				console.log(push);
 			}
+		} else {
+			console.log("session not found");
+			//??
 		}
 
 		// No need to update the user or anything like that.
