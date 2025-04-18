@@ -87,6 +87,21 @@ const api = {
 			throw err;
 		}
 	},
+	findOne: async function (params = {}) {
+		params = JSON.parse(JSON.stringify(params));
+
+		const options = {
+			params: {
+				...params,
+			},
+		};
+		try {
+			const res = await http.get("/events/latest", options);
+			return res.data || [];
+		} catch (err) {
+			throw err;
+		}
+	},
 };
 
 const config = {
@@ -321,6 +336,12 @@ export const useEventsStore = defineStore(config.name, {
 
 				//events[i] = event;
 			}
+		},
+
+		findOne: async function (params = {}) {
+			const event = await api.findOne(params).catch((err) => {});
+
+			return event;
 		},
 
 		doAction: async function (action) {

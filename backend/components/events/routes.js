@@ -87,6 +87,29 @@ const getLatest = async (req, res) => {
 	return res.send(events);
 };
 
+const getOne = async (req, res) => {
+	let params = {
+		...req.query,
+	};
+
+	const testMode = req.headers["x-test"] || false;
+	params.test = !!testMode;
+
+	if (params["mentions[]"]) {
+		params.mentions = params["mentions[]"];
+		delete params["mentions[]"];
+	}
+
+	params.workspaceId = res.locals.user.primaryWorkspace;
+	params.take = config.events.take;
+
+	const event = await component.findOne(params).catch((err) => {
+		throw err;
+	});
+
+	return res.send(event);
+};
+
 const actionSchema = {
 	schema: {},
 };
@@ -108,6 +131,15 @@ const getLatestSchema = {
 		test: {
 			type: "boolean",
 			default: false,
+		},
+	},
+};
+
+const getOneSchema = {
+	schema: {
+		id: {
+			type: "string",
+			optional: false,
 		},
 	},
 };
@@ -152,6 +184,8 @@ const getSchema = {
 		},
 	},
 };
+
+router.get("/:id", middlewareAuth, middlewareSchema(getOneSchema), getOne);
 
 router.get(
 	"/latest",

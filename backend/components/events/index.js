@@ -11,6 +11,12 @@ const component = {
 		return events;
 	},
 
+	async findOne(params) {
+		const event = await Events.findById(params.id, null, params.test);
+
+		return event;
+	},
+
 	async findLatest(params) {
 		const events = await Events.findLatest(params);
 

@@ -1,17 +1,28 @@
 <template>
 	<Modal klass="modal-view" @onClose="active = false" :active="active">
 		<article>
+			<header>
+				<strong>Event details </strong>
+			</header>
 			<span v-if="processing" class="c-spinner"></span>
+			<Card
+				v-if="event"
+				@onEventNameSearch="onEventNameSearch"
+				:item="event"
+				@onConfirmAction="onConfirmAction"
+			></Card>
 		</article>
 	</Modal>
 </template>
 
 <script>
 import Modal from "@operational.co/components/ui/modal.vue";
+import Card from "@operational.co/components/card/index.vue";
 
 export default {
 	components: {
 		Modal,
+		Card,
 	},
 
 	data: function () {
@@ -20,6 +31,8 @@ export default {
 			activeSlug: null,
 
 			processing: false,
+
+			event: null,
 		};
 	},
 
@@ -37,7 +50,6 @@ export default {
 			if (!this.eventId) {
 				return;
 			}
-			console.log(this.eventId);
 			this.loadEvent(this.eventId);
 		},
 	},
@@ -48,8 +60,18 @@ export default {
 		async loadEvent(eventId) {
 			this.processing = true;
 
-			//this.processing = false;
+			const event = await this.$store.events.findOne({
+				id: eventId,
+			});
+
+			if (event) {
+				this.event = event;
+			}
+
+			this.processing = false;
 		},
+		onEventNameSearch: function () {},
+		onConfirmAction: function () {},
 		onClose: function () {
 			this.$emit("onClose");
 		},
@@ -81,9 +103,13 @@ export default {
 		grid-column-gap: 16px;
 	}
 
+	header {
+		margin-bottom: 1rem;
+	}
+
 	@media screen and (max-width: 460px) {
 		.vfm__content {
-			width: calc(100% - 48px);
+			//width: calc(100% - 48px);
 		}
 	}
 }
