@@ -140,6 +140,9 @@ export default {
 	},
 
 	computed: {
+		baseApiUrl: function () {
+			return this.$store.app.baseApiUrl;
+		},
 		appVersion: function () {
 			return __APP_VERSION__;
 		},

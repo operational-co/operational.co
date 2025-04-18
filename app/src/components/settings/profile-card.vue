@@ -69,12 +69,12 @@ export default {
 		workspace: function () {
 			return this.$store.workspace.resource;
 		},
+
 		baseApiUrl: function () {
 			return this.$store.app.baseApiUrl;
 		},
 		assetPath: function () {
 			let baseUrl = this.baseApiUrl;
-
 			return `${baseUrl}/uploads`;
 		},
 		apikeys: function () {

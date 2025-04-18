@@ -12,8 +12,10 @@ function setHeaderFromConfig(config) {
 
 let baseUrl = "http://localhost:2000";
 
-if (import.meta && import.meta.env.VITE_API_URL) {
-	baseUrl = import.meta.env.VITE_API_URL;
+const API_URL = window?.__APP_CONFIG__?.VITE_API_URL || import.meta.env.VITE_API_URL;
+
+if(API_URL) {
+	baseUrl = API_URL;
 }
 
 const http = axios.create({
