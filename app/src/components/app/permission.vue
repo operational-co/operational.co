@@ -1,7 +1,7 @@
 <template>
 	<div class="c-app-permission">
 		<section>
-			<p v-if="isPwa">
+			<p v-if="isServiceWorkerRegistered">
 				<strong>
 					<span class="c-app-permission__label">
 						<svg
@@ -18,13 +18,13 @@
 								fill="currentColor"
 							/>
 						</svg> </span
-					>App is in PWA mode.
+					>Service worker is registered.
 				</strong>
 			</p>
 			<p v-else>
 				<strong>
-					App is not in PWA mode. If you're on mobile iOS or Android, you won't
-					receive push notifications.</strong
+					Service worker isn't registered. If you're on mobile iOS or Android,
+					you won't receive push notifications.</strong
 				>
 				<a href="https://operational.co/manual/pwa" target="_blank"
 					>What is PWA mode?</a
@@ -211,6 +211,8 @@ export default {
 		return {
 			notifyProcessing: false,
 			pushNotificationProcessing: false,
+
+			isServiceWorkerRegistered: false,
 
 			notify: false,
 			trigger: false,
@@ -404,6 +406,12 @@ export default {
 		},
 
 		async loadPushSubscription() {
+			const data = await this.$store.app
+				.isServiceWorkerRegistered()
+				.catch((err) => {
+					console.log(data);
+				});
+			this.isServiceWorkerRegistered = data;
 			try {
 				const registration = await navigator.serviceWorker.ready;
 				this.subscription = await registration.pushManager.getSubscription();

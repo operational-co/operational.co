@@ -156,6 +156,18 @@ export const useAppStore = defineStore(config.name, {
 	actions: {
 		...appStore.exportActions(),
 
+		async isServiceWorkerRegistered() {
+			if (!("serviceWorker" in navigator)) return false;
+
+			try {
+				const registration = await navigator.serviceWorker.getRegistration();
+				return !!registration;
+			} catch (err) {
+				console.error("Error checking service worker:", err);
+				return false;
+			}
+		},
+
 		async init() {
 			const events = useEventsStore();
 			const crm = useCrmStore();
