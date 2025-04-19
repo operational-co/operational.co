@@ -2,8 +2,6 @@
 self.addEventListener("push", (event) => {
 	let data = event.data ? event.data.text() : "No payload";
 
-	console.log(data);
-
 	let body = "";
 
 	try {
@@ -51,8 +49,6 @@ self.addEventListener("notificationclick", (event) => {
 	let eventId = "na";
 
 	//if(typeof data === 'object' &&)
-
-	console.log(data);
 
 	// Focus or open the web app with a query param
 	const urlToOpen = new URL(`/?eventId=${data.id}`, self.location.origin).href;

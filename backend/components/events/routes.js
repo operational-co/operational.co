@@ -88,6 +88,7 @@ const getLatest = async (req, res) => {
 };
 
 const getOne = async (req, res) => {
+	console.log("trigger");
 	let params = {
 		...req.query,
 	};
@@ -185,8 +186,6 @@ const getSchema = {
 	},
 };
 
-router.get("/:id", middlewareAuth, middlewareSchema(getOneSchema), getOne);
-
 router.get(
 	"/latest",
 	middlewareAuth,
@@ -197,6 +196,8 @@ router.get(
 router.get("/", middlewareAuth, middlewareSchema(getSchema), get);
 
 router.post("/action", middlewareAuth, middlewareSchema(actionSchema), action);
+
+router.get("/:id", middlewareAuth, middlewareSchema(getOneSchema), getOne);
 
 // Export the router
 export default router;

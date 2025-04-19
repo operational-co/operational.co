@@ -64,7 +64,6 @@ const component = {
 						pushSubscription: subscription,
 					},
 				});
-				console.log(push);
 			}
 		} else {
 			console.log("session not found");

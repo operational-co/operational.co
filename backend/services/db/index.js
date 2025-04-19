@@ -77,7 +77,7 @@ class Db {
 		return await db.findContexts(params);
 	}
 
-	async findOne(id, _id, testMode = false) {
+	async findOne(id, testMode = false) {
 		const db = this.getDbInstance();
 		return await db.findOne(id, testMode);
 	}

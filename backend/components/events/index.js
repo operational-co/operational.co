@@ -12,7 +12,7 @@ const component = {
 	},
 
 	async findOne(params) {
-		const event = await Events.findById(params.id, null, params.test);
+		const event = await Events.findById(params.id, params.test);
 
 		return event;
 	},

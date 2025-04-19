@@ -60,7 +60,7 @@ class CronTab {
 		 * Build a categories list every 1 hour
 		 */
 		new Cron(
-			"0 * * * *",
+			"*/10 * * * *",
 			this.options,
 			Workspace.generateCategories.bind(Workspace),
 		);

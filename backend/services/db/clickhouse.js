@@ -26,7 +26,7 @@ const clickhouse = {
 		}
 
 		if (params.cursor) {
-			let initialEvent = await this.findOne(params.cursor);
+			let initialEvent = await this.findOne(params.cursor, params.test);
 			let clause = `(createdAt < '${initialEvent.createdAt}')`;
 			where.push(clause);
 		}

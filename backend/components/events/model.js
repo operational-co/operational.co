@@ -156,8 +156,8 @@ class Log extends Model {
 		return await Db.findContexts(params);
 	}
 
-	async findById(id, _id, testMode = false) {
-		return await Db.findOne(id, _id, testMode);
+	async findById(id, testMode = false) {
+		return await Db.findOne(id, testMode);
 	}
 
 	async getEventCount(params) {
