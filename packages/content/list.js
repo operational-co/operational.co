@@ -125,6 +125,11 @@ export const selfhostedList = [
     depth: 1
   },
   {
+    name: "Integrations",
+    path: "/selfhosted/integrations",
+    depth: 1
+  },
+  {
     name: "Best practices",
     path: "/selfhosted/best-practices",
     depth: 1
