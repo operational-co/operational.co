@@ -5,6 +5,12 @@ on:
     branches:
       - master
 
+permissions:
+  contents: write
+  packages: write
+  issues: write
+  pull-requests: write
+
 jobs:
   version:
     runs-on: ubuntu-latest
@@ -58,7 +64,7 @@ jobs:
         with:
           context: .
           file: ./DockerFile
-          push: ${{ github.event_name == 'push' && needs.version.outputs.version != '' }}
+          push: true
           tags: |
             ghcr.io/${{ github.repository }}:latest
             ghcr.io/${{ github.repository }}:${{ needs.version.outputs.version || '0.0.0' }}
