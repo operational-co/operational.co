@@ -7,6 +7,7 @@ import prisma from "#lib/prisma.js";
 import fs from "fs";
 import moment from "moment";
 import { customAlphabet } from "nanoid";
+import nodemailer from "nodemailer";
 
 const alphabet = "abcdefghijklmnopqrstuvwxyz"; // Your custom letters
 const generateId = customAlphabet(alphabet, 4); // Generate 4-character IDs
@@ -14,169 +15,212 @@ const generateId = customAlphabet(alphabet, 4); // Generate 4-character IDs
 const __dirname = path.resolve("");
 
 const eta = new Eta({
-	tags: ["{{", "}}"],
-	views: path.join(__dirname, "./services/email/templates"),
+  tags: ["{{", "}}"],
+  views: path.join(__dirname, "./services/email/templates"),
 });
 
 class Email {
-	from = config.email.FROM;
-	devGroup = config.email.devGroup || [];
-	managementGroup = config.email.managementGroup || [];
-	email = null;
-	resend = null;
+  from = config.email.FROM;
+  devGroup = config.email.devGroup || [];
+  managementGroup = config.email.managementGroup || [];
+  email = null;
+  resend = null;
+  transporter = null;
 
-	async setup() {
-		if (config.resend.TOKEN && config.email.FROM) {
-			const resend = new Resend(config.resend.TOKEN);
+  async setup() {
+    // setup via resend directly
+    if (config.resend.TOKEN && config.email.FROM) {
+      const resend = new Resend(config.resend.TOKEN);
 
-			this.resend = resend;
-		}
+      this.resend = resend;
 
-		return true;
-	}
+      // or if available, setup via smtp
+    } else if (config.email.SMTP_HOST) {
+      let opts = {
+        host: config.email.SMTP_HOST,
+        port: config.email.SMTP_PORT || 587,
+        secure: config.email.SMTP_PORT === 465 ? true : false, // true for port 465, false for other ports
+      };
+      if (config.email.SMTP_USERNAME) {
+        let auth = {
+          user: config.email.SMTP_USERNAME,
+          pass: config.email.SMTP_PASSWORD || "",
+        };
+        opts.auth = auth;
+      }
+      this.transporter = nodemailer.createTransport(opts);
+    }
 
-	async test() {
-		let value = "file";
-		let info = "";
+    return true;
+  }
 
-		if (config.resend.TOKEN && config.email.FROM) {
-			value = "resend";
-		}
-		if (config.resend.TOKEN && !config.email.FROM) {
-			value = "file";
-			info = "FROM env var needs to be set to receive emails from RESEND";
-		}
-		if (!config.resend.TOKEN) {
-			value = "file";
-			info =
-				"Resend setup not found. Emails will be written as text files inside /backend/private";
-		}
+  async test() {
+    let value = "file";
+    let info = "";
 
-		return {
-			name: "email",
-			value: value,
-			status: "active",
-			info: info,
-		};
-	}
+    if (config.resend.TOKEN && config.email.FROM) {
+      value = "resend";
+    }
+    if (config.resend.TOKEN && !config.email.FROM) {
+      value = "file";
+      info = "FROM env var needs to be set to receive emails from RESEND";
+    }
+    if (!config.resend.TOKEN) {
+      value = "file";
+      info = "Resend setup not found. Emails will be written as text files inside /backend/private";
+    }
 
-	async saveEmailToFile(payload) {
-		try {
-			// Destructure payload
-			const { subject, text } = payload;
+    return {
+      name: "email",
+      value: value,
+      status: "active",
+      info: info,
+    };
+  }
 
-			const tempId = generateId();
+  async sendTest(email) {
+    const html = `Email body`;
 
-			// Generate the folder and file path
-			const folderPath = path.join(__dirname, "/private/emails");
-			const dateTime = moment().format("DD-MM-YYYY-HH-mm");
-			const slugifiedSubject = subject
-				.toLowerCase()
-				.replace(/[^a-z0-9]+/g, "-")
-				.replace(/(^-|-$)/g, "");
-			const fileName = `${dateTime}-${tempId}-${slugifiedSubject || "no-subject"}.txt`;
-			const filePath = path.join(folderPath, fileName);
+    await this.send({
+      subject: `Test email`,
+      to: email,
+      html: html,
+      text: "test",
+    });
+  }
 
-			// Ensure the folder exists
-			await fs.promises.mkdir(folderPath, { recursive: true });
+  async saveEmailToFile(payload) {
+    try {
+      // Destructure payload
+      const { subject, text } = payload;
 
-			// Write the email content to the file
-			const emailContent = `Subject: ${subject}\n\n${text}`;
-			await fs.promises.writeFile(filePath, emailContent, "utf8");
+      const tempId = generateId();
 
-			console.log(`Email saved to file: ${filePath}`);
-		} catch (error) {
-			console.error("Error saving email to file:", error.message);
-		}
-	}
+      // Generate the folder and file path
+      const folderPath = path.join(__dirname, "/private/emails");
+      const dateTime = moment().format("DD-MM-YYYY-HH-mm");
+      const slugifiedSubject = subject
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/(^-|-$)/g, "");
+      const fileName = `${dateTime}-${tempId}-${slugifiedSubject || "no-subject"}.txt`;
+      const filePath = path.join(folderPath, fileName);
 
-	async send(obj) {
-		let from = this.from;
+      // Ensure the folder exists
+      await fs.promises.mkdir(folderPath, { recursive: true });
 
-		let to = obj.to;
+      // Write the email content to the file
+      const emailContent = `Subject: ${subject}\n\n${text}`;
+      await fs.promises.writeFile(filePath, emailContent, "utf8");
 
-		if (typeof to !== "string") {
-			to = to[0];
-		}
+      console.log(`Email saved to file: ${filePath}`);
+    } catch (error) {
+      console.error("Error saving email to file:", error.message);
+    }
+  }
 
-		let payload = {
-			to: to,
-			from: from, // Use the email address or domain you verified above
-			subject: obj.subject || "NO SUBJECT",
-			text: obj.text || "",
-			html: obj.html || "",
-			attachments: obj.attachments || [],
-		};
+  async send(obj) {
+    let from = this.from;
 
-		if (config.env !== "production") {
-			payload.subject = `[TEST] ${payload.subject}`;
-		}
+    let to = obj.to;
 
-		let response = null;
+    if (typeof to !== "string") {
+      to = to[0];
+    }
 
-		if (!config.resend.TOKEN || !config.email.FROM) {
-			this.saveEmailToFile(payload);
-			response = true;
-		} else {
-			try {
-				response = await this.resend.emails.send(payload);
+    let payload = {
+      to: to,
+      from: from, // Use the email address or domain you verified above
+      subject: obj.subject || "NO SUBJECT",
+      text: obj.text || "",
+      html: obj.html || "",
+      attachments: obj.attachments || [],
+    };
 
-				delete payload.attachments;
-				delete payload.html;
+    if (config.env !== "production") {
+      payload.subject = `[TEST] ${payload.subject}`;
+    }
 
-				let str = JSON.stringify(payload);
+    let response = null;
 
-				//console.log(str);
-			} catch (err) {
-				console.log(err);
+    if (this.resend) {
+      try {
+        response = await this.resend.emails.send(payload);
 
-				throw err;
-			}
-		}
+        delete payload.attachments;
+        delete payload.html;
 
-		return response;
-	}
+        let str = JSON.stringify(payload);
 
-	async renderHtml(htmlPath, fields, htmlOnly = false) {
-		let mjml = await eta.render(htmlPath, fields);
+        //console.log(str);
+      } catch (err) {
+        console.log(err);
 
-		if (htmlOnly) {
-			return mjml;
-		}
+        throw err;
+      }
+    } else if (this.transporter) {
+      try {
+        const info = await this.transporter.sendMail({
+          from: `Operational <${payload.from}>`, // sender address
+          to: payload.to,
+          subject: payload.subject,
+          text: payload.text,
+          html: payload.html,
+        });
 
-		let mjmlObject = mjml2html(mjml);
+        response = info;
+      } catch (err) {
+        console.log(err);
+        throw err;
+      }
+    } else {
+      this.saveEmailToFile(payload);
+      response = true;
+    }
 
-		return mjmlObject.html;
-	}
+    return response;
+  }
 
-	async userWelcome(user) {
-		const context = {
-			...config,
-		};
-		let fields = {
-			user,
-			context,
-		};
+  async renderHtml(htmlPath, fields, htmlOnly = false) {
+    let mjml = await eta.render(htmlPath, fields);
 
-		let html = await this.renderHtml("user-welcome.mjml", fields);
+    if (htmlOnly) {
+      return mjml;
+    }
 
-		await this.send({
-			subject: `Welcome to Operational, ${user.firstName}`,
-			to: user.email,
-			html: html,
-			text: "test",
-		});
-	}
+    let mjmlObject = mjml2html(mjml);
 
-	async sendActivationEmail(user, workspace, code) {
-		let subject = `Operational - Activate your account`;
+    return mjmlObject.html;
+  }
 
-		let baseUrl = config.appUrl;
+  async userWelcome(user) {
+    const context = {
+      ...config,
+    };
+    let fields = {
+      user,
+      context,
+    };
 
-		let link = `${baseUrl}/?code=${code}`;
-		let limit = workspace.freeEvents || 10000;
+    let html = await this.renderHtml("user-welcome.mjml", fields);
 
-		let text = `
+    await this.send({
+      subject: `Welcome to Operational, ${user.firstName}`,
+      to: user.email,
+      html: html,
+      text: "test",
+    });
+  }
+
+  async sendActivationEmail(user, workspace, code) {
+    let subject = `Operational - Activate your account`;
+
+    let baseUrl = config.appUrl;
+
+    let link = `${baseUrl}/?code=${code}`;
+    let limit = workspace.freeEvents || 10000;
+
+    let text = `
       Hi ${user.firstName},
 
       Thank you for signing up.
@@ -189,21 +233,21 @@ class Email {
       Shash
     `;
 
-		return await this.send({
-			subject,
-			to: user.email,
-			text,
-		});
-	}
+    return await this.send({
+      subject,
+      to: user.email,
+      text,
+    });
+  }
 
-	async onResetPasswordRequest(user) {
-		let subject = `Operational - Your password reset request`;
+  async onResetPasswordRequest(user) {
+    let subject = `Operational - Your password reset request`;
 
-		let baseUrl = config.appUrl;
+    let baseUrl = config.appUrl;
 
-		let link = `${baseUrl}/?resetpasswordtoken=${user.resetPasswordToken}`;
+    let link = `${baseUrl}/?resetpasswordtoken=${user.resetPasswordToken}`;
 
-		let text = `
+    let text = `
       Hi ${user.firstName},
 
       We received a reset password request from you.
@@ -215,56 +259,56 @@ class Email {
       Shash
     `;
 
-		return await this.send({
-			subject,
-			to: user.email,
-			text,
-		});
-	}
+    return await this.send({
+      subject,
+      to: user.email,
+      text,
+    });
+  }
 
-	async onNewWorkspace(userId, workspace) {
-		let subject = `Operational - New project created`;
+  async onNewWorkspace(userId, workspace) {
+    let subject = `Operational - New project created`;
 
-		let user = await prisma.user.findUnique({
-			where: {
-				id: userId,
-			},
-		});
+    let user = await prisma.user.findUnique({
+      where: {
+        id: userId,
+      },
+    });
 
-		let baseUrl = config.appUrl;
+    let baseUrl = config.appUrl;
 
-		let text = `
+    let text = `
       Hi ${user.firstName},
 
-			Your project "${workspace.name}" has been created!
+      Your project "${workspace.name}" has been created!
 
       Regards
       Shash
     `;
 
-		return await this.send({
-			subject,
-			to: user.email,
-			text,
-		});
-	}
+    return await this.send({
+      subject,
+      to: user.email,
+      text,
+    });
+  }
 
-	async onWorkspaceHold(workspace, reason) {
-		if (!workspace.adminId) {
-			console.log(`No adminId for workspace ${workspace.name}`);
-			return;
-		}
-		let subject = `Operational - Your project has been put on hold`;
+  async onWorkspaceHold(workspace, reason) {
+    if (!workspace.adminId) {
+      console.log(`No adminId for workspace ${workspace.name}`);
+      return;
+    }
+    let subject = `Operational - Your project has been put on hold`;
 
-		let user = await prisma.user.findUnique({
-			where: {
-				id: workspace.adminId,
-			},
-		});
+    let user = await prisma.user.findUnique({
+      where: {
+        id: workspace.adminId,
+      },
+    });
 
-		let baseUrl = config.appUrl;
+    let baseUrl = config.appUrl;
 
-		let text = `
+    let text = `
       Hi ${user.firstName},
 
       We noticed your project "${workspace.name}" has reached the free event limit, and as a result, it's currently on hold.
@@ -278,64 +322,64 @@ class Email {
       Shash
     `;
 
-		return await this.send({
-			subject,
-			to: user.email,
-			text,
-		});
-	}
+    return await this.send({
+      subject,
+      to: user.email,
+      text,
+    });
+  }
 
-	async onWorkspaceDeactivated(workspace) {
-		if (!workspace.adminId) {
-			console.log(`No adminId for workspace ${workspace.name}`);
-			return;
-		}
-		let subject = `Operational - Your project has been deactivated`;
+  async onWorkspaceDeactivated(workspace) {
+    if (!workspace.adminId) {
+      console.log(`No adminId for workspace ${workspace.name}`);
+      return;
+    }
+    let subject = `Operational - Your project has been deactivated`;
 
-		let user = await prisma.user.findUnique({
-			where: {
-				id: workspace.adminId,
-			},
-		});
+    let user = await prisma.user.findUnique({
+      where: {
+        id: workspace.adminId,
+      },
+    });
 
-		let baseUrl = config.appUrl;
+    let baseUrl = config.appUrl;
 
-		let text = `
+    let text = `
       Hi ${user.firstName},
 
-			It looks like your project has exceeded the free event limit, and no billing details have been added yet. As a result, your project is currently inactive, and new events aren’t being tracked.
+      It looks like your project has exceeded the free event limit, and no billing details have been added yet. As a result, your project is currently inactive, and new events aren’t being tracked.
 
-			To continue using Operational, you can update your billing details here: app.operational.co/settings/billing.
+      To continue using Operational, you can update your billing details here: app.operational.co/settings/billing.
 
-			If you have any questions or need any help, feel free to reach out at shash@operational.co.
+      If you have any questions or need any help, feel free to reach out at shash@operational.co.
 
-			Best,
-			Shash
+      Best,
+      Shash
     `;
 
-		return await this.send({
-			subject,
-			to: user.email,
-			text,
-		});
-	}
+    return await this.send({
+      subject,
+      to: user.email,
+      text,
+    });
+  }
 
-	async onWorkspaceInformEvents(workspace) {
-		if (!workspace.adminId) {
-			console.log(`No adminId for workspace ${workspace.name}`);
-			return;
-		}
-		let subject = `Operational - Your project has been deactivated`;
+  async onWorkspaceInformEvents(workspace) {
+    if (!workspace.adminId) {
+      console.log(`No adminId for workspace ${workspace.name}`);
+      return;
+    }
+    let subject = `Operational - Your project has been deactivated`;
 
-		let user = await prisma.user.findUnique({
-			where: {
-				id: workspace.adminId,
-			},
-		});
+    let user = await prisma.user.findUnique({
+      where: {
+        id: workspace.adminId,
+      },
+    });
 
-		let baseUrl = config.appUrl;
+    let baseUrl = config.appUrl;
 
-		let text = `
+    let text = `
       Hi ${user.firstName},
 
       Let me help you setup your project on Operational.
@@ -348,25 +392,25 @@ class Email {
 
       Let me know if you have any questions. I'm here to help you integrate Operational in your product.
 
-			Best,
-			Shash
+      Best,
+      Shash
     `;
 
-		return await this.send({
-			subject,
-			to: user.email,
-			text,
-		});
-	}
+    return await this.send({
+      subject,
+      to: user.email,
+      text,
+    });
+  }
 
-	async sendNagEmail(workspace, nagPercentage) {
-		let user = await prisma.user.findUnique({
-			where: {
-				id: workspace.adminId,
-			},
-		});
+  async sendNagEmail(workspace, nagPercentage) {
+    let user = await prisma.user.findUnique({
+      where: {
+        id: workspace.adminId,
+      },
+    });
 
-		let text = `
+    let text = `
 Hi ${user.firstName},
 
 Just a quick heads-up—your project "${workspace.name}" has now used ${nagPercentage}% of its free event limit.
@@ -379,18 +423,18 @@ Cheers
 Shash
     `;
 
-		let subject = `Operational - Your project need billing details`;
+    let subject = `Operational - Your project need billing details`;
 
-		if (nagPercentage > 94) {
-			subject = `Operational - Your free event limit is ${nagPercentage} used`;
-		}
+    if (nagPercentage > 94) {
+      subject = `Operational - Your free event limit is ${nagPercentage} used`;
+    }
 
-		return await this.send({
-			subject,
-			to: user.email,
-			text,
-		});
-	}
+    return await this.send({
+      subject,
+      to: user.email,
+      text,
+    });
+  }
 }
 
 export default new Email();
