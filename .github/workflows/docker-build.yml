@@ -40,7 +40,8 @@ jobs:
           fi
 
       - name: Debug version output
-        run: echo "Docker tag version: ${{ steps.version.outputs.version }}"
+        run: |
+          echo "Docker tag version: ${{ steps.version.outputs.version }}"
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v6
