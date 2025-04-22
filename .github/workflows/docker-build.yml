@@ -31,11 +31,16 @@ jobs:
 
       - name: Extract version
         id: version
+        shell: bash
         run: |
           if [[ "${GITHUB_REF}" == refs/tags/v* ]]; then
-            echo "version=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
+            echo "version=${GITHUB_REF#refs/tags/v}" >> "$GITHUB_OUTPUT"
           else
-            echo "version=latest" >> $GITHUB_OUTPUT
+            echo "version=latest" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Debug version output
+        run: echo "Docker tag version: ${{ steps.version.outputs.version }}"
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v6
@@ -43,10 +48,11 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
+          platforms: linux/amd64,linux/arm64
           tags: |
             ghcr.io/${{ github.repository }}:latest
             ghcr.io/${{ github.repository }}:${{ steps.version.outputs.version }}
           labels: |
             org.opencontainers.image.source=${{ github.server_url }}/${{ github.repository }}
-            org.opencontainers.image.version=${{ steps.extract.outputs.version }}
+            org.opencontainers.image.version=${{ steps.version.outputs.version }}
             org.opencontainers.image.revision=${{ github.sha }}
