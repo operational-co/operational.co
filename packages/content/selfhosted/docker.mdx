@@ -58,6 +58,18 @@ The above setup is great for getting started locally.
 However for your main setup, you want to add this .env to /backend
 
 <Code lang="bash" client:load>
+  ```
+  docker run --rm -it \
+  -e NODE_ENV=production \
+  -e DATABASE_URL=yourdatabaseurl \
+  -e VITE_API_URL=http://localhost:4337 \
+  -p 80:80 \
+  -p 4337:4337 \
+  ops-test
+  ```
+</Code>
+
+<Code lang="bash" client:load>
 ```
 DATABASE_URL=""
 
