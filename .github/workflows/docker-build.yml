@@ -5,51 +5,19 @@ on:
     branches:
       - master
     tags:
-      - "v*"
+      - "v*" # Triggers only on version tags like v1.2.3
 
 permissions:
-  contents: write
+  contents: read
   packages: write
-  issues: write
-  pull-requests: write
 
 jobs:
-  version:
-    runs-on: ubuntu-latest
-    outputs:
-      version: ${{ steps.semantic_release.outputs.version }}
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: "*"
-
-      - name: Install dependencies
-        run: npm install -g semantic-release @semantic-release/changelog conventional-changelog-conventionalcommits @semantic-release/git
-
-      - name: Get next version
-        id: semantic_release
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          version=$(semantic-release --dry-run | grep "next release version is" | sed -E 's/.* ([0-9]+\.[0-9]+\.[0-9]+(-[a-zA-Z0-9.]+)?).*/\1/')
-          echo -e "\033[1;32mDry run version: $version\033[0m"
-          if [ ! -z "$version" ]; then
-            echo "version=$version" >> $GITHUB_OUTPUT
-          fi
-
   docker:
-    needs: version
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
@@ -61,17 +29,20 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Extract version from tag
+        id: extract
+        run: echo "version=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
+
       - name: Build and push Docker image
         uses: docker/build-push-action@v6
         with:
           context: .
-          file: ./DockerFile
-          push: ${{ github.event_name == 'push' && needs.version.outputs.version != '' }}
-          platforms: linux/amd64,linux/arm64
+          file: ./Dockerfile
+          push: true
           tags: |
             ghcr.io/${{ github.repository }}:latest
-            ghcr.io/${{ github.repository }}:${{ github.ref_name }}
+            ghcr.io/${{ github.repository }}:${{ steps.extract.outputs.version }}
           labels: |
             org.opencontainers.image.source=${{ github.server_url }}/${{ github.repository }}
-            org.opencontainers.image.version=${{ needs.version.outputs.version }}
+            org.opencontainers.image.version=${{ steps.extract.outputs.version }}
             org.opencontainers.image.revision=${{ github.sha }}
