@@ -71,13 +71,13 @@ export default {
     diff: function () {
       let item = this.item;
 
-      let date1 = item.createdAt;
+      let date1 = this.normalizeDates(item.createdAt);
 
       if (item.contexts.length === 0) {
         return ``;
       }
 
-      let date2 = item.contexts[item.contexts.length - 1].createdAt;
+      let date2 = this.normalizeDates(item.contexts[item.contexts.length - 1].createdAt);
 
       let obj = utils.dateDifference(date1, date2);
 
@@ -104,6 +104,18 @@ export default {
   },
 
   methods: {
+    normalizeDates(dateStr) {
+      if (dateStr.includes("T") && (dateStr.endsWith("Z") || dateStr.match(/[+-]\d{2}:\d{2}$/))) {
+        return new Date(dateStr).toISOString();
+      }
+
+      // Otherwise, convert the format:
+      const adjusted =
+        dateStr.replace(" ", "T").replace(/(\.\d{3})\d+/, "$1") + // Truncate to milliseconds
+        "Z";
+
+      return new Date(adjusted).toISOString();
+    },
     onConfirmAction: function (e) {
       this.$emit("onConfirmAction", e);
     },

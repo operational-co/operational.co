@@ -8,7 +8,8 @@ echo "🤖 Operational DockerFile setup"
 # Function to print environment variables
 print_env_vars() {
   echo "🔧 Environment Variables:"
-  echo "  DATABASE_URL=$DATABASE_URL"
+  echo "  DATABASE_URL=$DATABASE_URL" 
+  echo "  VITE_API_URL=$VITE_API_URL"
   echo "  APP_URL=$APP_URL"
   echo "  VAPID_EMAIL=$VAPID_EMAIL"
   echo "  VAPID_PUBLIC_KEY=$VAPID_PUBLIC_KEY"
