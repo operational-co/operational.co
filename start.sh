@@ -3,6 +3,31 @@
 set -e
 set -o pipefail
 
+echo "🤖 Operational DockerFile setup"
+
+# Function to print environment variables
+print_env_vars() {
+  echo "🔧 Environment Variables:"
+  echo "  DATABASE_URL=$DATABASE_URL"
+  echo "  APP_URL=$APP_URL"
+  echo "  VAPID_EMAIL=$VAPID_EMAIL"
+  echo "  VAPID_PUBLIC_KEY=$VAPID_PUBLIC_KEY"
+  echo "  VAPID_PRIVATE_KEY=$VAPID_PRIVATE_KEY"
+  echo "  RESEND=$RESEND"
+  echo "  PORT=$PORT"
+  echo "  SECRET=$SECRET"
+  echo "  ADMIN_EMAIL=$ADMIN_EMAIL"
+  echo "  REMOVE_EVENTS_AT=$REMOVE_EVENTS_AT"
+  echo "  REMOVE_TEST_EVENTS_AT=$REMOVE_TEST_EVENTS_AT"
+  echo "  CORS=$CORS"
+}
+
+# Function to print mapped ports
+print_mapped_ports() {
+  echo "🔧 Mapped Ports:"
+  ss -tuln
+}
+
 FRONTEND_INDEX="/var/www/html/index.html"
 
 # Ensure DATABASE_URL is set
@@ -16,6 +41,12 @@ fi
 echo "🛠 Injecting VITE_API_URL directly into index.html..."
 sed -i '/<head>/a \
 <script>window.__APP_CONFIG__ = { VITE_API_URL: "'"$VITE_API_URL"'" };</script>' "$FRONTEND_INDEX"
+
+# Print environment variables
+print_env_vars
+
+# Print mapped ports
+print_mapped_ports
 
 # Start backend
 echo "🚀 Starting backend..."
