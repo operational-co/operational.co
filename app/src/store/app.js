@@ -12,76 +12,77 @@ import { useWorkspaceStore } from "./workspace";
 import { useMetricStore } from "./metric";
 
 const STATIC_API_URL = import.meta.env.VITE_API_URL || undefined;
+const VITE_PUSH_SERVER_KEY = import.meta.env.VITE_PUSH_SERVER_KEY || undefined;
 
 const api = {
-	refresh: async function () {
-		try {
-			const res = await http.get("/crm/user");
+  refresh: async function () {
+    try {
+      const res = await http.get("/crm/user");
 
-			return res.data || [];
-		} catch (err) {
-			throw err;
-		}
-	},
-	subscribePush: async function (subscription) {
-		try {
-			const res = await http.post("/website/subscribe-push", subscription);
-			return res.data || [];
-		} catch (err) {
-			//console.log(err);
-			throw err;
-		}
-	},
-	unsubscribePush: async function (subscription) {
-		try {
-			const res = await http.post("/website/unsubscribe-push", subscription);
-			return res.data || [];
-		} catch (err) {
-			//console.log(err);
-			throw err;
-		}
-	},
-	activate: async function (form) {
-		try {
-			const res = await http.post("/workspace/activate", form);
-			return res.data || [];
-		} catch (err) {
-			//console.log(err);
-			throw err;
-		}
-	},
-	sendTestPushNotification: async function () {
-		try {
-			const res = await http.post("/website/send-test-push-notification");
-			return res.data || [];
-		} catch (err) {
-			//console.log(err);
-			throw err;
-		}
-	},
-	getStats: async function () {
-		try {
-			const res = await http.get("/website/stats");
-			return res.data || [];
-		} catch (err) {
-			//console.log(err);
-			throw err;
-		}
-	},
-	checkConnection: async function () {
-		try {
-			const res = await http.post("/website/connection");
-			return res.data || [];
-		} catch (err) {
-			//console.log(err);
-			throw err;
-		}
-	},
+      return res.data || [];
+    } catch (err) {
+      throw err;
+    }
+  },
+  subscribePush: async function (subscription) {
+    try {
+      const res = await http.post("/website/subscribe-push", subscription);
+      return res.data || [];
+    } catch (err) {
+      //console.log(err);
+      throw err;
+    }
+  },
+  unsubscribePush: async function (subscription) {
+    try {
+      const res = await http.post("/website/unsubscribe-push", subscription);
+      return res.data || [];
+    } catch (err) {
+      //console.log(err);
+      throw err;
+    }
+  },
+  activate: async function (form) {
+    try {
+      const res = await http.post("/workspace/activate", form);
+      return res.data || [];
+    } catch (err) {
+      //console.log(err);
+      throw err;
+    }
+  },
+  sendTestPushNotification: async function () {
+    try {
+      const res = await http.post("/website/send-test-push-notification");
+      return res.data || [];
+    } catch (err) {
+      //console.log(err);
+      throw err;
+    }
+  },
+  getStats: async function () {
+    try {
+      const res = await http.get("/website/stats");
+      return res.data || [];
+    } catch (err) {
+      //console.log(err);
+      throw err;
+    }
+  },
+  checkConnection: async function () {
+    try {
+      const res = await http.post("/website/connection");
+      return res.data || [];
+    } catch (err) {
+      //console.log(err);
+      throw err;
+    }
+  },
 };
 
 const config = {
-	name: "app",
-	isSingleton: false,
+  name: "app",
+  isSingleton: false,
 };
 
 const appStore = new CrudStore(config, api);
@@ -89,223 +90,231 @@ const appStore = new CrudStore(config, api);
 export const appApi = api;
 
 export const useAppStore = defineStore(config.name, {
-	state: function () {
-		return {
-			...appStore.exportState(),
+  state: function () {
+    return {
+      ...appStore.exportState(),
 
-			notification: null,
+      notification: null,
 
-			appInit: false,
+      appInit: false,
 
-			loading: false,
+      loading: false,
 
-			onboarding: false,
+      onboarding: false,
 
-			docs: false,
+      docs: false,
 
-			testMode: false,
+      testMode: false,
 
-			offline: false,
+      offline: false,
 
-			permissionModal: false,
-			pwaModal: false,
-			switchWorkspace: false,
-			createWorkspace: false,
+      permissionModal: false,
+      pwaModal: false,
+      switchWorkspace: false,
+      createWorkspace: false,
 
-			displayMode: "browser tab",
+      displayMode: "browser tab",
 
-			isPwa: false,
+      isPwa: false,
 
-			// service worker registration
-			registration: null,
+      // service worker registration
+      registration: null,
 
-			baseUrl: import.meta.env.VITE_APP_URL || `http://localhost:8080`,
-		};
-	},
-	getters: {
-		...appStore.exportGetters(),
+      baseUrl: import.meta.env.VITE_APP_URL || `http://localhost:8080`,
+    };
+  },
+  getters: {
+    ...appStore.exportGetters(),
 
-		baseApiUrl: function () {
-			const API_URL =
-				window?.__APP_CONFIG__?.VITE_API_URL ||
-				import.meta.env.VITE_API_URL ||
-				`http://localhost:2000`;
+    baseApiUrl: function () {
+      const API_URL =
+        window?.__APP_CONFIG__?.VITE_API_URL ||
+        import.meta.env.VITE_API_URL ||
+        `http://localhost:2000`;
 
-			return API_URL;
-		},
+      return API_URL;
+    },
 
-		isSelfHosted: function () {
-			if (
-				import.meta.env.VITE_SELFHOSTED &&
-				import.meta.env.VITE_SELFHOSTED === "false"
-			) {
-				return false;
-			}
-			return true;
-		},
+    isSelfHosted: function () {
+      if (import.meta.env.VITE_SELFHOSTED && import.meta.env.VITE_SELFHOSTED === "false") {
+        return false;
+      }
+      return true;
+    },
 
-		baseApiUrl: function () {
-			let baseUrl = `http://localhost:2000`;
-			if (window?.__APP_CONFIG__?.VITE_API_URL) {
-				console.log("using baseUrl from window?.__APP_CONFIG__?.VITE_API_URL");
-				baseUrl = window?.__APP_CONFIG__?.VITE_API_URL;
-			} else if (STATIC_API_URL) {
-				console.log("Using build-time API URL");
-				baseUrl = STATIC_API_URL;
-			}
-			return baseUrl;
-		},
+    vapidPublicKey: function () {
+      let vapidPublicKey = "";
+      if (window?.__APP_CONFIG__?.VITE_PUSH_SERVER_KEY) {
+        console.log("using vapidPublicKey from window?.__APP_CONFIG__?.VITE_PUSH_SERVER_KEY");
+        vapidPublicKey = window?.__APP_CONFIG__?.VITE_PUSH_SERVER_KEY;
+      } else if (VITE_PUSH_SERVER_KEY) {
+        console.log("Using build-time VITE_PUSH_SERVER_KEY");
+        vapidPublicKey = VITE_PUSH_SERVER_KEY;
+      }
+      return vapidPublicKey;
+    },
 
-		isIOS: function () {
-			if (typeof window === `undefined` || typeof navigator === `undefined`)
-				return false;
+    baseApiUrl: function () {
+      let baseUrl = `http://localhost:2000`;
+      if (window?.__APP_CONFIG__?.VITE_API_URL) {
+        console.log("using baseUrl from window?.__APP_CONFIG__?.VITE_API_URL");
+        baseUrl = window?.__APP_CONFIG__?.VITE_API_URL;
+      } else if (STATIC_API_URL) {
+        console.log("Using build-time API URL");
+        baseUrl = STATIC_API_URL;
+      }
+      return baseUrl;
+    },
 
-			return /iPhone|iPad|iPod/i.test(
-				navigator.userAgent ||
-					navigator.vendor ||
-					(window.opera && opera.toString() === `[object Opera]`),
-			);
-		},
-	},
-	actions: {
-		...appStore.exportActions(),
+    isIOS: function () {
+      if (typeof window === `undefined` || typeof navigator === `undefined`) return false;
 
-		async isServiceWorkerRegistered() {
-			if (!("serviceWorker" in navigator)) return false;
+      return /iPhone|iPad|iPod/i.test(
+        navigator.userAgent ||
+          navigator.vendor ||
+          (window.opera && opera.toString() === `[object Opera]`),
+      );
+    },
+  },
+  actions: {
+    ...appStore.exportActions(),
 
-			try {
-				const registration = await navigator.serviceWorker.getRegistration();
-				return !!registration;
-			} catch (err) {
-				console.error("Error checking service worker:", err);
-				return false;
-			}
-		},
+    async isServiceWorkerRegistered() {
+      if (!("serviceWorker" in navigator)) return false;
 
-		async init() {
-			const events = useEventsStore();
-			const crm = useCrmStore();
-			const user = useUserStore();
-			const reports = useReportsStore();
-			const workspace = useWorkspaceStore();
-			const metric = useMetricStore();
+      try {
+        const registration = await navigator.serviceWorker.getRegistration();
+        return !!registration;
+      } catch (err) {
+        console.error("Error checking service worker:", err);
+        return false;
+      }
+    },
 
-			let pie = await user.init();
-			await events.init();
-			await crm.init();
-			await reports.init();
-			await workspace.init();
-			await metric.init();
+    async init() {
+      const events = useEventsStore();
+      const crm = useCrmStore();
+      const user = useUserStore();
+      const reports = useReportsStore();
+      const workspace = useWorkspaceStore();
+      const metric = useMetricStore();
 
-			if (user.isAuth && pie) {
-				await this.afterLogin(pie);
-			} else {
-				// do something else
-			}
+      let pie = await user.init();
+      await events.init();
+      await crm.init();
+      await reports.init();
+      await workspace.init();
+      await metric.init();
 
-			this.appInit = true;
-		},
+      if (user.isAuth && pie) {
+        await this.afterLogin(pie);
+      } else {
+        // do something else
+      }
 
-		async afterLogin(pie) {
-			const events = useEventsStore();
-			const crm = useCrmStore();
-			const reports = useReportsStore();
-			const workspace = useWorkspaceStore();
-			const metric = useMetricStore();
+      this.appInit = true;
+    },
 
-			await metric.consumePie(pie);
-			await workspace.consumePie(pie);
-			await events.consumePie(pie);
-			await crm.consumePie(pie);
-			await reports.consumePie(pie);
-		},
+    async afterLogin(pie) {
+      const events = useEventsStore();
+      const crm = useCrmStore();
+      const reports = useReportsStore();
+      const workspace = useWorkspaceStore();
+      const metric = useMetricStore();
 
-		async sendTestPushNotification() {
-			return await api.sendTestPushNotification();
-		},
+      await metric.consumePie(pie);
+      await workspace.consumePie(pie);
+      await events.consumePie(pie);
+      await crm.consumePie(pie);
+      await reports.consumePie(pie);
+    },
 
-		async sendNotification(notification) {
-			if (typeof notification === "object" && notification.message) {
-				this.notification = notification;
-				return;
-			}
+    async sendTestPushNotification() {
+      return await api.sendTestPushNotification();
+    },
 
-			if (typeof notification === "string") {
-				let payload = {
-					message: notification,
-					timer: 3000,
-				};
-				this.notification = payload;
-			}
-		},
+    async sendNotification(notification) {
+      if (typeof notification === "object" && notification.message) {
+        this.notification = notification;
+        return;
+      }
 
-		async getStats() {
-			return await api.getStats();
-		},
+      if (typeof notification === "string") {
+        let payload = {
+          message: notification,
+          timer: 3000,
+        };
+        this.notification = payload;
+      }
+    },
 
-		async subscribePush(subscription) {
-			await api.subscribePush(subscription);
-		},
+    async getStats() {
+      return await api.getStats();
+    },
 
-		async unsubscribePush(subscription) {
-			//await api.unsubscribePush(unsubscribePush);
-		},
+    async subscribePush(subscription) {
+      await api.subscribePush(subscription);
+    },
 
-		async checkConnection() {
-			try {
-				const connection = await api.checkConnection();
-				return connection;
-			} catch (err) {
-				throw err;
-			}
-		},
+    async unsubscribePush(subscription) {
+      //await api.unsubscribePush(unsubscribePush);
+    },
 
-		setLoading(condition) {
-			this.loading = condition;
-		},
+    async checkConnection() {
+      try {
+        const connection = await api.checkConnection();
+        return connection;
+      } catch (err) {
+        throw err;
+      }
+    },
 
-		startOnboarding() {
-			this.onboarding = true;
-		},
+    setLoading(condition) {
+      this.loading = condition;
+    },
 
-		stopOnboarding() {
-			this.onboarding = false;
-		},
+    startOnboarding() {
+      this.onboarding = true;
+    },
 
-		showDocs() {
-			this.docs = true;
-		},
+    stopOnboarding() {
+      this.onboarding = false;
+    },
 
-		hideDocs() {
-			this.docs = false;
-		},
+    showDocs() {
+      this.docs = true;
+    },
 
-		setTestMode(condition) {
-			this.testMode = condition;
-		},
+    hideDocs() {
+      this.docs = false;
+    },
 
-		setPermissionModal(condition) {
-			this.permissionModal = condition;
-		},
+    setTestMode(condition) {
+      this.testMode = condition;
+    },
 
-		setPwaModal(condition) {
-			this.pwaModal = condition;
-		},
+    setPermissionModal(condition) {
+      this.permissionModal = condition;
+    },
 
-		setDisplayMode(mode) {
-			this.displayMode = mode;
-		},
+    setPwaModal(condition) {
+      this.pwaModal = condition;
+    },
 
-		setSwitchWorkspace() {
-			this.switchWorkspace = true;
-		},
+    setDisplayMode(mode) {
+      this.displayMode = mode;
+    },
 
-		setCreateWorkspace(condition) {
-			this.createWorkspace = condition;
-		},
+    setSwitchWorkspace() {
+      this.switchWorkspace = true;
+    },
 
-		setOffline(condition) {
-			this.offline = condition;
-		},
-	},
+    setCreateWorkspace(condition) {
+      this.createWorkspace = condition;
+    },
+
+    setOffline(condition) {
+      this.offline = condition;
+    },
+  },
 });

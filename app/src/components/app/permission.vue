@@ -322,6 +322,9 @@ export default {
         return `Push notifications are disabled.`;
       }
     },
+    vapidPublicKey: function () {
+      return this.$store.app.vapidPublicKey;
+    },
   },
 
   methods: {
@@ -375,7 +378,7 @@ export default {
         return;
       }
 
-      let key = import.meta.env.VITE_PUSH_SERVER_KEY;
+      const key = this.vapidPublicKey;
 
       let subscription = await registration.pushManager
         .subscribe({
