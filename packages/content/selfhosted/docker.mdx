@@ -8,9 +8,12 @@ heroImage: "/blog-placeholder-2.jpg"
 import Item from "@operational.co/components/card/index.vue";
 import Code from "@operational.co/components/code/index.vue";
 
-# Install via Docker
 
-Operational can be installed via docker-compose.
+# Install via Dockerfile
+
+Operational has a Dockerfile you install locally or on your server.
+
+Alternatives we have ready-to-go images served via [Github Registry hub](https://github.com/operational-co/operational.co/pkgs/container/operational.co).
 
 ## Install via Coolify
 
@@ -18,82 +21,120 @@ Coolify is a Docker manager. It can control your VPS and install applications fo
 
 Here's a video on setting up Operational via Coolify:
 
-<iframe width="100%" height="315" src="https://www.youtube.com/embed/4dFS6h4GFJA?si=PrS6yUdSgtceMj5P" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+<iframe width="100%" height="315" src="https://www.youtube.com/embed/oPc856rvqX0" title="Operational setup using Docker image" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 
-## Install via Docker manually
+**Steps**
+
+1. Setup a VPS
+2. Connect Coolify to VPS
+3. Setup a Coolify project
+4. Create a mysql database
+  Save the connection string for env vars
+
+5. Setup a Docker image
+  Get the Docker image url from [here](https://github.com/operational-co/operational.co/pkgs/container/operational.co).
+6. Enter env vars
+  You'll need these vars:
+
+  - APP_URL: set this to the default url Coolify assigns(you can change this later on)
+  - DATABASE_URL: set this as the connection string of the mysql database you've setup earlier
+  - PORT: set this to 2000
+  - VITE_API_URL: set this to the backend url
+
+You'll need to also create a backend url manually. To do this, copy this code and paste it inside your Coolify Docker image's container label textarea:
+<Code lang="bash">
+```
+traefik.http.routers.backend-4337.rule=Host(`api-yourfrontendurl`)
+traefik.http.routers.backend-4337.entryPoints=http
+traefik.http.routers.backend-4337.service=backend-4337
+traefik.http.services.backend-4337.loadbalancer.server.port=4337
+```
+</Code>
+
+And replace the api-yourfrontendurl with the frontend url from Coolify, but prepend `api-` before it.
+
+And paste this in the VITE_API_URL as the value
+
+7. Deploy
+
+---
+
+Keeping your database seperate from the Docker application is a good idea because you can easily update your docker image in the future if needed, and your database will be intact.
+
+PS, if you're using something like Dokploy, Komo.do, etc, the steps are almost same. What differs between these platforms is how they handle urls and ports.
+
+## Install via Docker locally
 
 ### Step 1. Install Docker
 
 For local installations, you can install [Docker desktop from here](https://docs.docker.com/desktop/setup/install/windows-install/).
 
-On your server, you'll need to install docker and docker-compose via the command line.
+On your VPS server, you'll need to install docker via the command line.
 
 ### Step 2. Clone the repo
 
 Clone the repo at https://github.com/operational-co/operational.co
 
-### Step 3. Create .env files
 
-- Once cloned, cd into the repo.
-- Create a .env file in the folder
-- Create a .env file in the /backend folder
-- Add this in the .env for /backend:
-DATABASE_URL=""
+### Step 3. Configure ports & env
 
+**Ports** 
 
-### Step 4. Run docker compose
+Ops's dockerfile will require 2 ports. One for the frontend, other for the backend. You can pass ports via the -p switch.
 
-In the repo folder, run `docker-compose up`
+**Env vars**
 
-This will setup:
+You'll need to pass the `DATABASE_URL` env as a bare minimum.
 
-- mysql 8.x
-- `/app` directory which will serve static html via nginx
-- `/backend` nodejs app
-
-## Hosting via docker
-
-The above setup is great for getting started locally.
-
-However for your main setup, you want to add this .env to /backend
+Here's a basic example with ports and env vars:
 
 <Code lang="bash" client:load>
-  ```
-  docker run --rm -it \
-  -e NODE_ENV=production \
-  -e DATABASE_URL=yourdatabaseurl \
-  -e VITE_API_URL=http://localhost:4337 \
+```
+docker run -d \
+-p 80:80 \
+-p 4337:4337 \
+-e DATABASE_URL="mysql://root:password@127.0.0.1/operational"
+```
+</Code>
+
+Note that the backslashes are for breaking the command up into multiple lines.
+
+### Complete example
+
+This example has everything you need for a proper production ready deployment
+
+<Code lang="bash" client:load>
+```
+docker run -d \
   -p 80:80 \
   -p 4337:4337 \
+  -e DATABASE_URL="mysql://root:qKz7y26Q2wp3@49.13.149.99:9009/operational-staging" \
+  -e VITE_API_URL="http://localhost:4337" \
+  -e APP_URL="http://localhost" \
+  -e VAPID_EMAIL="mailto:your-email@example.com" \
+  -e VAPID_PUBLIC_KEY="" \
+  -e VAPID_PRIVATE_KEY="" \
+  -e RESEND="your-resend-key" \
+  -e PORT=2000 \
+  -e SECRET="your-secret" \
+  -e ADMIN_EMAIL="shashwat.amin@yahoo.com" \
+  -e REMOVE_EVENTS_AT="120" \
+  -e REMOVE_TEST_EVENTS_AT="7" \
+  -e CORS="" \
   ops-test
-  ```
-</Code>
-
-<Code lang="bash" client:load>
-```
-DATABASE_URL=""
-
-# Eg https://xyz.com
-APP_URL="" 
-
-# Optional. Set vapid details for push notifications. Generate your vapid details from https://tools.reactpwa.com/vapid
-VAPID_EMAIL=""
-VAPID_PUBLIC_KEY=""
-VAPID_PRIVATE_KEY=""
-
-# Nodejs env, defaults to development. Set it to production when hosting online.
-NODE_ENV="development"
-
-# Port. Defaults to 2000
-PORT="2000"
-
-# Secret hash. DON'T LEAVE THIS EMPTY. Use a random id generator to generate a hash, eg: https://www.uuidgenerator.net/
-SECRET=""
-
-# ["http://localhost:8080"] Allows cors from this url. If APP_URL is set, that will be used instead.
-# Set a cors url to override the current url
-# /api/v1/ingest is allowed from all urls so it can receive events without any cors issue.
-# Set this value to "*" to allow all urls
-CORS=""
 ```
 </Code>
+
+- DATABASE_URL: mysql connection string
+- VITE_API_URL: url of the backend.
+- APP_URL: url of the frontend.
+- VAPID_EMAIL: optional but recommended. Vapid credentials for push notifications
+- VAPID_PUBLIC_KEY: same as above
+- VAPID_PRIVATE_KEY: same as above
+- RESEND: optional, for sending emails
+- PORT: optional, port for the nodejs backend, defaults to 2000. Generally speaking, you don't need to modify this at all.
+- SECRET: a long randomized string used for hashing passwords and sessions. Just enter a random string.
+- ADMIN_EMAIL: optional, sets the email sender. If you have set RESEND, set this to one of your verified domain's emails.
+- REMOVE_EVENTS_AT: optional, sets when a event is removed from the system. Defaults to one year.
+- REMOVE_TEST_EVENTS_AT: optional, sets when a test event is removed from the system. Defaults to seven days.
+- CORS: optional. If you've set APP_URL, you don't need this. But if your frontend can't connect to your backend, set this to "\*"
