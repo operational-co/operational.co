@@ -40,9 +40,9 @@ if [ -z "$DATABASE_URL" ]; then
 fi
 
 # Inject VITE_API_URL into index.html (inline JS)
-echo "🛠 Injecting VITE_API_URL directly into index.html..."
+echo "🛠 Injecting VITE_API_URL and VITE_PUSH_SERVER_KEY directly into index.html..."
 sed -i '/<head>/a \
-<script>window.__APP_CONFIG__ = { VITE_API_URL: "'"$VITE_API_URL"'" };</script>' "$FRONTEND_INDEX"
+<script>window.__APP_CONFIG__ = { VITE_API_URL: "'"$VITE_API_URL"'", VITE_PUSH_SERVER_KEY: "'"$VITE_PUSH_SERVER_KEY"'" };</script>' "$FRONTEND_INDEX"
 
 # Print environment variables
 print_env_vars
