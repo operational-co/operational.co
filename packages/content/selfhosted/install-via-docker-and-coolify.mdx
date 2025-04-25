@@ -35,7 +35,12 @@ Here's a video on setting up Operational via Coolify:
   - PORT: set this to 2000
   - VITE_API_URL: set this to the backend url
 
-You'll need to also create a backend url manually. To do this, copy this code and paste it inside your Coolify Docker image's container label textarea:
+You'll need to also create a backend url manually. In the video, I couldn't get this to work via Coolify's UI so I manually added container labels.
+
+But you don't need to do that. All you need to do is to add two domains in the domains input inside Coolify. One domain will be for your frontend, other will be for your backend. In the second domain, append `:4337` port to the end of the domain. This will map the backend url to port `4337` which is used by the dockerfile for the backend.
+
+If Coolify's UI barfs, paste this code at the end of the container labels and replace api-yourfrontendurl with your backend:
+
 <Code lang="bash">
 ```
 traefik.http.routers.backend-4337.rule=Host(`api-yourfrontendurl`)
@@ -45,11 +50,9 @@ traefik.http.services.backend-4337.loadbalancer.server.port=4337
 ```
 </Code>
 
-And replace the api-yourfrontendurl with the frontend url from Coolify, but prepend `api-` before it.
+And paste the backend url in the VITE_API_URL env var as the value.
 
-And paste this in the VITE_API_URL as the value
-
-7. Deploy
+7. Deploy your docker container.
 
 ---
 
