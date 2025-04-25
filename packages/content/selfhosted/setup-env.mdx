@@ -9,7 +9,7 @@ Env vars control how the server will function. For hosted deployments, read thro
 
 <Code lang="bash" client:load>
 ```
-# mysql database connection string, eg: mysql://mysql-user:mysql-password@host:port/db-name
+# REQUIRED. mysql database connection string, eg: mysql://mysql-user:mysql-password@host:port/db-name
 DATABASE_URL="mysql://root:gjkesbgkjak@19.43.119.82:2000/operational" 
 
 # Optional. Set vapid details for push notifications. Generate your vapid details from https://tools.reactpwa.com/vapid
@@ -53,7 +53,7 @@ ADMIN_EMAIL=""
 
 <Code lang="bash" client:load>
 ```
-# Set this the to url your api server is accessible to. Defaults to http://localhost:2000
+# REQUIRED. Set this the to url your api server is accessible to. Defaults to http://localhost:2000
 VITE_API_URL="http://localhost:2000"
 
 # Only set this if you have vapid details. Set this to the value of VAPID_PUBLIC_KEY from your backend .env

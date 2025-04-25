@@ -4,9 +4,7 @@ import Code from "@operational.co/components/code/index.vue";
 
 # Install on your VPS server
 
-For under $10 p/m you can host Operational in a rock-solid environment.
-
-Here's how.
+For under $10 p/m you can host Operational on a rock-solid virtual private server(VPS).
 
 ## Install on a fresh VPS server
 
@@ -63,6 +61,8 @@ The application itself requires:
 
 - nodejs 18.x minimum
 - mysql 8.x
+- nginx
+- pm2
 
 Install these and make sure nodejs and mysql service* is running.
 
@@ -80,20 +80,30 @@ Running `git clone https://github.com/operational-co/operational.co.git` (you'll
 
 Once done, create .env files inside `/app` and `/backend`.
 
-Configure your env vars. [Here's the guide for env](/selfhosted/setup-env).
+Then configure your env vars. [Here's the guide for env](/selfhosted/setup-env).
 
 Once done, run `npm run build` inside both `/app` and `/backend`
 
-### Step 4. Make sure everything is installed
+### Step 4. Setup pm2 and nginx
+
+Don't do this step if you have run the install script!
+
+Inside your `/backend` folder, run `pm2 start index.js`
+
+Then setup nginx to serve static files from `/app/dist`
+
+And then setup nginx to setup a reverse proxy from 127.0.0.1:2000
+
+### Step 5. Make sure everything is installed
 
 Check for this:
 
 - Is your nginx configured to serve static content from `/app/dist`
-- Make sure nginx has a reverse proxy setup for localhost:2000 (2000 is the default port for the backend)
+- Make sure nginx has a reverse proxy setup for 127.0.0.1:2000 (2000 is the default port for the backend)
 - Make sure certbot is setup(optional, for ssl)
 - Install pm2 and make sure it has started running
 
-### Step 5. Create your account
+### Step 6. Create your account
 
 Once everything is setup, open your frontend(url depends on how you've setup nginx to serve the app/dist folder)
 
@@ -113,4 +123,20 @@ Both these guides should get you up and runnings, however we recommend:
 - Make sure either mysql doesn't have internet access(via firewall) or the default root user cannot be accessed via password auth
 - Configure ssh to work on a non-default port
 
-These steps are a bit overkill if you're using Operational as a internal tool, but we recommend doing this for complete peace of mind.
+These steps are a bit overkill if you're using Operational as a internal tool, but we recommend doing this for peace of mind.
+
+If you're new to VPS hosting, there are scripts out there to one-shot secure your server.
+
+- https://www.kkyri.com/p/how-to-secure-your-new-vps-a-step-by-step-guide
+- https://github.com/akcryptoguy/vps-harden/tree/master
+- https://github.com/vernu/vps-audit
+
+---
+
+## Server recommendations
+
+- We recommended Hetzner because they have the best bang-for-your-buck pricing. But really, any VPS provider will work.
+- Operational doesn't require much ram. We recommend at least 1 gb of ram but it will run on lower ram too.
+- We recommend ubuntu 20.x,22.x or 24.x for the server OS.
+
+

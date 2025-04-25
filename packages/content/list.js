@@ -110,10 +110,20 @@ export const selfhostedList = [
     depth: 1
   },
   {
-    name: "Docker",
-    path: "/selfhosted/docker",
+    name: "Install via Docker",
+    path: "/selfhosted/install-via-docker",
     depth: 1
   },
+  {
+    name: "Install via Docker and Coolify",
+    path: "/selfhosted/install-via-docker-and-coolify",
+    depth: 1
+  },
+  // {
+  //   name: "Docker",
+  //   path: "/selfhosted/docker",
+  //   depth: 1
+  // },
   {
     name: "Onboarding",
     path: "/selfhosted/onboarding",

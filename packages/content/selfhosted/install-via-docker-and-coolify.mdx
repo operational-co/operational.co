@@ -1,0 +1,58 @@
+---
+title: "The Operational Manual"
+description: "Lorem ipsum dolor sit amet"
+pubDate: "Jul 22 2024"
+heroImage: "/blog-placeholder-2.jpg"
+---
+
+import Item from "@operational.co/components/card/index.vue";
+import Code from "@operational.co/components/code/index.vue";
+
+
+# Install via Docker image & Coolify
+
+Coolify is a Docker manager. It can control your VPS and install applications for you.
+
+Here's a video on setting up Operational via Coolify:
+
+<iframe width="100%" height="315" src="https://www.youtube.com/embed/oPc856rvqX0" title="Operational setup using Docker image" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
+**Steps**
+
+1. Setup a VPS
+2. Connect Coolify to VPS
+3. Setup a Coolify project
+4. Create a mysql database
+  Save the connection string for env vars
+
+5. Setup a Docker image
+  Get the Docker image url from [here](https://github.com/operational-co/operational.co/pkgs/container/operational.co).
+6. Enter env vars
+  You'll need these vars:
+
+  - APP_URL: set this to the default url Coolify assigns(you can change this later on)
+  - DATABASE_URL: set this as the connection string of the mysql database you've setup earlier
+  - PORT: set this to 2000
+  - VITE_API_URL: set this to the backend url
+
+You'll need to also create a backend url manually. To do this, copy this code and paste it inside your Coolify Docker image's container label textarea:
+<Code lang="bash">
+```
+traefik.http.routers.backend-4337.rule=Host(`api-yourfrontendurl`)
+traefik.http.routers.backend-4337.entryPoints=http
+traefik.http.routers.backend-4337.service=backend-4337
+traefik.http.services.backend-4337.loadbalancer.server.port=4337
+```
+</Code>
+
+And replace the api-yourfrontendurl with the frontend url from Coolify, but prepend `api-` before it.
+
+And paste this in the VITE_API_URL as the value
+
+7. Deploy
+
+---
+
+Keeping your database seperate from the Docker application is a good idea because you can easily update your docker image in the future if needed, and your database will be intact.
+
+If you're using something like Dokploy, Komo.do, etc, the steps are almost same. What differs between these platforms is how they handle urls and ports.
