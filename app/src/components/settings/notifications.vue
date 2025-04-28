@@ -1,29 +1,29 @@
 <template>
-	<div class="c-settings-notifications">
-		<Permission></Permission>
-	</div>
+  <div class="c-settings-notifications">
+    <Permission></Permission>
+  </div>
 </template>
 
 <script>
-import Permission from "@/components/app/permission.vue";
+import Permission from "./permission.vue";
 
 export default {
-	components: {
-		Permission,
-	},
+  components: {
+    Permission,
+  },
 
-	computed: {
-		workspace: function () {
-			return this.$store.workspace.resource;
-		},
-		users: function () {
-			if (!this.workspace) {
-				return [];
-			}
+  computed: {
+    workspace: function () {
+      return this.$store.workspace.resource;
+    },
+    users: function () {
+      if (!this.workspace) {
+        return [];
+      }
 
-			return this.workspace.users || [];
-		},
-	},
+      return this.workspace.users || [];
+    },
+  },
 };
 </script>
 

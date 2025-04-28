@@ -22,7 +22,6 @@ export default {
       y: 0,
       arrowX: 0,
       arrowY: 0,
-      placement: null,
       middlewareData: null
     };
   },
@@ -44,6 +43,9 @@ export default {
     yMargin: {
       type: Number,
       default: 0
+    },
+    placement: {
+      default: "bottom-start"
     }
   },
 
@@ -101,6 +103,7 @@ export default {
       const tooltip = this.$refs.tooltip;
       const arrowElement = document.querySelector(".c-arrow");
       const options = {
+        placement: this.placement,
         middleware: [offset(16), flip(), shift({ padding: 5 }), arrow({ element: arrowElement })]
       };
       const { x, y, placement, middlewareData } = await computePosition(button, tooltip, options);
@@ -108,7 +111,7 @@ export default {
       this.x = x;
       this.y = y;
 
-      this.placement = placement;
+      //this.placement = placement;
       this.middlewareData = middlewareData;
     },
     cleanup: function () {

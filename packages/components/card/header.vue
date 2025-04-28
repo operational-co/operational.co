@@ -318,7 +318,7 @@ export default {
 
       span {
         &:first-child {
-          min-width: 60px;
+          min-width: 64.67px;
           margin-right: 6px;
         }
       }
