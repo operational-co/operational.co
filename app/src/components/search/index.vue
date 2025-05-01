@@ -223,8 +223,7 @@ export default {
   &__wrap {
     position: relative;
     display: grid;
-    grid-template-columns: 1fr 200px;
-    grid-column-gap: 0.5rem;
+    grid-template-columns: 1fr 160px;
 
     .c-switch {
       position: absolute;
@@ -236,6 +235,8 @@ export default {
 
   .c-input-text {
     border-radius: var(--input-radius);
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
     box-shadow:
       0px 2.1px 5.3px rgba(0, 0, 0, 0.073),
       0px 7.1px 17.9px rgba(0, 0, 0, 0.107),
@@ -261,6 +262,11 @@ export default {
     position: relative;
   }
 
+  .btn {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+  }
+
   .form-control {
     margin-bottom: 0;
 
@@ -273,6 +279,9 @@ export default {
 
     padding-left: 38px;
     padding-right: 38px;
+
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
   }
 
   .form-control + svg {

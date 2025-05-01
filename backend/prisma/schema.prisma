@@ -2,7 +2,7 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider        = "prisma-client-js"
+  provider = "prisma-client-js"
 }
 
 datasource db {
@@ -84,8 +84,8 @@ model Push {
 
   pushSubscription Json?
 
-  user        User      @relation("users", fields: [userId], references: [id], onDelete: Cascade)
-  userId      Int
+  user   User @relation("users", fields: [userId], references: [id], onDelete: Cascade)
+  userId Int
 
   sid String?
 }
@@ -111,7 +111,6 @@ model Events {
   // For main query performance
   @@index([workspaceId, contextType, test, createdAt])
   @@index([workspaceId, contextType, test, category, createdAt])
-
   // For subquery (context lookup) performance
   @@index([workspaceId, contextType, contextId])
 }
@@ -189,7 +188,7 @@ model Workspace {
   // Billing flags and when they were set
   paymentStartedAt DateTime?
   paymentStoppedAt DateTime?
-  holdAt DateTime?
+  holdAt           DateTime?
 
   status WorkspaceStatus @default(NORMAL)
 
@@ -199,7 +198,7 @@ model Workspace {
 
 // Tracks per month metric for workspaces
 model Metric {
-  id   Int    @id @default(autoincrement())
+  id Int @id @default(autoincrement())
 
   month Int @default(1)
 
@@ -240,6 +239,13 @@ model Category {
   workspaceId Int?
 
   text String
+
+  @@unique([workspaceId, text])
+}
+
+model CategoryRecomputeQueue {
+  workspaceId Int      @id
+  updatedAt   DateTime @updatedAt
 }
 
 model Coupon {

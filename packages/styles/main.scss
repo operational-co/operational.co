@@ -121,10 +121,10 @@ body {
 
 @keyframes flash-bg {
   0% {
-    box-shadow: 0 0 0 4px hsla(var(--hue-p), 80%, 48%, 0.5);
+    box-shadow: 0 0 0 4px hsla(var(--hue-orange), 80%, 48%, 0.5);
   }
   50% {
-    box-shadow: 0 0 0 4px hsla(var(--hue-p), 80%, 48%, 1);
+    box-shadow: 0 0 0 4px hsla(var(--hue-orange), 80%, 48%, 1);
   }
   100% {
   }

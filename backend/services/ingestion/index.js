@@ -1,6 +1,7 @@
 import Key from "#services/key/index.js";
 import Webpush from "#services/webpush/index.js";
 import moment from "moment";
+import prisma from "#lib/prisma.js";
 import { customAlphabet } from "nanoid";
 import { v4 as uuidv4 } from "uuid";
 import { writeFile } from "fs/promises";
@@ -12,461 +13,480 @@ import Db from "#services/db/index.js";
 const nanoid = customAlphabet("1234567890abcdefghijklmnopqrstuvwxyz", 16);
 
 async function saveToJson(payload) {
-	let id = payload._id;
-	let fileName = `${id}.json`;
+  let id = payload._id;
+  let fileName = `${id}.json`;
 
-	const __dirname = path.resolve("");
+  const __dirname = path.resolve("");
 
-	let filePath = path.join(__dirname, `./public/${fileName}`);
+  let filePath = path.join(__dirname, `./public/${fileName}`);
 
-	const jsonData = JSON.stringify(payload);
+  const jsonData = JSON.stringify(payload);
 
-	// Write JSON string to file
-	await writeFile(filePath, jsonData, "utf8");
+  // Write JSON string to file
+  await writeFile(filePath, jsonData, "utf8");
 
-	console.log(`JSON data saved to ${filePath}`);
+  console.log(`JSON data saved to ${filePath}`);
 }
 
 class Ingestion {
-	jobs = [];
-	interval = 1000;
+  jobs = [];
+  interval = 1000;
 
-	types = ["text", "map", "image", "json", "rows"];
+  types = ["text", "map", "image", "json", "rows"];
 
-	async setup() {
-		setInterval(() => {
-			this.processJobs();
-		}, this.interval);
-	}
+  async setup() {
+    setInterval(() => {
+      this.processJobs();
+    }, this.interval);
+  }
 
-	async identify(payload, apikey) {
-		let workspaceId = await Key.validate(apikey);
+  async identify(payload, apikey) {
+    let workspaceId = await Key.validate(apikey);
 
-		if (!workspaceId) {
-			throw `Apikey is invalid or disabled`;
-		}
+    if (!workspaceId) {
+      throw `Apikey is invalid or disabled`;
+    }
 
-		payload = {
-			// Use this to map event to user2
-			userId: payload.userId,
+    payload = {
+      // Use this to map event to user2
+      userId: payload.userId,
 
-			workspaceId,
+      workspaceId,
 
-			// Basic user details
-			firstName: payload.firstName || "",
-			lastName: payload.lastName || "",
-			email: payload.email || "",
-			avatar: payload.avatar || "",
-			timezone: payload.timezone || "",
-			test: payload.test || false,
-		};
+      // Basic user details
+      firstName: payload.firstName || "",
+      lastName: payload.lastName || "",
+      email: payload.email || "",
+      avatar: payload.avatar || "",
+      timezone: payload.timezone || "",
+      test: payload.test || false,
+    };
 
-		await Db.insertUser(payload);
+    await Db.insertUser(payload);
 
-		return true;
-	}
+    return true;
+  }
 
-	async testIngest() {
-		let apikey = `ops_niceoneniceone`;
+  async testIngest() {
+    let apikey = `ops_niceoneniceone`;
 
-		let event = {
-			type: "rows",
-			avatar: "🤘",
-			name: "User signed up",
-			notify: true,
-			context: "134_signup",
-			contextStart: true,
-			category: "cron",
-			content: [
-				{ type: "text", label: "Name", content: "fsadsg fraegrsfbg" },
-				{
-					type: "text",
-					label: "Email",
-					content: "Email: efradgs@mailinator.com",
-				},
-				{ type: "text", label: "IP", content: "IP: ::1" },
-				{
-					type: "text",
-					label: "Workspace",
-					content: "Workspace name: fdsvgsb",
-				},
-				{ type: "text", label: "Referral", content: "" },
-			],
-			actions: [
-				{
-					key: "test-action-1",
-					url: "https://api.swipekit.app/user/ban?email=efradgs@mailinator.com&id=134",
-					buttonText: "Ban user?",
-				},
-				{
-					key: "test-action-2",
-					url: "https://api.swipekit.app/user/activate?email=efradgs@mailinator.com&id=134",
-					buttonText: "Activate user?",
-				},
-				{
-					key: "test-action-3",
-					url: "https://mailinator.com",
-					external: true,
-					buttonText: "View website",
-				},
-			],
-		};
+    let event = {
+      type: "rows",
+      avatar: "🤘",
+      name: "User signed up",
+      notify: true,
+      context: "134_signup",
+      contextStart: true,
+      category: "cron",
+      content: [
+        { type: "text", label: "Name", content: "fsadsg fraegrsfbg" },
+        {
+          type: "text",
+          label: "Email",
+          content: "Email: efradgs@mailinator.com",
+        },
+        { type: "text", label: "IP", content: "IP: ::1" },
+        {
+          type: "text",
+          label: "Workspace",
+          content: "Workspace name: fdsvgsb",
+        },
+        { type: "text", label: "Referral", content: "" },
+      ],
+      actions: [
+        {
+          key: "test-action-1",
+          url: "https://api.swipekit.app/user/ban?email=efradgs@mailinator.com&id=134",
+          buttonText: "Ban user?",
+        },
+        {
+          key: "test-action-2",
+          url: "https://api.swipekit.app/user/activate?email=efradgs@mailinator.com&id=134",
+          buttonText: "Activate user?",
+        },
+        {
+          key: "test-action-3",
+          url: "https://mailinator.com",
+          external: true,
+          buttonText: "View website",
+        },
+      ],
+    };
 
-		await this.ingest(event, apikey).catch((err) => {
-			console.log(err);
-		});
-	}
+    await this.ingest(event, apikey).catch((err) => {
+      console.log(err);
+    });
+  }
 
-	/**
-	 * Ingestion works in parts
-	 * 1 - Scour for common formatting mistakes
-	 * 2 - Check apikey
-	 * 3 - Pack everything in
-	 */
-	async ingest(payload, apikey) {
-		let types = this.types;
+  /**
+   * Ingestion works in parts
+   * 1 - Scour for common formatting mistakes
+   * 2 - Check apikey
+   * 3 - Pack everything in
+   */
+  async ingest(payload, apikey) {
+    let types = this.types;
 
-		// assume default type to be text
-		if (!payload.type) {
-			payload.type = "text";
-		}
+    // assume default type to be text
+    if (!payload.type) {
+      payload.type = "text";
+    }
 
-		if (payload.type === "cards") {
-			payload.type = "rows";
-		}
+    if (payload.type === "cards") {
+      payload.type = "rows";
+    }
 
-		if (!types.includes(payload.type)) {
-			throw `type field must include one of the following: ${types.join(
-				",",
-			)} . Currently it has ${payload.type}`;
-		}
+    if (!types.includes(payload.type)) {
+      throw `type field must include one of the following: ${types.join(
+        ",",
+      )} . Currently it has ${payload.type}`;
+    }
 
-		if (!payload.content && !payload.name) {
-			throw `content field is required`;
-		}
+    if (!payload.content && !payload.name) {
+      throw `content field is required`;
+    }
 
-		let name = payload.name || undefined;
+    let name = payload.name || undefined;
 
-		if (name && name.length > 48) {
-			name = name.substring(0, 48);
-		}
+    if (name && name.length > 48) {
+      name = name.substring(0, 48);
+    }
 
-		let notify = payload.notify || false;
-		notify = !!notify;
+    let notify = payload.notify || false;
+    notify = !!notify;
 
-		let test = payload.test || false;
-		test = !!test;
+    let test = payload.test || false;
+    test = !!test;
 
-		let avatar = payload.avatar || null;
+    let avatar = payload.avatar || null;
 
-		if (typeof avatar !== "string") {
-			avatar = undefined;
-		}
+    if (typeof avatar !== "string") {
+      avatar = undefined;
+    }
 
-		//let contextType = payload.contextType || 0;
-		let contextId = payload.contextId || "";
-		let contextStart = payload.contextStart || false;
+    //let contextType = payload.contextType || 0;
+    let contextId = payload.contextId || "";
+    let contextStart = payload.contextStart || false;
 
-		let contextType = 0;
-		if (contextId && !contextStart) {
-			contextType = 1;
-		}
+    let contextType = 0;
+    if (contextId && !contextStart) {
+      contextType = 1;
+    }
 
-		let category = null;
-		if (payload.category) {
-			category = payload.category;
-			if (category.length > 24) {
-				category = category.substring(0, 24);
-			}
-		}
+    let category = null;
+    if (payload.category) {
+      category = payload.category;
+      if (category.length > 24) {
+        category = category.substring(0, 24);
+      }
+    }
 
-		payload = {
-			avatar,
-			name,
-			userId: payload.userId || undefined,
-			type: payload.type,
-			content: payload.content || undefined,
-			actions: payload.actions || null,
-			_apikey: apikey,
-			notify,
-			test,
-			category,
-			contextId,
-			contextType,
-		};
+    payload = {
+      avatar,
+      name,
+      userId: payload.userId || undefined,
+      type: payload.type,
+      content: payload.content || undefined,
+      actions: payload.actions || null,
+      _apikey: apikey,
+      notify,
+      test,
+      category,
+      contextId,
+      contextType,
+    };
 
-		payload.searchable = this.generateSearchable(payload);
+    payload.searchable = this.generateSearchable(payload);
 
-		payload = await this.part1(payload).catch((err) => {
-			throw err;
-		});
+    payload = await this.part1(payload).catch((err) => {
+      throw err;
+    });
 
-		payload = await this.part2(payload);
+    payload = await this.part2(payload);
 
-		return payload;
-	}
+    return payload;
+  }
 
-	async part1(payload) {
-		let obj = await Key.validate(payload._apikey);
-		if (!obj) {
-			throw `Apikey is invalid or disabled`;
-		}
-		const workspaceId = obj.workspaceId;
+  async part1(payload) {
+    let obj = await Key.validate(payload._apikey);
+    if (!obj) {
+      throw `Apikey is invalid or disabled`;
+    }
+    const workspaceId = obj.workspaceId;
 
-		if (!workspaceId) {
-			throw `Apikey is invalid or disabled`;
-		}
+    if (!workspaceId) {
+      throw `Apikey is invalid or disabled`;
+    }
 
-		try {
-			payload = this.verifyPayload(payload);
-		} catch (err) {
-			throw err;
-		}
+    try {
+      payload = this.verifyPayload(payload);
+    } catch (err) {
+      throw err;
+    }
 
-		delete payload._apikey;
+    delete payload._apikey;
 
-		payload._notifiers = obj.notifiers || [];
+    payload._notifiers = obj.notifiers || [];
 
-		payload.workspaceId = workspaceId;
+    payload.workspaceId = workspaceId;
 
-		/* This should get us the utc date in iso8601 format
+    /* This should get us the utc date in iso8601 format
 			https://stackoverflow.com/questions/25725019/how-do-i-format-a-date-as-iso-8601-in-moment-js
 			*/
-		payload.createdAt = moment().toISOString();
+    payload.createdAt = moment().toISOString();
 
-		return payload;
-	}
+    return payload;
+  }
 
-	async part2(payload) {
-		payload.id = uuidv4();
+  async part2(payload) {
+    payload.id = uuidv4();
 
-		if (payload.notify) {
-			let newPayload = JSON.parse(JSON.stringify(payload));
-			Webpush.sendEventNotification(newPayload);
-		}
+    if (payload.notify) {
+      let newPayload = JSON.parse(JSON.stringify(payload));
+      Webpush.sendEventNotification(newPayload);
+    }
 
-		// not part of the schema, remove it
-		delete payload._notifiers;
+    // not part of the schema, remove it
+    delete payload._notifiers;
 
-		// To ensure objects have the keys in a specific order
-		//payload = this.reorderObjectKeys(payload);
-		await Db.insertOne(payload);
+    // To ensure objects have the keys in a specific order
+    //payload = this.reorderObjectKeys(payload);
+    await Db.insertOne(payload);
 
-		//await saveToJson(payload);
+    //await saveToJson(payload);
 
-		return payload;
-	}
+    // No need to wait for this async fx
+    this.postIngest(payload);
 
-	async processJobs() {
-		if (this.jobs.length > 0) {
-			// process em
+    return payload;
+  }
 
-			await Log.batchInsertJobs(this.jobs);
+  async postIngest(event) {
+    if (event.category) {
+      const workspaceId = event.workspaceId;
 
-			// then clear out the queue
-			this.jobs = [];
-		} else {
-		}
-	}
+      // 2. Mark workspaceId for category recomputation using raw SQL
+      await prisma.$executeRawUnsafe(
+        `
+    INSERT INTO CategoryRecomputeQueue (workspaceId, updatedAt)
+    VALUES (?, NOW())
+    ON DUPLICATE KEY UPDATE updatedAt = NOW()
+  `,
+        workspaceId,
+      );
+    }
+  }
 
-	verifyPayload(payload) {
-		if (payload.type === "rows") {
-			try {
-				payload = this.verifyRows(payload);
-			} catch (err) {
-				throw err;
-			}
-		}
+  async processJobs() {
+    if (this.jobs.length > 0) {
+      // process em
 
-		if (payload.actions && payload.actions.length === 0) {
-			payload.actions = null;
-		}
+      await Log.batchInsertJobs(this.jobs);
 
-		if (payload.actions) {
-			try {
-				payload = this.verifyActions(payload);
-			} catch (err) {
-				throw err;
-			}
-		} else {
-			// just in case
-			delete payload.actions;
-		}
+      // then clear out the queue
+      this.jobs = [];
+    } else {
+    }
+  }
 
-		return payload;
-	}
+  verifyPayload(payload) {
+    if (payload.type === "rows") {
+      try {
+        payload = this.verifyRows(payload);
+      } catch (err) {
+        throw err;
+      }
+    }
 
-	verifyRows(payload) {
-		if (!payload.content) {
-			throw "content needs to have some data";
-		}
-		if (payload.content.length === 0) {
-			throw "content needs to have some data";
-		}
+    if (payload.actions && payload.actions.length === 0) {
+      payload.actions = null;
+    }
 
-		for (let i = 0; i < payload.content.length; i++) {
-			let card = payload.content[i];
+    if (payload.actions) {
+      try {
+        payload = this.verifyActions(payload);
+      } catch (err) {
+        throw err;
+      }
+    } else {
+      // just in case
+      delete payload.actions;
+    }
 
-			try {
-				this.verifyRow(card, i);
-			} catch (err) {
-				throw err;
-			}
-		}
+    return payload;
+  }
 
-		//payload.content = JSON.stringify(payload.content);
+  verifyRows(payload) {
+    if (!payload.content) {
+      throw "content needs to have some data";
+    }
+    if (payload.content.length === 0) {
+      throw "content needs to have some data";
+    }
 
-		return payload;
-	}
+    for (let i = 0; i < payload.content.length; i++) {
+      let card = payload.content[i];
 
-	verifyRow(row, i) {
-		if (!row.type) {
-			row.type = "text";
-		}
-		if (!row.type) {
-			row.type = "text";
-		}
-		if (row.type === "rows") {
-			throw `card's type shouldn't be rows`;
-		}
-		if (!this.types.includes(row.type)) {
-			throw `card's type should be one of ${this.types.join(",")}`;
-		}
-		if (!row.content) {
-			row.content = "";
-		}
+      try {
+        this.verifyRow(card, i);
+      } catch (err) {
+        throw err;
+      }
+    }
 
-		return true;
-	}
+    //payload.content = JSON.stringify(payload.content);
 
-	verifyActions(payload) {
-		let actions = payload.actions;
+    return payload;
+  }
 
-		if (!actions.length) {
-			throw "actions should have at least 1 action";
-		}
+  verifyRow(row, i) {
+    if (!row.type) {
+      row.type = "text";
+    }
+    if (!row.type) {
+      row.type = "text";
+    }
+    if (row.type === "rows") {
+      throw `card's type shouldn't be rows`;
+    }
+    if (!this.types.includes(row.type)) {
+      throw `card's type should be one of ${this.types.join(",")}`;
+    }
+    if (!row.content) {
+      row.content = "";
+    }
 
-		for (let i = 0; i < actions.length; i++) {
-			let action = actions[i];
+    return true;
+  }
 
-			try {
-				this.verifyAction(action);
-			} catch (err) {
-				throw err;
-			}
+  verifyActions(payload) {
+    let actions = payload.actions;
 
-			action.external = !!action.external;
+    if (!actions.length) {
+      throw "actions should have at least 1 action";
+    }
 
-			action.id = nanoid();
-			action.key = action.key;
-			action.meta = action.meta || null;
-			action.status = "PENDING";
-			action.external = action.external || false;
+    for (let i = 0; i < actions.length; i++) {
+      let action = actions[i];
 
-			payload.actions[i] = action;
-		}
+      try {
+        this.verifyAction(action);
+      } catch (err) {
+        throw err;
+      }
 
-		return payload;
-	}
+      action.external = !!action.external;
 
-	verifyAction(action) {
-		if (!action.url) {
-			throw "Action needs to have a valid url";
-		}
+      action.id = nanoid();
+      action.key = action.key;
+      action.meta = action.meta || null;
+      action.status = "PENDING";
+      action.external = action.external || false;
 
-		if (!action.buttonText) {
-			throw "Action needs to have buttonText";
-		}
+      payload.actions[i] = action;
+    }
 
-		if (action.buttonText.length > 48) {
-			throw "buttonText is too long. Should be under 48 chars";
-		}
+    return payload;
+  }
 
-		if (!action.key && !action.external) {
-			throw `Action needs to have a key or be marked as external`;
-		}
+  verifyAction(action) {
+    if (!action.url) {
+      throw "Action needs to have a valid url";
+    }
 
-		if (typeof action.meta === "object" && !!action.meta === true) {
-		}
+    if (!action.buttonText) {
+      throw "Action needs to have buttonText";
+    }
 
-		action.lastClicked = null;
+    if (action.buttonText.length > 48) {
+      throw "buttonText is too long. Should be under 48 chars";
+    }
 
-		// by default, don't allow repeatable actions
-		if (action.repeat) {
-			action.repeat = 1;
-		} else {
-			action.repeat = -1;
-		}
+    if (!action.key && !action.external) {
+      throw `Action needs to have a key or be marked as external`;
+    }
 
-		// implement action.timeout, action.repeat(can be null, int or -1)(-1 means indefinite)
+    if (typeof action.meta === "object" && !!action.meta === true) {
+    }
 
-		// implement action.expirein
+    action.lastClicked = null;
 
-		// By default, actions cannot be run beyond 7 days
-		// action.expireIn is in minutes
+    // by default, don't allow repeatable actions
+    if (action.repeat) {
+      action.repeat = 1;
+    } else {
+      action.repeat = -1;
+    }
 
-		if (typeof action.expireIn !== "number") {
-			action.expireIn = 10080; // 60 x 24 x 7
-		}
+    // implement action.timeout, action.repeat(can be null, int or -1)(-1 means indefinite)
 
-		return true;
-	}
+    // implement action.expirein
 
-	generateSearchable(payload) {
-		let searchable = "";
-		if (payload.type === "log" || payload.type === "text") {
-			searchable = payload.content || "";
+    // By default, actions cannot be run beyond 7 days
+    // action.expireIn is in minutes
 
-			return `${payload.name || ""} ${searchable}`;
-		}
+    if (typeof action.expireIn !== "number") {
+      action.expireIn = 10080; // 60 x 24 x 7
+    }
 
-		if (payload.type === "rows" && payload.content) {
-			for (let i = 0; i < payload.content.length; i++) {
-				let card = payload.content[i];
+    return true;
+  }
 
-				if (card.type === "log" || card.type === "text") {
-					searchable = `${searchable} ${card.content}`;
-				}
-			}
-		}
+  generateSearchable(payload) {
+    let searchable = "";
+    if (payload.type === "log" || payload.type === "text") {
+      searchable = payload.content || "";
 
-		if (searchable.length > 220) {
-			searchable = searchable.slice(0, 220);
-		}
+      return `${payload.name || ""} ${searchable}`;
+    }
 
-		return `${payload.name || ""} ${searchable}`;
-	}
+    if (payload.type === "rows" && payload.content) {
+      for (let i = 0; i < payload.content.length; i++) {
+        let card = payload.content[i];
 
-	reorderObjectKeys(obj) {
-		let keysOrder = [
-			"_id",
-			"avatar",
-			"name",
-			"userId",
-			"type",
-			"content",
-			"actions",
-			"notify",
-			"test",
-			"contextId",
-			"contextType",
-			"searchable",
-			"workspaceId",
-			"createdAt",
-		];
+        if (card.type === "log" || card.type === "text") {
+          searchable = `${searchable} ${card.content}`;
+        }
+      }
+    }
 
-		const reorderedObject = {};
+    if (searchable.length > 220) {
+      searchable = searchable.slice(0, 220);
+    }
 
-		keysOrder.forEach((key) => {
-			if (obj.hasOwnProperty(key)) {
-				reorderedObject[key] = obj[key];
-			} else {
-				reorderedObject[key] = null;
-			}
-		});
+    return `${payload.name || ""} ${searchable}`;
+  }
 
-		return reorderedObject;
-	}
+  reorderObjectKeys(obj) {
+    let keysOrder = [
+      "_id",
+      "avatar",
+      "name",
+      "userId",
+      "type",
+      "content",
+      "actions",
+      "notify",
+      "test",
+      "contextId",
+      "contextType",
+      "searchable",
+      "workspaceId",
+      "createdAt",
+    ];
+
+    const reorderedObject = {};
+
+    keysOrder.forEach((key) => {
+      if (obj.hasOwnProperty(key)) {
+        reorderedObject[key] = obj[key];
+      } else {
+        reorderedObject[key] = null;
+      }
+    });
+
+    return reorderedObject;
+  }
 }
 
 export default new Ingestion();
