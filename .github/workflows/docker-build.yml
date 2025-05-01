@@ -2,10 +2,9 @@ name: Build and Push to GHCR
 
 on:
   push:
-    branches:
-      - master
     tags:
-      - "v*" # Triggers only on version tags like v1.2.3
+      - "v*" # ONLY triggers on version tags like v1.2.3
+# Remove branches: don't listen to branch pushes anymore
 
 permissions:
   contents: read
@@ -33,11 +32,7 @@ jobs:
         id: version
         shell: bash
         run: |
-          if [[ "${GITHUB_REF}" == refs/tags/v* ]]; then
-            echo "version=${GITHUB_REF#refs/tags/v}" >> "$GITHUB_OUTPUT"
-          else
-            echo "version=latest" >> "$GITHUB_OUTPUT"
-          fi
+          echo "version=${GITHUB_REF#refs/tags/v}" >> "$GITHUB_OUTPUT"
 
       - name: Debug version output
         run: |
