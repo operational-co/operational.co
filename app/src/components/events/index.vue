@@ -48,6 +48,7 @@
         :items="items"
         :loaded="loaded"
         :query="query"
+        :category="category"
         :computedItems="computedItems"
         @onClear="onClear"
       ></Empty>
