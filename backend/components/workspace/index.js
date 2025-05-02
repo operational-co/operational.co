@@ -265,6 +265,8 @@ const component = {
       const workspace = workspaces[i];
 
       const metric = await Metric.calculateMetric(workspace.id);
+
+      console.log(metric);
     }
   },
 
