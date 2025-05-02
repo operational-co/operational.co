@@ -41,11 +41,19 @@ REMOVE_EVENTS_AT=""
 # [7] Removes old test events older than 7 days
 REMOVE_TEST_EVENTS_AT=""
 
+
+# [""] Set this to the url you've configured in resend(or in your smtp email provider). If not set, emails will saved as txt files inside /backend/private
+ADMIN_EMAIL=""
+
 # [""] Use resend.com for email sending. They have a free plan available.
+# If you don't want to use resend, get smtp credentials from your email provider and enter them(see smtp env vars below)
 RESENT=""
 
-# [""] Set this to the url you've configured in resend. If not set, emails will saved as txt files inside /backend/private
-ADMIN_EMAIL=""
+# [""] Set these smtp env vars to the smtp settings of your email provider. For instance, here's resend's docs on smtp: https://resend.com/docs/send-with-smtp
+SMTP_HOST=""
+SMTP_PORT=""
+SMTP_USERNAME=""
+SMTP_PASSWORD=""
 ```
 </Code>
 

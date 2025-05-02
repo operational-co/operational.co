@@ -9,14 +9,14 @@ import Form from "./index.vue";
 
 export default {
   components: {
-    Form,
+    Form
   },
 
   data: function () {
     return {
       initialValues: {
         email: "",
-        password: "",
+        password: ""
       },
       schema: {
         email: {
@@ -26,9 +26,9 @@ export default {
           validations: {
             required: {
               params: null,
-              message: "Email is required",
-            },
-          },
+              message: "Email is required"
+            }
+          }
         },
         password: {
           label: "Password",
@@ -37,24 +37,28 @@ export default {
           validations: {
             required: {
               params: null,
-              message: "Password is required",
+              message: "Password is required"
             },
-            minLength : {
-              params : 8,
-              message : 'Password should be more than 8 characters'
+            minLength: {
+              params: 8,
+              message: "Password should be more than 8 characters"
+            },
+            maxLength: {
+              params: 50,
+              message: "Password cannot be more than 50 characters"
             }
-          },
-        },
-      },
+          }
+        }
+      }
     };
   },
 
   computed: {
     button: function () {
       return {
-        text: "Login",
+        text: "Login"
       };
-    },
+    }
   },
 
   methods: {
@@ -64,8 +68,8 @@ export default {
       } catch (err) {
         throw err;
       }
-    },
-  },
+    }
+  }
 };
 </script>
 

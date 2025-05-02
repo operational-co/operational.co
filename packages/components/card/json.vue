@@ -82,6 +82,10 @@ export default {
 
       let code = await highlightText(text, { sub: jsonSyntax.default }, mode == "multiline", opt);
 
+      // Clean trailing empty line, if any
+      code = code.replace(/(<br\s*\/?>\s*)$/, ""); // Remove final <br> if exists
+      code = code.replace(/(<span[^>]*>\s*<\/span>\s*)$/, ""); // Remove final empty span if exists
+
       this.html = code;
     }
   },
@@ -153,6 +157,7 @@ export default {
   pre {
     width: 100%;
     padding: 4px;
+    margin-bottom: 0;
     font-size: var(--font-size-sm);
     font-family: "Jetbrains Mono";
   }

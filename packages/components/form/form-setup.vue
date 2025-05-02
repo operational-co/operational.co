@@ -75,6 +75,10 @@ export default {
             minLength: {
               params: 8,
               message: "Password should be more than 8 characters"
+            },
+            maxLength: {
+              params: 50,
+              message: "Password cannot be more than 50 characters"
             }
           }
         },
