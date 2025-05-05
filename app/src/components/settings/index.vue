@@ -184,7 +184,7 @@
               <span> Billing </span>
             </router-link>
           </li>
-          <li>
+          <li v-if="!isSelfHosted">
             <router-link to="/settings/invoices">
               <svg
                 width="24"
