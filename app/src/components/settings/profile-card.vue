@@ -20,7 +20,7 @@
         <h5>Project</h5>
         <span> {{ workspace.name }} - {{ workspace.status }} </span>
       </section>
-      <section>
+      <!-- <section>
         <h5>Test mode</h5>
         <label class="c-switch">
           <input v-model="testMode" type="checkbox" checked />
@@ -32,7 +32,7 @@
           Use test mode to send test events from local and staging. Test mode events will be removed
           after 7 days.
         </small>
-      </section>
+      </section> -->
     </footer>
   </div>
 </template>
@@ -49,14 +49,14 @@ export default {
 
   data: function () {
     return {
-      testMode: false,
+      //testMode: false,
     };
   },
 
   watch: {
-    testMode: function () {
-      this.onTestMode(this.testMode);
-    },
+    // testMode: function () {
+    //   this.onTestMode(this.testMode);
+    // },
   },
 
   computed: {
@@ -100,14 +100,14 @@ export default {
   },
 
   methods: {
-    async onTestMode(testMode) {
-      let condition = "off";
-      if (testMode) {
-        condition = "on";
-      }
-      this.$store.app.setTestMode(testMode);
-      this.$store.app.sendNotification(`Test mode is ${condition}`);
-    },
+    // async onTestMode(testMode) {
+    //   let condition = "off";
+    //   if (testMode) {
+    //     condition = "on";
+    //   }
+    //   this.$store.app.setTestMode(testMode);
+    //   this.$store.app.sendNotification(`Test mode is ${condition}`);
+    // },
   },
 
   mounted: function () {

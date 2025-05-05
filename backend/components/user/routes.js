@@ -5,7 +5,7 @@ import middlewareSchema from "#components/middleware/schema.js";
 import middlewareAuth from "#components/middleware/auth.js";
 import middlewareAccess from "#components/middleware/access.js";
 import model from "./model.js";
-import File from "#services/file/index.js";
+import Storage from "#services/storage/index.js";
 
 import multer from "multer";
 import path from "path";
@@ -168,10 +168,21 @@ const update = async (req, res) => {
 
   // Access file data as buffer and get the file name
   if (req.file) {
+    const existingUser = await model.findById(res.locals.user.id);
+
+    console.log(existingUser);
+    if (existingUser.avatar) {
+      //remove existing avatar
+      try {
+        await Storage.deleteFile(existingUser.avatar, "uploads");
+      } catch (err) {
+        console.log(err);
+      }
+    }
     const fileBuffer = req.file.buffer;
     const fileName = req.file.originalname;
 
-    let filePath = await File.saveImage(fileName, fileBuffer).catch((err) => {
+    let filePath = await Storage.upload(fileBuffer, fileName, "uploads").catch((err) => {
       console.log(err);
     });
 
@@ -253,7 +264,13 @@ const createIntent = async (req, res) => {
 const getBillingData = async (req, res) => {
   try {
     const billingData = await component.getBillingData(res.locals.user);
-    return res.status(200).send(billingData);
+    if (billingData) {
+      return res.status(200).send(billingData);
+    } else {
+      return res.status(401).send({
+        message: `No customerId`,
+      });
+    }
   } catch (err) {
     console.log(err);
     return res.status(401).send({

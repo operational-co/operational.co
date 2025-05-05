@@ -1,24 +1,26 @@
 <template>
   <div class="c-profile-invoices">
     <section>
-      <h4>Invoices</h4>
+      <h4>Invoices <span class="c-spinner" v-if="processing"></span></h4>
       <p>View or download your past invoices.</p>
 
       <div class="c-profile-invoices__header">
         <span>Invoice code</span>
-        <span> Date</span>
+        <span> Period start</span>
+        <span> Period end</span>
         <span> Status </span>
         <span> Amount </span>
         <div></div>
       </div>
 
-      <div class="c-profile-invoices__item">
-        <span>INV-007</span>
-        <span> May 2024 </span>
-        <span> Paid </span>
-        <span> $1.3 </span>
+      <div class="c-profile-invoices__item" v-for="invoice in invoices" :key="invoice.id">
+        <span>{{ invoice.code }}</span>
+        <span> {{ formatDate(invoice.periodStart) }} </span>
+        <span> {{ formatDate(invoice.periodEnd) }} </span>
+        <span>{{ invoice.status }}</span>
+        <span> ${{ invoice.total }} </span>
         <div>
-          <button type="button" class="btn btn-sm">Download</button>
+          <button type="button" class="btn btn-sm" @click="onDownload(invoice)">Download</button>
         </div>
       </div>
     </section>
@@ -26,17 +28,56 @@
 </template>
 
 <script>
+import moment from "moment";
+
 export default {
-  computed: {},
+  data: function () {
+    return {
+      processing: false,
+    };
+  },
+
+  computed: {
+    invoices: function () {
+      return this.$store.invoices.resources;
+    },
+  },
+
+  methods: {
+    async getInvoices() {
+      const invoices = await this.$store.invoices.load();
+    },
+    formatDate: function (date) {
+      return moment(date).format("Do MMM, YYYY");
+    },
+    async onDownload(invoice) {
+      if (this.processing) {
+        return;
+      }
+      this.processing = true;
+      await this.$store.invoices.download(invoice);
+      this.processing = false;
+    },
+  },
+
+  mounted: function () {
+    this.getInvoices();
+  },
 };
 </script>
 
 <style lang="scss">
 .c-profile-invoices {
+  h4 {
+    .c-spinner {
+      margin-left: var(--margin);
+    }
+  }
+
   &__header {
     padding: var(--margin) 0;
     display: grid;
-    grid-template-columns: 100px 100px 100px 100px 1fr;
+    grid-template-columns: 100px 140px 140px 100px 1fr 1fr;
     align-items: center;
 
     border-bottom: var(--color-bg-5) solid 1px;
@@ -48,7 +89,7 @@ export default {
   &__item {
     padding: var(--margin) 0;
     display: grid;
-    grid-template-columns: 100px 100px 100px 100px 1fr;
+    grid-template-columns: 100px 140px 140px 100px 1fr 1fr;
     align-items: center;
 
     border-top: var(--color-bg-5) solid 1px;

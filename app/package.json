@@ -9,6 +9,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@dicebear/core": "9.2.2",
+    "@dicebear/thumbs": "9.2.2",
     "@floating-ui/dom": "1.6.9",
     "@mdx-js/rollup": "3.0.1",
     "@mdx-js/vue": "3.0.1",
@@ -40,7 +42,6 @@
     "vee-validate": "4.9.4",
     "vite-plugin-pwa": "0.17.2",
     "vue": "3.3.4",
-    "vue-boring-avatars": "1.4.0",
     "vue-final-modal": "4.5.3",
     "vue-grid-layout": "2.4.0",
     "vue-mention": "2.0.0-alpha.3",

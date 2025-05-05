@@ -3,271 +3,307 @@ import InvoiceModel from "#components/invoice/model.js";
 import Events from "#components/events/index.js";
 
 import config from "#lib/config.js";
+import ops from "#lib/ops.js";
 
 import moment from "moment";
 import Stripe from "stripe";
 
 class Billing {
-	stripe = null;
-	options = {
-		utcOffset: 0,
-	};
+  stripe = null;
+  options = {
+    utcOffset: 0,
+  };
 
-	async setup() {
-		let key = config.stripe.TEST_SECRET;
-		if (process.env.NODE_ENV === "production") {
-			key = config.stripe.LIVE_SECRET;
-		}
-		this.stripe = Stripe(key);
-	}
+  async setup() {
+    let key = config.stripe.TEST_SECRET;
+    if (process.env.NODE_ENV === "production") {
+      key = config.stripe.LIVE_SECRET;
+    }
+    this.stripe = Stripe(key);
+  }
 
-	async billInvoices() {
-		let invoices = await InvoiceModel.client.findMany({
-			where: {
-				status: "OPEN",
-			},
-			include: {
-				workspace: true,
-			},
-		});
+  async billInvoices() {
+    let invoices = await InvoiceModel.client.findMany({
+      where: {
+        status: "OPEN",
+      },
+      include: {
+        workspace: true,
+      },
+    });
 
-		for (let i = 0; i < invoices.length; i++) {
-			let invoice = invoices[i];
+    for (let i = 0; i < invoices.length; i++) {
+      let invoice = invoices[i];
 
-			await this.billInvoice(invoice);
-		}
-	}
+      await this.billInvoice(invoice);
+    }
+  }
 
-	async billInvoice(invoice) {
-		// In this case, mark the invoice as void because there's no point passing 0 in stripe's paymentIntent api.
-		// For the latter, stripe won't accept a payment of $0.5 or lower
-		if (invoice.total <= 0.5) {
-			await InvoiceModel.client.update({
-				where: {
-					id: invoice.id,
-				},
-				data: {
-					status: "VOID",
-				},
-			});
-			return;
-		}
+  async billInvoice(invoice) {
+    const contextId = `invoice-${invoice.id}`;
+    ops.events.ingest({
+      name: "billing invoice",
+      avatar: "🧾",
+      category: "billing",
+      contextStart: true,
+      contextId,
+      type: "json",
+      content: invoice,
+    });
+    // In this case, mark the invoice as void because there's no point passing 0 in stripe's paymentIntent api.
+    // For the latter, stripe won't accept a payment of $0.5 or lower
+    // Update: actually, move this logic to invoice generation
+    if (invoice.total <= 0.5) {
+      await InvoiceModel.client.update({
+        where: {
+          id: invoice.id,
+        },
+        data: {
+          status: "VOID",
+        },
+      });
+      return;
+    }
 
-		// Payment has been successful, log this(this shouldn't happen)
-		if (invoice.paymentStatus && invoice.paymentStatus === "succeeded") {
-			return;
-		}
+    // Payment has been successful, log this(this shouldn't happen)
+    if (invoice.paymentStatus && invoice.paymentStatus === "succeeded") {
+      ops.events.ingest({
+        name: `billing invoice - payment already succeeded`,
+        contextId,
+      });
+      return;
+    }
 
-		// Payment has been process, check paymentIntent via the paymentIntentId;
-		if (invoice.paymentStatus && invoice.paymentStatus === "processing") {
-			let paymentIntent = await this.stripe.paymentIntents
-				.retrieve(invoice.paymentIntentId)
-				.catch((err) => {
-					console.log(err);
-					// log this error
-					throw err;
-				});
+    // Payment has been process, check paymentIntent via the paymentIntentId;
+    if (invoice.paymentStatus && invoice.paymentStatus === "processing") {
+      let paymentIntent = await this.stripe.paymentIntents
+        .retrieve(invoice.paymentIntentId)
+        .catch((err) => {
+          console.log(err);
+          // log this error
+          throw err;
+        });
 
-			// payment was successful
-			if (paymentIntent && paymentIntent.status === "succeeded") {
-				await InvoiceModel.client
-					.update({
-						where: {
-							id: invoice.id,
-						},
-						data: {
-							status: "PAID",
-						},
-					})
-					.catch((err) => {
-						// log this error
-						throw err;
-					});
-			}
+      // payment was successful
+      if (paymentIntent && paymentIntent.status === "succeeded") {
+        ops.events.ingest({
+          name: `billing invoice - paymant succeeded`,
+          avatar: "🥳",
+          contextId,
+        });
 
-			return;
-		}
+        // update invoice and mark it as paid
+        await InvoiceModel.client
+          .update({
+            where: {
+              id: invoice.id,
+            },
+            data: {
+              status: "PAID",
+            },
+          })
+          .catch((err) => {
+            // log this error
+            throw err;
+          });
+      }
 
-		// log if payment is in any other state
-		let customerId = `cus_QHJmGtWfUi83L5`;
-		const paymentMethods =
-			await this.stripe.customers.listPaymentMethods(customerId);
+      return;
+    }
 
-		if (!paymentMethods) {
-			this.onNoPaymentMethod(invoice);
-			return;
-		}
+    const workspace = await WorkspaceModel.findById(invoice.workspaceId);
 
-		const paymentMethod = paymentMethods.data[0];
+    // log if payment is in any other state
+    let customerId = workspace.customerId; //`cus_QHJmGtWfUi83L5`;
 
-		if (!paymentMethod) {
-			this.onNoPaymentMethod(invoice);
-			return;
-		}
+    if (!customerId) {
+      ops.events.ingest({
+        name: "billing invoice - customerId not found",
+        contextId,
+        type: "json",
+        content: workspace,
+      });
+    }
+    const paymentMethods = await this.stripe.customers.listPaymentMethods(customerId);
 
-		const paymentMethodId = paymentMethod.id;
+    if (!paymentMethods) {
+      ops.events.ingest({
+        name: "billing invoice - payment methods not found",
+        contextId,
+        type: "json",
+        content: workspace,
+      });
+      this.onNoPaymentMethod(invoice);
+      return;
+    }
 
-		let status = null;
-		let paymentIntent = null;
+    const paymentMethod = paymentMethods.data[0];
 
-		try {
-			paymentIntent = await this.chargeCustomer(
-				customerId,
-				paymentMethodId,
-				invoice.total,
-			).catch((err) => {
-				console.log(err);
-			});
+    if (!paymentMethod) {
+      ops.events.ingest({
+        name: "billing invoice - payment methods not found",
+        contextId,
+        type: "json",
+        content: workspace,
+      });
+      this.onNoPaymentMethod(invoice);
+      return;
+    }
 
-			status = paymentIntent.status;
-		} catch (err) {
-			// log this error
-			throw err;
-		}
+    const paymentMethodId = paymentMethod.id;
 
-		console.log(paymentIntent);
+    let status = null;
+    let paymentIntent = null;
 
-		if (!status) {
-			return;
-		}
+    // Actually attempt to charge the user here
+    try {
+      paymentIntent = await this.chargeCustomer(customerId, paymentMethodId, invoice.total);
 
-		let data = {
-			paymentIntentId: paymentIntent.id,
-			paymentStatus: status,
-		};
+      status = paymentIntent.status;
+    } catch (err) {
+      // log this error
+      throw err;
+    }
 
-		if (status === "succeeded") {
-			data.status = "PAID";
-		}
+    //console.log(paymentIntent);
 
-		invoice = await InvoiceModel.client.update({
-			where: {
-				id: invoice.id,
-			},
-			data,
-		});
+    if (!status) {
+      return;
+    }
 
-		console.log(invoice);
+    let data = {
+      paymentIntentId: paymentIntent.id,
+      paymentStatus: status,
+    };
 
-		console.log(`------`);
-	}
+    if (status === "succeeded") {
+      data.status = "PAID";
+    }
 
-	async createCustomer(user, workspaceId) {
-		const email = user.email;
-		const name = `${user.firstName} ${user.lastName}`;
-		const customer = await this.stripe.customers.create({
-			email,
-			name,
-		});
+    invoice = await InvoiceModel.client.update({
+      where: {
+        id: invoice.id,
+      },
+      data,
+    });
+  }
 
-		console.log("customer created");
+  async createCustomer(user, workspaceId) {
+    const email = user.email;
+    let name = `${user.firstName}`;
+    if (user.lastName) {
+      name = `${name} ${user.lastName}`;
+    }
+    const customer = await this.stripe.customers.create({
+      email,
+      name,
+    });
 
-		await WorkspaceModel.update({
-			id: workspaceId,
-			customerId: customer.id,
-		}).catch((err) => {
-			console.log(err);
-		});
+    console.log("customer created");
 
-		return customer;
-	}
+    await WorkspaceModel.update({
+      id: workspaceId,
+      customerId: customer.id,
+    }).catch((err) => {
+      console.log(err);
+    });
 
-	/**
-	 * This bad boi runs when someone doesn't have a valid paymentMethod but we must charge them
-	 * Probably flip their workspace status
-	 */
-	async onNoPaymentMethod(invoice) {}
+    return customer;
+  }
 
-	async chargeCustomer(customerId, paymentMethodId, amount) {
-		const currency = "usd";
+  /**
+   * This bad boi runs when someone doesn't have a valid paymentMethod but we must charge them
+   * Probably flip their workspace status
+   */
+  async onNoPaymentMethod(invoice) {}
 
-		try {
-			// Retrieve customer's default payment method
-			//const customer = await this.stripe.customers.retrieve(customerId);
-			//const paymentMethod = customer.invoice_settings.default_payment_method;
+  async chargeCustomer(customerId, paymentMethodId, amount) {
+    const currency = "usd";
 
-			// Create a Payment Intent
-			const paymentIntent = await this.stripe.paymentIntents.create({
-				amount: amount * 100, // Amount must be in cents
-				currency: currency,
-				customer: customerId,
-				payment_method: paymentMethodId,
-				confirm: true,
-				automatic_payment_methods: {
-					enabled: true,
-					allow_redirects: "never",
-				},
-			});
+    try {
+      // Retrieve customer's default payment method
+      //const customer = await this.stripe.customers.retrieve(customerId);
+      //const paymentMethod = customer.invoice_settings.default_payment_method;
 
-			// Optionally, handle the payment intent confirmation
-			console.log("Payment Intent created:", paymentIntent);
+      // Create a Payment Intent
+      const paymentIntent = await this.stripe.paymentIntents.create({
+        amount: amount * 100, // Amount must be in cents
+        currency: currency,
+        customer: customerId,
+        payment_method: paymentMethodId,
+        confirm: true,
+        automatic_payment_methods: {
+          enabled: true,
+          allow_redirects: "never",
+        },
+      });
 
-			// Return the payment intent status or details as needed
-			return paymentIntent;
-		} catch (error) {
-			// Handle errors
-			console.error("Error charging customer:", error);
-			throw error;
-		}
-	}
+      // Optionally, handle the payment intent confirmation
+      console.log("Payment Intent created:", paymentIntent);
 
-	async getSetupIntents(customerId) {
-		console.log(config.stripe);
-		try {
-			const setupIntents = await this.stripe.setupIntents.list({
-				limit: 99,
-				customer: customerId,
-			});
-			return setupIntents;
-		} catch (err) {
-			console.log(err);
-			throw err;
-		}
-	}
+      // Return the payment intent status or details as needed
+      return paymentIntent;
+    } catch (error) {
+      // Handle errors
+      console.error("Error charging customer:", error);
+      throw error;
+    }
+  }
 
-	// Cancels all setupIntents of a customer
-	async cancelSetupIntents(customerId) {
-		try {
-			const setupIntents = await this.stripe.setupIntents.list({
-				limit: 99,
-				customer: customerId,
-			});
-			console.log(setupIntents.data);
-			if (!setupIntents) {
-				return null;
-			}
-			if (!setupIntents.data) {
-				return [];
-			}
-			for (let i = 0; i < setupIntents.data.length; i++) {
-				const setupIntent = setupIntents.data[0];
+  async getSetupIntents(customerId) {
+    console.log(config.stripe);
+    try {
+      const setupIntents = await this.stripe.setupIntents.list({
+        limit: 99,
+        customer: customerId,
+      });
+      return setupIntents;
+    } catch (err) {
+      console.log(err);
+      throw err;
+    }
+  }
 
-				await this.stripe.setupIntents.cancel(setupIntent.id).catch((err) => {
-					console.log(err);
-				});
-			}
-			console.log(`${setupIntents.data.length} SetupIntents cancelled`);
-			return setupIntents;
-		} catch (err) {
-			console.log(err);
-			throw err;
-		}
-	}
+  // Cancels all setupIntents of a customer
+  async cancelSetupIntents(customerId) {
+    try {
+      const setupIntents = await this.stripe.setupIntents.list({
+        limit: 99,
+        customer: customerId,
+      });
+      console.log(setupIntents.data);
+      if (!setupIntents) {
+        return null;
+      }
+      if (!setupIntents.data) {
+        return [];
+      }
+      for (let i = 0; i < setupIntents.data.length; i++) {
+        const setupIntent = setupIntents.data[0];
 
-	async getPaymentMethods(customerId) {
-		try {
-			const paymentMethods = await this.stripe.customers.listPaymentMethods(
-				customerId,
-				{
-					limit: 99,
-				},
-			);
-			return paymentMethods;
-		} catch (err) {
-			console.log(err);
-			throw err;
-		}
-	}
+        await this.stripe.setupIntents.cancel(setupIntent.id).catch((err) => {
+          console.log(err);
+        });
+      }
+      console.log(`${setupIntents.data.length} SetupIntents cancelled`);
+      return setupIntents;
+    } catch (err) {
+      console.log(err);
+      throw err;
+    }
+  }
+
+  async getPaymentMethods(customerId) {
+    try {
+      const paymentMethods = await this.stripe.customers.listPaymentMethods(customerId, {
+        limit: 99,
+      });
+      return paymentMethods;
+    } catch (err) {
+      console.log(err);
+      throw err;
+    }
+  }
 }
 
 export default new Billing();

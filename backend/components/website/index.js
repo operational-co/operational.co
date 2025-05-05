@@ -1,6 +1,7 @@
 import User from "#components/user/model.js";
 import prisma from "#lib/prisma.js";
 import Webpush from "#services/webpush/index.js";
+import Storage from "#services/storage/index.js";
 import os from "os";
 import si from "systeminformation";
 import config from "#lib/config.js";
@@ -195,10 +196,12 @@ const component = {
     let tests = [];
 
     let emailService = await Email.test();
+    let storageService = await Storage.test();
     let webpushService = await Webpush.test();
     let dbService = await Db.test();
 
     tests.push(emailService);
+    tests.push(storageService);
     tests.push(webpushService);
     tests.push(dbService);
 

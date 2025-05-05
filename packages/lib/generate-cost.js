@@ -1,5 +1,5 @@
 function generateCost(scales, count) {
-	/*
+  /*
   prices = [
     {
       rate: 0.001,
@@ -16,30 +16,30 @@ function generateCost(scales, count) {
   ];
   */
 
-	//let count = 19000;
-	let cost = 0;
-	let eventsCount = [];
+  //let count = 19000;
+  let cost = 0;
+  let eventsCount = [];
 
-	for (let i = 0; i < scales.length; i++) {
-		let scale = scales[i];
-		let [periodStart, periodEnd] = scale.period;
+  for (let i = 0; i < scales.length; i++) {
+    let scale = scales[i];
+    let [periodStart, periodEnd] = scale.period;
 
-		let temp = Math.min(count, periodEnd) - periodStart;
-		let scaleCount = Math.max(0, Math.min(count, periodEnd) - periodStart);
+    let temp = Math.min(count, periodEnd) - periodStart;
+    let scaleCount = Math.max(0, Math.min(count, periodEnd) - periodStart);
 
-		let scaleCost = temp * scale.rate;
-		cost += scaleCost;
+    let scaleCost = temp * scale.rate;
+    cost += scaleCost;
 
-		eventsCount.push({ scale: i + 1, count: scaleCount, rate: scale.rate });
+    eventsCount.push({ scale: i + 1, count: scaleCount, rate: scale.rate });
 
-		if (count <= periodEnd) {
-			break;
-		}
-	}
+    if (count <= periodEnd) {
+      break;
+    }
+  }
 
-	cost = cost.toFixed(1);
+  cost = cost.toFixed(1);
 
-	return { cost, eventsCount };
+  return { cost, eventsCount };
 }
 
 export default generateCost;

@@ -1,99 +1,86 @@
 <template>
-	<div :class="['c-app-header', { offline: offline === true }]">
-		<div class="c-app-header__inner">
-			<section>
-				<a href="/" class="logo">
-					<h1>Operational</h1>
-					<span>{{ subtitleText }}</span>
-				</a>
-				<span class="c-app-header__testmode" v-if="testMode">
-					Test mode active
-				</span>
-			</section>
-			<section :class="['c-app-header__menu']">
-				<!-- <router-link to="/crm"> Users </router-link> -->
-				<router-link to="/"> Events </router-link>
-				<router-link to="/settings"> Settings </router-link>
-				<router-link to="/playground"> Playground </router-link>
-				<router-link to="/docs">Docs</router-link>
-				<!-- <a href="#" @click.prevent="onSupport"> Support </a> -->
-			</section>
+  <div :class="['c-app-header', { offline: offline === true }]">
+    <div class="c-app-header__inner">
+      <section>
+        <a href="/" class="logo">
+          <h1>Operational</h1>
+          <span>{{ subtitleText }}</span>
+        </a>
+        <span class="c-app-header__testmode" v-if="testMode"> Test mode active </span>
+      </section>
+      <section :class="['c-app-header__menu']">
+        <!-- <router-link to="/crm"> Users </router-link> -->
+        <router-link to="/"> Events </router-link>
+        <router-link to="/settings"> Settings </router-link>
+        <router-link to="/playground"> Playground </router-link>
+        <router-link to="/docs">Docs</router-link>
+        <!-- <a href="#" @click.prevent="onSupport"> Support </a> -->
+      </section>
 
-			<section>
-				<a
-					:class="['popup-menu-button', { active: menuActive === true }]"
-					@click.prevent="onMenuOpen"
-				>
-					<span v-if="workspace"> {{ workspace.name }}</span>
-					<Avatar v-if="user && !user.avatar" :size="32" :name="user.email">
-					</Avatar>
-					<img
-						v-if="user && user.avatar"
-						class="c-avatar"
-						:src="`${assetPath}/${user.avatar}`"
-					/>
-				</a>
+      <section>
+        <a
+          :class="['popup-menu-button', { active: menuActive === true }]"
+          @click.prevent="onMenuOpen"
+        >
+          <span v-if="workspace"> {{ workspace.name }}</span>
+          <Avatar :user="user"> </Avatar>
+        </a>
 
-				<PopupMenu
-					v-if="init"
-					selector=".popup-menu-button"
-					ref="PopupMenu"
-					@onClose="onMenuClose"
-				></PopupMenu>
-			</section>
-		</div>
+        <PopupMenu
+          v-if="init"
+          selector=".popup-menu-button"
+          ref="PopupMenu"
+          @onClose="onMenuClose"
+        ></PopupMenu>
+      </section>
+    </div>
 
-		<div :class="['c-app-header__mobile', { active: showNav === true }]">
-			<router-link to="/settings">
-				<Avatar v-if="user && !user.avatar" :size="24" :name="user.email">
-				</Avatar>
-				<img
-					v-if="user && user.avatar"
-					class="c-avatar"
-					:src="`${assetPath}/${user.avatar}`"
-				/>
-				<span v-if="user"> {{ user.firstName }} </span>
-			</router-link>
+    <div :class="['c-app-header__mobile', { active: showNav === true }]">
+      <router-link to="/settings">
+        <Avatar v-if="user && !user.avatar" :size="24" :name="user.email"> </Avatar>
+        <img v-if="user && user.avatar" class="c-avatar" :src="`${assetPath}/${user.avatar}`" />
+        <span v-if="user"> {{ user.firstName }} </span>
+      </router-link>
 
-			<router-link to="/">
-				<svg
-					width="24"
-					height="24"
-					viewBox="0 0 24 24"
-					fill="none"
-					xmlns="http://www.w3.org/2000/svg"
-				>
-					<path
-						d="M5 6H19M7 3H17M5 21H19C20.1046 21 21 20.1046 21 19V11C21 9.89543 20.1046 9 19 9H5C3.89543 9 3 9.89543 3 11V19C3 20.1046 3.89543 21 5 21Z"
-						stroke="currentColor"
-						stroke-width="1.5"
-						stroke-linecap="round"
-					/>
-				</svg>
+      <router-link to="/">
+        <svg
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M5 6H19M7 3H17M5 21H19C20.1046 21 21 20.1046 21 19V11C21 9.89543 20.1046 9 19 9H5C3.89543 9 3 9.89543 3 11V19C3 20.1046 3.89543 21 5 21Z"
+            stroke="currentColor"
+            stroke-width="1.5"
+            stroke-linecap="round"
+          />
+        </svg>
 
-				<span> Events </span>
-			</router-link>
+        <span> Events </span>
+      </router-link>
 
-			<router-link to="/docs">
-				<svg
-					width="24"
-					height="24"
-					viewBox="0 0 24 24"
-					fill="none"
-					xmlns="http://www.w3.org/2000/svg"
-				>
-					<path
-						d="M9 14H13M9 10H15M6 20H18C19.1046 20 20 19.1046 20 18V6C20 4.89543 19.1046 4 18 4H6C4.89543 4 4 4.89543 4 6V18C4 19.1046 4.89543 20 6 20Z"
-						stroke="currentColor"
-						stroke-width="1.5"
-						stroke-linecap="round"
-					/>
-				</svg>
+      <router-link to="/docs">
+        <svg
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M9 14H13M9 10H15M6 20H18C19.1046 20 20 19.1046 20 18V6C20 4.89543 19.1046 4 18 4H6C4.89543 4 4 4.89543 4 6V18C4 19.1046 4.89543 20 6 20Z"
+            stroke="currentColor"
+            stroke-width="1.5"
+            stroke-linecap="round"
+          />
+        </svg>
 
-				<span> Docs </span>
-			</router-link>
+        <span> Docs </span>
+      </router-link>
 
-			<!-- <a href="#" @click.prevent="onSupport">
+      <!-- <a href="#" @click.prevent="onSupport">
 				<svg
 					width="24"
 					height="24"
@@ -112,401 +99,395 @@
 
 				<span>Support</span>
 			</a> -->
-		</div>
-	</div>
+    </div>
+  </div>
 </template>
 
 <script>
 import PopupMenu from "./popup-menu.vue";
 import Constrain from "@operational.co/components/ui/constrain.vue";
 
-import Avatar from "vue-boring-avatars";
+import Avatar from "@operational.co/components/ui/avatar.vue";
 
 export default {
-	components: {
-		PopupMenu,
-		Constrain,
-		Avatar,
-	},
+  components: {
+    PopupMenu,
+    Constrain,
+    Avatar,
+  },
 
-	data: function () {
-		return {
-			init: false,
-			menuActive: false,
+  data: function () {
+    return {
+      init: false,
+      menuActive: false,
 
-			lastScrollPosition: 0,
-			showNav: true,
-		};
-	},
+      lastScrollPosition: 0,
+      showNav: true,
+    };
+  },
 
-	computed: {
-		baseApiUrl: function () {
-			return this.$store.app.baseApiUrl;
-		},
-		appVersion: function () {
-			return __APP_VERSION__;
-		},
-		isSelfHosted: function () {
-			return this.$store.app.isSelfHosted;
-		},
-		subtitleText: function () {
-			if (this.isSelfHosted) {
-				return `Self-hosted ${this.appVersion}`;
-			} else {
-				return "Beta";
-			}
-		},
-		testMode: function () {
-			return this.$store.app.testMode;
-		},
-		offline: function () {
-			return this.$store.app.offline;
-		},
-		user: function () {
-			return this.$store.user.resource;
-		},
-		workspace: function () {
-			return this.$store.workspace.resource;
-		},
-		baseApiUrl: function () {
-			return this.$store.app.baseApiUrl;
-		},
-		assetPath: function () {
-			let baseUrl = this.baseApiUrl;
-			return `${baseUrl}/uploads`;
-		},
-	},
+  computed: {
+    appVersion: function () {
+      return __APP_VERSION__;
+    },
+    isSelfHosted: function () {
+      return this.$store.app.isSelfHosted;
+    },
+    subtitleText: function () {
+      if (this.isSelfHosted) {
+        return `Self-hosted ${this.appVersion}`;
+      } else {
+        return "Beta";
+      }
+    },
+    testMode: function () {
+      return this.$store.app.testMode;
+    },
+    offline: function () {
+      return this.$store.app.offline;
+    },
+    user: function () {
+      return this.$store.user.resource;
+    },
+    workspace: function () {
+      return this.$store.workspace.resource;
+    },
+    baseApiUrl: function () {
+      return this.$store.app.baseApiUrl;
+    },
+    assetPath: function () {
+      let baseUrl = this.baseApiUrl;
+      return `${baseUrl}/uploads`;
+    },
+  },
 
-	methods: {
-		onDocs: function () {
-			this.$store.app.showDocs();
-		},
-		onSupport: function () {
-			$crisp.push(["do", "chat:show"]);
-			$crisp.push(["do", "chat:open"]);
-		},
-		onMenuClose: function () {
-			this.menuActive = false;
-		},
-		logout: function () {
-			this.$store.user.logout();
-		},
-		onMenuOpen: function () {
-			this.menuActive = true;
-			this.$refs.PopupMenu.toggle();
-		},
-		handleScroll() {
-			const currentScrollPosition = window.scrollY;
-			if (
-				currentScrollPosition > this.lastScrollPosition &&
-				currentScrollPosition > 100
-			) {
-				// User is scrolling down
-				this.showNav = false;
-			} else {
-				// User is scrolling up or at the top
-				this.showNav = true;
-			}
-			this.lastScrollPosition = currentScrollPosition;
-		},
-		addEventListeners: function () {
-			window.addEventListener("scroll", this.handleScroll);
-		},
-		removeEventListeners: function () {
-			window.removeEventListener("scroll", this.handleScroll);
-		},
-	},
+  methods: {
+    onDocs: function () {
+      this.$store.app.showDocs();
+    },
+    onSupport: function () {
+      $crisp.push(["do", "chat:show"]);
+      $crisp.push(["do", "chat:open"]);
+    },
+    onMenuClose: function () {
+      this.menuActive = false;
+    },
+    logout: function () {
+      this.$store.user.logout();
+    },
+    onMenuOpen: function () {
+      this.menuActive = true;
+      this.$refs.PopupMenu.toggle();
+    },
+    handleScroll() {
+      const currentScrollPosition = window.scrollY;
+      if (currentScrollPosition > this.lastScrollPosition && currentScrollPosition > 100) {
+        // User is scrolling down
+        this.showNav = false;
+      } else {
+        // User is scrolling up or at the top
+        this.showNav = true;
+      }
+      this.lastScrollPosition = currentScrollPosition;
+    },
+    addEventListeners: function () {
+      window.addEventListener("scroll", this.handleScroll);
+    },
+    removeEventListeners: function () {
+      window.removeEventListener("scroll", this.handleScroll);
+    },
+  },
 
-	mounted: function () {
-		this.init = true;
+  mounted: function () {
+    this.init = true;
 
-		this.addEventListeners();
-	},
+    this.addEventListeners();
+  },
 
-	beforeUnmount: function () {
-		this.removeEventListeners();
-	},
+  beforeUnmount: function () {
+    this.removeEventListeners();
+  },
 };
 </script>
 
 <style lang="scss">
 .c-app-header {
-	width: 100%;
-	height: 56px;
+  width: 100%;
+  height: 56px;
 
-	.c-avatar {
-		width: 32px;
-		height: 32px;
-		border-radius: 99px;
-		object-fit: cover;
-		object-position: center center;
-	}
+  .c-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 99px;
+    object-fit: cover;
+    object-position: center center;
+  }
 
-	&__testmode {
-		display: inline-block;
-		padding: var(--margin) var(--margin-lg);
-		margin-left: var(--margin-lg);
-		background-color: var(--color-bg-3);
-		border-radius: var(--border-radius);
-		font-family: var(--font-family-monospace);
-		font-weight: 400;
-		font-size: var(--font-size-sm);
-		line-height: 1;
-	}
+  &__testmode {
+    display: inline-block;
+    padding: var(--margin) var(--margin-lg);
+    margin-left: var(--margin-lg);
+    background-color: var(--color-bg-3);
+    border-radius: var(--border-radius);
+    font-family: var(--font-family-monospace);
+    font-weight: 400;
+    font-size: var(--font-size-sm);
+    line-height: 1;
+  }
 
-	&__inner {
-		width: 100%;
-		height: 100%;
-		position: relative;
-		z-index: 1;
+  &__inner {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    z-index: 1;
 
-		> section {
-			padding: var(--margin) var(--margin-lg);
+    > section {
+      padding: var(--margin) var(--margin-lg);
 
-			&:first-child {
-				position: absolute;
-				top: 0;
-				left: 0;
-				height: 100%;
-			}
+      &:first-child {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+      }
 
-			&:nth-child(2) {
-				position: absolute;
-				top: 0;
-				left: 50%;
-				height: 100%;
-				transform: translateX(-50%);
-			}
+      &:nth-child(2) {
+        position: absolute;
+        top: 0;
+        left: 50%;
+        height: 100%;
+        transform: translateX(-50%);
+      }
 
-			&:last-child {
-				position: absolute;
-				top: 0;
-				right: 0;
-				height: 100%;
-			}
-		}
+      &:last-child {
+        position: absolute;
+        top: 0;
+        right: 0;
+        height: 100%;
+      }
+    }
 
-		.c-constrain {
-			flex-grow: 1;
-		}
+    .c-constrain {
+      flex-grow: 1;
+    }
 
-		.logo {
-			position: relative;
-			margin-right: auto;
+    .logo {
+      position: relative;
+      margin-right: auto;
 
-			display: flex;
-			align-items: center;
+      display: flex;
+      align-items: center;
 
-			h1 {
-				display: inline-block;
-				padding: var(--margin);
-				font-size: var(--font-size-lg);
-				margin: 0;
-				color: var(--color-font);
-				transition: all var(--transition-time) linear;
+      h1 {
+        display: inline-block;
+        padding: var(--margin);
+        font-size: var(--font-size-lg);
+        margin: 0;
+        color: var(--color-font);
+        transition: all var(--transition-time) linear;
 
-				&:hover,
-				&:active {
-					color: var(--color-primary-light);
-				}
-			}
+        &:hover,
+        &:active {
+          color: var(--color-primary-light);
+        }
+      }
 
-			span {
-				display: inline-block;
-				padding: var(--margin-sm) var(--margin);
-				margin-left: var(--margin);
-				font-size: var(--font-size-xs);
-				font-weight: 600;
-				font-family: var(--font-family-monospace);
-				line-height: 1;
-				color: var(--color-font-light);
-				background-color: var(--color-bg-2);
-				border-radius: var(--border-radius);
-			}
-		}
+      span {
+        display: inline-block;
+        padding: var(--margin-sm) var(--margin);
+        margin-left: var(--margin);
+        font-size: var(--font-size-xs);
+        font-weight: 600;
+        font-family: var(--font-family-monospace);
+        line-height: 1;
+        color: var(--color-font-light);
+        background-color: var(--color-bg-2);
+        border-radius: var(--border-radius);
+      }
+    }
 
-		> a {
-			user-select: none;
-			cursor: pointer;
-		}
+    > a {
+      user-select: none;
+      cursor: pointer;
+    }
 
-		.popup-menu-button {
-			position: relative;
-			max-width: 160px;
-			display: flex;
-			justify-content: center;
-			align-items: center;
-			border-radius: 99px;
-			margin-right: 0;
-			padding: var(--margin) var(--margin-lg);
-			padding-right: var(--margin);
-			background-color: var(--color-bg-3);
-			color: var(--color-font);
-			transition: all var(--transition-time-sm) linear;
-			cursor: pointer;
+    .popup-menu-button {
+      position: relative;
+      max-width: 160px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: 99px;
+      margin-right: 0;
+      padding: var(--margin) var(--margin-lg);
+      padding-right: var(--margin);
+      background-color: var(--color-bg-3);
+      color: var(--color-font);
+      transition: all var(--transition-time-sm) linear;
+      cursor: pointer;
 
-			> span {
-				display: inline-block;
-				margin-right: var(--margin);
-				font-weight: 500;
-				pointer-events: none;
-				overflow: hidden;
-				white-space: nowrap;
-				text-overflow: ellipsis;
-				user-select: none;
-			}
+      > span {
+        display: inline-block;
+        margin-right: var(--margin);
+        font-weight: 500;
+        pointer-events: none;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        user-select: none;
+      }
 
-			> .c-avatar {
-				user-select: none;
-			}
+      > .c-avatar {
+        user-select: none;
+      }
 
-			> svg {
-				min-width: 32px;
-			}
+      > svg {
+        min-width: 32px;
+      }
 
-			&:hover,
-			&:active,
-			&.active {
-				background-color: var(--color-primary-dark);
-				color: var(--color-primary);
-			}
-		}
-	}
+      &:hover,
+      &:active,
+      &.active {
+        background-color: var(--color-primary-dark);
+        color: var(--color-primary);
+      }
+    }
+  }
 
-	&__menu {
-		display: flex;
-		justify-content: center;
-		align-items: center;
+  &__menu {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 
-		a {
-			height: 32px;
-			position: relative;
-			display: inline-flex;
-			align-items: center;
-			margin: 0 var(--margin);
-			padding: var(--margin) var(--spacer-sm);
-			color: var(--color-font);
-			transition: var(--transition);
-			font-weight: 500;
-			//background-color: var(--color-bg-3);
-			border-radius: var(--border-radius);
-			user-select: none;
-			line-height: 1rem;
+    a {
+      height: 32px;
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      margin: 0 var(--margin);
+      padding: var(--margin) var(--spacer-sm);
+      color: var(--color-font);
+      transition: var(--transition);
+      font-weight: 500;
+      //background-color: var(--color-bg-3);
+      border-radius: var(--border-radius);
+      user-select: none;
+      line-height: 1rem;
 
-			&:hover,
-			&:active,
-			&:focus {
-				outline: none;
-				background-color: var(--color-bg-3);
-				color: var(--color-link-hover);
-			}
+      &:hover,
+      &:active,
+      &:focus {
+        outline: none;
+        background-color: var(--color-bg-3);
+        color: var(--color-link-hover);
+      }
 
-			&.router-link-active {
-				color: var(--color-link-hover);
-				background-color: var(--color-bg-3);
-				//background-color: var(--color-primary);
-			}
-		}
-	}
+      &.router-link-active {
+        color: var(--color-link-hover);
+        background-color: var(--color-bg-3);
+        //background-color: var(--color-primary);
+      }
+    }
+  }
 
-	&__mobile {
-		display: none;
-	}
+  &__mobile {
+    display: none;
+  }
 
-	&.offline {
-		.c-app-header__menu a,
-		.popup-menu-button,
-		.c-app-header__mobile a {
-			opacity: 0.75;
-			pointer-events: none;
-		}
-	}
+  &.offline {
+    .c-app-header__menu a,
+    .popup-menu-button,
+    .c-app-header__mobile a {
+      opacity: 0.75;
+      pointer-events: none;
+    }
+  }
 
-	@media screen and (max-width: 940px) {
-		display: block;
-		position: fixed;
-		z-index: 2;
-		bottom: 0;
-		left: 0;
-		width: 100%;
-		padding-top: 0;
+  @media screen and (max-width: 940px) {
+    display: block;
+    position: fixed;
+    z-index: 2;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding-top: 0;
 
-		.c-avatar {
-			width: 24px;
-			height: 24px;
-		}
+    .c-avatar {
+      width: 24px;
+      height: 24px;
+    }
 
-		.c-constrain__inner {
-			padding: 0;
-		}
+    .c-constrain__inner {
+      padding: 0;
+    }
 
-		&__inner {
-			display: none;
-			border-radius: 0;
-		}
+    &__inner {
+      display: none;
+      border-radius: 0;
+    }
 
-		&__mobile {
-			width: 100%;
-			display: flex;
-			justify-content: space-evenly;
-			background-color: var(--color-bg-1);
-			border-top: var(--color-bg-3) solid 1px;
-			//background-color: hsla(206, 8%, 20%, 0.75);
-			backdrop-filter: blur(4px);
-			-webkit-backdrop-filter: blur(4px);
-			padding: var(--margin) var(--margin-lg);
-			transform: translateY(100%);
-			transition: transform var(--transition-time) ease-out;
+    &__mobile {
+      width: 100%;
+      display: flex;
+      justify-content: space-evenly;
+      background-color: var(--color-bg-1);
+      border-top: var(--color-bg-3) solid 1px;
+      //background-color: hsla(206, 8%, 20%, 0.75);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      padding: var(--margin) var(--margin-lg);
+      transform: translateY(100%);
+      transition: transform var(--transition-time) ease-out;
 
-			&.active {
-				transform: translateY(0%);
-			}
+      &.active {
+        transform: translateY(0%);
+      }
 
-			> a {
-				display: flex;
-				flex-direction: column;
-				justify-content: center;
-				align-items: center;
-				color: var(--color-font);
-				min-width: 63px;
-				font-weight: 500;
+      > a {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        color: var(--color-font);
+        min-width: 63px;
+        font-weight: 500;
 
-				&:first-child {
-					> svg {
-						border-radius: 99px;
-					}
-				}
+        &:first-child {
+          > svg {
+            border-radius: 99px;
+          }
+        }
 
-				> svg {
-					width: 24px;
-					height: 24px;
-				}
+        > svg {
+          width: 24px;
+          height: 24px;
+        }
 
-				> span {
-					display: inline-block;
-					margin-top: var(--margin-sm);
-					font-size: var(--font-size-xs);
-					font-weight: 500;
-				}
+        > span {
+          display: inline-block;
+          margin-top: var(--margin-sm);
+          font-size: var(--font-size-xs);
+          font-weight: 500;
+        }
 
-				&.router-link-active,
-				&:active,
-				&:focus {
-					outline: none;
-					color: var(--color-primary-light);
-				}
-			}
-		}
-	}
+        &.router-link-active,
+        &:active,
+        &:focus {
+          outline: none;
+          color: var(--color-primary-light);
+        }
+      }
+    }
+  }
 
-	@supports (-webkit-touch-callout: none) {
-		&__mobile {
-			padding-bottom: var(--spacer);
-		}
-	}
+  @supports (-webkit-touch-callout: none) {
+    &__mobile {
+      padding-bottom: var(--spacer);
+    }
+  }
 }
 
 .is-ios .c-app-header {
-	height: 76px;
+  height: 76px;
 }
 </style>

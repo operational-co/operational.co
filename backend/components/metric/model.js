@@ -5,100 +5,112 @@ import hashPassword from "#lib/hash-password.js";
 import comparePassword from "#lib/compare-password.js";
 
 class Metric extends Model {
-	async findById(workspaceId) {
-		const query = {
-			where: {
-				id: workspaceId,
-			},
-			include: {
-				admin: true,
-			},
-		};
+  async findById(workspaceId) {
+    const query = {
+      where: {
+        id: workspaceId,
+      },
+      include: {
+        admin: true,
+      },
+    };
 
-		try {
-			const user = await this.client.findUnique(query);
+    try {
+      const user = await this.client.findUnique(query);
 
-			return user;
-		} catch (err) {
-			throw err;
-		}
-	}
+      return user;
+    } catch (err) {
+      throw err;
+    }
+  }
 
-	async findByWorkspaceId(workspaceId) {
-		const query = {
-			where: {
-				workspaceId,
-			},
-		};
+  async findByWorkspaceMonthYear(workspaceId, month, year) {
+    const metric = await prisma.metric.findFirst({
+      where: {
+        workspaceId: workspaceId,
+        month: month,
+        year: year,
+      },
+    });
 
-		try {
-			const metrics = await this.client.findMany(query);
+    return metric;
+  }
 
-			return metrics || null;
-		} catch (err) {
-			throw err;
-		}
-	}
+  async findByWorkspaceId(workspaceId) {
+    const query = {
+      where: {
+        workspaceId,
+      },
+    };
 
-	async findByMonth(workspaceId, month) {
-		const query = {
-			where: {
-				workspaceId,
-				month,
-			},
-		};
+    try {
+      const metrics = await this.client.findMany(query);
 
-		try {
-			const metrics = await this.client.findMany(query);
+      return metrics || null;
+    } catch (err) {
+      throw err;
+    }
+  }
 
-			return metrics[0] || null;
-		} catch (err) {
-			throw err;
-		}
-	}
+  async findByMonth(workspaceId, month) {
+    const query = {
+      where: {
+        workspaceId,
+        month,
+      },
+    };
 
-	async create(workspaceId, month, year, events = 0) {
-		const query = {
-			data: {
-				workspaceId,
-				month,
-				year,
-				events,
-			},
-		};
+    try {
+      const metrics = await this.client.findMany(query);
 
-		try {
-			const metric = await this.client.create(query);
+      return metrics[0] || null;
+    } catch (err) {
+      throw err;
+    }
+  }
 
-			return metric;
-		} catch (err) {
-			throw err;
-		}
-	}
+  async create(workspaceId, month, year, events = 0) {
+    const query = {
+      data: {
+        workspaceId,
+        month,
+        year,
+        events,
+      },
+    };
 
-	async update(payload) {
-		let id = payload.id;
-		id = parseInt(id);
+    try {
+      const metric = await this.client.create(query);
 
-		delete payload.id;
+      return metric;
+    } catch (err) {
+      throw err;
+    }
+  }
 
-		const query = {
-			where: {
-				id,
-			},
-			data: {
-				...payload,
-			},
-		};
+  async update(payload) {
+    let id = payload.id;
+    id = parseInt(id);
 
-		try {
-			const metric = await this.client.update(query);
+    delete payload.id;
 
-			return metric;
-		} catch (err) {
-			throw err;
-		}
-	}
+    const query = {
+      where: {
+        id,
+      },
+      data: {
+        ...payload,
+      },
+    };
+
+    try {
+      const metric = await this.client.update(query);
+
+      return metric;
+    } catch (err) {
+      throw err;
+    }
+  }
 }
 
 export default new Metric("metric", prisma);

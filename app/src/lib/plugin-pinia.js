@@ -6,6 +6,7 @@ import { useUserStore } from "../store/user";
 import { useReportsStore } from "../store/reports";
 import { useWorkspaceStore } from "../store/workspace";
 import { useMetricStore } from "../store/metric";
+import { useInvoicesStore } from "../store/invoices";
 
 export default {
   install: (app) => {
@@ -18,6 +19,7 @@ export default {
       reports: useReportsStore(),
       workspace: useWorkspaceStore(),
       metric: useMetricStore(),
+      invoices: useInvoicesStore(),
     };
   },
 };

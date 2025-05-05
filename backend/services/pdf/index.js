@@ -7,13 +7,12 @@ import moment from "moment";
 const __dirname = path.resolve("");
 
 class Pdf {
-  http;
   printer;
 
   async setup() {
     let assetPath = path.join(__dirname, "public", "inter");
 
-    var fonts = {
+    let fonts = {
       Inter: {
         normal: `${assetPath}/Inter-Regular.otf`,
         bold: `${assetPath}/Inter-SemiBold.otf`,
@@ -53,10 +52,15 @@ class Pdf {
     return true;
   }
 
-  async createInvoice(workspace, invoice) {
+  async getBase64Image(filePath) {
+    const fileData = await fs.promises.readFile(filePath);
+    return fileData.toString("base64");
+  }
+
+  async createInvoice(workspace, invoice, res) {
     let billingAddress = ``;
     let tax = ``;
-    let companyName = workspace.companyName || workspace.admin.name;
+    let companyName = workspace.name || workspace.admin.firstName;
 
     if (!workspace.address) {
       billingAddress = ``;
@@ -71,19 +75,15 @@ class Pdf {
       tax = `${workspace.taxType} ${workspace.taxId}`;
     }
 
-    //let fileName = path.join(path.dirname(require.main.filename), 'invoice.json');
     let logoName = path.join(__dirname, "public", "logo.png");
-    //let invoice = await fs.promises.readFile(fileName, 'utf-8');
-    //invoice = JSON.parse(invoice);
+
     let printer = this.printer;
 
-    let createDate = moment().format("DD-MM-YYYY");
+    let invoiceName = `${invoice.code}.pdf`;
 
-    let invoiceName = `${workspace.id}-${createDate}-invoice.pdf`;
-
-    let startDate = moment.unix(invoice.period_start);
-    let endDate = moment.unix(invoice.period_end);
-    let dateIssue = startDate.clone();
+    let startDate = moment(invoice.periodStart);
+    let endDate = moment(invoice.periodEnd);
+    let dateIssue = moment(invoice.createdAt);
 
     startDate = startDate.format("Do MMM, YYYY");
     endDate = endDate.format("Do MMM, YYYY");
@@ -93,9 +93,33 @@ class Pdf {
 
     let baseMargin = [0, 5, 0, 5];
 
-    let total = invoice.total / 100;
-    let subtotal = invoice.subtotal / 100;
-    let amount_due = invoice.amount_due / 100;
+    let total = invoice.total;
+    let subtotal = invoice.subTotal;
+    let amount_due = invoice.total;
+
+    let lineItems = invoice.lineItems.map((item) => {
+      return [
+        {
+          text: `${item.name}\n${item.description}\n${item.quantity}`,
+        },
+        { text: item.quantity, margin: baseMargin },
+        {
+          text: `${item.amount}`,
+        },
+      ];
+    });
+
+    let body = [
+      [
+        { text: "Description", fontSize: 12, margin: baseMargin },
+        { text: "Quantity", fontSize: 12, margin: baseMargin },
+        { text: "Amount", fontSize: 12, margin: baseMargin },
+      ],
+      ...lineItems,
+      [``, { text: "Subtotal", bold: true, margin: baseMargin }, `$${subtotal}`],
+      [``, { text: "Total", bold: true, margin: baseMargin }, `$${total}`],
+      [``, { text: "Amount Due", bold: true, margin: baseMargin }, `$${total}`],
+    ];
 
     let docDefinition = {
       pageSize: "A4",
@@ -136,7 +160,7 @@ class Pdf {
           table: {
             widths: ["auto", "auto"],
             body: [
-              ["Invoice Number", `${invoice.number}`],
+              ["Invoice code", `${invoice.code}`],
               ["Date of issue", dateIssue],
               ["Date due", endDate],
             ],
@@ -187,44 +211,20 @@ class Pdf {
           bold: true,
           fontSize: 18,
         },
-        // {
-        // 	text: 'Pay Online',
-        // 	link: `${invoice.invoice_pdf}`,
-        // 	bold: true,
-        // 	margin: [0, 20],
-        // 	decoration: 'underline',
-        // },
         {
           layout: "lightHorizontalLines",
           table: {
-            // headers are automatically repeated if the table spans over multiple pages
-            // you can declare how many rows should be treated as headers
             headerRows: 1,
-            widths: ["*", "*", "*", 100],
+            widths: ["*", 80, 80],
 
-            body: [
-              [
-                { text: "Description", fontSize: 12, margin: baseMargin },
-                { text: "Quantity", fontSize: 12, margin: baseMargin },
-                { text: "Unit Price", fontSize: 12, margin: baseMargin },
-                { text: "Amount", fontSize: 12, margin: baseMargin },
-              ],
-              [
-                { text: `Operational logging\n${startDate} - ${endDate}`, margin: baseMargin },
-                { text: "1", margin: baseMargin },
-                { text: `$${amount_due}`, margin: baseMargin },
-                { text: `$${subtotal}`, margin: baseMargin },
-              ],
-              [``, { text: "Subtotal", bold: true, margin: baseMargin }, ``, `$${subtotal}`],
-              [``, { text: "Total", bold: true, margin: baseMargin }, ``, `$${total}`],
-              [``, { text: "Amount Due", bold: true, margin: baseMargin }, ``, `$${total}`],
-            ],
+            body: body,
           },
         },
       ],
       defaultStyle: {
         font: "Inter",
         fontSize: 14,
+        color: "#000000",
       },
     };
 
@@ -232,14 +232,18 @@ class Pdf {
 
     let pdfDoc = printer.createPdfKitDocument(docDefinition, options);
 
-    //let filePath = path.join(path.dirname(require.main.filename), invoiceName);
+    const savePath = path.join(__dirname, invoiceName);
 
     let chunks = [];
     let result;
 
-    let outputPath = path.join(__dirname, "public", "test.pdf");
+    res.setHeader("Content-Disposition", `attachment; filename="${invoiceName}.pdf"`);
+    res.contentType("application/pdf");
 
-    pdfDoc.pipe(fs.createWriteStream(outputPath));
+    // Pipe PDF directly to HTTP response
+    pdfDoc.pipe(res);
+
+    // End the PDF stream
     pdfDoc.end();
   }
 

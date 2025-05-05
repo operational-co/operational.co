@@ -10,6 +10,7 @@ import { useUserStore } from "./user";
 import { useReportsStore } from "./reports";
 import { useWorkspaceStore } from "./workspace";
 import { useMetricStore } from "./metric";
+import { useInvoicesStore } from "./invoices";
 
 const STATIC_API_URL = import.meta.env.VITE_API_URL || undefined;
 const VITE_PUSH_SERVER_KEY = import.meta.env.VITE_PUSH_SERVER_KEY || undefined;
@@ -198,6 +199,7 @@ export const useAppStore = defineStore(config.name, {
       const reports = useReportsStore();
       const workspace = useWorkspaceStore();
       const metric = useMetricStore();
+      const invoices = useInvoicesStore();
 
       let pie = await user.init();
       await events.init();
@@ -205,11 +207,17 @@ export const useAppStore = defineStore(config.name, {
       await reports.init();
       await workspace.init();
       await metric.init();
+      await invoices.init();
 
       if (user.isAuth && pie) {
         await this.afterLogin(pie);
       } else {
         // do something else
+      }
+
+      let testMode = localStorage.getItem("ops/testMode");
+      if (testMode === "true") {
+        this.testMode = true;
       }
 
       this.appInit = true;
@@ -221,12 +229,14 @@ export const useAppStore = defineStore(config.name, {
       const reports = useReportsStore();
       const workspace = useWorkspaceStore();
       const metric = useMetricStore();
+      const invoices = useInvoicesStore();
 
       await metric.consumePie(pie);
       await workspace.consumePie(pie);
       await events.consumePie(pie);
       await crm.consumePie(pie);
       await reports.consumePie(pie);
+      await invoices.consumePie(pie);
     },
 
     async sendTestPushNotification() {
@@ -291,6 +301,7 @@ export const useAppStore = defineStore(config.name, {
 
     setTestMode(condition) {
       this.testMode = condition;
+      localStorage.setItem("ops/testMode", condition);
     },
 
     setPermissionModal(condition) {

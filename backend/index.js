@@ -14,7 +14,6 @@ import Db from "#services/db/index.js";
 import Session from "#services/session/index.js";
 import Billing from "#services/billing/index.js";
 import Demo from "#services/demo/index.js";
-import File from "#services/file/index.js";
 import Internal from "#services/internal/index.js";
 
 import apiRoutes from "#components/api/routes.js";
@@ -23,6 +22,7 @@ import userRoutes from "#components/user/routes.js";
 import workspaceRoutes from "#components/workspace/routes.js";
 import websiteRoutes from "#components/website/routes.js";
 import metricRoutes from "#components/metric/routes.js";
+import invoiceRoutes from "#components/invoice/routes.js";
 
 import User from "#components/user/index.js";
 import UserModel from "#components/user/model.js";
@@ -41,9 +41,11 @@ import path from "path";
 import ops from "#lib/ops.js";
 
 const __dirname = path.resolve("");
-
 const app = express();
 
+/**
+ * Modifying console prototype so console.logs show line number.
+ */
 ["log", "warn", "error"].forEach((methodName) => {
   const originalMethod = console[methodName];
   console[methodName] = (...args) => {
@@ -75,6 +77,8 @@ const app = express();
 async function runExperiments() {
   await ops.log(`avatar:🤖 Server started`);
 
+  //await Workspace.billUsers();
+
   //await Website.getStats();
 }
 
@@ -92,38 +96,14 @@ async function preInit() {
     await Session.setup(),
     await Billing.setup(),
     await Demo.setup(),
-    await File.setup(),
     await Internal.setup(),
   ]);
 
   runExperiments();
 
-  //await Workspace.generateCategories();
-
   //await Ingestion.testIngest();
 
   //await ch.migrate();
-
-  // let { endpoint, keys } = {
-  //  keys: {
-  //    auth: "OORGyfMSHVA2wb3wZ6AtVw",
-  //    p256dh:
-  //      "BMyzyDJoYFq20kI2QBekraDxPIlrTo2eODXfy0PWmguBI6doiSZ2sOmsuFunVfKcgPedKIbB3L_PXL_vCNlI5oE",
-  //  },
-  //  endpoint:
-  //    "https://fcm.googleapis.com/fcm/send/dW7J9soYuwA:APA91bFn5sYQlxGortiJTABI2pcWF3jJih9ZfpDtBAgFFozSriCbyWdOZxtwoLr2eDtLVDQeSPAt45Eq5iZWIYWxs_-90r5kK9w5mQHsUA5dMFLtFCV1G9YDTc3V0wkUSADs8ZDQPRwh",
-  //  expirationTime: null,
-  // };
-
-  // let message = "lol:123";
-
-  // Webpush.sendNotification(endpoint, keys, message);
-
-  // let event = {
-  //  _notifiers: [1, 10],
-  // };
-
-  // Webpush.sendEventNotification(event);
 }
 
 async function init() {
@@ -225,6 +205,8 @@ async function setupServer() {
 
   app.use("/metric", metricRoutes);
 
+  app.use("/invoice", invoiceRoutes);
+
   // Define the path to the uploads directory
   const uploadDir = path.join(__dirname, "public/uploads");
 
@@ -259,6 +241,7 @@ async function setupServer() {
     process.exit(1);
   }
 
+  // depreciated - might resurrect this in the future
   const gracefulShutdown = async () => {
     console.log("Shutting down gracefully...");
     server.close(() => {

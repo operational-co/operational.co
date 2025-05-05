@@ -47,7 +47,7 @@
     "node-cache": "5.1.2",
     "nodemailer": "6.10.1",
     "nodemon": "3.0.2",
-    "pdfmake": "0.2.10",
+    "pdfmake": "^0.2.7",
     "perfect-express-sanitizer": "1.0.13",
     "prisma": "6.4.1",
     "resend": "3.3.0",

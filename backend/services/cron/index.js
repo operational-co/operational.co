@@ -2,6 +2,7 @@ import { Cron } from "croner";
 import Db from "#services/db/index.js";
 import Workspace from "#components/workspace/index.js";
 import ops from "#lib/ops.js";
+import config from "#lib/config.js";
 
 function temp() {
   //console.log("ran temp");
@@ -16,25 +17,6 @@ class CronTab {
   async setup() {
     this.setupJobs();
   }
-
-  // depreciated
-  wrap = (fx) => {
-    if (!fx) {
-      return;
-    }
-    let temp = fx.name;
-    temp = temp.replace("bound ", "");
-
-    ops.log(`cron: ${temp}`).catch((err) => {
-      console.log(err);
-    });
-
-    //console.log(temp);
-
-    //console.log(`%c CRON: ${temp}`, "color: cyan");
-
-    fx();
-  };
 
   async setupJobs() {
     /**
@@ -60,10 +42,12 @@ class CronTab {
     /**
      * Most important cronjob. Run billing cycle on the 1st,2nd,3rd and 4th of the month
      */
-    new Cron("0 0 1 * *", this.options, Workspace.billUsers.bind(Workspace));
-    new Cron("0 0 2 * *", this.options, Workspace.billUsers.bind(Workspace));
-    new Cron("0 0 3 * *", this.options, Workspace.billUsers.bind(Workspace));
-    new Cron("0 0 4 * *", this.options, Workspace.billUsers.bind(Workspace));
+    if (!config.SELFHOSTED) {
+      new Cron("0 0 1 * *", this.options, Workspace.billUsers.bind(Workspace));
+      new Cron("0 0 2 * *", this.options, Workspace.billUsers.bind(Workspace));
+      new Cron("0 0 3 * *", this.options, Workspace.billUsers.bind(Workspace));
+      new Cron("0 0 4 * *", this.options, Workspace.billUsers.bind(Workspace));
+    }
 
     /**
      * Calculates usage every 10 minutes for all workspaces
@@ -73,13 +57,17 @@ class CronTab {
     /**
      * Sends marketing-esque emails
      */
-    new Cron("12 * * * *", this.options, Workspace.sendLifecycleEmails.bind(Workspace));
+    if (!config.SELFHOSTED) {
+      new Cron("12 * * * *", this.options, Workspace.sendLifecycleEmails.bind(Workspace));
+    }
 
     /**
      * Calculates usedFreeEvents for workspaces. Runs every 15 minutes. Depends on metrics to be precalculated.
      * Also deactivates Workspaces
      */
-    new Cron("*/15 * * * *", this.options, Workspace.calculateUsedFreeEvents.bind(Workspace));
+    if (!config.SELFHOSTED) {
+      new Cron("*/15 * * * *", this.options, Workspace.calculateUsedFreeEvents.bind(Workspace));
+    }
 
     /**
      * Basic healthcheck

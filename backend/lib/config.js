@@ -113,11 +113,12 @@ const config = {
     PRIVATE_KEY: process.env.VAPID_PRIVATE_KEY,
   },
 
-  cloudflare: {
-    BUCKET: ``,
-    ACCESS_KEY_ID: "",
-    SECRET_ACCESS_KEY: "",
-    ACCOUNT_ID: "",
+  s3: {
+    REGION: process.env.S3_REGION || "auto",
+    ACCESS_KEY_ID: process.env.S3_ACCESS_KEY_ID || "",
+    SECRET_ACCESS_KEY: process.env.S3_SECRET_ACCESS_KEY || "",
+    ENDPOINT: process.env.S3_ENDPOINT || "",
+    BUCKET: process.env.S3_BUCKET || "",
   },
 
   prices: {

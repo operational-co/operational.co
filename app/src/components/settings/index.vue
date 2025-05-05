@@ -159,11 +159,7 @@
               </svg>
               <span> Project </span>
               <div>
-                <img
-                  v-if="user && user.avatar"
-                  class="c-avatar"
-                  :src="`${assetPath}/${user.avatar}`"
-                />
+                <Avatar :user="user"></Avatar>
               </div>
             </router-link>
           </li>
@@ -188,8 +184,8 @@
               <span> Billing </span>
             </router-link>
           </li>
-          <!-- <li>
-            <router-link to="/settings/billing">
+          <li>
+            <router-link to="/settings/invoices">
               <svg
                 width="24"
                 height="24"
@@ -208,7 +204,7 @@
 
               <span> Invoices </span>
             </router-link>
-          </li> -->
+          </li>
           <li>
             <router-link to="/settings/usage">
               <svg
@@ -272,10 +268,13 @@
 import Constrain from "@operational.co/components/ui/constrain.vue";
 import ProfileCard from "./profile-card.vue";
 
+import Avatar from "@operational.co/components/ui/avatar.vue";
+
 export default {
   components: {
     Constrain,
     ProfileCard,
+    Avatar,
   },
 
   data: function () {
@@ -419,10 +418,10 @@ export default {
           div {
             margin-left: auto;
 
-            img {
+            .c-avatar {
               width: 24px;
               height: 24px;
-              border-radius: 99px;
+              min-width: 24px;
             }
           }
         }

@@ -7,21 +7,21 @@ import comparePassword from "#lib/compare-password.js";
 import NodeCache from "node-cache";
 
 class User extends Model {
-	cache = new NodeCache({
-		stdTTL: 30, // Really really small duration. Cache is only used to exclusively speed up middleware/auth.js resolves
-		checkPeriod: 120,
-	});
+  cache = new NodeCache({
+    stdTTL: 30, // Really really small duration. Cache is only used to exclusively speed up middleware/auth.js resolves
+    checkPeriod: 120,
+  });
 
-	// note that the result doens't match with the getPie
-	async findById(userId, cache = false) {
-		// Use a cache for smaller quicker resolves(eg, middleware/auth.js)
-		if (cache) {
-			let temp = this.cache.get(userId);
-			if (temp) {
-				return temp;
-			}
-		}
-		let sql = `
+  // note that the result doens't match with the getPie
+  async findById(userId, cache = false) {
+    // Use a cache for smaller quicker resolves(eg, middleware/auth.js)
+    if (cache) {
+      let temp = this.cache.get(userId);
+      if (temp) {
+        return temp;
+      }
+    }
+    let sql = `
 		SELECT
 			b.id,
 			b.email,
@@ -29,6 +29,7 @@ class User extends Model {
 			b.primaryWorkspace,
 			b.activated,
 			b.onboarded,
+			b.avatar,
 			b.onboardingStep,
 			b.activationCode
     FROM User b
@@ -36,22 +37,22 @@ class User extends Model {
 		LIMIT 1
 		`;
 
-		try {
-			const users = await prisma.$queryRawUnsafe(sql);
+    try {
+      const users = await prisma.$queryRawUnsafe(sql);
 
-			if (users && users.length > 0) {
-				this.cache.set(userId, users[0]);
-				return users[0];
-			} else {
-				return null;
-			}
-		} catch (err) {
-			throw err;
-		}
-	}
+      if (users && users.length > 0) {
+        this.cache.set(userId, users[0]);
+        return users[0];
+      } else {
+        return null;
+      }
+    } catch (err) {
+      throw err;
+    }
+  }
 
-	async findByEmail(email) {
-		let sql = `
+  async findByEmail(email) {
+    let sql = `
 		SELECT
 			b.id,
 			b.email,
@@ -68,150 +69,147 @@ class User extends Model {
 		LIMIT 1
 		`;
 
-		try {
-			const users = await prisma.$queryRawUnsafe(sql);
+    try {
+      const users = await prisma.$queryRawUnsafe(sql);
 
-			if (users && users.length > 0) {
-				return users[0];
-			} else {
-				return null;
-			}
-		} catch (err) {
-			throw err;
-		}
-	}
+      if (users && users.length > 0) {
+        return users[0];
+      } else {
+        return null;
+      }
+    } catch (err) {
+      throw err;
+    }
+  }
 
-	async login(form, bypass = false) {
-		const email = form.email;
-		const password = form.password;
+  async login(form, bypass = false) {
+    const email = form.email;
+    const password = form.password;
 
-		const query = {
-			where: {
-				email: email,
-			},
-		};
+    const query = {
+      where: {
+        email: email,
+      },
+    };
 
-		const users = await this.client.findMany(query);
+    const users = await this.client.findMany(query);
 
-		if (users.length === 0) {
-			throw "User not found";
-		}
+    if (users.length === 0) {
+      throw "User not found";
+    }
 
-		const user = users[0];
+    const user = users[0];
 
-		if (bypass) {
-			delete user.password;
-			return user;
-		}
+    if (bypass) {
+      delete user.password;
+      return user;
+    }
 
-		const condition = await comparePassword(password, user.password);
+    const condition = await comparePassword(password, user.password);
 
-		if (!condition) {
-			throw `Can't find any users with those login details`;
-		}
+    if (!condition) {
+      throw `Can't find any users with those login details`;
+    }
 
-		delete user.password;
+    delete user.password;
 
-		return user;
-	}
+    return user;
+  }
 
-	async update(resource) {
-		let id = resource.id;
+  async update(resource) {
+    let id = resource.id;
 
-		let query = {
-			where: {
-				id: id,
-			},
-			data: resource,
-			omit: {
-				password: true,
-				meta: true,
-				resetPasswordToken: true,
-			},
-			include: {
-				workspace: true,
-			},
-		};
+    let query = {
+      where: {
+        id: id,
+      },
+      data: resource,
+      omit: {
+        password: true,
+        meta: true,
+        resetPasswordToken: true,
+      },
+      include: {
+        workspace: true,
+      },
+    };
 
-		delete query.data.id;
+    delete query.data.id;
 
-		resource = await this.client.update(query).catch((err) => {
-			this.captureException(err);
+    resource = await this.client.update(query).catch((err) => {
+      this.captureException(err);
 
-			throw err;
-		});
+      throw err;
+    });
 
-		// workspace is actually workspaceUser
-		const workspace = resource.workspace;
+    // workspace is actually workspaceUser
+    const workspace = resource.workspace;
 
-		let notify = false;
-		let pushSubscription = null;
+    let notify = false;
+    let pushSubscription = null;
 
-		// get the workspaceUser of the primary workspace
-		for (let i = 0; i < workspace.length; i++) {
-			const w = workspace[i];
-			if (
-				w.userId === resource.id &&
-				w.workspaceId === resource.primaryWorkspace
-			) {
-				notify = w.notify;
-				pushSubscription = w.pushSubscription;
+    // get the workspaceUser of the primary workspace
+    for (let i = 0; i < workspace.length; i++) {
+      const w = workspace[i];
+      if (w.userId === resource.id && w.workspaceId === resource.primaryWorkspace) {
+        notify = w.notify;
+        pushSubscription = w.pushSubscription;
 
-				break;
-			}
-		}
+        break;
+      }
+    }
 
-		resource.notify = notify;
-		resource.pushSubscription = pushSubscription;
+    resource.notify = notify;
+    resource.pushSubscription = pushSubscription;
 
-		delete resource.workspace;
+    delete resource.workspace;
 
-		// then also get all workspaceUsers via a quick query
-		const workspaceUsers = await prisma.$queryRawUnsafe(
-			`SELECT w.id AS id, w.name AS name 
+    // then also get all workspaceUsers via a quick query
+    const workspaceUsers = await prisma.$queryRawUnsafe(
+      `SELECT w.id AS id, w.name AS name 
    FROM WorkspaceUser wu
    JOIN Workspace w ON wu.workspaceId = w.id
    WHERE wu.userId = ? AND wu.workspaceId = ?`,
-			resource.id,
-			resource.primaryWorkspace,
-		);
+      resource.id,
+      resource.primaryWorkspace,
+    );
 
-		resource.workspaces = workspaceUsers;
+    resource.workspaces = workspaceUsers;
 
-		//resource = await this.findById(id);
+    //resource = await this.findById(id);
 
-		//this.afterWrite(resource);
+    //this.afterWrite(resource);
 
-		return resource;
-	}
+    return resource;
+  }
 
-	async getPie(userId) {
-		let arr = [
-			"u.id",
-			"u.email",
-			"u.createdAt",
-			"u.primaryWorkspace",
-			"u.avatar",
-			"u.firstName",
-			"u.lastName",
-			"u.activated",
-			"u.onboarded",
-			"u.onboardingStep",
-			"u.activationCode",
-			"u.settings",
-			"u.status",
-			"u.timezone",
-			"wu.pushSubscription",
-			"wu.notify",
-		];
+  async getPie(userId) {
+    let arr = [
+      "u.id",
+      "u.email",
+      "u.createdAt",
+      "u.primaryWorkspace",
+      "u.avatar",
+      "u.firstName",
+      "u.lastName",
+      "u.activated",
+      "u.onboarded",
+      "u.onboardingStep",
+      "u.activationCode",
+      "u.settings",
+      "u.status",
+      "u.timezone",
+      "wu.pushSubscription",
+      "wu.notify",
+    ];
 
-		arr = arr.map((field) => {
-			let key = field.split(".")[1];
-			let str = `${field} AS user_${key}`;
-			return str;
-		});
+    arr = arr.map((field) => {
+      let key = field.split(".")[1];
+      let str = `${field} AS user_${key}`;
+      return str;
+    });
 
-		const sql = `
+    const sql = `
 		SELECT
 			${arr.join(",")},
 			Workspace.*,
@@ -281,163 +279,159 @@ class User extends Model {
 			u.id, Workspace.id
 		`;
 
-		let user = await prisma.$queryRawUnsafe(sql);
+    let user = await prisma.$queryRawUnsafe(sql);
 
-		if (!user) {
-			return;
-		}
+    if (!user) {
+      return;
+    }
 
-		if (user.length === 0) {
-			return;
-		}
+    if (user.length === 0) {
+      return;
+    }
 
-		let pie = user[0];
+    let pie = user[0];
 
-		try {
-			pie = this.configurePie(pie);
-		} catch (err) {
-			console.log(err);
-		}
+    try {
+      pie = this.configurePie(pie);
+    } catch (err) {
+      console.log(err);
+    }
 
-		return pie;
-	}
+    return pie;
+  }
 
-	configurePie(pie) {
-		let user = {};
-		let workspace = {};
-		for (let key in pie) {
-			let splits = key.split("_");
+  configurePie(pie) {
+    let user = {};
+    let workspace = {};
+    for (let key in pie) {
+      let splits = key.split("_");
 
-			if (!splits[1]) {
-				workspace[key] = pie[key];
-				continue;
-			}
+      if (!splits[1]) {
+        workspace[key] = pie[key];
+        continue;
+      }
 
-			if (splits[0] === "user") {
-				user[splits[1]] = pie[key];
-				continue;
-			}
+      if (splits[0] === "user") {
+        user[splits[1]] = pie[key];
+        continue;
+      }
 
-			if (splits[0] === "wu") {
-				user[splits[1]] = pie[key];
-			}
-		}
-		if (!user) {
-			return;
-		}
-		if (!workspace) {
-			return;
-		}
-		if (workspace.apiKeys) {
-			workspace.keys = workspace.apiKeys;
-			delete workspace.apiKeys;
-		}
-		if (pie.workspace_categories) {
-			workspace.categories = pie.workspace_categories;
-		}
-		if (pie.workspace_metric) {
-			workspace.metrics = [pie.workspace_metric];
-		} else {
-			workspace.metrics = [];
-		}
+      if (splits[0] === "wu") {
+        user[splits[1]] = pie[key];
+      }
+    }
+    if (!user) {
+      return;
+    }
+    if (!workspace) {
+      return;
+    }
+    if (workspace.apiKeys) {
+      workspace.keys = workspace.apiKeys;
+      delete workspace.apiKeys;
+    }
+    if (pie.workspace_categories) {
+      workspace.categories = pie.workspace_categories;
+    }
+    if (pie.workspace_metric) {
+      workspace.metrics = [pie.workspace_metric];
+    } else {
+      workspace.metrics = [];
+    }
 
-		user.notify = !!user.notify;
-		user.onboarded = !!user.onboarded;
-		user.activated = !!user.activated;
+    user.notify = !!user.notify;
+    user.onboarded = !!user.onboarded;
+    user.activated = !!user.activated;
 
-		user.workspace = workspace;
-		return user;
-	}
+    user.workspace = workspace;
+    return user;
+  }
 
-	async signup(form, isSetup = false) {
-		const email = form.email;
-		const password = form.password;
-		let projectName = "";
+  async signup(form, isSetup = false) {
+    const email = form.email;
+    const password = form.password;
+    let projectName = "";
 
-		if (isSetup) {
-			// Specific to user.setup
-			projectName = form.projectName || undefined;
-			delete form.projectName;
-			form.onboardingStep = "setup";
-			form.activated = true;
-		}
+    if (isSetup) {
+      // Specific to user.setup
+      projectName = form.projectName || undefined;
+      delete form.projectName;
+      form.onboardingStep = "setup";
+      form.activated = true;
+    }
 
-		const query = {
-			where: {
-				email: email,
-			},
-		};
+    const query = {
+      where: {
+        email: email,
+      },
+    };
 
-		const userExistsResult = await prisma.$queryRawUnsafe(
-			`SELECT EXISTS(SELECT 1 FROM User WHERE email = ?) AS userExists`,
-			email,
-		);
+    const userExistsResult = await prisma.$queryRawUnsafe(
+      `SELECT EXISTS(SELECT 1 FROM User WHERE email = ?) AS userExists`,
+      email,
+    );
 
-		const userExists = Boolean(Number(userExistsResult[0].userExists));
+    const userExists = Boolean(Number(userExistsResult[0].userExists));
 
-		//const users = await this.client.findMany(query);
+    //const users = await this.client.findMany(query);
 
-		if (userExists.length > 0) {
-			throw "Someone with this email already exists";
-		}
+    if (userExists.length > 0) {
+      throw "Someone with this email already exists";
+    }
 
-		let hashedPassword = await hashPassword(password);
+    let hashedPassword = await hashPassword(password);
 
-		let user = await this.client
-			.create({
-				data: {
-					...form,
-					password: hashedPassword,
-				},
-			})
-			.catch((err) => {
-				throw err;
-			});
+    let user = await this.client
+      .create({
+        data: {
+          ...form,
+          password: hashedPassword,
+        },
+      })
+      .catch((err) => {
+        throw err;
+      });
 
-		const workspace = await WorkspaceModel.signup(
-			user,
-			projectName,
-			isSetup,
-		).catch((err) => {
-			throw err;
-		});
+    const workspace = await WorkspaceModel.signup(user, projectName, isSetup).catch((err) => {
+      throw err;
+    });
 
-		const WorkspaceUser = await prisma.workspaceUser.create({
-			data: {
-				userId: user.id,
-				workspaceId: workspace.id,
-				role: "ADMIN",
-				notify: true,
-			},
-		});
+    const WorkspaceUser = await prisma.workspaceUser.create({
+      data: {
+        userId: user.id,
+        workspaceId: workspace.id,
+        role: "ADMIN",
+        notify: true,
+      },
+    });
 
-		user = await this.client.update({
-			where: {
-				id: user.id,
-			},
-			data: {
-				primaryWorkspace: workspace.id,
-			},
-		});
+    user = await this.client.update({
+      where: {
+        id: user.id,
+      },
+      data: {
+        primaryWorkspace: workspace.id,
+      },
+    });
 
-		return user;
-	}
+    return user;
+  }
 
-	async checkPassword(password, hash) {
-		const condition = await comparePassword(password, hash);
+  async checkPassword(password, hash) {
+    const condition = await comparePassword(password, hash);
 
-		if (!condition) {
-			return false;
-		}
+    if (!condition) {
+      return false;
+    }
 
-		return true;
-	}
+    return true;
+  }
 
-	async signPassword(password) {
-		let hashedPassword = await hashPassword(password);
+  async signPassword(password) {
+    let hashedPassword = await hashPassword(password);
 
-		return hashedPassword;
-	}
+    return hashedPassword;
+  }
 }
 
 export default new User("user", prisma);

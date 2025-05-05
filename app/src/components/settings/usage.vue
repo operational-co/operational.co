@@ -51,14 +51,16 @@ export default {
       let metrics = this.metrics;
 
       const sortedData = metrics.sort((a, b) => {
+        // Create moment objects for comparison
         const dateA = moment()
           .year(a.year)
-          .month(a.month - 1);
+          .month(a.month - 1); // Month is 0-indexed in Moment.js
         const dateB = moment()
           .year(b.year)
           .month(b.month - 1);
 
-        return dateB.isBefore(dateA) ? 1 : -1;
+        // Compare the two dates
+        return dateA.isBefore(dateB) ? -1 : 1;
       });
 
       return sortedData;

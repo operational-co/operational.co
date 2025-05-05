@@ -7,6 +7,7 @@
       <section class="c-events__header">
         <h3>Events</h3>
         <Toggle :listening="listening" @onToggle="onToggle"></Toggle>
+        <TestMode></TestMode>
       </section>
       <Search
         ref="search"
@@ -77,6 +78,7 @@ import Empty from "./empty.vue";
 import Toggle from "./toggle.vue";
 import ModalView from "./modal-view.vue";
 import ModalConfirm from "./modal-confirm.vue";
+import TestMode from "./test-mode.vue";
 
 export default {
   components: {
@@ -88,6 +90,7 @@ export default {
     Toggle,
     ModalView,
     ModalConfirm,
+    TestMode,
   },
 
   data: function () {
@@ -621,6 +624,10 @@ export default {
 
     h3 {
       margin-bottom: 0;
+    }
+
+    .c-events-test-mode {
+      margin-left: auto;
     }
 
     > a {
