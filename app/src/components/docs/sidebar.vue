@@ -41,12 +41,8 @@
 </template>
 
 <script>
-import Avatar from "vue-boring-avatars";
-
 export default {
-  components: {
-    Avatar,
-  },
+  components: {},
 
   computed: {
     user: function () {

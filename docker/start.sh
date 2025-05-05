@@ -51,8 +51,8 @@ print_env_vars
 print_mapped_ports
 
 # Start backend
-echo "🚀 Starting backend..."
-cd /app/backend
+echo "🚀 Starting backend from /monorepo/backend..."
+cd /monorepo/backend
 
 # Generate SECRET if needed
 if [ -z "$SECRET" ]; then

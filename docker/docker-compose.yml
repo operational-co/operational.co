@@ -1,0 +1,45 @@
+version: "3.8"
+
+services:
+  mysql:
+    image: mysql:8.2
+    container_name: operational-mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: operational_root_password
+      MYSQL_DATABASE: operational
+      MYSQL_USER: operational_user
+      MYSQL_PASSWORD: operational_password
+    ports:
+      - "3307:3306" # host:container
+    volumes:
+      - mysql-data:/var/lib/mysql
+
+  operational:
+    image: ghcr.io/operational-co/operational.co:0.1.6
+    container_name: operational-app
+    depends_on:
+      - mysql
+    restart: always
+    ports:
+      - "3000:80" # For frontend (nginx serving the Vue SPA)
+      - "4337:4337" # For backend API
+    environment:
+      DATABASE_URL: mysql://operational_user:operational_password@mysql:3306/operational
+      APP_URL: http://localhost:3000
+      VAPID_EMAIL: your@email.com
+      VAPID_PUBLIC_KEY: your_public_key
+      VAPID_PRIVATE_KEY: your_private_key
+      PORT: 4337
+      SECRET: your_secret
+      REMOVE_TEST_EVENTS_AT: ""
+      CORS: "*"
+      RESEND: ""
+      ADMIN_EMAIL: admin@email.com
+      SMTP_HOST: ""
+      SMTP_PORT: ""
+      SMTP_USERNAME: ""
+      SMTP_PASSWORD: ""
+
+volumes:
+  mysql-data:

@@ -35,10 +35,11 @@ RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && \
 # ========================
 # Set up backend
 # ========================
-WORKDIR /app/backend
-COPY ./backend/package*.json ./
+WORKDIR /monorepo
+COPY . .
+
+WORKDIR /monorepo/backend
 RUN npm install
-COPY ./backend ./
 
 # Provide dummy values at build-time
 ARG DATABASE_URL=dummy://user:pass@localhost:5432/dbname
@@ -84,12 +85,12 @@ COPY --from=frontend-build /monorepo/app/dist /var/www/html
 # Set up Nginx
 # ========================
 RUN rm -f /etc/nginx/sites-enabled/default
-COPY ./nginx.conf /etc/nginx/conf.d/default.conf
+COPY ./docker/nginx.conf /etc/nginx/conf.d/default.conf
 
 # ========================
 # Add start script
 # ========================
-COPY ./start.sh /start.sh
+COPY ./docker/start.sh /start.sh
 RUN chmod +x /start.sh
 
 EXPOSE 80 4337
