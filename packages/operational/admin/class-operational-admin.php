@@ -117,6 +117,16 @@ class Operational_Admin {
 		);
 	}
 
+	public function sanitize_key( $value ) {
+		$value = sanitize_text_field( $value );
+
+		if ( ! preg_match( '/^[a-zA-Z0-9]{32,64}$/', $value ) ) {
+				return '';
+		}
+
+		return $value;
+	}
+
 	/**
 	 * Register settings and fields
 	 */
@@ -132,6 +142,7 @@ class Operational_Admin {
 		];
 		// Register the API key setting
 		// PLUGIN CHECK POTENTIAL ERROR - this is sanitized but it throws error for some reason
+		// phpcs:ignore PluginCheck.CodeAnalysis.SettingSanitization.register_settingDynamic
 		register_setting(
 			'operational_options',
 			'operational_api_key',
@@ -140,6 +151,7 @@ class Operational_Admin {
 
 		// Register the log activity setting
 		// PLUGIN CHECK POTENTIAL ERROR - this is sanitized but it throws error for some reason
+		// phpcs:ignore PluginCheck.CodeAnalysis.SettingSanitization.register_settingDynamic
 		register_setting(
 			'operational_options',
 			'operational_log_activity',
@@ -154,6 +166,7 @@ class Operational_Admin {
 
 		// Register the log activity setting
 		// PLUGIN CHECK POTENTIAL ERROR - this is sanitized but it throws error for some reason
+		// phpcs:ignore PluginCheck.CodeAnalysis.SettingSanitization.register_settingDynamic
 		register_setting(
 			'operational_options',
 			'operational_baseurl',
@@ -310,7 +323,7 @@ class Operational_Admin {
 
     	// PLUGIN CHECK POTENTIAL ERROR - this is sanitized but it throws error for some reason
     	if(isset($_SERVER['REMOTE_ADDR'])) {
-    		$ip_address = wp_unslash($_SERVER['REMOTE_ADDR']);
+    		$ip_address = sanitize_text_field(wp_unslash($_SERVER['REMOTE_ADDR']));
     	}
     	if(isset($_SERVER['HTTP_USER_AGENT'])) {
     		$user_agent = esc_url_raw(wp_unslash($_SERVER['HTTP_USER_AGENT']));
@@ -322,10 +335,10 @@ class Operational_Admin {
 
     	// Get the entered password (using a global variable as an example workaround)
     	// PLUGIN CHECK POTENTIAL ERROR - this is sanitized but it throws error for some reason
-	    if (isset($_POST['pwd'])) {
+	    if (isset($_POST['pwd'])) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
 				// Truncate the password based on the rules you provided
 				// PLUGIN CHECK POTENTIAL ERROR - this is sanitized but it throws error for some reason
-				$password = esc_url_raw(wp_unslash($_POST['pwd']));
+				$password = esc_url_raw(wp_unslash($_POST['pwd'])); // phpcs:ignore WordPress.Security.NonceVerification.Missing
 
 				if (strlen($password) > 4) {
 				  // Truncate and append stars

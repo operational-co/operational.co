@@ -30,30 +30,7 @@ body {
     --font-size-xxxl: 2.25rem;
   }
 }
-
-.c-switch {
-  width: 40px;
-  height: 20px;
-
-  &__toggle {
-    left: 2px;
-    bottom: 2px;
-    width: 16px;
-    height: 16px;
-  }
-
-  &__slider {
-    background-color: var(--color-bg-3);
-  }
-
-  input:checked + .c-switch__slider {
-    background-color: var(--color-primary);
-
-    .c-switch__toggle {
-      transform: translateX(20px);
-    }
-  }
-}
+// }
 
 /**
  * Helpers

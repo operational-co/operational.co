@@ -3,8 +3,8 @@ Contributors: shash122tfu
 Donate link: https://operational.co
 Tags: Activity log, Event log, Admin log, Event Tracker, logger
 Requires at least: 5.9
-Tested up to: 6.7
-Stable tag: 1.1
+Tested up to: 6.8
+Stable tag: 1.1.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 

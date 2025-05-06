@@ -324,8 +324,8 @@ select.form-control {
 .c-switch {
   position: relative;
   display: inline-block;
-  width: 60px;
-  height: 30px;
+  width: 40px;
+  height: 20px;
   user-select: none;
 
   input {
@@ -347,7 +347,7 @@ select.form-control {
   }
 
   input:checked + .c-switch__slider .c-switch__toggle {
-    transform: translateX(30px);
+    transform: translateX(14px);
     color: var(--color-primary);
   }
 
@@ -358,7 +358,7 @@ select.form-control {
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: var(--color-bg-1);
+    background-color: var(--color-bg-3);
     -webkit-transition: 0.4s;
     transition: 0.4s;
 
@@ -371,10 +371,10 @@ select.form-control {
     align-items: center;
     justify-content: center;
     content: "";
-    width: 24px;
-    height: 24px;
-    left: 3px;
-    bottom: 3px;
+    left: 2px;
+    bottom: 2px;
+    width: 16px;
+    height: 16px;
     background-color: white;
     transition: 500ms;
     border-radius: 6px;
