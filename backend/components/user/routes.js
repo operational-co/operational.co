@@ -30,28 +30,6 @@ const upload = multer({
   limits: { fileSize: 10 * 1024 * 1024 }, // 10 MB limit
 });
 
-async function emailValidation(email) {
-  // let splits = email.split("@");
-
-  // let name = splits[0];
-
-  // let domain = splits[1];
-
-  // let testEmail = config.email.TEST_EMAIL;
-
-  // if (testEmail && domain === testEmail) {
-  // 	let tempName = testEmail.split(".")[0];
-  // 	tempName = tempName.split("-")[0];
-  // 	tempName = `${tempName}.com`;
-
-  // 	return `${name}@${tempName}`;
-  // }
-
-  // check for malicious users
-
-  return email;
-}
-
 // Create a new router instance
 const router = express.Router();
 
@@ -93,15 +71,6 @@ const signup = async (req, res) => {
       message: "No email found",
     };
   }
-
-  let newEmail = await emailValidation(email).catch((err) => {});
-
-  if (!newEmail) {
-    res.status(401);
-    return res.send({ message: "Your email seems to be invalid" });
-  }
-
-  req.body.email = newEmail;
 
   let form = {
     ...req.body,
@@ -353,7 +322,7 @@ const signupSchema = {
     companyUrl: {
       type: "string",
     },
-    email: { type: "string", format: "email" },
+    email: { type: "string", format: "email", minLength: 6, maxLength: 100 },
     password: { type: "string", minLength: 8, maxLength: 50 },
     meta: {
       type: "object",

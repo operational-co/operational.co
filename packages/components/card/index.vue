@@ -63,7 +63,7 @@ export default {
         return true;
       }
 
-      if (this.item.type !== "text" && this.item.content) {
+      if (this.item.content) {
         return true;
       }
 
