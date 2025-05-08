@@ -432,7 +432,7 @@ WHERE workspaceId = ${params.workspaceId}
     const hoursAgo = new Date(currentDate - hours * 60 * 60 * 1000);
 
     const result = await prisma.$executeRaw`
-		  DELETE FROM Event
+		  DELETE FROM Events
 		  WHERE createdAt < ${hoursAgo}
 		    AND test = false
 		`;
@@ -447,7 +447,7 @@ WHERE workspaceId = ${params.workspaceId}
     const hoursAgo = new Date(currentDate - hours * 60 * 60 * 1000);
 
     const result = await prisma.$executeRaw`
-		  DELETE FROM Event
+		  DELETE FROM Events
 		  WHERE createdAt < ${hoursAgo}
 		    AND test = true
 		`;

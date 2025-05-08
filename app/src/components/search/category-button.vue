@@ -21,7 +21,13 @@
   >
     <div class="c-category-button__dropdown">
       <div class="c-category-button__dropdown__list" v-if="categories.length > 0">
-        <a href="#" v-for="(cat, i) in categories" :key="i" @click.prevent="filterCategory(cat)">
+        <a
+          :class="[{ active: category && cat.text === category.text }]"
+          href="#"
+          v-for="(cat, i) in categories"
+          :key="i"
+          @click.prevent="filterCategory(cat)"
+        >
           {{ cat.text }}
         </a>
       </div>
@@ -233,6 +239,10 @@ export default {
       &:hover,
       &:active {
         background-color: var(--color-bg-5);
+      }
+
+      &.active {
+        background-color: var(--color-primary);
       }
     }
   }

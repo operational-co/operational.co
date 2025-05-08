@@ -27,7 +27,7 @@
         </div>
       </div>
       <div class="c-form__footer">
-        <button :disabled="isSubmitting" class="btn btn-primary btn-wide btn-box">
+        <button :disabled="isSubmitting" class="btn btn-primary btn-box">
           <span v-if="isSubmitting" class="c-spinner"></span>
           {{ buttonText }}
         </button>

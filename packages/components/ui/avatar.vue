@@ -1,13 +1,12 @@
 <template>
   <div class="c-avatar">
     <img v-if="user && user.avatar" class="c-avatar" :src="`${assetPath}/${user.avatar}`" />
-    <span v-if="!user && svg" v-html="svg"> </span>
+    <span v-if="svg" v-html="svg"> </span>
   </div>
 </template>
 
 <script>
 import { createAvatar } from "@dicebear/core";
-//import { thumbs } from "@dicebear/collection";
 import * as thumbs from "@dicebear/thumbs";
 
 export default {
@@ -33,8 +32,12 @@ export default {
 
   methods: {
     createAvatar: function () {
+      // only create avatar is needed
+      if (this.user && this.user.avatar) {
+        return;
+      }
       let temp = createAvatar(thumbs, {
-        seed: this.name || ""
+        seed: this.user.email || ""
       });
 
       let svg = temp.toString();

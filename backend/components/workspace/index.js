@@ -18,12 +18,80 @@ import Key from "#services/key/index.js";
 import Email from "#services/email/index.js";
 import Billing from "#services/billing/index.js";
 import Session from "#services/session/index.js";
+import { customAlphabet } from "nanoid";
+
+const nanoid = customAlphabet("1234567890abcdefghijklmnopqrstuvwxyz", 24);
 
 import ops from "#lib/ops.js";
 
 import moment from "moment";
 
 const component = {
+  async invite(form, adminUserId, workspaceId) {
+    try {
+      const adminUser = await prisma.user.findUnique({
+        where: {
+          id: adminUserId,
+        },
+      });
+
+      const code = nanoid();
+      const link = `${config.appUrl}?invite=${code}`;
+      const user = await prisma.user.create({
+        data: {
+          firstName: form.firstName,
+          email: form.email,
+          status: "INVITED",
+          settings: {
+            inviteCode: code,
+          },
+        },
+      });
+      const workspaceUser = await prisma.workspaceUser.create({
+        data: {
+          workspace: {
+            connect: {
+              id: workspaceId,
+            },
+          },
+          user: {
+            connect: {
+              id: user.id,
+            },
+          },
+        },
+      });
+
+      console.log(user);
+
+      await Email.inviteUser(user, adminUser, link);
+
+      // then get all users of the workspace
+      const users = await prisma.$queryRawUnsafe(
+        `
+        SELECT 
+            u.id,
+            u.firstName,
+            u.lastName,
+            u.email,
+            u.avatar
+        FROM 
+            WorkspaceUser wu
+        INNER JOIN 
+            User u ON wu.userId = u.id
+        WHERE 
+            wu.workspaceId = ?
+    `,
+        workspaceId,
+      );
+
+      return users;
+    } catch (err) {
+      console.log(err);
+      throw err;
+    }
+  },
+
   async activate(form) {
     let code = form.code;
     let users = await UserModel.client.findMany({

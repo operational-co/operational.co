@@ -259,7 +259,21 @@ class User extends Model {
 	        WHERE M.workspaceId = Workspace.id
 	        ORDER BY M.createdAt DESC
 	        LIMIT 1
-    	) AS workspace_metric
+    	) AS workspace_metric,
+      (
+      SELECT JSON_ARRAYAGG(
+      JSON_OBJECT(
+      'id', u2.id,
+      'firstName', u2.firstName,
+      'lastName', u2.lastName,
+      'email', u2.email,
+      'avatar', u2.avatar
+      )
+      )
+      FROM WorkspaceUser wu2
+      INNER JOIN User u2 ON u2.id = wu2.userId
+      WHERE wu2.workspaceId = Workspace.id
+      ) AS workspace_users
 		FROM
 			User u
 		JOIN
@@ -337,6 +351,10 @@ class User extends Model {
       workspace.metrics = [pie.workspace_metric];
     } else {
       workspace.metrics = [];
+    }
+
+    if (pie.workspace_users) {
+      workspace.users = pie.workspace_users;
     }
 
     user.notify = !!user.notify;

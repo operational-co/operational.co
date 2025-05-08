@@ -435,6 +435,30 @@ Shash
       text,
     });
   }
+
+  async inviteUser(user, adminUser, link) {
+    let text = `
+Hi ${user.firstName},
+
+You have been invited into ${adminUser.firstName}'s project at Operational.co
+
+To accept this invite, click on this link and create your account:
+${link}
+
+This invitation will automatically expire in 7 days.
+
+Cheers
+Shash
+    `;
+
+    let subject = `Operational - You are invited to join a project`;
+
+    return await this.send({
+      subject,
+      to: user.email,
+      text,
+    });
+  }
 }
 
 export default new Email();
