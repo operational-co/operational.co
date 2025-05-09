@@ -1,6 +1,6 @@
 <p align="center">
   <a href="https://operational.co">
-    <img src="media/operational-banner.jpg" width="340px" alt="Operational Event tracker" />
+    <img src="media/operational-banner.jpg" width="480px" alt="Operational Event tracker" />
   </a>
 </p>
 
@@ -9,11 +9,13 @@
     <a href="https://operational.co/api" target="_blank">Docs</a> |
     <a href="https://operational.co/selfhosted/introduction" target="_blank">Self-hosting</a> |
     <a href="https://operational.co/pitch" target="_blank">Pitch</a> |
-    <a href="https://operational.co/vision" target="_blank">Vision</a>
+    <a href="https://operational.co/other/vision" target="_blank">Vision</a>
     <br /><br />
 </p>
 
-Operational is a open-source Event tracking tool. Monitor signups, webhooks, cronjobs and more. Operational is a Open source alternative to Logsnag, another Event tracking tool in the same category.
+[Operational.co](https://operational.co) is a open-source Event tracking tool. Monitor signups, webhooks, cronjobs and more.
+
+Operational is a Open source alternative to Logsnag, another Event tracking tool in the same category.
 
 ![Operational Event tracker](media/operational-screenshot.png)
 
@@ -28,13 +30,14 @@ Operational is a open-source Event tracking tool. Monitor signups, webhooks, cro
 
 ## How to use Operational?
 
-Right now there are two ways to use Operational
+Right now there are two ways to use Operational:
 
 - Join the waitlist on [Discord](https://discord.gg/QmfGeMGM)
 - Self-host [Operational](https://operational.co/selfhosted)
 
 ### Highlights
 
+- Heaps of self-hosting options, from Render.com to docker images, with video guides. We want you to self-host!
 - Very few 3rd party dependencies. No need to install clickhouse in the open source version.
 - Feature packed. Send json, formatted json, bundle up logs in contexts, add action buttons, and more.
 - Easy to grok and tear apart - no useless dependencies, nor unnecessarily complex code.
@@ -51,5 +54,4 @@ And the /packages folder has public npm packages which are shared across all rep
 
 ### Community
 
-We have a active Discord community.
-<a href="https://discord.gg/QmfGeMGM" target="_blank">Discord</a>
+We have a active [Discord](https://discord.gg/QmfGeMGM) community. We highly recommend jumping on our Discord server for updates, feedback and help.
