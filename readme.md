@@ -1,6 +1,6 @@
 <p align="center">
   <a href="https://operational.co">
-    <img src="media/operational-banner.jpg" width="600px" alt="Operational Event tracker" />
+    <img src="media/operational-banner.jpg" width="800px" alt="Operational Event tracker" />
   </a>
 </p>
 
@@ -17,7 +17,7 @@
 
 Operational is a Open source alternative to Logsnag, another Event tracking tool in the same category.
 
-![Operational Event tracker](media/operational-screenshot.png)
+![Operational Event tracker](media/operational-screenshot.png?v=1)
 
 ### Why use Operational?
 
