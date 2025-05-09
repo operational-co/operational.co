@@ -1,21 +1,21 @@
-![hero](media/operational-banner.jpg)
+<p align="center">
+  <a href="https://operational.co">
+    <img src="media/operational-banner.jpg" width="340px" alt="Operational Event tracker" />
+  </a>
+</p>
 
 <p align="center">
-    <h1 align="center"><b>Operational.co</b></h1>
-<p align="center">
-    Open-source Event tracker for tech products.
-    <br />
-    <br />
-    <a href="https://operational.co" target="_blank">Website</a>
-    ·
-    <a href="https://operational.co/api" target="_blank">Docs</a>
-    ·
-    <a href="https://discord.gg/QmfGeMGM" target="_blank">Discord</a>
-  </p>
-  <br />
+    <a href="https://operational.co" target="_blank">Website</a> |
+    <a href="https://operational.co/api" target="_blank">Docs</a> |
+    <a href="https://operational.co/selfhosted/introduction" target="_blank">Self-hosting</a> |
+    <a href="https://operational.co/pitch" target="_blank">Pitch</a> |
+    <a href="https://operational.co/vision" target="_blank">Vision</a>
+    <br /><br />
 </p>
 
 Operational is a open-source Event tracking tool. Monitor signups, webhooks, cronjobs and more. Operational is a Open source alternative to Logsnag, another Event tracking tool in the same category.
+
+![Operational Event tracker](media/operational-screenshot.png)
 
 ### Why use Operational?
 
@@ -48,3 +48,8 @@ This is a monorepo of 3 repos:
 - /website astrojs marketing website
 
 And the /packages folder has public npm packages which are shared across all repos.
+
+### Community
+
+We have a active Discord community.
+<a href="https://discord.gg/QmfGeMGM" target="_blank">Discord</a>
