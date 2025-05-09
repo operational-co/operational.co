@@ -39,40 +39,12 @@ import express from "express";
 import path from "path";
 
 import ops from "#lib/ops.js";
+import modifyConsoleLog from "#lib/modify-console-log.js";
+
+modifyConsoleLog();
 
 const __dirname = path.resolve("");
 const app = express();
-
-/**
- * Modifying console prototype so console.logs show line number.
- */
-["log", "warn", "error"].forEach((methodName) => {
-  const originalMethod = console[methodName];
-  console[methodName] = (...args) => {
-    let initiator = "unknown place";
-    try {
-      throw new Error();
-    } catch (e) {
-      if (typeof e.stack === "string") {
-        let isFirst = true;
-        for (const line of e.stack.split("\n")) {
-          const matches = line.match(/^\s+at\s+(.*)/);
-          if (matches) {
-            if (!isFirst) {
-              // first line - current function
-              // second line - caller (what we are looking for)
-              initiator = matches[1];
-              initiator = initiator.replace("/Users/shashwatamin/Documents/projects/", "");
-              break;
-            }
-            isFirst = false;
-          }
-        }
-      }
-    }
-    originalMethod.apply(console, [...args, `\n`, `-> ${initiator}`]);
-  };
-});
 
 async function runExperiments() {
   await ops.log(`avatar:🤖 Server started`);

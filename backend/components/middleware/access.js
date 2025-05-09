@@ -1,10 +1,8 @@
-import verifyJwt from "#lib/verify-jwt.js";
-import Session from "#services/session/index.js";
 import accessCheck from "#lib/access-check.js";
 import config from "#lib/config.js";
 
 async function auth(req, res, next) {
-  // No point, if is selfhosted
+  // No point if selfhosted
   if (config.SELFHOSTED) {
     next();
     return;
@@ -14,9 +12,17 @@ async function auth(req, res, next) {
 
   console.log(data);
 
-  data = true;
+  let isAllow = false;
 
-  if (data) {
+  if (data && data.allow) {
+    isAllow = true;
+  }
+
+  if (data && data.email) {
+    req.body.email = data.email;
+  }
+
+  if (isAllow) {
     next();
     return;
   } else {

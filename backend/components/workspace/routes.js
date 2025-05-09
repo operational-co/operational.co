@@ -3,6 +3,7 @@ import multer from "multer";
 import component from "./index.js";
 import middlewareSchema from "#components/middleware/schema.js";
 import middlewareAuth from "#components/middleware/auth.js";
+import accessCheck from "#lib/access-check.js";
 
 // Create a new router instance
 const router = express.Router();
@@ -109,6 +110,14 @@ const invite = async (req, res) => {
     firstName: req.body.firstName || req.body.name,
     email: req.body.email,
   };
+
+  const result = await accessCheck(req.body.email);
+
+  if (!result.allow) {
+    return res.status(400).send({
+      message: `Email is invalid or not allowed`,
+    });
+  }
 
   console.log(res.locals);
 
