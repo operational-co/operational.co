@@ -1,6 +1,6 @@
 <p align="center">
   <a href="https://operational.co">
-    <img src="media/operational-banner.jpg" width="480px" alt="Operational Event tracker" />
+    <img src="media/operational-banner.jpg" width="600px" alt="Operational Event tracker" />
   </a>
 </p>
 
@@ -30,7 +30,7 @@ Operational is a Open source alternative to Logsnag, another Event tracking tool
 
 ## How to use Operational?
 
-Right now there are two ways to use Operational:
+There are two ways to use Operational:
 
 - Join the waitlist on [Discord](https://discord.gg/QmfGeMGM)
 - Self-host [Operational](https://operational.co/selfhosted)
@@ -42,16 +42,26 @@ Right now there are two ways to use Operational:
 - Feature packed. Send json, formatted json, bundle up logs in contexts, add action buttons, and more.
 - Easy to grok and tear apart - no useless dependencies, nor unnecessarily complex code.
 
-## Structure
-
-This is a monorepo of 3 repos:
-
-- /app the spa for operational.co
-- /backend the expressjs api powering the backend
-- /website astrojs marketing website
-
-And the /packages folder has public npm packages which are shared across all repos.
-
-### Community
+## Community
 
 We have a active [Discord](https://discord.gg/QmfGeMGM) community. We highly recommend jumping on our Discord server for updates, feedback and help.
+
+## Technology
+
+Operational has a dead-simple tech stack:
+
+- Nodejs >=18
+- Mysql 8.x
+- Prismajs
+- Clickhouse(optional)
+- Expressjs 5.x
+- Vue 3
+- Vite
+
+Operational itself is a monorepo of 3 repos:
+
+- /app the SPA for operational.co
+- /backend the expressjs app powering the backend
+
+- /website astrojs marketing website
+- /packages folder has public npm packages which are shared across all repos.
