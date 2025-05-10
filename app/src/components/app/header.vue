@@ -313,7 +313,7 @@ export default {
 
     .popup-menu-button {
       position: relative;
-      max-width: 160px;
+      max-width: 200px;
       display: flex;
       justify-content: center;
       align-items: center;

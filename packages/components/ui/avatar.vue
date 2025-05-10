@@ -36,6 +36,9 @@ export default {
       if (this.user && this.user.avatar) {
         return;
       }
+      if (!this.user) {
+        return;
+      }
       let temp = createAvatar(thumbs, {
         seed: this.user.email || ""
       });

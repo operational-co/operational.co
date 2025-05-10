@@ -18,6 +18,7 @@
     @onClose="onPopupClose"
     :xMargin="0"
     :yMargin="-10"
+    placement="bottom-end"
   >
     <div class="c-category-button__dropdown">
       <div class="c-category-button__dropdown__list" v-if="categories.length > 0">

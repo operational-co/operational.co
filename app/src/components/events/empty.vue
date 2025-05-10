@@ -18,40 +18,31 @@
             Sending an event to Operational is easy - just pick your preferred method below and run
             the snippet:
           </p>
-        </template>
-        <template v-else>
-          <p>Hello {{ user.firstName }}. Test mode is on - you will only see test events here.</p>
-          <p>
-            You can switch off test mode by going into
-            <router-link to="/settings">settings</router-link> and turning the test mode toggle off.
-          </p>
-        </template>
-
-        <Accordion>
-          <template #title
-            ><svg
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M6.88926 4.21041C5.53867 3.53708 4 4.5445 4 6.01567V17.9785C4 19.4496 5.53867 20.4571 6.88926 19.7837L18.887 13.8023C20.371 13.0625 20.371 10.9317 18.887 10.1918L6.88926 4.21041Z"
-                fill="currentColor"
-              />
-            </svg>
-            <p>Nodejs SDK</p>
-          </template>
-          <template #body>
-            <br />
-            <p>Install the Operational SDK</p>
-            <Code>
-              <pre>npm install --save @operational.co/sdk</pre>
-            </Code>
-            <p>Add this code inside your nodejs project.</p>
-            <Code>
-              <pre>
+          <Accordion>
+            <template #title
+              ><svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M6.88926 4.21041C5.53867 3.53708 4 4.5445 4 6.01567V17.9785C4 19.4496 5.53867 20.4571 6.88926 19.7837L18.887 13.8023C20.371 13.0625 20.371 10.9317 18.887 10.1918L6.88926 4.21041Z"
+                  fill="currentColor"
+                />
+              </svg>
+              <p>Nodejs SDK</p>
+            </template>
+            <template #body>
+              <br />
+              <p>Install the Operational SDK</p>
+              <Code>
+                <pre>npm install --save @operational.co/sdk</pre>
+              </Code>
+              <p>Add this code inside your nodejs project.</p>
+              <Code>
+                <pre>
 import Ops from "@operational.co/sdk";
 // Or if you're using require
 // const Ops = require('@operational.co/sdk');
@@ -61,29 +52,29 @@ const ops = new Ops("{{ apikey }}");
 ops.events.ingest({
   name : 'User signed up',
 });</pre
+                >
+              </Code>
+            </template>
+          </Accordion>
+          <Accordion>
+            <template #title
+              ><svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
               >
-            </Code>
-          </template>
-        </Accordion>
-        <Accordion>
-          <template #title
-            ><svg
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M6.88926 4.21041C5.53867 3.53708 4 4.5445 4 6.01567V17.9785C4 19.4496 5.53867 20.4571 6.88926 19.7837L18.887 13.8023C20.371 13.0625 20.371 10.9317 18.887 10.1918L6.88926 4.21041Z"
-                fill="currentColor"
-              />
-            </svg>
-            <p>Axios(javascript)</p>
-          </template>
-          <template #body>
-            <Code>
-              <pre>
+                <path
+                  d="M6.88926 4.21041C5.53867 3.53708 4 4.5445 4 6.01567V17.9785C4 19.4496 5.53867 20.4571 6.88926 19.7837L18.887 13.8023C20.371 13.0625 20.371 10.9317 18.887 10.1918L6.88926 4.21041Z"
+                  fill="currentColor"
+                />
+              </svg>
+              <p>Axios(javascript)</p>
+            </template>
+            <template #body>
+              <Code>
+                <pre>
 axios.post('https://api.operational.co/api/v1/ingest',{
 name : 'User signed up',
 }, {
@@ -91,29 +82,29 @@ headers : {
 'Authorization' : 'Bearer {{ apikey }}'
 }
 });</pre
+                >
+              </Code>
+            </template>
+          </Accordion>
+          <Accordion>
+            <template #title
+              ><svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
               >
-            </Code>
-          </template>
-        </Accordion>
-        <Accordion>
-          <template #title
-            ><svg
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M6.88926 4.21041C5.53867 3.53708 4 4.5445 4 6.01567V17.9785C4 19.4496 5.53867 20.4571 6.88926 19.7837L18.887 13.8023C20.371 13.0625 20.371 10.9317 18.887 10.1918L6.88926 4.21041Z"
-                fill="currentColor"
-              />
-            </svg>
-            <p>Fetch(javascript)</p>
-          </template>
-          <template #body>
-            <Code>
-              <pre>
+                <path
+                  d="M6.88926 4.21041C5.53867 3.53708 4 4.5445 4 6.01567V17.9785C4 19.4496 5.53867 20.4571 6.88926 19.7837L18.887 13.8023C20.371 13.0625 20.371 10.9317 18.887 10.1918L6.88926 4.21041Z"
+                  fill="currentColor"
+                />
+              </svg>
+              <p>Fetch(javascript)</p>
+            </template>
+            <template #body>
+              <Code>
+                <pre>
 const url = `https://api.operational.co/api/v1/log`;
 
 const response = await fetch(url, {
@@ -130,37 +121,41 @@ const response = await fetch(url, {
 const data = await response.json();
 console.log(data);
 </pre
+                >
+              </Code>
+            </template>
+          </Accordion>
+          <Accordion>
+            <template #title
+              ><svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
               >
-            </Code>
-          </template>
-        </Accordion>
-        <Accordion>
-          <template #title
-            ><svg
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M6.88926 4.21041C5.53867 3.53708 4 4.5445 4 6.01567V17.9785C4 19.4496 5.53867 20.4571 6.88926 19.7837L18.887 13.8023C20.371 13.0625 20.371 10.9317 18.887 10.1918L6.88926 4.21041Z"
-                fill="currentColor"
-              />
-            </svg>
-            <p>cURL</p>
-          </template>
-          <template #body>
-            <Code>
-              <pre>
+                <path
+                  d="M6.88926 4.21041C5.53867 3.53708 4 4.5445 4 6.01567V17.9785C4 19.4496 5.53867 20.4571 6.88926 19.7837L18.887 13.8023C20.371 13.0625 20.371 10.9317 18.887 10.1918L6.88926 4.21041Z"
+                  fill="currentColor"
+                />
+              </svg>
+              <p>cURL</p>
+            </template>
+            <template #body>
+              <Code>
+                <pre>
 	curl -X POST "https://api.operational.co/api/v1/log" -H "Authorization: Bearer {{
-                  apikey
-                }}" -H "Content-Type: text/plain" -d "test msg"
+                    apikey
+                  }}" -H "Content-Type: text/plain" -d "test msg"
 </pre
-              >
-            </Code>
-          </template>
-        </Accordion>
+                >
+              </Code>
+            </template>
+          </Accordion>
+        </template>
+        <template v-else>
+          <p>Hello {{ user.firstName }}. Test mode is on - you will only see test events here.</p>
+        </template>
 
         <p>
           If you run into any snags, don't hesitate to reach out to me via the in-app chat widget.
@@ -213,6 +208,8 @@ export default {
       if (!workspace) {
         return "";
       }
+
+      console.log(workspace);
 
       let apikeys = workspace.keys;
       if (!apikeys) {

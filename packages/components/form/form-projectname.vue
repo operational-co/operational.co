@@ -14,7 +14,6 @@ export default {
 
   data: function () {
     return {
-      initialValues: {},
       schema: {
         projectName: {
           type: "InputText",
@@ -30,7 +29,16 @@ export default {
     };
   },
 
+  props: {
+    projectName: {}
+  },
+
   computed: {
+    initialValues: function () {
+      return {
+        projectName: this.projectName || ""
+      };
+    },
     button: function () {
       return {
         text: "Create Project"

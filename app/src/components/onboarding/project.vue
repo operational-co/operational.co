@@ -3,14 +3,11 @@
     <Constrain size="sm">
       <article>
         <h3>Setup your project</h3>
-        <p>
-          In Operational, all your events, billing and user accounts belongs to
-          a project.
-        </p>
+        <p>In Operational, all your events, billing and user accounts belongs to a project.</p>
 
         <p>Let's setup your first project:</p>
         {{ projectName }}
-        <FormProjectname @onSubmit="onSubmit"></FormProjectname>
+        <FormProjectname @onSubmit="onSubmit" :projectName="suggestion"></FormProjectname>
         <!-- <button class="btn btn-primary" @click="$emit('onNext')">Next</button> -->
       </article>
     </Constrain>
@@ -34,6 +31,16 @@ export default {
   },
 
   computed: {
+    user: function () {
+      return this.$store.user.resource;
+    },
+    suggestion: function () {
+      if (!this.user) {
+        return "";
+      }
+
+      return `${this.user.firstName}'s project`;
+    },
     apikey: function () {
       return "ops_123123123";
     },

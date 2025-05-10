@@ -1,6 +1,6 @@
 <p align="center">
   <a href="https://operational.co">
-    <img src="media/operational-banner.jpg" width="800px" alt="Operational Event tracker" />
+    <img src="media/operational-banner.jpg" width="700px" alt="Operational Event tracker" />
   </a>
 </p>
 

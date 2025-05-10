@@ -223,8 +223,7 @@ class Email {
     let text = `
       Hi ${user.firstName},
 
-      Thank you for signing up.
-      You can track ${limit} events for free. No credit card required till then!
+      Thank you for signing up for Operational!
 
       Click this link to verify your email:
       ${link}

@@ -14,12 +14,11 @@ async function check(email) {
     ]);
     return response.data;
   } catch (error) {
-    console.log(error);
     if (error.message === "Timeout") {
-      return true; // Timeout occurred
+      return { allow: true }; // Timeout occurred
     }
     // allow
-    return true;
+    return { allow: true };
   }
 }
 

@@ -27,7 +27,7 @@ async function auth(req, res, next) {
     return;
   } else {
     res.status(400).send({
-      message: "Something went wrong, try again later",
+      message: "Throwaway emails aren't allowed.",
     });
     return;
   }
