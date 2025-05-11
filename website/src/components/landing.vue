@@ -63,8 +63,7 @@
           <Code :copy="false">docker pull ghcr.io/operational-co/operational.co:latest </Code>
           <p>
             Or install on <a href="/selfhosted/install-on-render">Render.com</a>,
-            <a href="/selfhosted/docker">with Coolify</a>,
-            <a href="/selfhosted/docker">docker compose</a> or
+            <a href="/selfhosted/docker">with Coolify</a> or
             <a href="/selfhosted/install-locally">install locally.</a>
           </p>
         </div>
@@ -1069,6 +1068,7 @@ await ops.events.ingest({
         // }
       }
       > p {
+        font-weight: 500;
         font-size: var(--font-size-xs);
         text-align: center;
       }
