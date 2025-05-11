@@ -1,10 +1,12 @@
 <template>
   <div class="c-widget">
-    <Header :subtitle="subtitle"></Header>
+    <div class="c-widget__wrap">
+      <Header :subtitle="subtitle"></Header>
 
-    <div class="c-widget__inner">
-      <Chart :data="data"></Chart>
-      <div id="chart"></div>
+      <div class="c-widget__inner">
+        <Chart :data="data"></Chart>
+        <div id="chart"></div>
+      </div>
     </div>
   </div>
 </template>
@@ -77,17 +79,21 @@ export default {
 <style lang="scss">
 .c-widget {
   position: relative;
+  padding: var(--margin-lg);
   //height: 100%;
-  //background-color: var(--color-bg-2);
-  border-radius: var(--border-radius-lg);
-  box-shadow:
-    0 20px 25px -5px rgb(0 0 0 / 0.3),
-    0 8px 10px -6px rgb(0 0 0 / 0.1);
 
-  border-bottom: var(--color-bg-3) solid 1px;
+  &__wrap {
+    background-color: var(--color-bg-2);
+    border-radius: var(--border-radius);
+    // box-shadow:
+    //   0 20px 25px -5px rgb(0 0 0 / 0.3),
+    //   0 8px 10px -6px rgb(0 0 0 / 0.1);
+
+    border-bottom: var(--color-bg-3) solid 1px;
+  }
 
   &__inner {
-    padding: var(--spacer);
+    padding: var(--margin-lg);
     padding-top: 0;
   }
 

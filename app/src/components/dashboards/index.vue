@@ -1,14 +1,11 @@
 <template>
   <div class="c-dashboards">
     <Constrain>
-      <h3>Dashboards</h3>
-      <!-- <Chart></Chart> -->
+      <div class="c-dashboards__header">
+        <h3>Dashboard</h3>
+        <EditMode></EditMode>
+      </div>
     </Constrain>
-    <!-- <div class="c-reports__grid">
-      <template v-if="items">
-        <Widget v-for="(widget, i) in items" :widget="widget" :key="i"></Widget>
-      </template>
-    </div> -->
     <div class="c-dashboard">
       <div class="grid-stack">
         <div
@@ -42,22 +39,22 @@ import { GridStack, GridStackEngine } from "gridstack";
 
 import "gridstack/dist/gridstack.min.css";
 
-import Chart from "@operational.co/components/chart/index.vue";
+import EditMode from "./edit-mode.vue";
 
 export default {
   components: {
     Constrain,
     Widget,
-    Chart,
+    EditMode,
   },
 
   data: function () {
     return {
       grid: null,
       items: [
-        { id: 1, x: 0, y: 0, w: 2 },
-        { id: 2, x: 0, y: 1, w: 2 },
-        { id: 3, x: 0, y: 2, w: 2 },
+        { id: 1, x: 0, y: 0, w: 1 },
+        { id: 2, x: 1, y: 0, w: 1 },
+        { id: 3, x: 0, y: 2, w: 1 },
       ],
       search: {},
     };
@@ -82,24 +79,35 @@ export default {
 
       let height = oneWidget.offsetHeight;
 
+      console.log(height);
+
+      if (!this.grid) {
+        return height;
+      }
+
       this.grid.cellHeight(height);
     },
   },
 
   mounted: function () {
+    const height = this.computeHeight();
     this.grid = GridStack.init({
       float: false,
       minRow: 1,
       maxRow: 3,
       column: 2,
       disableResize: true,
-      cellHeight: "auto",
+      cellHeight: height,
       cellHeightThrottle: 1000,
     });
 
-    this.$nextTick(() => {
-      this.computeHeight();
-    });
+    // setInterval(() => {
+    //   this.computeHeight();
+    // }, 1000);
+
+    // this.$nextTick(() => {
+    //   this.computeHeight();
+    // });
 
     // const items = [
     //   { id: 1, x: 1, y: 1, h: 1 },
@@ -114,11 +122,32 @@ export default {
 <style lang="scss">
 .c-dashboards {
   .c-dashboard {
-    width: 720px;
-    padding: var(--margin);
+    max-width: 1200px;
+    padding: 0 var(--spacer);
     margin: var(--spacer-sm) auto;
 
     border-radius: 20px;
+  }
+
+  &__header {
+    position: relative;
+    display: flex;
+    align-items: center;
+
+    h3 {
+      margin-bottom: 0;
+    }
+
+    .c-dashboards-edit-mode {
+      margin-left: auto;
+    }
+
+    > a {
+      margin-left: auto;
+      font-weight: 500;
+      font-family: var(--font-family-monospace);
+      font-size: var(--font-size-sm);
+    }
   }
 
   &__grid {
@@ -155,16 +184,12 @@ export default {
     width: 100%;
   }
 
-  .c-widget {
-    background-color: var(--color-bg-2);
-  }
-
   .grid-stack-item-content {
     //padding: var(--margin);
     //background-color: #18bc9c;
     //padding: var(--spacer-lg);
     border-radius: var(--border-radius);
-    cursor: grab;
+    //cursor: grab;
   }
 
   .grid-stack-item {

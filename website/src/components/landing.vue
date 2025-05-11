@@ -1,6 +1,7 @@
 <template>
   <div class="c-landing-intro">
     <div class="d-intro">
+      <Background></Background>
       <Constrain size="sm">
         <div class="text-center">
           <h1>Open-source Event Tracker for your product</h1>
@@ -394,6 +395,8 @@ import "vue3-carousel/carousel.css";
 
 import { Carousel, Slide, Pagination, Navigation } from "vue3-carousel";
 
+import Background from "./ui/background.vue";
+
 export default {
   components: {
     Card,
@@ -409,6 +412,8 @@ export default {
     Slide,
     Pagination,
     Navigation,
+
+    Background,
   },
 
   data: function () {
@@ -918,6 +923,10 @@ await ops.events.ingest({
     padding: 5rem 0;
     padding-top: 7rem;
 
+    // .c-constrain {
+    //   opacity: 0;
+    // }
+
     .subtitle {
       position: relative;
       display: inline-block;
@@ -984,25 +993,25 @@ await ops.events.ingest({
       }
     }
 
-    &:after {
-      content: "";
-      position: absolute;
-      top: calc(50% - 100px);
-      left: 50%;
-      width: 0;
-      height: 200px;
-      border-radius: 99px;
-      background-color: hsl(210, 100%, 50%);
+    // &:after {
+    //   content: "";
+    //   position: absolute;
+    //   top: calc(50% - 100px);
+    //   left: 50%;
+    //   width: 0;
+    //   height: 200px;
+    //   border-radius: 99px;
+    //   background-color: hsl(210, 100%, 50%);
 
-      opacity: 0.225;
+    //   opacity: 0.1;
 
-      pointer-events: none;
+    //   pointer-events: none;
 
-      box-shadow:
-        0px 0px 512px 128px hsl(var(--hue-p), 100%, 20%),
-        0px 0px 128px 32px hsl(var(--hue-p), 100%, 20%),
-        0px 0px 32px 0px hsl(var(--hue-p), 100%, 20%);
-    }
+    //   box-shadow:
+    //     0px 0px 512px 128px hsl(var(--hue-p), 100%, 50%),
+    //     0px 0px 128px 32px hsl(var(--hue-p), 100%, 50%),
+    //     0px 0px 32px 0px hsl(var(--hue-p), 100%, 50%);
+    // }
 
     .btn-container {
       position: relative;

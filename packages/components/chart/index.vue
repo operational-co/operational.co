@@ -55,10 +55,10 @@ export default {
 
 <style lang="scss">
 .c-chart {
-  height: 300px;
+  height: 200px;
   width: 100%;
-  margin-bottom: var(--spacer);
-  padding-bottom: calc(var(--spacer) * 1);
+  //margin-bottom: var(--spacer);
+  //padding-bottom: calc(var(--spacer) * 1);
   --hue: var(--hue-p);
 
   --chart-color: hsl(var(--hue), 70%, 53%);

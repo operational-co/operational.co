@@ -5,6 +5,7 @@
     <span class="c-widget-header__subtitle" v-if="subtitle">
       {{ subtitle }}
     </span>
+    <div class="c-widget-header__menu"></div>
   </div>
 </template>
 
@@ -20,6 +21,7 @@ export default {
 
 <style lang="scss">
 .c-widget-header {
+  position: relative;
   padding: var(--spacer-sm);
   //background-color: red;
 
