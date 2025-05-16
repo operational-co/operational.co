@@ -76,6 +76,7 @@ const component = {
   },
 
   async sendTestPushNotification(userId, sid) {
+    console.log(`Sending test push notification to SID: ${sid} and userId: ${userId}`);
     const push = await prisma.push.findFirst({
       where: {
         sid: sid,
@@ -87,6 +88,9 @@ const component = {
         pushSubscription: true,
       },
     });
+
+    console.log(`Push subscription found:`);
+    console.log(push.pushSubscription);
 
     if (!push) {
       throw `Push subscription doesn't exist for sid: ${sid}`;
