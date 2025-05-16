@@ -26,7 +26,7 @@ const subscribe = async (req, res) => {
 };
 
 const sendTestPushNotification = async (req, res) => {
-  const sid = res.locals.sidl;
+  const sid = res.locals.sid;
   try {
     const pushSubscriptions = await component.sendTestPushNotification(res.locals.user.id, sid);
     return res.status(200).send(pushSubscriptions);
