@@ -186,15 +186,29 @@
         <p v-if="serverKey">Vapid public key(VITE_PUSH_SERVER_KEY):</p>
         <code>{{ serverKey }}</code>
       </template>
+      <small> Device push endpoint </small>
       <Code v-if="subscription" :copy="false">
-        <pre>{{ JSON.stringify(subscription, null, 4) }}</pre>
+        {{ subscription.endpoint }}
       </Code>
+
+      <template v-if="pushData">
+        <small>Current Session's push endpoint</small>
+        <Code v-if="pushData.push">
+          {{ pushData.push.pushSubscription.endpoint }}
+        </Code>
+        <small>Session SID</small>
+        <Code v-if="pushData.session">
+          {{ pushData.session.sid }}
+        </Code>
+      </template>
     </section>
   </div>
 </template>
 
 <script>
 import Code from "@operational.co/components/code/index.vue";
+
+import { appApi } from "@/store/app.js";
 
 export default {
   components: {
@@ -216,6 +230,8 @@ export default {
       load: false,
 
       subscription: null,
+
+      pushData: null,
     };
   },
 
@@ -415,6 +431,12 @@ export default {
       } catch (err) {
         console.log(err);
       }
+
+      const pushData = await appApi.getPush();
+
+      console.log(pushData);
+
+      this.pushData = pushData;
     },
   },
 

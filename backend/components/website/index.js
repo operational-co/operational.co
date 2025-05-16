@@ -231,6 +231,41 @@ const component = {
       ...stats,
     };
   },
+
+  async getPush(userId) {
+    // Step 1: Get the session for the user
+    const session = await prisma.session.findFirst({
+      where: { userId },
+      select: {
+        id: true,
+        sid: true,
+        userId: true,
+        user: true,
+        userAgent: true,
+        expiresAt: true,
+      },
+    });
+
+    if (!session) return null;
+
+    // Step 2: Get push data using the session's sid
+    const push = await prisma.push.findFirst({
+      where: {
+        sid: session.sid,
+      },
+      select: {
+        id: true,
+        sid: true,
+        userId: true,
+        pushSubscription: true,
+      },
+    });
+
+    return {
+      session,
+      push,
+    };
+  },
 };
 
 export default component;

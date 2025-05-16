@@ -1,12 +1,22 @@
 <template>
   <div class="c-input-select">
-    <label v-if="label" :for="name">{{ label }}</label>
-
-    <select class="form-control" v-model="text">
-      <option v-for="(option, i) in options" :key="i" :value="option.value">
-        {{ getKey(option) }}
-      </option>
-    </select>
+    <label class="form-label" v-if="label" :for="name">{{ label }}</label>
+    <div class="c-input-select__wrap">
+      <select class="form-control" v-model="text" :selected="text">
+        <option v-for="(option, i) in options" :key="i" :value="option.key">
+          {{ getKey(option) }}
+        </option>
+      </select>
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path
+          d="M8 10L11.4697 13.4697C11.7626 13.7626 12.2374 13.7626 12.5303 13.4697L16 10"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      </svg>
+    </div>
   </div>
 </template>
 
@@ -14,7 +24,7 @@
 export default {
   data: function () {
     return {
-      text: "http",
+      text: ""
     };
   },
 
@@ -23,61 +33,49 @@ export default {
       handler: function () {
         this.onChange({
           target: {
-            value: this.text,
-          },
+            value: this.text
+          }
         });
       },
-      immediate: false,
-    },
-    value: function () {
-      console.log(this.value, this.text);
-      // if (this.value !== this.text) {
-      //   this.text = this.value;
-      // }
-    },
+      immediate: false
+    }
   },
 
   props: {
     type: {
       type: String,
-      default: "text",
+      default: "text"
     },
     value: {
       type: String,
-      default: "",
+      default: ""
     },
     name: {
-      type: String,
+      type: String
     },
     label: {
-      type: String,
+      type: String
     },
     successMessage: {
       type: String,
-      default: "",
+      default: ""
     },
     placeholder: {
       type: String,
-      default: "",
+      default: ""
     },
     options: {
       type: Object,
       default: () => {
         return [];
-      },
+      }
     },
-    handleChange: {},
+    handleChange: {}
   },
 
   methods: {
     getKey: function (option) {
       return option.key || option.value;
-    },
-    isSelected: function (option) {
-      if (option.value === this.text) {
-        return "selected";
-      }
-      return;
     },
     onChange: function (e) {
       if (this.handleChange) {
@@ -85,19 +83,33 @@ export default {
       } else {
         this.$emit("update:value", e.target.value);
       }
-    },
-  },
-
-  mounted: function () {
-    if (this.value && typeof this.value === "string") {
-      if (this.value.target) {
-        this.text = this.value.target;
-      } else {
-        this.text = this.value;
-      }
     }
   },
+
+  created: function () {
+    if (this.value && typeof this.value === "string") {
+      this.text = this.value;
+    } else if (this.value.target) {
+      this.text = this.value.target.value;
+    }
+  }
 };
 </script>
 
-<style></style>
+<style lang="scss">
+.c-input-select {
+  &__wrap {
+    position: relative;
+
+    > svg {
+      position: absolute;
+      top: calc(50% - 12px);
+      right: 6px;
+    }
+
+    select {
+      padding-right: 24px;
+    }
+  }
+}
+</style>

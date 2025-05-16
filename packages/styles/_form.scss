@@ -282,6 +282,8 @@
   user-select: none;
   display: block;
   margin-bottom: 8px;
+  font-size: var(--font-size-sm);
+  font-weight: 500;
   line-height: 1;
   opacity: 0.85;
 }
@@ -324,7 +326,7 @@ select.form-control {
 .c-switch {
   position: relative;
   display: inline-block;
-  width: 40px;
+  width: 35px;
   height: 20px;
   user-select: none;
 

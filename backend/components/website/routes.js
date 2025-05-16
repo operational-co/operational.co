@@ -106,6 +106,20 @@ const checkConnection = async (req, res) => {
   }
 };
 
+const push = async (req, res) => {
+  const userId = res.locals.user.id;
+
+  try {
+    const push = await component.getPush(userId);
+    return res.status(200).send(push);
+  } catch (err) {
+    console.log(err);
+    return res.status(400).send({
+      message: err,
+    });
+  }
+};
+
 const loginSchema = {
   schema: {
     email: { type: "string", format: "email" },
@@ -139,6 +153,8 @@ router.post("/subscribe-push", middlewareAuth, subscribe);
 router.post("/send-test-push-notification", middlewareAuth, sendTestPushNotification);
 
 router.post("/connection", checkConnection);
+
+router.get("/push", middlewareAuth, push);
 
 // Export the router
 export default router;

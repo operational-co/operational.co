@@ -43,10 +43,10 @@ const api = {
       throw err;
     }
   },
-  loadPushes: async function () {
+  getPush: async function () {
     try {
-      const res = await http.get("/website/pushes");
-      return res.data || [];
+      const res = await http.get("/website/push");
+      return res.data || null;
     } catch (err) {
       //console.log(err);
       throw err;
@@ -335,10 +335,6 @@ export const useAppStore = defineStore(config.name, {
 
     setOffline(condition) {
       this.offline = condition;
-    },
-
-    async loadPushes() {
-      return await api.loadPushes();
     },
   },
 });
