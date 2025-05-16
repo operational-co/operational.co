@@ -232,10 +232,10 @@ const component = {
     };
   },
 
-  async getPush(userId) {
-    // Step 1: Get the session for the user
-    const session = await prisma.session.findFirst({
-      where: { userId },
+  async getPush(sid) {
+    // Step 1: Get the session by sid
+    const session = await prisma.session.findUnique({
+      where: { sid },
       select: {
         id: true,
         sid: true,
@@ -248,10 +248,10 @@ const component = {
 
     if (!session) return null;
 
-    // Step 2: Get push data using the session's sid
+    // Step 2: Get push data using the same sid
     const push = await prisma.push.findFirst({
       where: {
-        sid: session.sid,
+        sid: sid,
       },
       select: {
         id: true,

@@ -26,6 +26,7 @@ const api = {
     }
   },
   subscribePush: async function (subscription) {
+    console.log(subscription);
     try {
       const res = await http.post("/website/subscribe-push", subscription);
       return res.data || [];
