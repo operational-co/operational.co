@@ -21,13 +21,13 @@ import { VueFinalModal } from "vue-final-modal";
 export default {
   components: {
     ModalClose,
-    VueFinalModal,
+    VueFinalModal
   },
 
   data: function () {
     return {
       modalActive: false,
-      title: "Test modal",
+      title: "Test modal"
     };
   },
 
@@ -36,26 +36,26 @@ export default {
       handler: function () {
         this.modalActive = this.active;
       },
-      immediate: true,
-    },
+      immediate: true
+    }
   },
 
   props: {
     klass: {
       type: String,
-      default: "",
+      default: ""
     },
     type: {
       type: String,
-      default: "",
+      default: ""
     },
     active: {
       type: Boolean,
-      default: false,
+      default: false
     },
-    closeable : {
-      type : Boolean,
-      default : true
+    closeable: {
+      type: Boolean,
+      default: true
     }
   },
 
@@ -73,14 +73,14 @@ export default {
       }
 
       return "fade-enter";
-    },
+    }
   },
 
   methods: {
     onClose: function () {
       this.$emit("onClose");
-    },
-  },
+    }
+  }
 };
 </script>
 
@@ -91,7 +91,7 @@ export default {
   justify-content: center;
 
   .vfm--overlay {
-    background-color: rgba(0, 0, 0, 0.4);
+    background-color: rgba(0, 0, 0, 0.7);
     backdrop-filter: blur(2px);
   }
 

@@ -43,6 +43,15 @@ const api = {
       throw err;
     }
   },
+  loadPushes: async function () {
+    try {
+      const res = await http.get("/website/pushes");
+      return res.data || [];
+    } catch (err) {
+      //console.log(err);
+      throw err;
+    }
+  },
   activate: async function (form) {
     try {
       const res = await http.post("/workspace/activate", form);
@@ -326,6 +335,10 @@ export const useAppStore = defineStore(config.name, {
 
     setOffline(condition) {
       this.offline = condition;
+    },
+
+    async loadPushes() {
+      return await api.loadPushes();
     },
   },
 });
