@@ -6,7 +6,6 @@ import EventModel from "#components/events/model.js";
 import Invoice from "#components/invoice/index.js";
 import Metric from "#components/metric/index.js";
 import InvoiceModel from "#components/invoice/model.js";
-import SessionModel from "#models/session.js";
 
 import prisma from "#lib/prisma.js";
 import config from "#lib/config.js";
@@ -153,7 +152,7 @@ const component = {
       },
     );
 
-    let sessions = await SessionModel.client.findMany({
+    let sessions = await prisma.session.findMany({
       where: {
         userId: form.userId,
       },

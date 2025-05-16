@@ -13,8 +13,8 @@ export default {
     data: {
       default: function () {
         return [];
-      },
-    },
+      }
+    }
   },
 
   computed: {
@@ -37,7 +37,7 @@ export default {
       let maxYValue = this.data.reduce((max, obj) => (obj.y > max ? obj.y : max), -Infinity);
 
       return maxYValue;
-    },
+    }
   },
 
   methods: {
@@ -53,10 +53,10 @@ export default {
 
       return {
         //width: `${this.width}px`,
-        height: `${diff}%`,
+        height: `${diff}%`
       };
-    },
-  },
+    }
+  }
 };
 </script>
 
@@ -72,7 +72,7 @@ export default {
     grid-column-gap: 2px;
     align-items: end;
     position: relative;
-    padding: 0 var(--margin);
+    padding: 0 6px;
 
     height: 100%;
     width: 100%;

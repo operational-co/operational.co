@@ -231,31 +231,6 @@ const component = {
       ...stats,
     };
   },
-
-  async getPushes(userId) {
-    const results = await prisma.$queryRawUnsafe(
-      `
-  SELECT 
-    s.id AS sessionId,
-    s.sid AS sessionSid,
-    s.userId,
-    s.user AS sessionUserData,
-    s.userAgent,
-    s.expiresAt,
-
-    p.id AS pushId,
-    p.sid AS pushSid,
-    p.pushSubscription
-
-  FROM Session s
-  LEFT JOIN Push p ON p.userId = s.userId
-  WHERE s.userId = ?
-`,
-      userId,
-    );
-
-    return results;
-  },
 };
 
 export default component;

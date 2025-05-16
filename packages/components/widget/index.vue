@@ -4,8 +4,7 @@
       <Header :subtitle="subtitle"></Header>
 
       <div class="c-widget__inner">
-        <Chart :data="data"></Chart>
-        <div id="chart"></div>
+        <Chart :data="data" :type="type"></Chart>
       </div>
     </div>
   </div>
@@ -22,7 +21,11 @@ export default {
   },
 
   props: {
-    widget: {}
+    widget: {},
+    type: {
+      type: String,
+      default: "line"
+    }
   },
 
   computed: {

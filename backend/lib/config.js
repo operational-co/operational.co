@@ -71,7 +71,7 @@ const config = {
 
   appUrl: process.env.NODE_ENV === "production" ? process.env.APP_URL : "http://localhost:8080",
 
-  sessionLength: 3, // in days
+  sessionLength: 30, // in days
 
   events: {
     take: 40,

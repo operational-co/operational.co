@@ -1,9 +1,10 @@
 <template>
   <div class="c-chart">
     <!-- <Info :title="title"></Info>
-    <Bar :data="data"></Bar>
+   
     <Axis :data="data"></Axis> -->
-    <Area :data="data"></Area>
+    <Bar v-if="type === 'bar'" :data="data"></Bar>
+    <Line v-if="type === 'line'" :data="data"></Line>
   </div>
 </template>
 
@@ -11,14 +12,14 @@
 import Bar from "./bar.vue";
 import Axis from "./axis.vue";
 import Info from "./info.vue";
-import Area from "./area.vue";
+import Line from "./line.vue";
 
 export default {
   components: {
     Bar,
     Axis,
     Info,
-    Area
+    Line
   },
 
   data: function () {
@@ -28,6 +29,10 @@ export default {
   props: {
     title: {
       default: "New Subscribers"
+    },
+    type: {
+      type: String,
+      default: "line"
     }
     // data: {
     //   default: function () {
@@ -38,7 +43,7 @@ export default {
 
   computed: {
     data: function () {
-      let points = 30;
+      let points = 14;
       let data = [];
       for (let i = 0; i < points; i++) {
         let obj = {

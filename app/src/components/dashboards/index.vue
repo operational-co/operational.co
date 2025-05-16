@@ -21,7 +21,7 @@
           :id="w.id"
           :key="w.id"
         >
-          <Widget></Widget>
+          <Widget :type="w.type"></Widget>
         </div>
       </div>
     </div>
@@ -52,7 +52,7 @@ export default {
     return {
       grid: null,
       items: [
-        { id: 1, x: 0, y: 0, w: 1 },
+        { id: 1, x: 0, y: 0, w: 1, type: "bar" },
         { id: 2, x: 1, y: 0, w: 1 },
         { id: 3, x: 0, y: 2, w: 1 },
       ],
@@ -78,8 +78,6 @@ export default {
       }
 
       let height = oneWidget.offsetHeight;
-
-      console.log(height);
 
       if (!this.grid) {
         return height;

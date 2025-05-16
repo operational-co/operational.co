@@ -75,7 +75,6 @@ import DemoBlurb from "@/components/app/demo-blurb.vue";
 import Nprogress from "@/lib/nprogress.js";
 
 import { setTestMode } from "@/lib/http.js";
-import store from "store";
 
 import UAParser from "@/lib/ua-parser.js";
 
@@ -271,10 +270,10 @@ export default {
           await subscription.unsubscribe();
           await this.$store.app.unsubscribePush(subscription);
           console.log("User unsubscribed from push notifications");
-          // Optionally, send a request to your server to delete the subscription from your database
         }
       }
     },
+    // run this fx after login, and after headless login
     async afterLogin() {
       // activate crisp, whether afterlogin or aftersignup, doesn't matter
       if (typeof $crisp !== "undefined") {
@@ -285,51 +284,15 @@ export default {
         }
       }
 
+      this.registerServiceWorker();
+
       if (!this.user.activated || !this.user.onboarded) {
         this.afterSignup();
         return;
       }
 
-      this.registerServiceWorker();
-
-      let ask_pwa = store.get("ask_pwa");
-      let ask_permission = store.get("ask_permission");
-
+      // not used anymore
       const parser = new UAParser(navigator.userAgent);
-
-      const data = parser.getResult();
-      let width = window.screen.width;
-
-      // If on mobile and on iOS
-      if (width < 600 && data.os.name === "iOS") {
-        // If not on pwa mode, ask user to set up pwa mode
-        if (this.displayMode !== "standalone") {
-          // ask for pwa mode modal
-          //this.$store.app.setPwaModal(true);
-          return;
-        }
-
-        // If already on pwa mode but push notifications aren't enabled
-        if (
-          this.displayMode === "standalone" &&
-          !ask_permission &&
-          Notification.permission !== "granted"
-        ) {
-          // ask for push notification permission modal
-          this.$store.app.setPermissionModal(true);
-          return;
-        }
-      }
-
-      // If presumably on desktop
-      if (width >= 600) {
-        // If  push notifications aren't enabled
-        if (!ask_permission && Notification.permission !== "granted") {
-          // ask for push notification permission modal
-          this.$store.app.setPermissionModal(true);
-          return;
-        }
-      }
     },
     async afterSignup() {
       this.$store.app.startOnboarding();
@@ -450,6 +413,7 @@ export default {
       return base64.replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
     },
     async registerServiceWorker() {
+      console.log("registering service worker");
       let logs = [];
       logs.push(`[Push] Registering subscription`);
 
@@ -459,6 +423,7 @@ export default {
       // register serviceworker
       if (!("serviceWorker" in navigator)) {
         logs.push(`[Push] No serviceWorker. Push won't work`);
+        console.log(logs);
         return;
       }
 
@@ -473,6 +438,8 @@ export default {
         });
 
       if (!this.$store.app.registration) {
+        logs.push(`[Push] no registration found(odd!)`);
+        console.log(logs);
         return;
       }
 
@@ -495,7 +462,7 @@ export default {
 
       if (!subscription) {
         logs.push(`[Push] Subscription not found, subscribing to subscription`);
-        let subscription = await this.$store.app.registration.pushManager
+        subscription = await this.$store.app.registration.pushManager
           .subscribe({
             userVisibleOnly: true,
             applicationServerKey,
@@ -506,9 +473,12 @@ export default {
             //console.log(err);
             //this.$store.app.setPermissionModal(true);
           });
+        console.log(subscription);
       }
 
       if (!subscription) {
+        logs.push(`[Push] no subscription attached`);
+        console.log(logs);
         return;
       }
 
@@ -561,7 +531,6 @@ export default {
 
   mounted: function () {
     if (typeof $crisp !== "undefined") {
-      console.log($crisp);
       $crisp.push(["do", "chat:hide"]);
     }
 

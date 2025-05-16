@@ -1,12 +1,12 @@
 <template>
-  <div class="c-chart-area">
-    <div :class="['c-chart-area__popup', { active: popupActive === true }]" :style="popupStyle">
+  <div class="c-chart-line">
+    <div :class="['c-chart-line__popup', { active: popupActive === true }]" :style="popupStyle">
       <article v-if="popupActive">
         <span>{{ computedPopupDatumX }}</span>
         <!-- <span>{{ popupDatum.y }}</span> -->
       </article>
     </div>
-    <div class="c-chart-area__chart" ref="svg"></div>
+    <div class="c-chart-line__chart" ref="svg"></div>
   </div>
 </template>
 
@@ -448,7 +448,7 @@ export default {
 </script>
 
 <style lang="scss">
-.c-chart-area {
+.c-chart-line {
   position: relative;
   height: 100%;
 

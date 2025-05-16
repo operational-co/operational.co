@@ -182,15 +182,10 @@
 
     <section>
       <strong>Details</strong>
-      <small>
-        <p>List of all push subscriptions along with session data.</p>
-        <p>Useful for debugging push notifications.</p>
-      </small>
       <template>
         <p v-if="serverKey">Vapid public key(VITE_PUSH_SERVER_KEY):</p>
         <code>{{ serverKey }}</code>
       </template>
-      <PushTable></PushTable>
       <Code v-if="subscription" :copy="false">
         <pre>{{ JSON.stringify(subscription, null, 4) }}</pre>
       </Code>
@@ -200,12 +195,10 @@
 
 <script>
 import Code from "@operational.co/components/code/index.vue";
-import PushTable from "./push-table.vue";
 
 export default {
   components: {
     Code,
-    PushTable,
   },
 
   data: function () {

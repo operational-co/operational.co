@@ -33,7 +33,7 @@ class Email {
       const resend = new Resend(config.resend.TOKEN);
 
       this.resend = resend;
-      console.log("sending via resend");
+      console.log("sending email via resend");
 
       // or if available, setup via smtp
     } else if (config.email.SMTP_HOST) {
@@ -50,9 +50,9 @@ class Email {
         opts.auth = auth;
       }
       this.transporter = nodemailer.createTransport(opts);
-      console.log("sending via smtp");
+      console.log("sending email via smtp");
     } else {
-      console.log("saving to file");
+      console.log("saving email to file");
     }
 
     return true;

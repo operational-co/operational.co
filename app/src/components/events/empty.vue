@@ -209,8 +209,6 @@ export default {
         return "";
       }
 
-      console.log(workspace);
-
       let apikeys = workspace.keys;
       if (!apikeys) {
         return "";

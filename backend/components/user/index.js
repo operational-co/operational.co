@@ -1,6 +1,5 @@
 import User from "./model.js";
 import Workspace from "#components/workspace/model.js";
-import SessionModel from "#models/session.js";
 
 import config from "#lib/config.js";
 import generateJwt from "#lib/generate-jwt.js";
