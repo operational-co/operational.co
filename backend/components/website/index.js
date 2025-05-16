@@ -75,7 +75,22 @@ const component = {
     return true;
   },
 
-  async sendTestPushNotification(userId) {
+  async sendTestPushNotification(userId, sid) {
+    const push = await prisma.push.findFirst({
+      where: {
+        sid: sid,
+      },
+      select: {
+        id: true,
+        sid: true,
+        userId: true,
+        pushSubscription: true,
+      },
+    });
+
+    if (!push) {
+      throw `Push subscription doesn't exist for sid: ${sid}`;
+    }
     const user = await prisma.user.findUnique({
       where: {
         id: userId,
@@ -87,7 +102,6 @@ const component = {
     });
 
     let notify = false;
-    let pushSubscriptions = [];
 
     for (let i = 0; i < user.workspace.length; i++) {
       const workspaceUser = user.workspace[i];
@@ -98,19 +112,8 @@ const component = {
       }
     }
 
-    for (let i = 0; i < user.pushes.length; i++) {
-      const push = user.pushes[i];
-      if (push.pushSubscription) {
-        pushSubscriptions.push(push.pushSubscription);
-      }
-    }
-
     if (!notify) {
       throw `Account level notifications are off.`;
-    }
-
-    if (pushSubscriptions.length === 0) {
-      throw `No push subscriptions found`;
     }
 
     let message = {
@@ -118,12 +121,11 @@ const component = {
     };
 
     try {
-      for (let i = 0; i < pushSubscriptions.length; i++) {
-        const pushSubscription = pushSubscriptions[i];
-        await Webpush.sendNotification(pushSubscription.endpoint, pushSubscription.keys, message);
-      }
+      const pushSubscription = push.pushSubscription;
 
-      return pushSubscriptions;
+      await Webpush.sendNotification(pushSubscription.endpoint, pushSubscription.keys, message);
+
+      return pushSubscription;
     } catch (err) {
       console.log(err);
       if (err.statusCode === 401 || err.statusCode === 403 || err.statusCode === 404) {

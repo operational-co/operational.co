@@ -26,8 +26,9 @@ const subscribe = async (req, res) => {
 };
 
 const sendTestPushNotification = async (req, res) => {
+  const sid = res.locals.sidl;
   try {
-    const pushSubscriptions = await component.sendTestPushNotification(res.locals.user.id);
+    const pushSubscriptions = await component.sendTestPushNotification(res.locals.user.id, sid);
     return res.status(200).send(pushSubscriptions);
   } catch (err) {
     return res.status(400).send({
