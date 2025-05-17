@@ -1,19 +1,23 @@
 export default function (example, ctx) {
   const item = example.item;
+  let test = ctx.test || false;
+  let notify = ctx.notify || false;
   let token = ctx.token || "API_KEY";
+  let baseUrl = ctx.baseUrl;
 
   let type = item.type ? `\n    "type" => "${item.type}",` : "";
   let content = item.content ? `\n    "content" => "${item.content}",` : "";
-  let notify = item.notify || ctx.notify ? `\n    "notify" => true,` : "";
+  test = test ? `\n    "test" => true,` : "";
+  notify = notify ? `\n    "notify" => true,` : "";
   let actions = item.actions ? `\n    "actions" => ${JSON.stringify(item.actions, null, 2).replace(/\"/g, "'")},` : "";
 
   let phpCode = `<?php
 
-$url = "https://api.operational.co/api/v1/ingest";
+$url = "${baseUrl}/api/v1/ingest";
 
 $data = [
   "name" => "${item.name}",
-  "avatar" => "${item.avatar}",${type}${content}${notify}${actions}
+  "avatar" => "${item.avatar}",${test}${notify}${type}${content}${actions}
 ];
 
 $headers = [

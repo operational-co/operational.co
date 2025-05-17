@@ -1,5 +1,7 @@
 export default function (example, ctx) {
   const item = example.item;
+  let test = ctx.test || false;
+  let notify = ctx.notify || false;
   let token = ctx.token || "API_KEY";
   let baseUrl = ctx.baseUrl;
 
@@ -19,8 +21,12 @@ export default function (example, ctx) {
     form.content = item.content;
   }
 
-  if (item.notify) {
+  if (notify) {
     form.notify = item.notify;
+  }
+
+  if (test) {
+    form.test = item.test;
   }
 
   if (item.actions) {

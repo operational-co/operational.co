@@ -1,5 +1,5 @@
 <template>
-  <div :class="['c-playground-footer', { app: type === app }]">
+  <div :class="['c-playground-footer', { app: type === 'app' }]">
     <section>
       <InputText label="API key" v-model:value="token" placeholder="Enter your Api key"></InputText>
     </section>
@@ -11,22 +11,21 @@
       <InputSelect label="Code language" :options="codeOptions" v-model:value="currentOption"></InputSelect>
     </section>
 
-    <!-- <section class="advanced">
-      <strong>
-        <span> test: </span>
-        <InputSwitch v-model:value="test"></InputSwitch>
-      </strong>
-      <small> If set, events will show up as test events. </small>
-    </section> -->
+    <div class="spacer"></div>
 
-    <!-- <section class="advanced">
-      <strong>
-        <span> notify: </span>
-        <InputSwitch v-model:value="notify"></InputSwitch>
-      </strong>
+    <section>
+      <InputSwitch label="Test mode toggle" v-model:value="test"></InputSwitch>
 
-      <small> If set, events will send you push notifications when run. </small>
-    </section> -->
+      <small> If set, events will be marked as test events. </small>
+    </section>
+
+    <div class="spacer"></div>
+
+    <section>
+      <InputSwitch label="Notify toggle" v-model:value="notify"></InputSwitch>
+
+      <small> If set, events will send a push notification. </small>
+    </section>
   </div>
 </template>
 
@@ -47,6 +46,7 @@ export default {
       token: "",
 
       notify: "false",
+      test: false,
 
       codeMode: false,
       currentOption: null,
@@ -66,11 +66,11 @@ export default {
         {
           key: "curl",
           value: "cURL (command line)"
+        },
+        {
+          key: "php",
+          value: "PHP"
         }
-        // {
-        // 	key: "php",
-        // 	value: "PHP"
-        // },
         // {
         // 	key: "wordpress",
         // 	value: "Wordpress"
@@ -90,7 +90,8 @@ export default {
       default: false
     },
     currentView: {},
-    currentCode: {}
+    currentCode: {},
+    type: {}
   },
 
   watch: {
@@ -99,6 +100,12 @@ export default {
     },
     currentOption: function () {
       this.onOptionChange();
+    },
+    notify: function () {
+      this.onNotifyChange();
+    },
+    test: function () {
+      this.onTestChange();
     }
   },
 
@@ -107,8 +114,13 @@ export default {
       this.$emit("onClick", this.example);
     },
     onOptionChange() {
-      // Emit the selected option to the parent
       this.$emit("update:selectedOption", this.currentOption);
+    },
+    onNotifyChange() {
+      this.$emit("update:notifyOption", this.notify);
+    },
+    onTestChange() {
+      this.$emit("update:testOption", this.test);
     },
     setToken: function (token) {
       this.token = token;
@@ -137,7 +149,7 @@ export default {
   }
 
   .spacer {
-    padding: 0.25rem;
+    padding: 0.5rem;
   }
 
   .form-control {
@@ -166,6 +178,17 @@ export default {
       margin-bottom: 0.5rem;
       font-size: var(--font-size-xs);
       line-height: 1;
+    }
+
+    input[type="text"] {
+      font-family: var(--font-family-monospace);
+      font-weight: 500;
+    }
+
+    > small {
+      display: inline-block;
+      font-size: var(--font-size-xs);
+      line-height: 1.4;
     }
 
     .btn-primary {

@@ -2,7 +2,12 @@
   <div class="c-input-switch">
     <label class="form-label" v-if="label" :for="name">{{ label }}</label>
     <label class="c-switch">
-      <input :disabled="isSwitchDisabled" @input="onChange" :value="value" type="checkbox" checked />
+      <input
+        :disabled="isSwitchDisabled"
+        @change="onChange"
+        type="checkbox"
+        :checked="value === true || value === 'true'"
+      />
       <span class="c-switch__slider">
         <span class="c-switch__toggle"> </span>
       </span>
@@ -15,37 +20,36 @@ import { Field, Form, ErrorMessage } from "vee-validate";
 
 export default {
   components: {
-    Field,
+    Field
   },
 
   data: function () {
-    return {};
+    return {
+      isSwitchDisabled: false
+    };
   },
 
   props: {
     type: {
       type: String,
-      default: "text",
+      default: "text"
     },
-    value: {
-      type: String,
-      default: "",
-    },
+    value: {},
     name: {
-      type: String,
+      type: String
     },
     label: {
-      type: String,
+      type: String
     },
     successMessage: {
       type: String,
-      default: "",
+      default: ""
     },
     placeholder: {
       type: String,
-      default: "",
+      default: ""
     },
-    handleChange: {},
+    handleChange: {}
   },
 
   methods: {
@@ -53,10 +57,10 @@ export default {
       if (this.handleChange) {
         this.handleChange(e);
       } else {
-        this.$emit("update:value", e.target.value);
+        this.$emit("update:value", e.target.checked);
       }
-    },
-  },
+    }
+  }
 };
 </script>
 

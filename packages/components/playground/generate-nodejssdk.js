@@ -1,43 +1,50 @@
 export default function (example, ctx) {
   const item = example.item;
-
+  let test = ctx.test || false;
+  let notify = ctx.notify || false;
   let token = ctx.token || "API_KEY";
 
   let type = "";
 
   if (item.type) {
-    type = `\ntype : "${item.type}",`;
+    type = `\n  type: "${item.type}",`;
   }
 
   let content = "";
   if (item.content) {
     let tempContent = item.content;
-    console.log(item.type);
     if (item.type === "rows" || item.type === "json") {
-      console.log(type);
       tempContent = JSON.stringify(tempContent, null, 2);
-      content = `\ncontent : ${tempContent},`;
+      content = `\n  content: ${tempContent},`;
     } else {
-      content = `\ncontent : "${tempContent}",`;
+      content = `\n  content: "${tempContent}",`;
     }
   }
 
-  let notify = "";
-
   if (item.notify || ctx.notify) {
-    notify = `\nnotify : true,`;
+    notify = `\n  notify: true,`;
+  } else {
+    notify = ``;
+  }
+
+  if (item.test || ctx.test) {
+    test = `\n  test: true,`;
+  } else {
+    test = ``;
   }
 
   let actions = "";
 
   if (item.actions) {
-    actions = `\nactions : ${JSON.stringify(item.actions, null, 2)}`;
+    actions = `\n  actions: ${JSON.stringify(item.actions, null, 2)}`;
   }
 
-  let str = `const eventName = "${item.name}";
+  let str = `// Remember to setup the nodejs sdk https://www.npmjs.com/package/@operational.co/sdk 
+  
+const eventName = "${item.name}";
 const payload = {
-name : "${item.name}",
-avatar : "${item.avatar}",${notify}${type}${content}${actions}
+  name: "${item.name}",
+  avatar: "${item.avatar}",${test}${notify}${type}${content}${actions}
 }
 
 await ops.events.ingest(eventName, payload)`;

@@ -75,7 +75,7 @@ export default {
 
   methods: {
     getKey: function (option) {
-      return option.key || option.value;
+      return option.value || option.key;
     },
     onChange: function (e) {
       if (this.handleChange) {

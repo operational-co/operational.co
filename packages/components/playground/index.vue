@@ -9,6 +9,8 @@
       @onTokenUpdate="updateToken"
       @update:currentView="updateCurrentView"
       @update:selectedOption="updateCurrentOption"
+      @update:notifyOption="updateNotify"
+      @update:testOption="updateTest"
     ></Footer>
     <div class="c-playground__sidebar">
       <header>
@@ -214,6 +216,12 @@ export default {
     },
     updateCurrentOption(newOption) {
       this.currentOption = newOption;
+    },
+    updateNotify(notify) {
+      this.context.notify = notify;
+    },
+    updateTest(test) {
+      this.context.test = test;
     },
     updateCurrentView: function (view) {
       this.currentView = view;
