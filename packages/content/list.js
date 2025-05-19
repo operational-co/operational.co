@@ -135,6 +135,11 @@ export const selfhostedList = [
     depth: 1
   },
   {
+    name: "Setup Notifications",
+    path: "/selfhosted/setup-notifications",
+    depth: 1
+  },
+  {
     name: "Integrations",
     path: "/selfhosted/integrations",
     depth: 1
