@@ -40,8 +40,9 @@ MYSQL_OP_PASSWORD=$(openssl rand -hex 16)
 
 # Save passwords
 sudo tee /root/.passwords > /dev/null <<EOL
-mysql_root_pass="$MYSQL_ROOT_PASSWORD"
-mysql_operational_pass="$MYSQL_OP_PASSWORD"
+# Mysql user passwords
+root="$MYSQL_ROOT_PASSWORD"
+operational_user="$MYSQL_OP_PASSWORD"
 EOL
 sudo chmod 600 /root/.passwords
 
@@ -62,6 +63,14 @@ fi
 
 # Step 3: web-push
 echo "3. Installing web-push and generating VAPID keys"
+
+# Ensure jq is installed
+if ! is_installed jq; then
+    echo "Installing jq (required for parsing VAPID keys)..."
+    sudo apt update
+    sudo apt install -y jq
+fi
+
 sudo npm install -g web-push
 VAPID_KEYS=$(web-push generate-vapid-keys --json)
 VAPID_PUBLIC_KEY=$(echo $VAPID_KEYS | jq -r '.publicKey')
