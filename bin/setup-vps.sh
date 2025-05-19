@@ -176,5 +176,5 @@ sudo ufw default deny incoming
 sudo ufw --force enable
 
 echo ""
-echo "✅ Installation and setup completed!"
+echo "✅ Installation and setup completed! All your mysql passwords are in /root/.passwords"
 echo "🌐 Open https://$frontend_domain in your browser"
