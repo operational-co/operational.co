@@ -8,14 +8,14 @@ For under $10 p/m you can host Operational on a rock-solid virtual private serve
 
 ## Install on a fresh VPS server
 
-<iframe width="100%" height="315" src="https://www.youtube.com/embed/k-S-7thuHM8?si=h5p01Oqa4-9P-CRM" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+<iframe width="100%" height="315" src="https://www.youtube.com/embed/Mxn5DEIaRi4?si=ZdCmlH2InjRz5XUC" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 
 This is the fastest method to install Operational. This method requires that:
 
 - You have setup a VPS server and are logged in as root
 - You have configured 2 domain names(one for frontend, one for backend) for your instance.
 
-Once configured, run this inside your VPS as root.
+After that, run this inside your VPS as root.
 
 
 <Code lang="bash" client:load>
@@ -33,94 +33,19 @@ This script will:
 - Install certbot
 - Configure nginx and certbot
 - Pull the repo and install dependencies
+- Setup Webpush
 - Create .env files
+- Configure UFW for basic security measures
 - Start the server
-
-This method doesn't setup Vapid keys for push notifications. This can be easily done by generating your vapid keys from https://www.attheminute.com/au/vapid-key-generator and setting them as [env vars](/selfhosted/setup-env) inside `/backend`.
-
-## Install manually on your VPS
-
-Follow these steps to install Operational manually on your VPS.
-
-### Step 1. Setup a Virtual private server(VPS)
-
-We recommend Hetzner for the most bang-for-your-buck.
-
-Alternatives like Digital Ocean, OVHCloud, Linode, Vultr etc are also good.
-
-### Step 2. Install requirements
-
-You'll need to have nginx installed and configured.
-
-You'll also need 2 domains that's linked to your server. Subdomains is also fine.
-
-First domain points to the frontend `/app`
-Second domain points to the backend `/backend`
-
-The application itself requires:
-
-- nodejs 18.x minimum
-- mysql 8.x
-- nginx
-- pm2
-
-Install these and make sure nodejs and mysql service* is running.
-
-If you're hosting mysql elsewhere, make sure you have the connection string ready.
-
-### Step 3. Install application
-
-Install by either:
-
-Running the script on our [homepage](https://operational.co).
-
-or,
-
-Running `git clone https://github.com/operational-co/operational.co.git` (you'll need git to be installed on your server)
-
-Once done, create .env files inside `/app` and `/backend`.
-
-Then configure your env vars. [Here's the guide for env](/selfhosted/setup-env).
-
-Once done, run `npm run build` inside both `/app` and `/backend`
-
-### Step 4. Setup pm2 and nginx
-
-Don't do this step if you have run the install script!
-
-Inside your `/backend` folder, run `pm2 start index.js`
-
-Then setup nginx to serve static files from `/app/dist`
-
-And then setup nginx to setup a reverse proxy from 127.0.0.1:2000
-
-### Step 5. Make sure everything is installed
-
-Check for this:
-
-- Is your nginx configured to serve static content from `/app/dist`
-- Make sure nginx has a reverse proxy setup for 127.0.0.1:2000 (2000 is the default port for the backend)
-- Make sure certbot is setup(optional, for ssl)
-- Install pm2 and make sure it has started running
-
-### Step 6. Create your account
-
-Once everything is setup, open your frontend(url depends on how you've setup nginx to serve the app/dist folder)
-
-The onboarding process should startup. Follow the steps here and create your account.
-
-Once created, you should be able to track events.
 
 ---
 
 ## Security
 
-Both these guides should get you up and runnings, however we recommend:
+This guide should be enough to get you up and runnings, however we recommend:
 
 - You install fail2ban and configure it
 - Make sure your server has ssh key auth and not password auth
-- Firewall has been setup and works
-- Make sure either mysql doesn't have internet access(via firewall) or the default root user cannot be accessed via password auth
 - Configure ssh to work on a non-default port
 
 These steps are a bit overkill if you're using Operational as a internal tool, but we recommend doing this for peace of mind.
@@ -132,6 +57,30 @@ If you're new to VPS hosting, there are scripts out there to one-shot secure you
 - https://github.com/vernu/vps-audit
 
 ---
+
+## Maintainence
+
+### Updating Operational
+
+If you wish to update your copy of Operational, perform these steps:
+
+- ssh inside your server
+- go to /home/operational.go
+- run `git fetch origin`. If this doesn't work, set your git remove to operational's github repo.
+- cd to `/app` and run `npm run build`
+- restart nodejs by running `pm2 restart 0`
+
+### Accessing mysql
+
+You might need to access your mysql database directly via Sequel Ace or other Db viewer.
+
+To do this,
+
+- ssh inside your server
+- run `sudo ufw allow 3306/tcp`. This will allow outside connections
+- run `nano /root/.passwords`. This is where the root and operational_user passwords are stored.
+
+Use the passwords to access your mysql installation.
 
 ## Server recommendations
 

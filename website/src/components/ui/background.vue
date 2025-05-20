@@ -95,7 +95,7 @@ onMounted(() => {
     opacity: 0;
   }
   .fade-in-enter-active {
-    transition: opacity 1500ms ease 500ms;
+    transition: opacity 1500ms ease;
   }
   .fade-in-enter-to {
     opacity: 1;
