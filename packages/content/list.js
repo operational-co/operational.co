@@ -1,3 +1,155 @@
+export const list = [
+  {
+    name: "Start here",
+    slug: "api"
+  },
+  {
+    name: "API Docs",
+    slug: "api",
+    children: [
+      {
+        name: "Introduction",
+        slug: "introduction"
+      },
+      {
+        name: "Send your first event",
+        slug: "send-your-first-event"
+      },
+      {
+        name: "Event parameters",
+        slug: "event-parameters"
+      },
+      {
+        name: "Structured Events",
+        slug: "structured-events"
+      },
+      {
+        name: "Actions",
+        slug: "actions"
+      },
+      {
+        name: "Contexts",
+        slug: "contexts"
+      },
+      {
+        name: "Categories",
+        slug: "categories"
+      },
+      {
+        name: "Error handling",
+        slug: "error-handling"
+      }
+    ]
+  },
+  {
+    name: "The Manual",
+    slug: "manual",
+    children: [
+      {
+        name: "Introduction",
+        slug: "introduction"
+      },
+      {
+        name: "Basics",
+        slug: "basics"
+      },
+      {
+        name: "Conventions",
+        slug: "conventions"
+      },
+      {
+        name: "Setup",
+        slug: "setup"
+      },
+      {
+        name: "Test mode",
+        slug: "test-mode"
+      },
+      {
+        name: "Notifications",
+        slug: "notifications"
+      },
+      {
+        name: "PWA",
+        slug: "pwa"
+      }
+    ]
+  },
+  {
+    name: "Self hosting",
+    slug: "selfhosted",
+    children: [
+      {
+        name: "Introduction",
+        slug: "introduction"
+      },
+      {
+        name: "Install locally",
+        slug: "install-locally"
+      },
+      {
+        name: "Install on VPS",
+        slug: "install-on-vps"
+      },
+      {
+        name: "Install on Render",
+        slug: "install-on-render"
+      },
+      {
+        name: "Install via Docker",
+        slug: "install-via-docker"
+      },
+      {
+        name: "Install via Docker and Coolify",
+        slug: "install-via-docker-and-coolify"
+      },
+      // {
+      //   name: "Docker",
+      //   path: "/selfhosted/docker",
+      //   depth: 1
+      // },
+      {
+        name: "Onboarding",
+        slug: "onboarding"
+      },
+      {
+        name: "Setup .env",
+        slug: "setup-env"
+      },
+      {
+        name: "Setup Notifications",
+        slug: "setup-notifications"
+      },
+      {
+        name: "Integrations",
+        slug: "integrations"
+      },
+      {
+        name: "Best practices",
+        slug: "best-practices"
+      }
+    ]
+  },
+  {
+    name: "Other",
+    slug: "other",
+    children: [
+      {
+        name: "Vision",
+        slug: "vision"
+      },
+      {
+        name: "Roadmap",
+        slug: "roadmap"
+      },
+      {
+        name: "Contributing",
+        slug: "contributing"
+      }
+    ]
+  }
+];
+
 export const apiList = [
   {
     name: "API Docs"
@@ -223,3 +375,39 @@ export const usecasesList = [
   //   icon: "🛠️"
   // }
 ];
+
+export const getItems = function (list, slug) {
+  let listItem = null;
+  let prevListItem = null;
+  let nextListItem = null;
+
+  for (let i = 0; i < list.length; i++) {
+    let p = list[i];
+    let s = p.slug;
+
+    let children = p.children;
+
+    if (children) {
+      for (let j = 0; j < children.length; j++) {
+        const child = children[j];
+
+        if (child.slug === slug) {
+          if (children[j - 1]) {
+            prevListItem = children[j - 1];
+          }
+          if (children[j + 1]) {
+            nextListItem = children[j + 1];
+          }
+          listItem = child;
+          break;
+        }
+      }
+    }
+  }
+
+  return {
+    listItem,
+    prevListItem,
+    nextListItem
+  };
+};

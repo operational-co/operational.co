@@ -15,58 +15,112 @@
     <main>
       <div class="spacer"></div>
       <component
-        :is="resolveComponent(heading)"
-        v-for="(heading, i) in computedHeadings"
+        v-for="(item, i) in computedList"
+        :is="resolveComponent(item)"
         :key="i"
-        :href="`${heading.slug}`"
+        :href="`/${item.slug}`"
         :class="[
           'c-toc__item',
-          { d1: heading.depth && heading.depth === 1 },
-          { active: heading.slug && heading.slug === pathname }
+          {
+            expandable: !!item.children,
+            expanded: expands.includes(item.slug)
+          }
         ]"
       >
-        {{ heading.text }}
+        <template v-if="item.children">
+          <span @click="toggleExpand(item)">
+            {{ item.name }}
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M8 10L11.4697 13.4697C11.7626 13.7626 12.2374 13.7626 12.5303 13.4697L16 10"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </span>
+          <div class="c-toc__item__subitems">
+            <component
+              v-for="(subItem, i) in item.children"
+              :is="resolveComponent(subItem)"
+              :key="i"
+              :href="`/${item.slug}/${subItem.slug}`"
+              :class="['c-toc__item', { active: item.slug && pathname === `/${item.slug}/${subItem.slug}` }]"
+            >
+              {{ subItem.name }}
+            </component>
+          </div>
+        </template>
+        <template v-else>
+          {{ item.name }}
+        </template>
       </component>
     </main>
   </div>
 </template>
 
 <script>
+import { list, getItems } from "@operational.co/content/list.js";
 export default {
   data: function () {
     return {
-      active: false
+      active: false,
+      expands: []
     };
   },
 
   props: {
-    headings: {},
     pathname: {}
   },
 
   computed: {
-    computedHeadings: function () {
-      let headings = this.headings;
-
-      if (!headings) {
-        return [];
-      }
-
-      // for (let i = 0; i < headings.length; i++) {
-      //   let h = headings[i];
-      //   console.log(h);
-      // }
-
-      return headings;
+    computedList: function () {
+      return list;
     }
   },
 
   methods: {
-    resolveComponent: function (heading) {
-      if (heading.slug) {
+    toggleExpand: function (item) {
+      if (!this.expands.includes(item.slug)) {
+        this.expands.push(item.slug);
+      } else {
+        this.expands = this.expands.filter((expand) => {
+          if (expand === item.slug) {
+            return false;
+          }
+          return true;
+        });
+      }
+    },
+    resolveComponent: function (item) {
+      if (item.children) {
+        return "div";
+      }
+      if (item.slug) {
         return "a";
       }
       return "span";
+    }
+  },
+
+  mounted: function () {
+    let pathname = this.pathname;
+
+    for (let i = 0; i < list.length; i++) {
+      let item = list[i];
+
+      if (item.children) {
+        for (let j = 0; j < item.children.length; j++) {
+          let child = item.children[j];
+
+          let path = `/${item.slug}/${child.slug}`;
+          if (path === pathname) {
+            this.expands.push(item.slug);
+            break;
+          }
+        }
+      }
     }
   }
 };
@@ -87,9 +141,37 @@ export default {
     border-radius: var(--border-radius);
     transition: all var(--transition-time-sm) ease;
 
-    &.d1 {
-      padding-left: var(--spacer);
-      margin-bottom: 0.1rem;
+    &__subitems {
+      padding-left: 0.5rem;
+      height: 0;
+      overflow: hidden;
+      transition: height var(--transition-time) linear;
+    }
+
+    &.expandable {
+      cursor: pointer;
+
+      span {
+        &:hover {
+          opacity: 1;
+        }
+      }
+
+      &.expanded {
+        span {
+          opacity: 1;
+        }
+
+        .c-toc__item__subitems {
+          height: 100%;
+        }
+
+        span {
+          svg {
+            transform: rotate(180deg);
+          }
+        }
+      }
     }
 
     &.active {
@@ -118,7 +200,14 @@ export default {
   }
 
   span {
+    display: flex;
     opacity: 0.7;
+    user-select: none;
+
+    svg {
+      display: inline-block;
+      margin-left: auto;
+    }
   }
 
   header {

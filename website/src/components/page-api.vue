@@ -2,7 +2,7 @@
   <div class="c-page-api">
     <Constrain size="lg">
       <template #sidebar>
-        <Toc :pathname="pathname" :headings="headings"></Toc>
+        <Toc :pathname="pathname"></Toc>
       </template>
       <template #default>
         <slot></slot>
@@ -20,15 +20,14 @@ export default {
   components: {
     Constrain,
     Subtitle,
-    Toc
+    Toc,
   },
 
   props: {
     pathname: {},
-    headings: {}
   },
 
-  computed: {}
+  computed: {},
 };
 </script>
 
@@ -37,6 +36,10 @@ export default {
   padding: 3rem 0;
   background-color: var(--color-bg-2);
   border-top: var(--color-bg-4) solid 1px;
+
+  @media screen and (max-width: 980px) {
+    padding-top: 0.25rem;
+  }
 
   @media screen and (max-width: 576px) {
     padding-top: 0;

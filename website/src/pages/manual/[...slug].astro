@@ -2,71 +2,42 @@
 // @ts-nocheck
 import BaseLayout from "@/layouts/base.astro";
 import Constrain from "@operational.co/components/ui/constrain.vue"
-import {apiList, manualList} from "@operational.co/content/list.js";
+import {list, getItems} from "@operational.co/content/list.js";
 import headings from "@/lib/get-headings.js";
 import slugify from "@/lib/slugify.js";
 import Toc from "@operational.co/components/ui/toc.vue";
 import Prevnext from "@operational.co/components/ui/prevnext.vue";
 import PageApi from "@/components/page-api.vue";
 
-const posts = await Astro.glob('../../../../packages/content/manual/*.mdx');
+const posts = await Astro.glob('../../../../packages/content/*/*.mdx');
 
-const params = Astro.params;
+const {listItem, prevListItem, nextListItem} = getItems(list, Astro.params.slug);
 
-let page = null;
-let prevPage = null;
-let nextPage = null;
-
-
-for(let i = 0; i < manualList.length; i++) {
-  let p = manualList[i];
-  let slug = slugify(p.name);
-
-  if(slug === params.slug) {
-    if(manualList[i - 1]) {
-      prevPage = manualList[i - 1];
-    }
-    if(manualList[i + 1]) {
-      nextPage = manualList[i + 1];
-    } 
-    page = p;
-    break;
-  }
-}
-
-if(prevPage && prevPage.path) {
-  prevPage = {
-    title : prevPage.name,
-    path : `${prevPage.path}`
-  }
-} else {
-  prevPage = null;
-}
-if(nextPage && nextPage.path) {
-  nextPage = {
-    title : nextPage.name,
-    path : `${nextPage.path}`
-  }
-} else {
-  nextPage = null;
+if(!listItem) {
+  return;
 }
 
 export const getStaticPaths = function() {
-  let list = [];
-  manualList.map((page) => {
-    if(page.path) {
-      list.push({
+  let items = [];
+  list.map((item) => {
+    if(!item.children) {
+      items.push({
         params : {
-          slug : slugify(page.name)
+          slug : `/`
         }
       })
+    } else {
+      for(let i = 0 ; i < item.children.length; i++) {
+        const child = item.children[i];
+        items.push({
+          params : {
+            slug : `${child.slug}`
+          }
+        })
+      }
     }
   });
-  return list;
-}
-
-if(!page) {
-  return;
+  return items;
 }
 
 let content = null;
@@ -75,9 +46,9 @@ for(let  i = 0; i < posts.length; i++) {
   let post = posts[i];
   let file = post.file;
 
+  let path = `/${listItem.slug}`;
 
-
-  if(file.includes(page.path)) {
+  if(file.includes(path)) {
     content = post;
     break;
   }
@@ -87,12 +58,12 @@ const Content = content.Content;
 
 ---
 
-
 <BaseLayout>
-   <PageApi client:load pathname={Astro.url.pathname} headings={headings}>
+
+  <PageApi client:load pathname={Astro.url.pathname}>
     <div class="c-page">
       <Content />
-      <Prevnext prev={prevPage} next={nextPage} />
+      <Prevnext prev={prevListItem} next={nextListItem} />
     </div>
   </PageApi>
 </BaseLayout>

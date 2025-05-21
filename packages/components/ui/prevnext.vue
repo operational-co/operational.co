@@ -1,6 +1,6 @@
 <template>
   <div class="c-prevnext">
-    <a :title="prev.title" v-if="prev" class="c-prevnext__item btn" :href="prev.path">
+    <a :title="prev.name" v-if="prev" class="c-prevnext__item btn" :href="prev.slug">
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path
           fill-rule="evenodd"
@@ -10,12 +10,12 @@
         />
       </svg>
 
-      <span> {{ prev.title }} </span>
+      <span> {{ prev.name }} </span>
     </a>
     <span v-else></span>
 
-    <a :title="next.title" v-if="next" :class="['c-prevnext__item btn', 'next']" :href="next.path">
-      <span> {{ next.title }} </span>
+    <a :title="next.name" v-if="next" :class="['c-prevnext__item btn', 'next']" :href="next.slug">
+      <span> {{ next.name }} </span>
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path
           fill-rule="evenodd"
