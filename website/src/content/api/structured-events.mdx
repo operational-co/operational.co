@@ -1,0 +1,305 @@
+---
+title: Sending structured events
+slug: structured-events
+description: Learn how to send structured events
+date: 2024-06-08
+---
+
+
+import Item from "@operational.co/components/card/index.vue";
+import Code from "@operational.co/components/code/index.vue";
+import CodeWrap from "@operational.co/components/code/wrap.vue";
+import ApiItem from "@operational.co/components/ui/api-item.vue";
+
+# Sending structured events
+
+You can pass various data formats and structured form objects to render better events.
+
+Here's an example for text event.
+
+<CodeWrap client:load>
+<div slot="default">
+<Item
+client:only="vue"
+  item={{
+    name: "some event",
+    avatar: "🤖",
+    createdAt: "2021-03-03",
+    content : 'This is some info about the event'
+  }}
+></Item>
+</div>
+<div slot="node">
+<Code client:load>
+```
+const e = {
+  name: "some event",
+  avatar: "🤖",
+  content : 'This is some info about the event'
+};
+```
+</Code>
+</div>
+</CodeWrap>
+
+Note that you don't explicitely need to pass <code>type: 'text'</code> since type is assumed to be 'text' by default.
+
+Here's another example with type json.
+
+<CodeWrap client:load>
+<div slot="default">
+<Item client:only="vue"
+  item={{
+    createdAt: "2021-03-03",
+    name: "some event",
+    avatar: "🤖",
+    type : "json",
+    content : {
+    form_data_1 : 'something',
+    form_data_2 : 'something else',
+    obj : {
+      nestedField1 : 1,
+      nestedField2 : 'hmm'
+    }
+  }
+  }}
+></Item>
+</div>
+<div slot="node">
+<Code client:load>
+```
+const e = {
+  name: "some event",
+  avatar: "🤖",
+  type : 'json',
+  content : {
+    form_data_1 : 'something',
+    form_data_2 : 'something else',
+    obj : {
+      nestedField1 : 1,
+      nestedField2 : 'hmm'
+    }
+  }
+};
+```
+</Code>
+</div>
+</CodeWrap>
+
+Here's another example with type image.
+
+<CodeWrap client:load>
+<div slot="default">
+<Item client:only="vue"
+  item={{
+    createdAt: "2021-03-03",
+    name: "some event",
+    avatar: "🤖",
+    type : "image",
+    content : `https://images.unsplash.com/photo-1724026403614-f5461d17c6cc?q=80&w=3200&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D`
+  }}
+></Item>
+</div>
+<div slot="node">
+<Code client:load>
+```
+const e = {
+  name: "some event",
+  avatar: "🤖",
+  type : "image",
+    content : `https://images.unsplash.com/photo-1724026403614-f5461d17c6cc?q=80&w=3200&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D`
+};
+```
+</Code>
+</div>
+</CodeWrap>
+
+You can also stack different formats together. Use type 'rows' for this. Here's an example.
+
+<CodeWrap client:load>
+<div slot="default">
+<Item client:only="vue" 
+  item={{
+    createdAt: "2021-03-03",
+    name: "some event",
+    avatar: "🤖",
+    type : "rows",
+    content : [
+      {
+        type : 'text',
+        content : 'Some'
+      },
+      {
+        type : 'text',
+        content : 'text'
+      },
+      {
+        type : 'text',
+        content : 'Here'
+      }
+    ]
+  }}
+></Item>
+</div>
+<div slot="node">
+<Code client:load>
+```
+const e = {
+  name: "some event",
+  avatar: "🤖",
+  type : "rows",
+  content : [
+    {
+      type : 'text',
+      content : 'Some'
+    },
+    {
+      type : 'text',
+      content : 'text'
+    },
+    {
+      type : 'text',
+      content : 'Here'
+    }
+  ]
+};
+```
+</Code>
+</div>
+</CodeWrap>
+
+Type rows will take content as an array. These are all the options for each object inside the array.
+
+<CodeWrap client:load>
+<ApiItem client:load title="type" type="string" required="false">
+  If left blank, defaults to 'text'. Controls how content field is rendered. Options are 'text', 'json',
+  'image'. Note that you cannot have rows inside rows. Inception isn't possible currently.
+</ApiItem>
+<ApiItem client:load title="content" type="string/json" required="false">
+  Mixed content type, can be a string or JSON depending on what type is set.
+</ApiItem>
+<ApiItem client:load title="label" type="string" required="false">
+  If set, shows a small label above the content.
+</ApiItem>
+
+<div slot="node">
+<Code client:load>
+```
+const e = {
+  name: "some event",
+  avatar: "🤖",
+  type : "rows",
+  content : [
+    {
+      content : 'Text content, type is assumed to be text by default'
+    },
+    {
+      label : 'label',
+      type : 'text',
+      content : 'Text content with label'
+    },
+    {
+      type : 'image',
+      label : 'image',
+      content : `https://images.unsplash.com/photo-1724026403614-f5461d17c6cc?q=80&w=3200&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D`
+    }
+  ]
+};
+```
+</Code>
+</div>
+</CodeWrap>
+
+This will render the following event:
+
+<Item client:only="vue" 
+  item={{
+    createdAt: "2021-03-03",
+    name: "some event",
+    avatar: "🤖",
+    type : "rows",
+  content : [
+    {
+      content : 'Text content, type is assumed to be text by default'
+    },
+    {
+      label : 'Label',
+      type : 'text',
+      content : 'Text content with label'
+    },
+    {
+      label : 'Image',
+      type : 'image',
+      content : `https://images.unsplash.com/photo-1724026403614-f5461d17c6cc?q=80&w=3200&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D`
+    }
+  ]
+  }}
+></Item>
+
+Here's a much better example of a real life scenario.
+
+<CodeWrap client:load>
+<Item client:only="vue"
+  item={{
+    createdAt: "2021-03-03",
+    name: "user signed up",
+    avatar: "🤖",
+    type : "rows",
+  content : [
+    {
+      label : 'Name',
+      content : 'Shash'
+    },
+    {
+      label : 'Email',
+      content : 'shash@operational.co'
+    },
+    {
+      label : 'IP',
+      content : '173.69.420.422'
+    },
+    {
+      label : 'form',
+      type : 'json',
+      content : {
+        works_in : 'performance marketing',
+        found_us : 'google'
+      }
+    }
+  ]
+  }}
+></Item>
+<div slot="node">
+<Code client:load>
+```
+const e = {
+  name: "some event",
+  avatar: "🤖",
+  type : "rows",
+  content : [
+    {
+      label : 'Name',
+      content : 'Shash'
+    },
+    {
+      label : 'Email',
+      content : 'shash@operational.co'
+    },
+    {
+      label : 'IP',
+      content : '173.69.420.422'
+    },
+    {
+      label : 'form',
+      type : 'json',
+      content : {
+        works_in : 'performance marketing',
+        found_us : 'google'
+      }
+    }
+  ]
+};
+```
+</Code>
+</div>
+</CodeWrap>

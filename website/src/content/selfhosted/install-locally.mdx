@@ -1,0 +1,52 @@
+---
+title: Installing locally
+slug: install-locally
+description: Learn how to install Operational.co locally on your Mac/PC
+date: 2025-03-15
+---
+
+import Item from "@operational.co/components/card/index.vue";
+import Code from "@operational.co/components/code/index.vue";
+
+## Installing locally
+
+Before installing, make sure you have nodejs 18.18.x installed and mysql installed. If mysql isn't installed, make sure you have it setup on the cloud and have a connection string ready.
+
+### For Mac
+
+Fastest way to install is by running this script inside your terminal:
+
+<Code lang="bash" client:load>
+	```
+	bash <(curl -s https://raw.githubusercontent.com/operational-co/operational.co/v0.0.3/bin/setup.sh)
+	```
+</Code>
+
+This will:
+
+- make a directory(operational.co)
+- git clone the repo
+- Setup a .env file for /backend
+- Install dependencies
+
+After that, all you need to do is to run the commands the script will tell you to, and then visit localhost:8080 and follow the onboarding guide.
+
+### For Windows
+
+We don't have a terminal script. But its very easy to install.
+
+- Git clone the repo on your machine
+- cd to operational.co/backend and create an env file and add DATABASE_URL and a random SECRET env var:
+<Code lang="bash" client:load>
+```
+DATABASE_URL="your_connection_string_here"
+SECRET="any_random_string_here"
+```
+</Code>
+- Run `npm run build`
+- Run `npm run dev`
+- Then cd to `../operational.co/app`
+- Run `npm run buid`
+- Run `npm run dev`
+
+Then open up [localhost:8080](http://localhost:8080) in your browser and follow the [onboarding steps](/selfhosted/onboarding).

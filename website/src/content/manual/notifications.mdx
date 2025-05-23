@@ -1,0 +1,59 @@
+---
+title: Notifications
+slug: notifications
+description: Learn how to send notifications for your product
+date: 2024-09-22
+---
+
+import Item from "@operational.co/components/card/index.vue";
+import CodeWrap from "@operational.co/components/code/wrap.vue";
+import Code from "@operational.co/components/code/index.vue";
+
+# Chapter 5. Notifications
+
+There are times where you want to get informed of a event immediately as it happens.
+
+That's where notifications kick in.
+
+### How do notifications work
+
+Notifications inside ops don't happen by default.
+
+To enable notifications of a event, you need to mark the event with notify as true.
+
+Example:
+<Code client:only>
+```
+const e = {
+  name : "user's trial expired",
+  notify : true
+}
+```
+</Code>
+
+To receive push notifications on your device you need to enable push notifications. We will walk you through this step when you signup(as part of your onboarding process)
+
+If you're running this in PWA mode in iOS Safari, you will be automatically prompted to enable push notifications. See [PWA mode](/manual/pwa) for more details.
+
+### How to turn off notifications temporarily?
+
+There are scenarios where you want to turn off push notifications temporarily(eg, going on a hike, touching grass, etc).
+
+There is a very simple way to turn them off. Inside app.operational.co/profile and click on the "push notifications" slider to turn it off.
+
+This will turn off push notifications for all your logged in accounts. For instance if you're logged in to your laptop and to your phone, it will turn off push notifications in both these devices.
+
+This is because this toggle will turn off push notifications on a account level basis.
+
+
+### Why aren't notifications default on?
+
+Having notifications on by default sounds good in theory. Let's get notified when someone purchases my product. Yaaa!
+
+In practive we've seen this to be an utter distraction. We know other tools have notifications on by default but we purposefully didn't keep them on by default because 90% of the time you don't need to be notified of an event urgently.
+
+Notifications are little productivity zappers that can kill your time.
+
+We don't want to kill your time.
+
+Only enable notifications for events you really want to be urgently notified for.

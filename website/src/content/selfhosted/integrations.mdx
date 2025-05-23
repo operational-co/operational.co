@@ -1,0 +1,25 @@
+---
+title: Integrations
+slug: integrations
+description: Learn to to integrate your self-hosted Operational.co instance
+date: 2025-03-15
+---
+
+import Item from "@operational.co/components/card/index.vue";
+import Code from "@operational.co/components/code/index.vue";
+
+# Integrations with self-hosted instances
+
+### Nodejs SDK
+
+When using our Nodejs SDK, pass the `baseUrl` as the second parameter when initiating.
+
+<Code lang="js" client:load>
+```
+import Operational from "@operational.co/sdk"
+
+const ops = new Operational(`ops_yourapikey`, {
+  baseUrl : `https://urlofyourinstancebackend`
+});
+```
+</Code>

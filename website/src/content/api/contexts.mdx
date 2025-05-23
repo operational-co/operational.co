@@ -1,0 +1,169 @@
+---
+title: Sending contextual events
+slug: contexts
+description: Learn how to send events-in-events via contextual events
+date: 2024-06-08
+---
+
+
+import Item from "@operational.co/components/card/index.vue";
+import Code from "@operational.co/components/code/index.vue";
+import CodeWrap from "@operational.co/components/code/wrap.vue";
+import ApiItem from "@operational.co/components/ui/api-item.vue";
+
+# Sending contextual events
+
+Contextual events are events-in-events. Think of them as specific group of events that chained together. You can use this to visualized cron jobs, complex functions, workflows, etc.
+
+Here's a simple example:
+
+<CodeWrap client:load>
+<div slot="default">
+<Item client:only="vue" 
+  item={{
+    name: "cron job started",
+    avatar: "🤖",
+    createdAt: "2021-03-03",
+    contexts : [
+      {
+        name : 'processing',
+        createdAt: "2021-03-03",
+        content : '343543 job failed'
+      },
+      {
+        name : 'processing',
+        createdAt: "2021-03-03",
+        content : '183542 job passed'
+      },
+    ]
+  }}
+></Item>
+</div>
+
+<div slot="node">
+<Code client:load>
+```
+// first event
+let e = {
+  name: "cron job started",
+  avatar: "🤖",
+  contextId : "1_cron_job", // contextId needs to be common for all contextual events
+  contextStart : true // context start is only true for the first contextual event
+};
+
+await ops.events.ingest(e);
+
+// later on
+e = {
+  name: "processing",
+  contextId : "1_cron_job",
+  content : "343543 job failed"
+};
+
+await ops.events.ingest(e);
+
+// some time later
+e = {
+  name: "processing",
+  contextId : "1_cron_job",
+  contextId : "183542 job passed"
+};
+
+await ops.events.ingest(e);
+
+```
+</Code>
+</div>
+</CodeWrap>
+
+To start with contextual events, you need to make `contextStart : true` for the first event in the context and supply a contextId that is common for all contextual events in the chain.
+Note that you only need to mark the first event in the chain with contextStart:true.
+
+### What is the contextId?
+
+Imagine contextual events as part of a chain. To join events together in this chain, you need to have a common id. contextId is exactly that.
+
+However, you need a id that is also sufficiently unique for a chain of events that happen over various time periods and in seperate parts of your codebase.
+
+For instance, if you're tracking user signup flow, you might want to have ```"user_signup_" + userId``` as the contextId. This will generate a context of user_signup events for that specific user only.
+
+
+Here's an example.
+
+<Code client:load>
+```
+const e = {
+  name : 'Cron job started',
+  contextId : 'cronjob_1',
+  contextStart : true,
+  avatar: "🤖",
+}
+```
+</Code>
+
+Then further down your code base, add this in:
+
+<Code client:load>
+```
+const e = {
+  name : 'Cron job: processing job',
+  contextId : 'cronjob_1',
+}
+```
+</Code>
+
+And finally:
+
+<Code client:load>
+```
+const e = {
+  name : 'Cron job: processing finished',
+  contextId : 'cronjob_1',
+  type : "rows",
+  content : [
+    {
+      label : 'Successful jobs',
+      content : 10
+    },
+    {
+      label : 'Failed jobs',
+      content : 3
+    }
+  ]
+}
+```
+</Code>
+
+Putting it all together, these events will look like this:
+<CodeWrap client:load>
+<div slot="default">
+<Item client:only="vue" 
+  item={{
+    name: "cron job started",
+    avatar: "🤖",
+    createdAt: "2021-03-03",
+    contexts : [
+      {
+        name : 'Cron job: processing job',
+        createdAt: "2021-03-04",
+      },
+      {
+        name : 'Cron job: processing finished',
+        createdAt: "2021-03-05",
+        type : "rows",
+        content : [
+          {
+            label : 'Successful jobs',
+            content : 10
+          },
+          {
+            label : 'Failed jobs',
+            content : 3
+          }
+        ]
+      },
+    ]
+  }}
+></Item>
+</div>
+</CodeWrap>

@@ -8,20 +8,20 @@ import rehypeSlug from "rehype-slug";
 
 const mdxOptions = {
   //remarkPlugins: [remarkToc],
-  rehypePlugins: [rehypeSlug]
+  rehypePlugins: [rehypeSlug],
 };
 
 // https://astro.build/config
 export default defineConfig({
   prefetch: {
-    defaultStrategy: "viewport"
+    defaultStrategy: "viewport",
   },
   devToolbar: {
-    enabled: false
+    enabled: false,
   },
   site: "https://operational.co",
   server: {
-    port: 3000
+    port: 3000,
   },
   trailingSlash: "never",
   vite: {
@@ -29,13 +29,10 @@ export default defineConfig({
       preprocessorOptions: {
         scss: {
           //additionalData: `@import "@operational.co/styles/_globals.scss";`,
-          quietDeps: true
-        }
-      }
-    }
-  },
-  markdown: {
-    syntaxHighlight: false
+          quietDeps: true,
+        },
+      },
+    },
   },
   integrations: [
     vue(),
@@ -49,7 +46,7 @@ export default defineConfig({
           `https://operational.co/vs-logsnag`,
           `https://operational.co/vs-slack-telegram-discord`,
           `https://operational.co/styleguide`,
-          `https://operational.co/manual`
+          `https://operational.co/manual`,
         ];
         if (excludes.includes(page)) {
           console.log(`[EXCLUDED] ${page}`);
@@ -57,7 +54,7 @@ export default defineConfig({
         }
         console.log(`[INCLUDED] ${page}`);
         return true;
-      }
-    })
-  ]
+      },
+    }),
+  ],
 });

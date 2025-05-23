@@ -1,0 +1,98 @@
+---
+title: Install on your VPS
+slug: install-on-vps
+description: Learn how to install Operational on a VPS
+date: 2025-03-15
+---
+
+import Item from "@operational.co/components/card/index.vue";
+import CodeWrap from "@operational.co/components/code/wrap.vue";
+import Code from "@operational.co/components/code/index.vue";
+
+# Install on your VPS server
+
+For under $10 p/m you can host Operational on a rock-solid virtual private server(VPS).
+
+## Install on a fresh VPS server
+
+<iframe width="100%" height="315" src="https://www.youtube.com/embed/Mxn5DEIaRi4?si=ZdCmlH2InjRz5XUC" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
+This is the fastest method to install Operational. This method requires that:
+
+- You have setup a VPS server and are logged in as root
+- You have configured 2 domain names(one for frontend, one for backend) for your instance.
+
+After that, run this inside your VPS as root.
+
+
+<Code lang="bash" client:load>
+```
+curl -fsSL https://raw.githubusercontent.com/operational-co/operational.co/master/bin/setup-vps.sh -o setup-vps.sh && sudo bash setup-vps.sh
+```
+</Code>
+
+This script will:
+
+- Install nginx
+- Install nodejs
+- Install pm2
+- Install mysql
+- Install certbot
+- Configure nginx and certbot
+- Pull the repo and install dependencies
+- Setup Webpush
+- Create .env files
+- Configure UFW for basic security measures
+- Start the server
+
+---
+
+## Security
+
+This guide should be enough to get you up and runnings, however we recommend:
+
+- You install fail2ban and configure it
+- Make sure your server has ssh key auth and not password auth
+- Configure ssh to work on a non-default port
+
+These steps are a bit overkill if you're using Operational as a internal tool, but we recommend doing this for peace of mind.
+
+If you're new to VPS hosting, there are scripts out there to one-shot secure your server.
+
+- https://www.kkyri.com/p/how-to-secure-your-new-vps-a-step-by-step-guide
+- https://github.com/akcryptoguy/vps-harden/tree/master
+- https://github.com/vernu/vps-audit
+
+---
+
+## Maintainence
+
+### Updating Operational
+
+If you wish to update your copy of Operational, perform these steps:
+
+- ssh inside your server
+- go to /home/operational.go
+- run `git fetch origin`. If this doesn't work, set your git remove to operational's github repo.
+- cd to `/app` and run `npm run build`
+- restart nodejs by running `pm2 restart 0`
+
+### Accessing mysql
+
+You might need to access your mysql database directly via Sequel Ace or other Db viewer.
+
+To do this,
+
+- ssh inside your server
+- run `sudo ufw allow 3306/tcp`. This will allow outside connections
+- run `nano /root/.passwords`. This is where the root and operational_user passwords are stored.
+
+Use the passwords to access your mysql installation.
+
+## Server recommendations
+
+- We recommended Hetzner because they have the best bang-for-your-buck pricing. But really, any VPS provider will work.
+- Operational doesn't require much ram. We recommend at least 1 gb of ram but it will run on lower ram too.
+- We recommend ubuntu 20.x,22.x or 24.x for the server OS.
+
+

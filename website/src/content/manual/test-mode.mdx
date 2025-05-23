@@ -1,0 +1,57 @@
+---
+title: Test mode
+slug: test-mode
+description: Learn how to use test mode for events
+date: 2024-09-22
+---
+
+import Item from "@operational.co/components/card/index.vue";
+import CodeWrap from "@operational.co/components/code/wrap.vue";
+import Code from "@operational.co/components/code/index.vue";
+
+# Chapter 4. Test mode
+
+Ops has a test mode built in. Works very similar to Stripe's test mode.
+
+Test mode offers these benefits:
+
+- Debugging events from your local server is easier.
+- Keeps most of your codebase same for logging events.
+- Doesn't clog up unnecessary events in your feed from your local/staging server.
+- Doesn't rack up unnecessary costs(You won't be charged for test events)
+
+Test events are automatically removed from your account after 3 days. Also you won't receive notifications for test events.
+
+### How to use test mode?
+
+First, you need to send test events. These test events will show up in the webapp only if test mode is on. To turn on test mode, go to the profile page and turn on test mode.
+
+**How to send test events**
+
+Simply pass `test: true` to your event and it will be marked as a test event.
+<Code client:only>
+```
+let e = {
+  name : 'user signed up',
+  test : true
+}
+```
+</Code>
+
+This event won't automatically show up in the user interface. Go to your profile page and turn on the test mode toggle.
+
+### Best practices
+
+On your development / staging server, make sure all events has `test: true`
+
+If you're using the nodejs sdk, you can pass `test: true` as one of the sdk parameters and it will mark all api calls as test api calls.
+
+We recommend turning test mode on based on NODE_ENV. We recommend making test mode on by defauly but turn it off if NODE_ENV is production.
+
+<Code client:only>
+```
+const ops = new Operational(`yourapikey`, {
+  test : process.env.NODE_ENV !== 'production' ? true : false
+});
+```
+</Code>

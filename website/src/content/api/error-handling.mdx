@@ -1,0 +1,50 @@
+---
+title: Error handling
+slug: error-handling
+description: Understand how errors are handled in Operational's event api
+date: 2024-06-08
+---
+
+
+import Item from "@operational.co/components/card/index.vue";
+import Code from "@operational.co/components/code/index.vue";
+import ApiItem from "@operational.co/components/ui/api-item.vue";
+
+# Error handling
+
+### Response codes
+
+Every time you make a request, you will get one of these status codes back.
+
+<ApiItem client:load title="201" type="event created successfully" required="">
+  Event was created successfully.
+</ApiItem>
+<ApiItem client:load title="400" type="event wasn't created" required="">
+  Your event payload was deformed, or badly formatted. See the [api docs]("/api/introduction") for info.
+</ApiItem>
+<ApiItem client:load title="401" type="Authentication failed" required="">
+  Your API key was missing or invalid.
+</ApiItem>
+<ApiItem client:load title="500" type="Server error on our side" required="">
+  This indicates the problem was on our end. Please reach out to shash@operational.co if this were to happen.
+</ApiItem>
+
+<br />
+
+### Error handling
+
+Unlike traditional logs, ops has a fairly diverse API footprint. Eg you can send a lot of crazy stuff.
+
+This means there's a very likely possibility you might send us a request that won't make it past our parsers. Don't worry, we try to ingest the event data whenever possible.
+
+- userId field is meant to be a string. If you send a number, we'll simply convert it to a string on our end.
+- If the name field inside a event is too long, it will simply be truncated.
+- Events cannot be more than 100kb big. If they are, we will try to figure out if the event's type was json and if it was, it will be truncated. If the truncated event is under 100kb, ops will ingest the event.
+
+In these scenarios, we'll add warnings under the event letting you know that the event was modified so it could be ingested.
+
+---
+
+### Further reading
+
+We recommend reading the [owner's manual](/manual/introduction) to understand best practices.

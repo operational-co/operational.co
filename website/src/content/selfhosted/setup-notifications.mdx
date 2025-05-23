@@ -1,0 +1,94 @@
+---
+title: Setup Push Notifications
+slug: setup-notifications
+description: Learn how to setup push notifications and PWA mode for your self-hosted Operational.co instance
+date: 2025-03-15
+---
+
+import Item from "@operational.co/components/card/index.vue";
+import Code from "@operational.co/components/code/index.vue";
+
+# Setup Push Notifications
+
+The best thing about Operational self-hosted is being able to view your events on your mobile and receiving push notifications for them.
+
+To set this up you'll need:
+
+1. SSL connection
+2. Vapid keys
+3. Enable PWA mode
+4. Enable notifications inside your account
+
+Here's how to set this all up:
+
+## 1. Setup SSL
+
+First thing you need is to setup SSL connection from your instance to your domain. If you don't know how to do this, don't worry the [VPS setup guide](http://localhost:3000/selfhosted/install-on-vps) takes care of this.
+
+## 2. Setup Vapid keys
+
+You'll need to generate vapid keys. These are a pair of public and private keys. You can generate them from [here](https://www.attheminute.com/au/vapid-key-generator) or via the [web-push](https://www.npmjs.com/package/web-push) npm package.
+
+You'll also need a valid email address in this format: `mailto:abc@domain.com`
+
+Now you need to set these 3 things up as env vars inside your backend's env file like this:
+
+<Code lang="bash" client:load>
+
+```
+VAPID_EMAIL="mailto:email@domain.com"
+VAPID_PUBLIC_KEY="BP3td0Ocfd62J-Ggu9ma4SzWIwd5auBDG2rYD4K1uYOU1Q_LfVEKh9oYQqRLx6IITBHTIObZvAzXOJEzAmRGaoA"
+VAPID_PRIVATE_KEY="XAi7fu38VfY_Nm7JssLDxrpdHVRUPjtugWAlAqakKp1"
+```
+</Code>
+
+And then add this env var to your app's .env:
+<Code lang="bash" client:load>
+```
+VITE_PUSH_SERVER_KEY="BP3td0Ocfd62J-Ggu9ma4SzWIwd5auBDG2rYD4K1uYOU1Q_LfVEKh9oYQqRLx6IITBHTIObZvAzXOJEzAmRGaoA" // vapid public key
+```
+</Code>
+
+Then run `npm run build` inside app. This will set the env var inside the app.
+
+And then run `pm2 restart 0` to restart the backend.
+
+If you're using docker image, you just need to redeploy after adding env vars.
+
+## 3. Enable PWA mode
+
+Pwa means Progressive Web App. Without this, you won't be able to receive push notifications. On desktops, this is not necessary but you install 'install' PWA at least once.
+
+### Enabling PWA on mobile
+
+On iOS safari, open up your Operational instance
+
+Then click on the middle arrow button in the center of the navbar.
+
+Then click on 'Add to homescreen'
+
+Login and proceed to profile/push notifications (click on your avatar in the bottom nav menu)
+
+Here, it should say PWA enabled.
+
+### Enabling PWA on desktop
+
+Open your Operational instance in Chrome or Firefox(Safari isn't fully tested right now).
+
+Click on the the arrow icon to the right of the URL bar. This will 'install' it as a desktop app.
+
+Now you can use Operational like this. But if you don't want to, that's fine just close the desktop app.
+
+Now login and proceed to profile/push notifications and it should say PWA is enabled.
+
+## Enabling notifications
+
+Now all you need to do is to click the blue "Allow notifications" button inside profile/push notifications.
+
+If a popup doesn't open up asking for enabling notifications, check the URL bar for a "notifications blocked" label.
+
+Click on that and enable notifications. 
+
+---
+
+That's all you need to setup notifications. Once setup, you can test this by clicking on the "send test notification button".

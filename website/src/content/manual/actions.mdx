@@ -1,0 +1,165 @@
+---
+title: Actions
+slug: actions
+description: Learn the best ways to setup actions buttons for your product
+date: 2024-09-22
+---
+
+import Item from "@operational.co/components/card/index.vue";
+import Code from "@operational.co/components/code/index.vue";
+
+# Chapter 3. Actions
+
+Up till now, you can understand what's happening in your product. But what if you want to trigger something with an event?
+
+With Actions, you can add buttons to events. When pressed, they will send a webhook to your server and make it trigger things.
+
+Here are some common scenarios for Actions:
+
+- Ban users who signup with throwaway emails
+- Activate users manually
+- Send emails to users at various stages
+
+And so on.
+
+Here are some scenarios where actions can really help ease operational workload in your product.
+
+**Send email to user after their trial ends, allowing them to extend their trial**
+
+We've seen that when certain users are allowed to extend their trial based on some heuristic, they tend to usually convert into a paying user.
+
+The heuristic depends on your product. A basic heuristic would be usage. If a user hasn't used much of your product, there's no point allowing them to extend their trial.
+But if someone has used the heck out of your product, they might become paying customers after a bit more of usage.
+
+There's a certain psychological factor behind this too but that's a discussion for another day.
+
+<Item
+  item={{
+    name: "user trial ended",
+    createdAt: "2021-03-03",
+    avatar: "🤖",
+    type: "rows",
+    content: [
+      {
+        label: "ID",
+        content: 122,
+      },
+      {
+        label: "Name",
+        content: "Shash",
+      },
+      {
+        label: "Email",
+        content: "shash@operational.co",
+      },
+      {
+        label: "Bookmarks",
+        content: 122,
+      },
+      {
+        type: "json",
+        label: "form",
+        content: {
+          find_us: "Google",
+          works_in: "Marketing",
+        },
+      },
+    ],
+    actions: [
+      {
+        buttonText: "Extend trial?",
+      },
+    ],
+  }}
+></Item>
+
+Another scenario is where a user unsubscribes and you want to retain them. You can trigger ops to send an email asking them for feedback or ask them what would it take to retain them.
+In this scenario, you can add multiple actions which can trigger various emails.
+
+<Item
+  item={{
+    name: "user unsubscribed",
+    createdAt: "2021-03-03",
+    avatar: "🤖",
+    type: "rows",
+    content: [
+      {
+        label: "ID",
+        content: 122,
+      },
+      {
+        label: "Name",
+        content: "Shash",
+      },
+      {
+        label: "Email",
+        content: "shash@operational.co",
+      },
+      {
+        label: "Bookmarks",
+        content: 422,
+      },
+      {
+        type: "json",
+        label: "form",
+        content: {
+          find_us: "Google",
+          works_in: "Marketing",
+        },
+      },
+    ],
+    actions: [
+      {
+        buttonText: "Ask for feedback",
+      },
+      {
+        buttonText: "Ask to retain #1",
+      },
+      {
+        buttonText: "Ask to retain #2",
+      },
+    ],
+  }}
+></Item>
+
+## Setting up your server for actions
+
+Instead of creating multiple routes for each action, its better to create one route for all actions.
+
+This will keep your code tidier and make managing actions easier.
+
+<Code client:only>
+```
+// This is bad
+app.post('/api/action1', (req, res) => {
+})
+
+app.post('/api/action2', (req, res) => {
+})
+
+app.post('/api/action3', (req, res) => {
+})
+```
+</Code>
+
+<Code client:only>
+```
+// Do this instead
+
+app.post('/api/action', (req, res) => {
+  let type = req.body.action.type;
+
+  if(type === 'action1') {
+    await controller.action1;
+  }
+
+  if(type === 'action2') {
+    await controller.action2;
+  }
+
+  if(type === 'action3') {
+    await controller.action3;
+  }
+})
+```
+</Code>

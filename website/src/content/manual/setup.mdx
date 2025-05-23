@@ -1,0 +1,233 @@
+---
+title: Setup
+slug: setup
+description: Best practices for setting up Operational.co inside your product
+date: 2024-09-22
+---
+
+import Item from "@operational.co/components/card/index.vue";
+import Code from "@operational.co/components/code/index.vue";
+
+# Chapter 3. Setup
+
+You can track a gazillion events with ops.
+
+However a far better strategy is by writing down all your operational pain points in a notepad.
+
+If you're just starting to build a SaaS business for instance, you might've not dealt with operational issues so here are some:
+
+- When your server starts, you want to know what's the node_env, database_url, and other variables.
+- You want to understand who's signing up. I need to know their \*email, name and other bits
+- You need to know if new signups have either finished their onboarding process and/or they have used at least a bit of the product.
+- You want to know when user's trial ends. When this happens I need to know how much \*\*resources they consumed/processed.
+- You need to know when someone pays for my product.
+
+<small>
+  \*You can also include form data. For instance, during your onboarding process ask your user how did they found your
+  product. Then you can pass this information to ops.
+</small>
+
+<small>
+  \**Resources could be anything. For instance, if you're building a bookmarking app, a resource could be a bookmark. If
+  you're building an AI tool, a resource could be 1 api call to openAI; and so on.
+</small>
+
+---
+
+Once you've compiled a list of issues, next step is to send events to use ops to solve these issues.
+
+1. **When your server starts, you want to know what's the node_env, and other variables.**
+
+Send a event to ops on on server start. Pass in important env vars(don't add them all or it will look very confusing)
+
+<Item
+  item={{
+    name: "server started",
+    createdAt: "2021-03-03",
+    avatar: "🤖",
+    type: "rows",
+    content: [
+      {
+        type: "text",
+        label: "ENV",
+        content: "production",
+      },
+      {
+        type: "text",
+        label: "DATABASE_URL",
+        content: "mysql://user:213243tgfg435@111.222.333.444",
+      },
+      {
+        type: "text",
+        label: "mailchimp working",
+        content: "true",
+      },
+      {
+        type: "text",
+        label: "stripe connected",
+        content: "true",
+      },
+    ],
+  }}
+></Item>
+
+2. **You want to understand who's signing up. You need to know their \*email, name and other bits**
+
+Send a event to ops when someone signs up. Pass all important user data + any form data you've collected from them.
+
+<Item client:only
+  item={{
+    name: "user signup",
+    createdAt: "2021-03-03",
+    avatar: "🤖",
+    type: "rows",
+    content: [
+      {
+        label: "ID",
+        content: 122,
+      },
+      {
+        label: "Name",
+        content: "Shash",
+      },
+      {
+        label: "Email",
+        content: "shash@operational.co",
+      },
+      {
+        type: "json",
+        label: "form",
+        content: {
+          find_us: "Google",
+          works_in: "Marketing",
+        },
+      },
+    ],
+  }}
+></Item>
+
+3. **You need to know if new signups have either finished their onboarding process and/or they have used at least a bit of the product.**
+
+Send a event to ops when someone signs up. Pass all important user data + any form data you've collected from them.
+
+<Item
+  item={{
+    name: "user onboarded",
+    createdAt: "2021-03-03",
+    avatar: "🤖",
+    type: "rows",
+    content: [
+      {
+        label: "ID",
+        content: 122,
+      },
+      {
+        label: "Name",
+        content: "Shash",
+      },
+      {
+        label: "Email",
+        content: "shash@operational.co",
+      },
+      {
+        label: "Bookmarks",
+        content: 7,
+      },
+    ],
+  }}
+></Item>
+
+Hint: You can also combine similar events using [contexts](/api/contexts). Example:
+
+<Item client:only
+  item={{
+    name: "user signup",
+    createdAt: "2021-03-03",
+    avatar: "🤖",
+    type: "rows",
+    content: [
+      {
+        label: "ID",
+        content: 122,
+      },
+      {
+        label: "Name",
+        content: "Shash",
+      },
+      {
+        label: "Email",
+        content: "shash@operational.co",
+      },
+      {
+        type: "json",
+        label: "form",
+        content: {
+          find_us: "Google",
+          works_in: "Marketing",
+        },
+      },
+    ],
+    contexts: [
+      {
+        name: "user activated",
+        createdAt: "2021-03-03",
+        avatar: "🤖",
+      },
+      {
+        name: "user onboarded",
+        createdAt: "2021-03-03",
+        avatar: "🤖",
+      },
+    ],
+  }}
+></Item>
+
+4. **You want to know when user's trial ends. When this happens you need to know how much resources they consumed/processed.**
+
+Send a event when a user's trial finishes. Pass key metrics in the event. Ideally, pass actions here to ask high value users whether they would like to extend their trial, or ask for a review in exchange for a trial extension.
+<Item client:only
+  item={{
+    name: "user trial ended",
+    createdAt: "2021-03-03",
+    avatar: "🤖",
+    type: "rows",
+    content: [
+      {
+        label: "ID",
+        content: 122,
+      },
+      {
+        label: "Name",
+        content: "Shash",
+      },
+      {
+        label: "Email",
+        content: "shash@operational.co",
+      },
+      {
+        label: "Bookmarks",
+        content: 122,
+      },
+      {
+        type: "json",
+        label: "form",
+        content: {
+          find_us: "Google",
+          works_in: "Marketing",
+        },
+      },
+    ],
+    actions : [
+      {
+        buttonText : 'Extend trial',
+        key : 'extend_trial',
+        url : '#'
+      },
+      {
+        buttonText : 'Ask for review',
+        key : 'ask_for_review',
+        url : '#'
+      }
+    ]
+  }}
+></Item>

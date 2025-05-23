@@ -1,0 +1,86 @@
+---
+title: API docs
+slug: introduction
+description: Introduction to Operational's API docs
+date: 2024-06-08
+---
+
+
+import Item from "@operational.co/components/card/index.vue";
+import Code from "@operational.co/components/code/index.vue";
+import CodeWrap from "@operational.co/components/code/wrap.vue";
+import ApiItem from "@operational.co/components/ui/api-item.vue";
+import ApiToc from "@operational.co/components/ui/api-toc.vue";
+
+# API Docs
+
+## Integrations
+
+Operational has a official node.js SDK.
+
+For other languages, you can use our REST Api.
+
+To get started with our sdk, run this inside your project:
+<Code client:only>
+```
+npm install --save @operational.co/sdk
+```
+</Code>
+
+## Authentication
+
+You will need a valid api key to use Operational.
+
+To do so, create an account at app.operational.co
+
+Then copy the api key from app.operational.co/profile/apikeys and pass it as the first parameter in the SDK or as a bearer token if using the REST api.
+
+Example:
+<CodeWrap client:only>
+<div slot="node">
+<Code client:only>
+```
+import Operational from "@operational.co/sdk";
+// Or use this if imports are not supported in your node.js version
+// const Operational = require("@operational.co/sdk");
+
+const ops = new Operational("yourapikey");
+```
+</Code>
+</div>
+<div slot="fetch">
+<Code client:only>
+```
+const bearerToken = 'Bearer apikey';
+const baseUrl = 'https://api.operational.co';
+const url = `api/${this.version}/log`;
+const event = {
+  name: "test event"
+};
+
+fetch(`${baseUrl}/${url}`, {
+  method: 'POST',
+  headers: {
+    'Authorization': bearerToken,
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify(event)
+})
+.then(response => {
+  if (!response.ok) {
+    throw new Error('Network response was not ok');
+  }
+  return response.json();
+})
+.then(data => {
+  console.log('Success:', data);
+})
+.catch(error => {
+  console.error('Error:', error);
+});
+```
+</Code>
+</div>
+</CodeWrap>
+
+<ApiToc></ApiToc>

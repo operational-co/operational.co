@@ -10,7 +10,13 @@ import getJsonld from "@/lib/get-jsonld.js";
 import PageHeader from "@/components/page-header.vue"
 import UsecasesRelated from "@/components/usecases-related.vue"
 
-const posts = await Astro.glob('../../../../packages/content/usecases/*.mdx');
+const postModules = import.meta.glob('../../../../packages/content/*/*.mdx', { eager: true });
+
+const posts = Object.entries(postModules).map(([file, mod]) => ({
+  file,
+  ...mod
+}));
+
 const params = Astro.params;
 
 let page = null;

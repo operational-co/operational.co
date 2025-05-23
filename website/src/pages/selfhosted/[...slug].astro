@@ -1,32 +1,28 @@
 ---
 // @ts-nocheck
 import BaseLayout from "@/layouts/base.astro";
-import Constrain from "@operational.co/components/ui/constrain.vue"
-import {list, getItems} from "@operational.co/content/list.js";
-import headings from "@/lib/get-headings.js";
-import slugify from "@/lib/slugify.js";
-import Toc from "@operational.co/components/ui/toc.vue";
+import {list, getItems} from "@/content/list.js";
 import Prevnext from "@operational.co/components/ui/prevnext.vue";
 import PageApi from "@/components/page-api.vue";
 
-const posts = await Astro.glob('../../../../packages/content/*/*.mdx');
+import { getEntry, render } from 'astro:content';
 
-const {listItem, prevListItem, nextListItem} = getItems(list, Astro.params.slug);
+const baseSlug = 'selfhosted'
 
+const post = await getEntry(baseSlug, Astro.params.slug);
+const { Content } = await render(post);
+
+
+const {listItem, prevListItem, nextListItem} = getItems(list, `${baseSlug}/${Astro.params.slug}`);
 if(!listItem) {
   return;
 }
 
 export const getStaticPaths = function() {
   let items = [];
+  let baseSlug = 'selfhosted';
   list.map((item) => {
-    if(!item.children) {
-      items.push({
-        params : {
-          slug : `/`
-        }
-      })
-    } else {
+    if(item.slug === baseSlug && item.children) {
       for(let i = 0 ; i < item.children.length; i++) {
         const child = item.children[i];
         items.push({
@@ -41,20 +37,6 @@ export const getStaticPaths = function() {
 }
 
 let content = null;
-
-for(let  i = 0; i < posts.length; i++) {
-  let post = posts[i];
-  let file = post.file;
-
-  let path = `/${listItem.slug}`;
-
-  if(file.includes(path)) {
-    content = post;
-    break;
-  }
-}
-
-const Content = content.Content;
 
 ---
 

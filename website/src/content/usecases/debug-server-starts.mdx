@@ -1,0 +1,49 @@
+import Item from "@operational.co/components/card/index.vue";
+import Code from "@operational.co/components/code/index.vue";
+import CodeWrap from "@operational.co/components/code/wrap.vue";
+
+When your server (re)starts, you can send an event to Operational with relevant information about the server status, various 3rd party connections, and more.
+
+
+<CodeWrap client:only>
+<div slot="default">
+<Item client:only
+  item={{
+    name: "server started",
+    avatar: "🤖",
+    createdAt: "2021-03-03",
+    type : "rows",
+    content : [
+      {
+        label : 'NODE_ENV',
+        content : 'production'
+      },
+      {
+        label : 'Stripe key',
+        content : 'cus_fg4t4gtnonhi5o3hnt'
+      },
+      {
+        label : 'Pdf service',
+        content : 'working'
+      },
+    ]
+  }}
+></Item>
+</div>
+<div slot="node">
+<Code client:only>
+```
+const e = {
+  name: "a critical event",
+  avatar: "🤖",
+  actions : [
+    {
+      url : 'https://webhook.site',
+      buttonText : 'Press me'
+    }
+  ]
+};
+```
+</Code>
+</div>
+</CodeWrap>
