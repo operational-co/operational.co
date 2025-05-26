@@ -41,14 +41,23 @@ const selfhosted = defineCollection({
   }),
 });
 
+const integrations = defineCollection({
+  loader: glob({ pattern: "*.mdx", base: "./src/content/integrations" }),
+  schema: z.object({
+    title: z.string(),
+    slug: z.string(),
+    description: z.string().optional(),
+  }),
+});
+
 const pages = defineCollection({
   loader: glob({ pattern: "*.mdx", base: "./src/content/pages" }),
   schema: z.object({
-    //title: z.string(),
-    //slug: z.string(),
-    //description: z.string().optional(),
+    title: z.string(),
+    slug: z.string(),
+    description: z.string().optional(),
   }),
 });
 
 // 2. Export your collections
-export const collections = { docs, api, manual, selfhosted, pages };
+export const collections = { docs, api, manual, selfhosted, integrations, pages };

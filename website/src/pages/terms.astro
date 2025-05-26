@@ -1,28 +1,24 @@
 ---
 import BaseLayout from "@/layouts/base.astro";
-import PageEvent from "@/components/page-event.vue";
-import Styleguide from "@operational.co/components/ui/styleguide.vue";
-import UiDivider from "@/components/ui-divider.vue"
+import Constrain from "@operational.co/components/ui/constrain.vue"
+
+import { getEntry, render } from 'astro:content';
+
 import PageHeader from "@/components/page-header.vue"
-import PageCta from "@/components/page-cta.vue"
-import PageFeatures from "@/components/page-features.vue"
-import PageContent from "@/components/page-content.vue";
-import PageFaqs from "@/components/page-faqs.vue";
 
-import * as Post from '@operational.co/content/pages/terms.mdx';
+const post = await getEntry('pages', 'terms');
 
-const Content = Post.Content;
-const {title, description} = Post.frontmatter;
-
+const seoTitle = post.data.seoTitle || post.data.description || post.data.title;
+const description = post.data.description;
+const { Content } = await render(post);
 ---
 
-<BaseLayout>
-
-  <PageHeader>
+<BaseLayout title={seoTitle} description={description}>
+  <PageHeader subtitle="Logsnag alternative">
 
      <div slot="title">
       <h1>
-      Terms & conditions
+      Operational vs Logsnag
       </h1>
     </div>
     <div slot="body">
@@ -30,8 +26,9 @@ const {title, description} = Post.frontmatter;
     </div>
 
   </PageHeader>
-  <PageContent>
-    <Content />
-  </PageContent>
-
+  <Constrain>
+    <div class="c-page">
+      <Content />
+    </div>
+  </Constrain>
 </BaseLayout>

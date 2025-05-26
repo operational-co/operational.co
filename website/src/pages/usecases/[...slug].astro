@@ -2,8 +2,6 @@
 // @ts-nocheck
 import BaseLayout from "@/layouts/base.astro";
 import Constrain from "@operational.co/components/ui/constrain.vue"
-import {apiList, manualList, usecasesList} from "@operational.co/content/list.js";
-import headings from "@/lib/get-headings.js";
 import slugify from "@/lib/slugify.js";
 import getJsonld from "@/lib/get-jsonld.js";
 
@@ -35,6 +33,7 @@ for(let i = 0; i < usecasesList.length; i++) {
 
 
 export const getStaticPaths = function() {
+  return [];
   let list = [];
   usecasesList.map((page) => {
     let lastName = page.path.split('/');

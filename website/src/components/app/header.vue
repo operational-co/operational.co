@@ -5,8 +5,11 @@
         <a class="logo" href="/">
           <h1>Operational</h1>
         </a>
-        <a data-astro-prefetch class="btn btn-transparent" href="/api">Docs</a>
-        <a class="btn btn-transparent" href="https://github.com/operational-co/operational.co" target="_blank"
+        <a data-astro-prefetch class="btn btn-transparent" href="/docs/start-here">Docs</a>
+        <a
+          class="btn btn-transparent"
+          href="https://github.com/operational-co/operational.co"
+          target="_blank"
           >Github</a
         >
         <a class="btn btn-sm btn-fancy" href="https://app.operational.co?login"> Open app </a>
@@ -37,11 +40,29 @@
     </div>
     <div class="c-header__menu">
       <a href="https://github.com/operational-co/operational.co" target="_blank">Github</a>
-      <a data-astro-prefetch :class="[{ active: route.includes('/articles') }]" href="/articles"> Articles </a>
-      <a data-astro-prefetch :class="[{ active: route.includes('/pitch') }]" href="/pitch"> Pitch </a>
-      <a data-astro-prefetch :class="[{ active: route.includes('/usecases') }]" href="/usecases"> Usecases </a>
-      <a data-astro-prefetch :class="[{ active: route.includes('/playground') }]" href="/playground"> Playground </a>
-      <a data-astro-prefetch :class="[{ active: route.includes('/api') }]" href="/api"> API </a>
+      <a data-astro-prefetch :class="[{ active: route.includes('/articles') }]" href="/articles">
+        Articles
+      </a>
+      <a data-astro-prefetch :class="[{ active: route.includes('/pitch') }]" href="/pitch">
+        Pitch
+      </a>
+      <a data-astro-prefetch :class="[{ active: route.includes('/usecases') }]" href="/usecases">
+        Usecases
+      </a>
+      <a
+        data-astro-prefetch
+        :class="[{ active: route.includes('/playground') }]"
+        href="/playground"
+      >
+        Playground
+      </a>
+      <a
+        data-astro-prefetch
+        :class="[{ active: route.includes('/docs/start-here') }]"
+        href="/docs/start-here"
+      >
+        API
+      </a>
     </div>
   </div>
 </template>
@@ -51,18 +72,18 @@ import Constrain from "@operational.co/components/ui/constrain.vue";
 
 export default {
   components: {
-    Constrain
+    Constrain,
   },
 
   data: function () {
     return {
-      menuActive: false
+      menuActive: false,
     };
   },
 
   props: {
     hidden: {},
-    url: {}
+    url: {},
   },
 
   computed: {
@@ -73,14 +94,14 @@ export default {
       }
 
       return this.url.pathname;
-    }
+    },
   },
 
   methods: {
     onMenuToggle: function () {
       this.menuActive = !this.menuActive;
-    }
-  }
+    },
+  },
 };
 </script>
 

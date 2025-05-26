@@ -1,17 +1,16 @@
 ---
-import BaseHead from '@/components/base-head.astro';
-import Header from '@/components/app/header.vue';
 import BaseLayout from "@/layouts/base.astro";
-import PageEvent from "@/components/page-event.vue";
 import Constrain from "@operational.co/components/ui/constrain.vue"
 
-import * as Post from '@operational.co/content/pages/vs-logsnag.mdx';
+import { getEntry, render } from 'astro:content';
+
 import PageHeader from "@/components/page-header.vue"
 
-const {title, description} = Post.frontmatter;
+const post = await getEntry('pages', 'vs-logsnag');
 
-const seoTitle = `Operational is the best Logsnag alternative`;
-const Content = Post.Content;
+const seoTitle = post.data.seoTitle || post.data.description || post.data.title;
+const description = post.data.description;
+const { Content } = await render(post);
 ---
 
 <BaseLayout title={seoTitle} description={description}>

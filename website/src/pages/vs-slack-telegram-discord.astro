@@ -1,16 +1,31 @@
 ---
-import BaseHead from '@/components/base-head.astro';
-import Header from '@/components/app/header.vue';
 import BaseLayout from "@/layouts/base.astro";
-import PageEvent from "@/components/page-event.vue";
 import Constrain from "@operational.co/components/ui/constrain.vue"
 
-import * as Post from '@operational.co/content/pages/vs-slack-telegram-discord.mdx';
-const {title, description} = Post.frontmatter;
-const Content = Post.Content;
+import { getEntry, render } from 'astro:content';
+
+import PageHeader from "@/components/page-header.vue"
+
+const post = await getEntry('pages', 'vs-slack-telegram-discord');
+
+const seoTitle = post.data.seoTitle || post.data.description || post.data.title;
+const description = post.data.description;
+const { Content } = await render(post);
 ---
 
-<BaseLayout title={title} description={description}>
+<BaseLayout title={seoTitle} description={description}>
+  <PageHeader subtitle="Logsnag alternative">
+
+     <div slot="title">
+      <h1>
+      Operational vs Logsnag
+      </h1>
+    </div>
+    <div slot="body">
+      
+    </div>
+
+  </PageHeader>
   <Constrain>
     <div class="c-page">
       <Content />

@@ -47,7 +47,17 @@ export default {
   }
 
   @media screen and (max-width: 980px) {
-    padding-top: 0.25rem;
+    padding-top: 0;
+
+    .c-constrain {
+      &__sidebar {
+        margin-bottom: 0 !important;
+        border-radius: 0 !important;
+      }
+      &__inner {
+        border-radius: 0;
+      }
+    }
   }
 
   @media screen and (max-width: 576px) {

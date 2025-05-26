@@ -1,21 +1,24 @@
 ---
 import BaseLayout from "@/layouts/base.astro";
-import PageEvent from "@/components/page-event.vue";
 import Constrain from "@operational.co/components/ui/constrain.vue"
+
+import { getEntry, render } from 'astro:content';
+
 import PageHeader from "@/components/page-header.vue"
 
-import * as Post from '@operational.co/content/pages/pitch.mdx';
+const post = await getEntry('pages', 'pitch');
 
-const Content = Post.Content;
-const {title, description} = Post.frontmatter;
+const seoTitle = post.data.seoTitle || post.data.description || post.data.title;
+const description = post.data.description;
+const { Content } = await render(post);
 ---
 
-<BaseLayout title={title} description={description}>
-  <PageHeader subtitle="Pitch" size="sm">
+<BaseLayout title={seoTitle} description={description}>
+  <PageHeader subtitle="Logsnag alternative">
 
      <div slot="title">
       <h1>
-      Introducing Operational Event logger
+      Operational vs Logsnag
       </h1>
     </div>
     <div slot="body">
@@ -23,16 +26,9 @@ const {title, description} = Post.frontmatter;
     </div>
 
   </PageHeader>
-
-  <Constrain size="sm">
+  <Constrain>
     <div class="c-page">
       <Content />
     </div>
   </Constrain>
 </BaseLayout>
-
-<style is:global>
-  .c-card {
-    margin-bottom:1rem;
-  }
-</style>
