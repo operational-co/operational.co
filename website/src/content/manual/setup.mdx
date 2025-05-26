@@ -40,7 +40,7 @@ Once you've compiled a list of issues, next step is to send events to use ops to
 
 Send a event to ops on on server start. Pass in important env vars(don't add them all or it will look very confusing)
 
-<Item
+<Item client:only
   item={{
     name: "server started",
     createdAt: "2021-03-03",
@@ -110,7 +110,7 @@ Send a event to ops when someone signs up. Pass all important user data + any fo
 
 Send a event to ops when someone signs up. Pass all important user data + any form data you've collected from them.
 
-<Item
+<Item client:only 
   item={{
     name: "user onboarded",
     createdAt: "2021-03-03",

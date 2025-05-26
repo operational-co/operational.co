@@ -11,8 +11,6 @@
     "backend",
     "app",
     "website",
-    "website2",
-    "cms",
     "sdk"
   ],
   "dependencies": {

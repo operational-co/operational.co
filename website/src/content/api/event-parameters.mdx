@@ -5,18 +5,12 @@ description: A list of all event api's parameters
 date: 2024-06-08
 ---
 
-
 import Item from "@operational.co/components/card/index.vue";
-import Code from "@operational.co/components/code/index.vue";
-import CodeWrap from "@operational.co/components/code/wrap.vue";
 import ApiItem from "@operational.co/components/ui/api-item.vue";
 
 # Event parameters
 
 Here are all event api's parameters. Only name is required, everything else is optional.
-
-<CodeWrap client:load>
-<div slot="default">
 
 <ApiItem client:load title="name" type="string" required="true">
   Required, must be a string, max 26 characters, more characters will be truncated.
@@ -56,11 +50,10 @@ Here are all event api's parameters. Only name is required, everything else is o
 <ApiItem client:load title="contextStart" type="boolean" required="false">
   Defaults to false. Related to [contexts.](/api/contexts)
 </ApiItem>
-</div>
 
-<div slot="node">
-<Code client:load>
-```
+<br />
+
+```js
 const ops = new Operational("yourapikey");
 const e = {
   name: "some event",
@@ -78,11 +71,8 @@ const e = {
 
 await ops.events.ingest(e);
 ```
-</Code>
-</div>
-<div slot="fetch">
-<Code client:load>
-```
+
+```js
 const e = {
   name: "some event",
   avatar: "🤖",
@@ -110,6 +100,3 @@ const config = {
 
 await fetch(url, config);'
 ```
-</Code>
-</div>
-</CodeWrap>

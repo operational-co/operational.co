@@ -9,15 +9,20 @@ import Item from "@operational.co/components/card/index.vue";
 import CodeWrap from "@operational.co/components/code/wrap.vue";
 import Code from "@operational.co/components/code/index.vue";
 
-# Chapter 6. PWA mode
+# PWA & push notifications
 
-On mobile, ops is meant to run as progressive web app(pwa). This has a few benefits:
+PWA means progressive web app. Running Operational under this mode alters its functionality:
+
+- When PWA is enabled on your browser, you can run it as a desktop app.
+- When PWA is enabled on your phone, you can run it as a native app.
+
+Specifically for mobile there are a few benefits:
 
 - Receive push notifications
 - Looks and feels like a real app
-- Cannot be dismissed/controlled by Safari
+- Cannot be dismissed by Safari
 
-**Why run as a pwa?**
+**Why run as a PWA?**
 
 Ops is meant to be used on the fly. Enjoy the utter satisfaction of controlling your backend as you go around doing your daily tasks:
 
@@ -28,6 +33,14 @@ Ops is meant to be used on the fly. Enjoy the utter satisfaction of controlling 
 PWA makes all this possible.
 
 ### How to enable PWA mode
+
+**For desktop**
+
+- Open up app.operational.co
+- Click on the install icon on the right side of the url baseUrl
+- That's it. Operational should open up as a desktop app.
+
+You can still continue using it as a webapp if you wish.
 
 **For iOS**
 

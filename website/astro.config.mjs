@@ -6,6 +6,8 @@ import vue from "@astrojs/vue";
 import remarkToc from "remark-toc";
 import rehypeSlug from "rehype-slug";
 
+import tokyoNightMod from "./tokyo-night-mod.json";
+
 const mdxOptions = {
   //remarkPlugins: [remarkToc],
   rehypePlugins: [rehypeSlug],
@@ -32,6 +34,11 @@ export default defineConfig({
           quietDeps: true,
         },
       },
+    },
+  },
+  markdown: {
+    shikiConfig: {
+      theme: tokyoNightMod,
     },
   },
   integrations: [

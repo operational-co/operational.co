@@ -84,6 +84,49 @@ let headerHidden = false;//Astro.url.pathname === '/';
 			background: transparent;
 		}
 
+		starlight-tabs {
+
+			> [role="tabpanel"] {
+				margin-top:0!important;
+			}
+
+			.tablist-wrapper {
+				overflow-y: hidden;
+
+				ul {
+					display: flex;
+					list-style: none;
+					border-bottom: 2px solid var(--sl-color-gray-5);
+					padding: 0;
+					margin-bottom:0;
+
+					border-bottom:rgba(255,255,255,0.2) solid 2px;
+				}
+
+				li {
+					margin-bottom: -2px;
+				}
+
+				a {
+					display: inline-block;
+					padding: 0.25rem 1rem!important;
+					text-decoration: none;
+					border-bottom:transparent solid 2px;
+
+					&[aria-selected=true] {
+						border-bottom-color:red;
+						font-weight: 600;
+						background-color: var(--color-bg-3);
+					}
+				}
+			}
+
+			code {
+				border-top-left-radius: 0;
+				border-top-right-radius: 0;
+			}
+		}
+
 		@media screen and (max-width:576px) {
 			> main {
 				padding-top:48px;

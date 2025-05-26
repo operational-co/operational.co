@@ -6,7 +6,6 @@ date: 2024-06-08
 ---
 
 import Item from "@operational.co/components/card/index.vue";
-import Code from "@operational.co/components/code/index.vue";
 import CodeWrap from "@operational.co/components/code/wrap.vue";
 import ApiItem from "@operational.co/components/ui/api-item.vue";
 
@@ -18,8 +17,7 @@ Pressing these buttons will send a webhook to your server.
 
 Here's a simple example:
 
-<CodeWrap client:load>
-<div slot="default">
+
 <Item client:only="vue" 
   item={{
     name: "a critical event",
@@ -34,8 +32,7 @@ Here's a simple example:
     ]
   }}
 ></Item>
-</div>
-<div slot="node">
+
 ```js
 const e = {
   name: "a critical event",
@@ -48,14 +45,10 @@ const e = {
   ]
 };
 ```
-</div>
-</CodeWrap>
 
 You can also have static buttons which simply open up a webpage. Here's another example:
 
-<CodeWrap client:load>
-<div slot="default">
-<Item client:load="vue" 
+<Item client:only="vue" 
   item={{
     name: "a critical event",
     avatar: "🤖",
@@ -69,8 +62,6 @@ You can also have static buttons which simply open up a webpage. Here's another 
     ]
   }}
 ></Item>
-</div>
-<div slot="node">
 ```js
 const e = {
   name: "a critical event",
@@ -84,12 +75,9 @@ const e = {
   ]
 };
 ```
-</div>
-</CodeWrap>
 
 You can pass Actions as a json array. Each object in the array has these params:
 
-<CodeWrap client:load>
 <ApiItem client:load title="url" type="string" required="true">
   A valid url, eg https://stripe.com, http://server.io, etc.
 </ApiItem>
@@ -110,7 +98,7 @@ You can pass Actions as a json array. Each object in the array has these params:
   Defaults to null. This can be a string, or a object. This will be passed to the server when this action is triggered.
 </ApiItem>
 
-<div slot="node">
+
 ```js
 const e = {
   name: "some event",
@@ -131,8 +119,6 @@ const e = {
   ]
 };
 ```
-</div>
-</CodeWrap>
 
 ## How do actions work?
 

@@ -34,25 +34,6 @@ With Operational, we're writing this manual to help you better understand how to
 
 ---
 
-Before diving into setting up Operational(**ops from now on**), you should know 2 key concepts that make up ops.
-
-- Events are the things that happen in your product, eg: user signed up, cron job ran, etc.
-- Users are the people who use your product.
-
-To set up ops successfully, you need to understand how these concepts work together and plan your implementation accordingly.
-
-### Events
-
-Events are things like user signups, paying for subscriptions, etc.
-
-In the context of ops, events are meant to be more serious things like user signups, paying for subscriptions, etc, as opposed to "user clicked a button", "user used a feature", etc.
-
-### Users
-
-Users are people who are using your product. At the moment, users have been disabled for the beta period.
-
-In the near future, we will release features that will help you visualize individual user's journeys.
-
 ### What makes Operational different
 
 Logging tools are divided into two areas. Low level logging tools like the ELK stack, Greylog, Grafana, etc.
@@ -65,12 +46,29 @@ They can also ingest lots of data, but you will be limited by cost. They are gre
 
 ![understand ops](/images/manual/introduction/understand-ops.png)
 
-Operational comes as a solution where you want to receive events, sometimes even push notifications for critical events. Operational is meant for logging high value, sometimes critical events.
+Operational comes as a solution where you want to receive events for critical events. Operational is meant for logging high value events such as what did your user do, how did they do it when did they do it, etc.
 
-In other words, if analytics tools give you macro level visibility of your product, Operational gives the micro level visibility.
+It also works like an audit log so you can go back and dig out an entire history of a chain of events.
+
+*In other words, if analytics give you macro level visibility of your product, Operational gives the micro level visibility.*
+
+## What should you track?
+
+Start with a few key events:
+- User signs up
+- User's trial expires
+- User starts paying for your product
+- User stops paying for your product
+
+Most operational issues are centered around these areas.
+
+Later on, you want to add essential data, eg: did someone complete their onboarding process, was a email sent suceessfully on invoice, when did a user reset their email/password, etc.
+This can help you resolve support issues.
+
+Finally, depending on your needs, you might also want to log kyc data, eg save ip address on user login, signup events.
 
 ### How much data can you ingest with Operational?
 
 A lot. Operational has been tested to ingested 2 million records easily at this stage. It can ingest a lot more data, but it is limited by cost.
 
-For SaaS businesses doing between 5 - 10k a month, we don't recommend sending more then 150,000 events.
+For SaaS businesses doing between $5 - 10k a month, we don't recommend sending more then 150,000 events per month.

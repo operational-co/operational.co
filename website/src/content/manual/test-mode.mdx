@@ -5,11 +5,7 @@ description: Learn how to use test mode for events
 date: 2024-09-22
 ---
 
-import Item from "@operational.co/components/card/index.vue";
-import CodeWrap from "@operational.co/components/code/wrap.vue";
-import Code from "@operational.co/components/code/index.vue";
-
-# Chapter 4. Test mode
+# Test mode
 
 Ops has a test mode built in. Works very similar to Stripe's test mode.
 
@@ -29,14 +25,13 @@ First, you need to send test events. These test events will show up in the webap
 **How to send test events**
 
 Simply pass `test: true` to your event and it will be marked as a test event.
-<Code client:only>
-```
+
+```js
 let e = {
   name : 'user signed up',
   test : true
 }
 ```
-</Code>
 
 This event won't automatically show up in the user interface. Go to your profile page and turn on the test mode toggle.
 
@@ -46,12 +41,11 @@ On your development / staging server, make sure all events has `test: true`
 
 If you're using the nodejs sdk, you can pass `test: true` as one of the sdk parameters and it will mark all api calls as test api calls.
 
-We recommend turning test mode on based on NODE_ENV. We recommend making test mode on by defauly but turn it off if NODE_ENV is production.
+We recommend making test mode on by default but turn it off if NODE_ENV is production.
 
-<Code client:only>
-```
+
+```js
 const ops = new Operational(`yourapikey`, {
   test : process.env.NODE_ENV !== 'production' ? true : false
 });
 ```
-</Code>

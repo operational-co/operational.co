@@ -9,7 +9,7 @@ import Item from "@operational.co/components/card/index.vue";
 import CodeWrap from "@operational.co/components/code/wrap.vue";
 import Code from "@operational.co/components/code/index.vue";
 
-# Chapter 5. Notifications
+# Notifications
 
 There are times where you want to get informed of a event immediately as it happens.
 
@@ -22,14 +22,13 @@ Notifications inside ops don't happen by default.
 To enable notifications of a event, you need to mark the event with notify as true.
 
 Example:
-<Code client:only>
-```
+
+```js
 const e = {
   name : "user's trial expired",
   notify : true
 }
 ```
-</Code>
 
 To receive push notifications on your device you need to enable push notifications. We will walk you through this step when you signup(as part of your onboarding process)
 
@@ -48,7 +47,7 @@ This is because this toggle will turn off push notifications on a account level 
 
 ### Why aren't notifications default on?
 
-Having notifications on by default sounds good in theory. Let's get notified when someone purchases my product. Yaaa!
+Having notifications on by default sounds good in theory. Let's get notified when someone purchases a product. Yaaa!
 
 In practive we've seen this to be an utter distraction. We know other tools have notifications on by default but we purposefully didn't keep them on by default because 90% of the time you don't need to be notified of an event urgently.
 

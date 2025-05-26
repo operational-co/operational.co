@@ -5,6 +5,15 @@ import { z, defineCollection } from "astro:content";
 import { glob, file } from "astro/loaders";
 
 // 1. Define a "blog" collection
+const docs = defineCollection({
+  loader: glob({ pattern: "*.mdx", base: "./src/content/docs" }),
+  schema: z.object({
+    title: z.string(),
+    slug: z.string(),
+    description: z.string().optional(),
+  }),
+});
+
 const api = defineCollection({
   loader: glob({ pattern: "*.mdx", base: "./src/content/api" }),
   schema: z.object({
@@ -32,14 +41,14 @@ const selfhosted = defineCollection({
   }),
 });
 
-const other = defineCollection({
-  loader: glob({ pattern: "*.mdx", base: "./src/content/other" }),
+const pages = defineCollection({
+  loader: glob({ pattern: "*.mdx", base: "./src/content/pages" }),
   schema: z.object({
-    title: z.string(),
-    slug: z.string(),
-    description: z.string().optional(),
+    //title: z.string(),
+    //slug: z.string(),
+    //description: z.string().optional(),
   }),
 });
 
 // 2. Export your collections
-export const collections = { api, manual, selfhosted, other };
+export const collections = { docs, api, manual, selfhosted, pages };

@@ -7,11 +7,11 @@ import PageApi from "@/components/page-api.vue";
 
 import { getEntry, render } from 'astro:content';
 
-const baseSlug = 'other'
+
+const baseSlug = 'docs'
 
 const post = await getEntry(baseSlug, Astro.params.slug);
 const { Content } = await render(post);
-
 
 const {listItem, prevListItem, nextListItem} = getItems(list, `${baseSlug}/${Astro.params.slug}`);
 if(!listItem) {
@@ -20,14 +20,20 @@ if(!listItem) {
 
 export const getStaticPaths = function() {
   let items = [];
-  let baseSlug = 'other';
+  let baseSlug = 'docs';
   list.map((item) => {
-    if(item.slug === baseSlug && item.children) {
+    if(item.baseSlug && item.baseSlug ===baseSlug) {
+      items.push({
+        params : {
+          slug :`${item.slug}`
+        }
+      });
+    } else if(item.slug === baseSlug && item.children) {
       for(let i = 0 ; i < item.children.length; i++) {
         const child = item.children[i];
         items.push({
           params : {
-            slug : `${child.slug}`
+            slug : child.slug
           }
         })
       }
@@ -35,8 +41,6 @@ export const getStaticPaths = function() {
   });
   return items;
 }
-
-let content = null;
 
 ---
 

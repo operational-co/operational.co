@@ -5,11 +5,7 @@ description: Learn how to setup categories for your events
 date: 2024-06-08
 ---
 
-
 import Item from "@operational.co/components/card/index.vue";
-import Code from "@operational.co/components/code/index.vue";
-import CodeWrap from "@operational.co/components/code/wrap.vue";
-import ApiItem from "@operational.co/components/ui/api-item.vue";
 
 # Categories
 
@@ -19,8 +15,7 @@ Use categories to group events by their usecase.
 
 ## Example
 
-<CodeWrap client:load>
-<div slot="default">
+
 <Item client:only="vue" 
   item={{
     name: "a critical event",
@@ -29,21 +24,18 @@ Use categories to group events by their usecase.
     category : "error"
   }}
 ></Item>
-</div>
-<div slot="node">
-<Code client:load>
-```
+
+```js
 const e = {
   name: "a critical event",
   avatar: "🤖",
   category : "error"
 };
 ```
-</Code>
-</div>
-</CodeWrap>
 
 
 After sending this event, a "error" category will show up under the search bar inside the webapp UI.
 
 Clicking on this will show you events which match the "error" category.
+
+You can now filter events by the 'error' category through the search bar inside Operational. Click on the dropdown next to the search bar and your categories will show up.

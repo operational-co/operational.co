@@ -30,6 +30,10 @@
     margin-right: var(--margin);
   }
 
+  > p {
+    margin-bottom: 0;
+  }
+
   &:hover,
   &:active,
   &:focus {

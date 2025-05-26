@@ -39,7 +39,7 @@ export default {
 
 <style lang="scss">
 .c-prevnext {
-  margin: var(--spacer) 0;
+  margin-top: var(--spacer);
   display: grid;
   grid-template-columns: max-content max-content;
   justify-content: space-between;

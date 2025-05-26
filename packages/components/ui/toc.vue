@@ -18,7 +18,7 @@
         v-for="(item, i) in computedList"
         :is="resolveComponent(item)"
         :key="i"
-        :href="`/${item.slug}`"
+        :href="getHref(item)"
         :class="[
           'c-toc__item',
           {
@@ -61,7 +61,7 @@
 </template>
 
 <script>
-import { list, getItems } from "@operational.co/content/list.js";
+import { list, getItems } from "@/content/list.js";
 export default {
   data: function () {
     return {
@@ -81,6 +81,13 @@ export default {
   },
 
   methods: {
+    getHref: function (item) {
+      if (item.baseSlug) {
+        return `/${item.baseSlug}/${item.slug}`;
+      } else {
+        return `/${item.slug}`;
+      }
+    },
     toggleExpand: function (item) {
       if (!this.expands.includes(item.slug)) {
         this.expands.push(item.slug);
@@ -150,6 +157,7 @@ export default {
 
     &.expandable {
       cursor: pointer;
+      margin-top: 0.25rem;
 
       span {
         &:hover {

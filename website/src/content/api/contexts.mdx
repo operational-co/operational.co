@@ -5,11 +5,7 @@ description: Learn how to send events-in-events via contextual events
 date: 2024-06-08
 ---
 
-
 import Item from "@operational.co/components/card/index.vue";
-import Code from "@operational.co/components/code/index.vue";
-import CodeWrap from "@operational.co/components/code/wrap.vue";
-import ApiItem from "@operational.co/components/ui/api-item.vue";
 
 # Sending contextual events
 
@@ -17,8 +13,7 @@ Contextual events are events-in-events. Think of them as specific group of event
 
 Here's a simple example:
 
-<CodeWrap client:load>
-<div slot="default">
+
 <Item client:only="vue" 
   item={{
     name: "cron job started",
@@ -38,11 +33,8 @@ Here's a simple example:
     ]
   }}
 ></Item>
-</div>
 
-<div slot="node">
-<Code client:load>
-```
+```js
 // first event
 let e = {
   name: "cron job started",
@@ -72,9 +64,6 @@ e = {
 await ops.events.ingest(e);
 
 ```
-</Code>
-</div>
-</CodeWrap>
 
 To start with contextual events, you need to make `contextStart : true` for the first event in the context and supply a contextId that is common for all contextual events in the chain.
 Note that you only need to mark the first event in the chain with contextStart:true.
@@ -90,8 +79,8 @@ For instance, if you're tracking user signup flow, you might want to have ```"us
 
 Here's an example.
 
-<Code client:load>
-```
+
+```js
 const e = {
   name : 'Cron job started',
   contextId : 'cronjob_1',
@@ -99,23 +88,19 @@ const e = {
   avatar: "🤖",
 }
 ```
-</Code>
 
 Then further down your code base, add this in:
 
-<Code client:load>
-```
+```js
 const e = {
   name : 'Cron job: processing job',
   contextId : 'cronjob_1',
 }
 ```
-</Code>
 
 And finally:
 
-<Code client:load>
-```
+```js
 const e = {
   name : 'Cron job: processing finished',
   contextId : 'cronjob_1',
@@ -132,11 +117,10 @@ const e = {
   ]
 }
 ```
-</Code>
+
 
 Putting it all together, these events will look like this:
-<CodeWrap client:load>
-<div slot="default">
+
 <Item client:only="vue" 
   item={{
     name: "cron job started",
@@ -165,5 +149,4 @@ Putting it all together, these events will look like this:
     ]
   }}
 ></Item>
-</div>
-</CodeWrap>
+

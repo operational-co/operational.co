@@ -1,4 +1,5 @@
 import prisma from "#lib/prisma.js";
+import prismaWrap from "#lib/prisma-wrap.js";
 import Model from "#lib/class-model.js";
 import WorkspaceModel from "#components/workspace/model.js";
 

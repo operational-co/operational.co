@@ -7,7 +7,6 @@ date: 2024-06-08
 
 
 import Item from "@operational.co/components/card/index.vue";
-import Code from "@operational.co/components/code/index.vue";
 import CodeWrap from "@operational.co/components/code/wrap.vue";
 import ApiItem from "@operational.co/components/ui/api-item.vue";
 
@@ -17,8 +16,7 @@ You can pass various data formats and structured form objects to render better e
 
 Here's an example for text event.
 
-<CodeWrap client:load>
-<div slot="default">
+
 <Item
 client:only="vue"
   item={{
@@ -28,26 +26,20 @@ client:only="vue"
     content : 'This is some info about the event'
   }}
 ></Item>
-</div>
-<div slot="node">
-<Code client:load>
-```
+
+```js
 const e = {
   name: "some event",
   avatar: "🤖",
   content : 'This is some info about the event'
 };
 ```
-</Code>
-</div>
-</CodeWrap>
 
 Note that you don't explicitely need to pass <code>type: 'text'</code> since type is assumed to be 'text' by default.
 
 Here's another example with type json.
 
-<CodeWrap client:load>
-<div slot="default">
+
 <Item client:only="vue"
   item={{
     createdAt: "2021-03-03",
@@ -64,10 +56,7 @@ Here's another example with type json.
   }
   }}
 ></Item>
-</div>
-<div slot="node">
-<Code client:load>
-```
+```js
 const e = {
   name: "some event",
   avatar: "🤖",
@@ -82,14 +71,10 @@ const e = {
   }
 };
 ```
-</Code>
-</div>
-</CodeWrap>
 
 Here's another example with type image.
 
-<CodeWrap client:load>
-<div slot="default">
+
 <Item client:only="vue"
   item={{
     createdAt: "2021-03-03",
@@ -99,10 +84,8 @@ Here's another example with type image.
     content : `https://images.unsplash.com/photo-1724026403614-f5461d17c6cc?q=80&w=3200&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D`
   }}
 ></Item>
-</div>
-<div slot="node">
-<Code client:load>
-```
+
+```js
 const e = {
   name: "some event",
   avatar: "🤖",
@@ -110,14 +93,12 @@ const e = {
     content : `https://images.unsplash.com/photo-1724026403614-f5461d17c6cc?q=80&w=3200&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D`
 };
 ```
-</Code>
-</div>
-</CodeWrap>
+
+---
 
 You can also stack different formats together. Use type 'rows' for this. Here's an example.
 
-<CodeWrap client:load>
-<div slot="default">
+
 <Item client:only="vue" 
   item={{
     createdAt: "2021-03-03",
@@ -140,10 +121,7 @@ You can also stack different formats together. Use type 'rows' for this. Here's 
     ]
   }}
 ></Item>
-</div>
-<div slot="node">
-<Code client:load>
-```
+```js
 const e = {
   name: "some event",
   avatar: "🤖",
@@ -164,13 +142,9 @@ const e = {
   ]
 };
 ```
-</Code>
-</div>
-</CodeWrap>
 
 Type rows will take content as an array. These are all the options for each object inside the array.
 
-<CodeWrap client:load>
 <ApiItem client:load title="type" type="string" required="false">
   If left blank, defaults to 'text'. Controls how content field is rendered. Options are 'text', 'json',
   'image'. Note that you cannot have rows inside rows. Inception isn't possible currently.
@@ -182,9 +156,7 @@ Type rows will take content as an array. These are all the options for each obje
   If set, shows a small label above the content.
 </ApiItem>
 
-<div slot="node">
-<Code client:load>
-```
+```js
 const e = {
   name: "some event",
   avatar: "🤖",
@@ -206,9 +178,6 @@ const e = {
   ]
 };
 ```
-</Code>
-</div>
-</CodeWrap>
 
 This will render the following event:
 
@@ -238,7 +207,6 @@ This will render the following event:
 
 Here's a much better example of a real life scenario.
 
-<CodeWrap client:load>
 <Item client:only="vue"
   item={{
     createdAt: "2021-03-03",
@@ -269,9 +237,7 @@ Here's a much better example of a real life scenario.
   ]
   }}
 ></Item>
-<div slot="node">
-<Code client:load>
-```
+```js
 const e = {
   name: "some event",
   avatar: "🤖",
@@ -300,6 +266,3 @@ const e = {
   ]
 };
 ```
-</Code>
-</div>
-</CodeWrap>

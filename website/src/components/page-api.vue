@@ -37,6 +37,15 @@ export default {
   background-color: var(--color-bg-2);
   border-top: var(--color-bg-4) solid 1px;
 
+  .c-constrain {
+    &__inner {
+      padding: 2rem 1rem;
+      background-color: var(--color-bg-4);
+      border-radius: 1rem;
+      overflow-x: hidden;
+    }
+  }
+
   @media screen and (max-width: 980px) {
     padding-top: 0.25rem;
   }

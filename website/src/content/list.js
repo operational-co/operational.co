@@ -1,10 +1,50 @@
 export const list = [
   {
     name: "Start here",
-    slug: "api",
+    slug: "start-here",
+    baseSlug: "docs",
   },
   {
-    name: "API Docs",
+    name: "Setup Operational",
+    slug: "setup-operational",
+    baseSlug: "docs",
+  },
+  {
+    name: "The Manual",
+    slug: "manual",
+    children: [
+      {
+        name: "Introduction",
+        slug: "introduction",
+      },
+      {
+        name: "PWA & push notifications",
+        slug: "pwa",
+      },
+      // {
+      //   name: "Basics",
+      //   slug: "basics",
+      // },
+      {
+        name: "Conventions",
+        slug: "conventions",
+      },
+      {
+        name: "Setup",
+        slug: "setup",
+      },
+      {
+        name: "Test mode",
+        slug: "test-mode",
+      },
+      {
+        name: "Notifications",
+        slug: "notifications",
+      },
+    ],
+  },
+  {
+    name: "Events API",
     slug: "api",
     children: [
       {
@@ -38,40 +78,6 @@ export const list = [
       {
         name: "Error handling",
         slug: "error-handling",
-      },
-    ],
-  },
-  {
-    name: "The Manual",
-    slug: "manual",
-    children: [
-      {
-        name: "Introduction",
-        slug: "introduction",
-      },
-      {
-        name: "Basics",
-        slug: "basics",
-      },
-      {
-        name: "Conventions",
-        slug: "conventions",
-      },
-      {
-        name: "Setup",
-        slug: "setup",
-      },
-      {
-        name: "Test mode",
-        slug: "test-mode",
-      },
-      {
-        name: "Notifications",
-        slug: "notifications",
-      },
-      {
-        name: "PWA",
-        slug: "pwa",
       },
     ],
   },
@@ -132,7 +138,7 @@ export const list = [
   },
   {
     name: "Other",
-    slug: "other",
+    slug: "docs",
     children: [
       {
         name: "Vision",
@@ -147,180 +153,6 @@ export const list = [
         slug: "contributing",
       },
     ],
-  },
-];
-
-export const apiList = [
-  {
-    name: "API Docs",
-  },
-  {
-    name: "Introduction",
-    path: "/api/introduction",
-    depth: 1,
-  },
-  {
-    name: "Send your first event",
-    path: "/api/send-your-first-event",
-    depth: 1,
-  },
-  {
-    name: "Event parameters",
-    path: "/api/event-parameters",
-    depth: 1,
-  },
-  {
-    name: "Structured Events",
-    path: "/api/structured-events",
-    depth: 1,
-  },
-  {
-    name: "Actions",
-    path: "/api/actions",
-    depth: 1,
-  },
-  {
-    name: "Contexts",
-    path: "/api/contexts",
-    depth: 1,
-  },
-  {
-    name: "Categories",
-    path: "/api/categories",
-    depth: 1,
-  },
-  {
-    name: "Error handling",
-    path: "/api/error-handling",
-    depth: 1,
-  },
-];
-
-export const manualList = [
-  {
-    name: "Manual",
-  },
-  {
-    name: "Introduction",
-    path: "/manual/introduction",
-    depth: 1,
-  },
-  {
-    name: "Basics",
-    path: "/manual/basics",
-    depth: 1,
-  },
-  {
-    name: "Conventions",
-    path: "/manual/conventions",
-    depth: 1,
-  },
-  {
-    name: "Setup",
-    path: "/manual/setup",
-    depth: 1,
-  },
-  {
-    name: "Test mode",
-    path: "/manual/test-mode",
-    depth: 1,
-  },
-  {
-    name: "Notifications",
-    path: "/manual/notifications",
-    depth: 1,
-  },
-  {
-    name: "PWA",
-    path: "/manual/pwa",
-    depth: 1,
-  },
-];
-
-export const selfhostedList = [
-  {
-    name: "Self hosting",
-  },
-  {
-    name: "Introduction",
-    path: "/selfhosted/introduction",
-    depth: 1,
-  },
-  {
-    name: "Install locally",
-    path: "/selfhosted/install-locally",
-    depth: 1,
-  },
-  {
-    name: "Install on VPS",
-    path: "/selfhosted/install-on-vps",
-    depth: 1,
-  },
-  {
-    name: "Install on Render",
-    path: "/selfhosted/install-on-render",
-    depth: 1,
-  },
-  {
-    name: "Install via Docker",
-    path: "/selfhosted/install-via-docker",
-    depth: 1,
-  },
-  {
-    name: "Install via Docker and Coolify",
-    path: "/selfhosted/install-via-docker-and-coolify",
-    depth: 1,
-  },
-  // {
-  //   name: "Docker",
-  //   path: "/selfhosted/docker",
-  //   depth: 1
-  // },
-  {
-    name: "Onboarding",
-    path: "/selfhosted/onboarding",
-    depth: 1,
-  },
-  {
-    name: "Setup .env",
-    path: "/selfhosted/setup-env",
-    depth: 1,
-  },
-  {
-    name: "Setup Notifications",
-    path: "/selfhosted/setup-notifications",
-    depth: 1,
-  },
-  {
-    name: "Integrations",
-    path: "/selfhosted/integrations",
-    depth: 1,
-  },
-  {
-    name: "Best practices",
-    path: "/selfhosted/best-practices",
-    depth: 1,
-  },
-];
-
-export const otherList = [
-  {
-    name: "Other",
-  },
-  {
-    name: "Vision",
-    path: "/other/vision",
-    depth: 1,
-  },
-  {
-    name: "Roadmap",
-    path: "/other/roadmap",
-    depth: 1,
-  },
-  {
-    name: "Contributing",
-    path: "/other/contributing",
-    depth: 1,
   },
 ];
 
@@ -388,6 +220,10 @@ export const getItems = function (list, path) {
     let s = p.slug;
 
     let children = p.children;
+
+    if (p.baseSlug && `${p.baseSlug}/${p.slug}` === path) {
+      listItem = p;
+    }
 
     if (children) {
       for (let j = 0; j < children.length; j++) {

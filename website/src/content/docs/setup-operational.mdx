@@ -1,0 +1,79 @@
+---
+title: Setup Operational
+slug: setup-operational
+description: Setup your project
+date: 2024-06-08
+---
+
+import Item from "@operational.co/components/card/index.vue";
+
+
+# Setup Operational
+
+## Setting up your project
+
+Once you signup, you'll be asked to create a project.
+
+All your events, teammates, billing etc will be tied to the project.
+
+In the near future, you can create additional projects too.
+
+## API key
+
+Once your project is created, you will be given an API key.
+Keep this somewhere safe, ideally inside a `.env` file in your project.
+
+## Sending your first event
+
+Copy and paste this snippet inside chrome devtools:
+
+```js
+const baseUrl = "https://api.operational.co";
+const event = {
+  name: "user signup",
+  avatar: "🤗",
+  content: "Someone signed up",
+}
+
+const apikey = ''; // <- Enter your API key here
+
+const headers = {
+  "Authorization": `Bearer ${apikey}`,
+  "Content-Type": "application/json"
+};
+
+const response = await fetch(`${baseUrl}/api/v1/ingest`, {
+  method: "POST",
+  headers: headers,
+  body: JSON.stringify(event)
+}).catch((err) => {});
+```
+
+Don't forget to enter your API key in the `apikey` var.
+
+Running this inside chrome devtools(or any javascript environment) will send an event to Operational.
+
+That's all to it!
+
+---
+
+### Playground
+
+Writing events can be tediuous so we created a Playground section inside the webapp. Go to [app.operational.co/playground](https://app.operational.co/playground) and copy-paste event code.
+
+### Integrations
+
+We have a [Nodejs SDK](https://www.npmjs.com/package/@operational.co/sdk) available.
+
+Other integrations will be added as we work on them.
+
+---
+
+## Next up
+
+Take a look at [setting up Operational on your phone with push notifications](/manual/pwa). This is where the real magic happens!
+
+Then check out the [events API](/api/introduction). You can do a lot more than just sending events. You can also send JSON logs, image urls and much more.
+
+
+

@@ -5,9 +5,7 @@ description: Send your first event via Operational's event api
 date: 2024-06-08
 ---
 
-
 import Item from "@operational.co/components/card/index.vue";
-import Code from "@operational.co/components/code/index.vue";
 import CodeWrap from "@operational.co/components/code/wrap.vue";
 import ApiItem from "@operational.co/components/ui/api-item.vue";
 
@@ -15,10 +13,9 @@ import ApiItem from "@operational.co/components/ui/api-item.vue";
 
 Run this code in your node.js backend.
 
-<CodeWrap client:load>
-<div slot="node">
-<Code client:load>
-```
+
+
+```js
 import Operational from "@operational.co/sdk";
 // Or use this if imports are not supported in your node.js version
 // const Operational = require("@operational.co/sdk");
@@ -31,12 +28,8 @@ const e = {
 
 await ops.events.ingest(e);
 ```
-</Code>
-</div>
 
-<div slot="fetch">
-<Code client:load>
-```
+```js
 const bearerToken = 'Bearer apikey';
 const baseUrl = 'https://api.operational.co';
 const url = `api/${this.version}/log`;
@@ -65,9 +58,6 @@ fetch(`${baseUrl}/${url}`, {
   console.error('Error:', error);
 });
 ```
-</Code>
-</div>
-</CodeWrap>
 
 This will show an event inside ops.
 

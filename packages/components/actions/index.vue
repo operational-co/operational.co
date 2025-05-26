@@ -82,7 +82,7 @@ export default {
 
   computed: {
     computedActions: function () {
-      let actions = JSON.parse(JSON.stringify(this.actions));
+      let actions = this.actions;
 
       actions = actions.filter((action) => {
         if (typeof action === "string") {
