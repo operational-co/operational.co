@@ -7,10 +7,40 @@ date: 2025-05-09
 
 # Nodejs SDK
 
-Installation
+## Installation
 
-Use npm to install Operational's SDK
+Use npm to install Operational's nodejs SDK. Run this inside your project:
 
 ```bash
 npm install --save @operational.co/sdk
 ```
+
+## Authorization
+
+Pass your api key like this:
+
+```js
+import Operational from "@operational.co/sdk"
+// Or use this if you're on a older version of nodejs
+// const Operational = require('@operational.co/sdk')
+
+const apikey = ''; // <-- Enter your api key here
+
+const ops = new Operational(apikey);
+```
+
+## Code examples
+
+Visit the [Playground](/playground) and select Nodejs SDK as the code language to generate code examples.
+
+## For self hosters
+
+Pass your backend's url when initiating the Operational class.
+
+```js
+const ops = new Operational(apikey, {
+  baseUrl : 'https://xzy.abc.com' // <- Enter your backend's url here.
+})
+```
+
+You can find this url inside your self hosted instance's profile page under your api key.

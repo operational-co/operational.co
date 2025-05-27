@@ -1,0 +1,48 @@
+---
+title: 'Wordpress plugin'
+slug : 'wordpress-plugin'
+description: 'Operational.co Wordpress plugin'
+date: 2025-05-09
+---
+
+# Wordpress plugin
+
+## Installation
+
+Use the [Wordpress plugin registry](https://en-au.wordpress.org/plugins/operational/) to install the plugin.
+
+
+After installing the plugin, click on Operational's settings in the sidebar.
+
+![operational wordpress plugin](/images/integrations/wordpress-plugin/wp1.png)
+
+Then enter your api key.
+
+![operational wordpress plugin](/images/integrations/wordpress-plugin/wp2.png)
+
+## Custom events
+
+By default, the plugin will log simple login activity.
+
+However the true strength of Operational is in sending custom events tailored towards your Wordpress installation.
+
+Here's a example of sending a custom event via code.
+
+```php
+// Paste this inside your functions.php file
+use function Operational\ops;
+
+$response = ops([
+  'name' => 'custom event',
+  'avatar' => '😃',
+  'notify' => true // Optional, sends a push notification
+]);
+```
+
+Read more about the events API [here](/api/introduction).
+
+## For self hosters
+
+Pass your backend's url in the 'base url' field inside plugin settings after installing the plugin.
+
+You can find this url inside your self hosted instance's profile page under your api key.

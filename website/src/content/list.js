@@ -44,6 +44,20 @@ export const list = [
     ],
   },
   {
+    name: "Integrations",
+    slug: "integrations",
+    children: [
+      {
+        name: "Nodejs SDK",
+        slug: "nodejs-sdk",
+      },
+      {
+        name: "Wordpress plugin",
+        slug: "wordpress-plugin",
+      },
+    ],
+  },
+  {
     name: "Events API",
     slug: "api",
     children: [
