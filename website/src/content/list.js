@@ -52,6 +52,10 @@ export const list = [
         slug: "nodejs-sdk",
       },
       {
+        name: "PHP SDK",
+        slug: "php-sdk",
+      },
+      {
         name: "Wordpress plugin",
         slug: "wordpress-plugin",
       },

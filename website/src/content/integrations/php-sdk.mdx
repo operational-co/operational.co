@@ -1,0 +1,52 @@
+---
+title: 'PHP SDK'
+slug : 'php-sdk'
+description: 'Operational.co PHP SDK'
+date: 2025-05-09
+---
+
+# PHP SDK
+
+Operational's PHP SDK requires PHP version 7.4 or greater.
+
+## Installation
+
+Use composer to install Operational's PHP SDK. Run this inside your project:
+
+```bash
+composer require operational/sdk-php
+```
+
+Then import it in your project
+
+```php
+require __DIR__ . '/vendor/autoload.php';
+
+use Operational\Operational;
+use Psr\Http\Message\ResponseInterface;
+```
+
+## Authorization
+
+Pass your api key like this:
+
+```php
+$client = new Operational('YOUR_API_KEY_HERE', [
+]);
+```
+
+## Code examples
+
+Visit the [Playground](/playground) and select PHP SDK as the code language to generate code examples.
+
+## For self hosters
+
+Pass your backend's url when initiating the Operational class.
+
+```php
+$client = new Operational('YOUR_API_KEY_HERE', [
+    'baseUrl' => 'https://xyz.abc.com', // <-- Enter your backend url here
+]);
+```
+
+You can find this url inside your self hosted instance's profile page under your api key.
