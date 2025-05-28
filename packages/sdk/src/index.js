@@ -87,6 +87,7 @@ class Operational {
     }
   };
 
+  // depreciated but we'll bring it back
   users = {
     identify: async (user) => {
       if (!user) {
@@ -105,7 +106,15 @@ class Operational {
   };
 
   // for the future
-  reports = {};
+  reports = {
+    //maybe send custom data source
+    sendData: async () => {}
+  };
+
+  // for the future
+  crm = {
+    updateProfile: async () => {}
+  };
 }
 
 export default Operational;

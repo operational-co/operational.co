@@ -67,6 +67,7 @@ import generateAxios from "./generate-axios.js";
 import generateFetch from "./generate-fetch.js";
 import generateCurl from "./generate-curl.js";
 import generatePhp from "./generate-php.js";
+import generatePhpSdk from "./generate-php-sdk.js";
 import generatePython from "./generate-python.js";
 
 import Code from "@operational.co/components/code/index.vue";
@@ -143,6 +144,9 @@ export default {
       }
       if (option === "php") {
         str = generatePhp(example, this.context);
+      }
+      if (option === "php-sdk") {
+        str = generatePhpSdk(example, this.context);
       }
       if (option === "python") {
         str = generatePython(example, this.context);

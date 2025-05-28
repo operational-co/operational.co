@@ -70,6 +70,10 @@ export default {
         {
           key: "php",
           value: "PHP"
+        },
+        {
+          key: "php-sdk",
+          value: "PHP SDK"
         }
         // {
         // 	key: "wordpress",
