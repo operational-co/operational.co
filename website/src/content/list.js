@@ -141,12 +141,8 @@ export const list = [
         slug: "setup-env",
       },
       {
-        name: "Setup Notifications",
-        slug: "setup-notifications",
-      },
-      {
-        name: "Integrations",
-        slug: "integrations",
+        name: "Setup PWA & push notifications",
+        slug: "setup-pwa-and-push-notifications",
       },
       {
         name: "Best practices",
