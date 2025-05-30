@@ -1,0 +1,71 @@
+---
+title: Receive push notifications for suspicious activity inside your SaaS product
+slug: receive-push-notifications-for-suspicious-activity-inside-your-saas-product
+description: Learn how to send real-time push notifications for suspicious actions in your SaaS using Operational.
+date: 2024-06-01
+tags:
+  - saas
+  - notifications
+  - security
+  - alerts
+icon: 🚨
+---
+
+## What this article covers
+
+In a SaaS product, spotting suspicious activity early can protect your users and data. Real-time alerts help you respond to brute-force logins, password spraying, or unusual IP access.
+
+![Operational in action](https://operational.co/images/pitch/ops_insitu.jpg)
+
+This guide shows how to send push notifications for suspicious events using Operational.
+
+## What is Operational
+
+Operational is an open-source event tracking service. You can record user actions, errors, or security events and forward them to any tool or channel. It makes it easy to catch and act on suspicious behavior in your application.
+
+## Setting up Operational
+
+1. Go to https://app.operational.co and sign up for a free account.
+2. Navigate to your workspace settings to find your API key.
+3. Copy the key and keep it handy for your code.
+
+## Code examples
+
+Below are JavaScript examples of pushing suspicious activity events to Operational.
+
+```js
+import Operational from "@operational.co/sdk"
+const ops = new Operational("YOUR_API_KEY")
+
+// Example 1: Suspicious login attempts
+const payload1 = {
+  name: "suspicious login attempt",
+  avatar: "🔔",
+  content: "Multiple failed login attempts for user John Smith"
+}
+await ops.events.ingest(payload1)
+
+// Example 2: Unusual IP address access
+const payload2 = {
+  name: "unusual IP access",
+  avatar: "🚨",
+  content: "User Jane Doe signed in from an unknown IP 203.0.113.42"
+}
+await ops.events.ingest(payload2)
+
+// Example 3: Possible data export
+const payload3 = {
+  name: "large data export",
+  avatar: "⚠️",
+  content: "User Acme Corp exported 10,000 records"
+}
+await ops.events.ingest(payload3)
+```
+
+These snippets log different suspicious activities. Each event can trigger a push notification in your Operational workspace.
+
+## Conclusion
+
+By sending security events to Operational, you get instant push notifications for unusual activity. That helps you react faster and keep your SaaS secure.
+
+Learn more at https://operational.co and try examples in the playground: https://operational.co/playground

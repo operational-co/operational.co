@@ -1,0 +1,65 @@
+---
+title: Receive push notifications from your Node.js backend
+slug: receive-push-notifications-from-your-node-js-backend
+description: Learn how to set up and receive push notifications from your Node.js backend using Operational for real-time alerts.
+date: 2025-05-22
+tags:
+  - nodejs
+  - push
+  - notifications
+  - backend
+icon: "🔔"
+---
+
+## What this article is about
+
+Handling push notifications from your Node.js backend helps you alert users in real time. For example, you might notify a mobile app when a new message arrives.
+
+![Operational in action](https://operational.co/images/pitch/ops_insitu.jpg)
+
+This guide shows how to capture and send push notification events using Operational.
+
+## What is Operational
+
+Operational is an open-source event tracking platform. You can send events from any tech stack and view them on a simple dashboard.
+
+Use it to log errors, user actions, or push notifications. Events appear instantly so you can monitor system health in real time.
+
+## Setting up Operational
+
+1. Sign up at [app.operational.co](https://app.operational.co).
+2. Create a new project and copy your API key.
+3. Install the SDK in your Node.js app:
+
+   ```bash
+   npm install @operational.co/sdk
+   ```
+
+You’re now ready to send events.
+
+## Code snippet
+
+```javascript
+import Operational from "@operational.co/sdk"
+
+// Initialize with your API key
+const ops = new Operational("API_KEY")
+
+// Define a push notification event
+const payload = {
+  name: "push notification",
+  avatar: "🔔",
+  content: "New message for John Doe"
+}
+
+// Send the event to Operational
+await ops.events.ingest(payload)
+```
+
+This example logs a push notification event each time your backend sends an alert. You can adjust the `content` field to include different user names or message details.
+
+## Conclusion
+
+Using Operational for push notifications saves time and reduces complexity. You get a live view of every event and can troubleshoot issues faster.
+
+Learn more at [operational.co](https://operational.co) or try examples in the [playground](https://operational.co/playground).

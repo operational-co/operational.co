@@ -46,6 +46,10 @@ There are two ways to use Operational:
 
 We have a active [Discord](https://discord.gg/QmfGeMGM) community. We highly recommend jumping on our Discord server for updates, feedback and help.
 
+## Contributing to Operational
+
+[How to contribute?](https://operational.co/other/contributing)
+
 ## Technology
 
 Operational has a dead-simple tech stack:

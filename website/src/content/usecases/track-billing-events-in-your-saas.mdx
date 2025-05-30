@@ -1,0 +1,86 @@
+---
+title: Track billing events in your SaaS
+slug: track-billing-events-in-your-saas
+description: Learn how to track billing events in your SaaS using Operational to monitor invoices, payments, and subscription updates.
+date: 2024-06-14
+tags:
+  - saas
+  - billing
+  - analytics
+icon: 💳
+---
+
+## What this article is about
+
+Tracking billing events in your SaaS helps you monitor invoices, payments, and subscription changes in real time.
+
+For example, if a customer’s payment fails, you can alert your support team instantly.
+
+![Operational in action](https://operational.co/images/pitch/ops_insitu.jpg)
+
+## What is Operational
+
+Operational is an open-source event tracking platform for any tech product.
+
+It lets you send structured events like errors, user actions, or billing updates.
+
+You can then view these events in a dashboard or integrate with other tools.
+
+## Setting up Operational
+
+1. Sign up at [app.operational.co](https://app.operational.co).
+2. Create a new project and get your API key.
+3. Install the SDK in your code:
+
+```bash
+npm install @operational.co/sdk
+```
+
+4. Store your API key in an environment variable:
+
+```bash
+export OP_API_KEY=your_api_key_here
+```
+
+## Code examples for tracking billing events
+
+These examples show how to send different billing events.
+
+```javascript
+import Operational from "@operational.co/sdk"
+const ops = new Operational(process.env.OP_API_KEY)
+
+// Invoice created event
+const invoiceCreated = {
+  name: "invoice created",
+  avatar: "💳",
+  content: "Invoice #123 created for $49.99 by John Doe"
+}
+await ops.events.ingest(invoiceCreated)
+
+// Payment succeeded event
+const paymentSucceeded = {
+  name: "payment succeeded",
+  avatar: "💳",
+  content: "Invoice #123 paid successfully by John Doe"
+}
+await ops.events.ingest(paymentSucceeded)
+
+// Payment failed event
+const paymentFailed = {
+  name: "payment failed",
+  avatar: "💳",
+  content: "Payment for invoice #124 failed for Jane Smith"
+}
+await ops.events.ingest(paymentFailed)
+```
+
+Each example sends a billing event to Operational so you can monitor your revenue flow.
+
+## Conclusion
+
+Operational saves you time and hassle by letting you track billing events without building your own system.
+
+Learn more on the [home page](https://operational.co).
+
+Try the [playground](https://operational.co/playground) to copy and paste snippets and see them in action.

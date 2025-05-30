@@ -1,0 +1,67 @@
+---
+title: Track cancelled subscriptions in PHP
+slug: track-cancelled-subscriptions-in-php
+description: Learn how to monitor and log when subscribers cancel their SaaS subscriptions using Operational's PHP SDK, simplifying billing analytics.
+date: 2025-05-22
+tags:
+  - php
+  - saas
+  - subscriptions
+  - billing
+icon: 🛑
+---
+
+## What this article covers
+
+This article explains how to track subscription cancellations in your PHP backend. Monitoring churn helps you respond to trends.
+
+![Operational in action](https://operational.co/images/pitch/ops_insitu.jpg)
+
+## What is Operational?
+
+Operational is an event tracking tool for any tech product. You can log structured events like subscription cancellations.
+
+It captures event details and user properties. This helps you analyze and reduce churn.
+
+## Setting up Operational
+
+First, sign up at https://app.operational.co and log in.
+
+Copy your API key from the dashboard.
+
+Install the PHP SDK in your project. Then you are ready to send events.
+
+## Code example
+
+```php
+<?php
+require 'vendor/autoload.php';
+use Operational\\Operational;
+
+$ops = new Operational('YOUR_API_KEY');
+
+$payload = [
+    'name' => 'subscription cancelled',
+    'avatar' => '🛑',
+    'content' => 'User John Doe cancelled their subscription',
+    'properties' => [
+        'user_id' => 12345,
+        'plan' => 'Pro',
+        'cancelled_at' => '2025-05-22T10:00:00Z'
+    ],
+];
+
+$response = $ops->events->ingest($payload);
+
+echo "Event sent with ID: {$response['id']}";
+```
+
+This code initializes the SDK, builds a payload, and sends a "subscription cancelled" event.
+
+## Conclusion
+
+Tracking cancellations with Operational lets you spot churn fast. It saves you time by handling event logging.
+
+Learn more at https://operational.co.
+
+Try examples in our playground: https://operational.co/playground

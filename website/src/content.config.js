@@ -59,5 +59,22 @@ const pages = defineCollection({
   }),
 });
 
+const usecases = defineCollection({
+  loader: glob({ pattern: "*.mdx", base: "./src/content/usecases" }),
+  schema: z.object({
+    title: z.string(),
+    slug: z.string(),
+    description: z.string().optional(),
+    date: z.preprocess((val) => {
+      if (typeof val === "string" || val instanceof Date) {
+        return new Date(val);
+      }
+      return val;
+    }, z.date()),
+    tags: z.array(z.string()),
+    icon: z.string(),
+  }),
+});
+
 // 2. Export your collections
-export const collections = { docs, api, manual, selfhosted, integrations, pages };
+export const collections = { docs, api, manual, selfhosted, integrations, pages, usecases };

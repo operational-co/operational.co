@@ -1,0 +1,73 @@
+---
+title: Receive push notifications when a user updated their profile in PHP
+slug: receive-push-notifications-when-a-user-updated-their-profile-in-php
+description: Learn how to send real-time push notifications in PHP when users update their profile using Operational's event ingestion API.
+date: 2024-06-12
+tags:
+  - php
+  - saas
+  - notifications
+  - events
+icon: 🔔
+---
+
+## What this article covers
+
+When a user updates their profile, staying informed in real time can improve engagement.
+This article shows how to send a push notification whenever a profile change happens in your PHP app.
+
+![Operational in action](https://operational.co/images/pitch/ops_insitu.jpg)
+
+## What is Operational
+
+Operational is an event tracking platform that ingests custom events from any tech stack.
+You can send events like profile updates and trigger push notifications to your team or users.
+Operational handles storage, routing, and delivery so you focus on building features.
+
+## Setting up Operational
+
+1. Sign up for an account at [app.operational.co](https://app.operational.co).
+2. After verifying your email, log in to find your API key in your dashboard.
+3. Copy the key and keep it safe—you’ll use it to authenticate your requests.
+
+## Code example in PHP
+
+```php
+<?php
+// Define your API key and endpoint
+$apiKey = 'YOUR_API_KEY';
+$url = 'https://api.operational.co/v1/events/ingest';
+
+// Build the event payload
+$payload = [
+  'name'   => 'profile updated',
+  'avatar' => '🔔',
+  'content'=> 'John Smith updated their profile picture'
+];
+
+// Initialize cURL
+$ch = curl_init($url);
+curl_setopt($ch, CURLOPT_POST, true);
+curl_setopt($ch, CURLOPT_HTTPHEADER, [
+    'Content-Type: application/json',
+    'Authorization: Bearer ' . $apiKey
+]);
+curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($payload));
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+// Send the request and capture the response
+$response = curl_exec($ch);
+curl_close($ch);
+
+// Optionally handle the response
+echo $response;
+```
+
+This snippet sends a "profile updated" event to Operational. You’ll then receive a push notification based on your project’s routing rules.
+
+## Conclusion
+
+Using Operational for push notifications saves you from building a custom event system.
+It handles ingestion, storage, and delivery so you can focus on your app.
+
+Learn more at https://operational.co and explore ready-to-use snippets in the playground: https://operational.co/playground

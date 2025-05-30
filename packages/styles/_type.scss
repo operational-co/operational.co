@@ -20,7 +20,7 @@ h2,
   margin-top: 0;
   margin-bottom: 1rem;
   font-size: var(--font-size-xxl);
-  font-weight: 650;
+  font-weight: 600;
   line-height: 1.18;
   color: var(--color-font-heading);
 
@@ -74,17 +74,35 @@ a {
 
 p,
 .p {
-  margin-bottom: 0.8rem;
+  margin-bottom: 0.9375rem;
 }
 
 ul,
 ol {
-  padding-left: 1rem;
+  padding-left: 0;
   margin-top: 0;
-  margin-bottom: 0.8rem;
+  margin-bottom: 1rem;
+  list-style: none;
 
   li {
+    position: relative;
+    padding-left: 2rem;
     margin-bottom: 0;
+
+    &:before {
+      content: "";
+      position: absolute;
+      width: 5px;
+      height: 5px;
+      left: 15px;
+      top: 8px;
+      border-radius: 50%;
+      background: var(--color-font);
+    }
+
+    & + li {
+      margin-top: 0.5rem;
+    }
 
     &::marker {
       color: var(--color-grey-2);
@@ -98,10 +116,28 @@ ol {
   }
 }
 
-// p + ul,
-// p + ol {
-//   margin-top: -1rem;
-// }
+ol {
+  counter-reset: ordered-listitem;
+
+  > li {
+    &:after {
+      position: absolute;
+      top: 0;
+      left: 0;
+      counter-increment: ordered-listitem;
+      content: counter(ordered-listitem);
+
+      background: var(--color-bg-3);
+      font-size: 0.8rem;
+      line-height: 1.5rem;
+      font-weight: 500;
+      text-align: center;
+      height: 24px;
+      width: 24px;
+      border-radius: 12px;
+    }
+  }
+}
 
 blockquote {
   padding-left: 24px;
@@ -183,4 +219,28 @@ pre {
 
 iframe {
   margin-bottom: 0.8rem;
+}
+
+.article-content {
+  h2,
+  .h2 {
+    font-size: 1.5625rem;
+    font-weight: 600;
+    line-height: 1.5rem;
+    margin-top: 1.875rem;
+    margin-bottom: 1rem;
+  }
+
+  h3,
+  .h3 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    line-height: 1.6rem;
+    margin-top: 1.875rem;
+    margin-bottom: 1rem;
+  }
+
+  p {
+    //color: var(--color-font);
+  }
 }

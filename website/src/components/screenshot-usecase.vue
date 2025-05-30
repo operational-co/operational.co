@@ -1,13 +1,11 @@
 <template>
-  <div :class="['c-screenshot-banner']">
-    <article>
-      <div>
-        <span>Operational</span>
-        <h1>{{ title || "" }}</h1>
-      </div>
-    </article>
-    <section>
-      <Item :item="item" :initialExpand="true"></Item>
+  <div class="c-screenshot-usecase">
+    <section :style="computedStyle">
+      <Item v-if="card" :item="card" :initialExpand="true"></Item>
+      <footer>
+        <img src="/logo-transparent.png" />
+        <span>Operational.co</span>
+      </footer>
     </section>
   </div>
 </template>
@@ -17,137 +15,50 @@ import Item from "@operational.co/components/card/index.vue";
 
 export default {
   components: {
-    Item
+    Item,
   },
 
   data() {
     return {
-      title: "",
-      cardName: "",
-      cardAvatar: "",
-      cardType: "",
-      cardContent: "",
-      cardActions: [
-        {
-          key: "ban",
-          url: "https://xyz.com/ban",
-          buttonText: "Ban user"
-        }
-      ]
+      card: null,
+      bg: "g1",
     };
   },
 
   computed: {
-    item() {
-      let date = new Date().toISOString();
-      const fiveMinutesAgo = new Date(Date.now() - 5 * 60 * 1000).toISOString();
-      const sevenMinutesAgo = new Date(Date.now() - 7 * 60 * 1000).toISOString();
-      return {
-        id: 1,
-        createdAt: date,
-        name: "login_failed",
-        avatar: "🤔",
-        type: "json",
-        content: {
-          username: "fi32n23i",
-          password: "sr3**",
-          IP: "127.0.0.1",
-          user_agent: "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:136.0) Gecko/20100101 Firefox/136.0",
-          browser: "Firefox",
-          os: "Mac OS"
-        }
+    computedStyle: function () {
+      let path = `/images/screenshot/${this.bg}.jpg`;
+      let backgroundImage = `url("${path}")`;
+      let style = {
+        "background-image": backgroundImage,
       };
-      return {
-        id: 1,
-        createdAt: date,
-        name: this.cardName || "Card name",
-        avatar: this.cardAvatar || "⏱️",
-        type: this.cardType || "default",
-        content: this.cardContent,
-        actions: this.cardActions,
-        contexts: [
-          {
-            createdAt: fiveMinutesAgo,
-            name: "User activated",
-            avatar: "😁"
-          },
-          {
-            createdAt: sevenMinutesAgo,
-            name: "User created their project",
-            avatar: "👍",
-            content: "Project Operational created for user Shash"
-          }
-        ]
-      };
-    }
+
+      return style;
+    },
   },
 
   mounted() {
-    this.title = "Track user trial ends";
-    this.cardName = "User trial ended";
-    this.cardAvatar = "🤔";
-    this.cardType = "rows";
-    this.cardContent = [
-      {
-        label: "Name",
-        content: "Shash"
-      },
-      {
-        label: "Email",
-        content: "shash@operational.co"
-      }
-    ];
-
-    return;
     const params = new URLSearchParams(window.location.search);
-    this.title = params.get("title") || "";
-    this.cardName = params.get("card-name") || "";
-    this.cardAvatar = params.get("card-avatar") || "";
-    this.cardType = params.get("card-type") || "";
 
-    const cardContentRaw = params.get("card-content");
-    if (cardContentRaw) {
-      try {
-        this.cardContent = JSON.parse(cardContentRaw);
-      } catch (e) {
-        this.cardContent = cardContentRaw;
-      }
+    const card = params.get("card") || "";
+
+    this.bg = params.get("bg") || "g1";
+
+    try {
+      this.card = JSON.parse(card);
+    } catch (err) {
+      this.card = {
+        name: "URL PARAM ERROR",
+      };
     }
-  }
+  },
 };
 </script>
 
 <style lang="scss">
-.c-screenshot-banner {
+.c-screenshot-usecase {
   position: relative;
   height: 100vh;
-
-  article {
-    position: absolute;
-    z-index: 2;
-    top: 0;
-    left: 0;
-    width: 55%;
-    height: 100%;
-    padding: 4rem;
-    padding-left: 5rem;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    display: none;
-
-    span {
-      display: block;
-      margin-bottom: 1rem;
-      margin-top: -3.5rem;
-      font-size: var(--font-size-xl);
-    }
-
-    h1 {
-      font-size: 56px;
-      margin: 0;
-    }
-  }
 
   section {
     position: absolute;
@@ -160,7 +71,7 @@ export default {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background-image: url("/images/screenshot/gradient.png");
+    background-image: url("/images/screenshot/g1.jpg");
     background-size: cover;
     background-position: center;
 
@@ -169,41 +80,59 @@ export default {
     padding-left: 0;
 
     .c-card {
-      max-width: 600px;
+      width: 460px;
       margin-bottom: 0;
       z-index: 1;
-      min-width: 380px;
-      box-shadow:
-        0 0 32px 0 rgba(255, 255, 255, 0.15),
-        0 0 128px 0 rgba(255, 255, 255, 0.05);
-      transform: scale(1.4);
+      // box-shadow:
+      //   0 0 32px 0 rgba(255, 255, 255, 0.15),
+      //   0 0 128px 0 rgba(255, 255, 255, 0.05);
+      transform: scale(1.85);
     }
 
-    &:after {
-      content: "";
+    footer {
       position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(90deg, rgba(16, 17, 17, 1) 0%, rgba(16, 17, 17, 0) 30%);
-      box-shadow:
-        inset 16px 0 128px 16px rgba(16, 17, 17, 0.5),
-        inset 0 0 1025px 4px rgba(16, 17, 17, 0.15);
+      bottom: 2rem;
+      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      img {
+        width: 4rem;
+        height: 4rem;
+      }
+
+      span {
+        font-size: var(--font-size-lg);
+        font-weight: 500;
+      }
     }
 
-    &:before {
-      content: "";
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(-90deg, rgba(16, 17, 17, 1) 0%, rgba(16, 17, 17, 0) 30%);
-      box-shadow:
-        inset 16px 0 128px 16px rgba(16, 17, 17, 0.5),
-        inset 0 0 1025px 4px rgba(16, 17, 17, 0.15);
-    }
+    // &:after {
+    //   content: "";
+    //   position: absolute;
+    //   top: 0;
+    //   left: 0;
+    //   width: 100%;
+    //   height: 100%;
+    //   background: linear-gradient(90deg, rgba(16, 17, 17, 05) 0%, rgba(16, 17, 17, 0) 30%);
+    //   box-shadow:
+    //     inset 16px 0 128px 16px rgba(16, 17, 17, 0.25),
+    //     inset 0 0 1025px 4px rgba(16, 17, 17, 0.075);
+    // }
+
+    // &:before {
+    //   content: "";
+    //   position: absolute;
+    //   top: 0;
+    //   left: 0;
+    //   width: 100%;
+    //   height: 100%;
+    //   background: linear-gradient(-90deg, rgba(16, 17, 17, 1) 0%, rgba(16, 17, 17, 0) 30%);
+    //   box-shadow:
+    //     inset 16px 0 128px 16px rgba(16, 17, 17, 0.5),
+    //     inset 0 0 1025px 4px rgba(16, 17, 17, 0.15);
+    // }
   }
 }
 </style>

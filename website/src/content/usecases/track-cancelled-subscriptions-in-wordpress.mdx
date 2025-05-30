@@ -1,0 +1,66 @@
+---
+title: Track cancelled subscriptions in Wordpress
+slug: track-cancelled-subscriptions-in-wordpress
+description: Learn how to capture and send cancelled subscription events from WordPress to Operational for better churn insights and reporting.
+date: 2025-05-22
+tags:
+  - wordpress
+  - subscriptions
+  - analytics
+icon: 🔕
+---
+
+## Why track cancelled subscriptions
+
+Tracking cancelled subscriptions helps you spot churn. It lets you know why customers leave. You can act fast. You can improve your plans.
+
+For example, if many users cancel a premium plan after one month, you can adjust pricing.
+
+<img src="https://operational.co/images/pitch/ops_insitu.jpg" alt="Operational in action"/>
+
+## What is Operational
+
+Operational is an open source event tracking tool. It collects events from your app. You can view and filter data in real time. You can track any event, like signups, purchases, and cancellations. It helps you understand user behavior.
+
+## Setting up Operational
+
+1. Go to [app.operational.co](https://app.operational.co) and sign up.
+2. Create a new project.
+3. Copy your API key from the project settings.
+4. Keep the key safe.
+
+## Sending cancellation events in WordPress
+
+Use this code in your theme or plugin. It runs when a WooCommerce subscription is cancelled.
+
+```php
+add_action('woocommerce_subscription_status_cancelled', 'send_cancel_event', 10, 1);
+
+function send_cancel_event($subscription) {
+  $api_key = 'YOUR_API_KEY';
+  $user = $subscription->get_user()->display_name;
+  $plan = $subscription->get_items()[0]->get_name();
+
+  $payload = [
+    'name' => 'subscription cancelled',
+    'avatar' => '🔕',
+    'content' => "User {$user} cancelled the {$plan} subscription"
+  ];
+
+  wp_remote_post('https://api.operational.co/v1/events', [
+    'headers' => [
+      'Authorization' => 'Bearer ' . $api_key,
+      'Content-Type' => 'application/json',
+    ],
+    'body' => json_encode($payload),
+  ]);
+}
+```
+
+This code listens for cancellations. It builds a payload. Then it sends the event to Operational.
+
+## Conclusion
+
+Operational can save time tracking cancelled subscriptions. You get real data on churn. You can act on insights.
+
+Learn more at https://operational.co. Try the playground at https://operational.co/playground.

@@ -1,0 +1,61 @@
+---
+title: Receive push notifications when a user updated their profile in Wordpress
+slug: receive-push-notifications-when-a-user-updated-their-profile-in-wordpress
+description: Learn to set up push notifications for user profile updates in Wordpress using Operational's event tracking API.
+date: 2024-06-12
+tags:
+  - wordpress
+  - notifications
+  - php
+icon: 👤
+---
+
+## What this article covers
+When someone updates their profile in Wordpress it can be hard to track changes in real time.
+You might want a push notification when John Doe edits their bio or avatar.
+This guide shows how to send those alerts automatically with Operational.
+
+![Operational in action](https://operational.co/images/pitch/ops_insitu.jpg)
+
+## What is Operational
+Operational is an open source event tracking service. You can send any user action to it and get instant alerts.
+It works with webhooks, SDKs, or direct API calls.
+Every profile update in your Wordpress site can become a tracked event.
+Then you get push or email notifications without custom server code.
+
+## Setup Operational
+1. Go to the signup page at [app.operational.co](https://app.operational.co) and create an account.
+2. In your dashboard, copy the API key under **Project Settings**.
+3. Keep this key safe; you’ll use it in your Wordpress code.
+
+## Code example
+The example below hooks into the `profile_update` action in Wordpress.
+It builds an event payload and sends it to Operational’s ingest API.
+
+```php
+add_action('profile_update', function($userId, $oldData) {
+    $user = get_userdata($userId);
+    $apiKey = 'YOUR_API_KEY';
+
+    $payload = [
+      'name' => 'Profile updated',
+      'avatar' => '👤',
+      'content' => $user->user_login . ' updated their profile information'
+    ];
+
+    $response = wp_remote_post('https://api.operational.co/v1/events.ingest', [
+      'headers' => [
+        'Content-Type' => 'application/json',
+        'Authorization' => 'Bearer ' . $apiKey,
+      ],
+      'body' => wp_json_encode($payload),
+    ]);
+});
+```
+
+This snippet listens for profile changes and sends a push notification event to Operational.
+
+## Conclusion
+With Operational you avoid building custom notification code.
+You get real-time alerts for profile updates in minutes.
+Learn more on the [Operational homepage](https://operational.co) or try code samples in the [playground](https://operational.co/playground).

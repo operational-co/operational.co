@@ -1,0 +1,81 @@
+---
+title: Receive push notifications from Wordpress
+slug: receive-push-notifications-from-wordpress
+description: Learn how to send push notifications from WordPress when new posts are published using Operational's event tracking API.
+date: 2025-05-22
+tags:
+  - wordpress
+  - notifications
+  - php
+icon: 🔔
+---
+
+## What this article is about
+
+This article shows how to send push notifications when new posts are published in WordPress.
+You will see how a blog can alert readers instantly.
+
+![Operational in action](https://operational.co/images/pitch/ops_insitu.jpg)
+
+For example, you can notify your team on mobile each time a new tutorial goes live.
+
+## What is Operational
+
+Operational is an event tracking platform.
+You can send events when things happen in your app or website.
+It then delivers notifications to your channels and devices.
+
+With Operational you can alert your team about new posts fast.
+You get a simple API for pushing events and notifications.
+
+## Setting up Operational
+
+First, sign up at [app.operational.co](https://app.operational.co).
+After logging in, go to your workspace settings to find your API key.
+Copy the key and keep it safe.
+
+You will use this key to authenticate when sending events from WordPress.
+
+## Code example in PHP
+
+Add this code to your theme’s `functions.php` or a custom plugin.
+
+```php
+<?php
+// Send a notification on new post publish
+function send_operational_notification($post_id) {
+  $title = get_the_title($post_id);
+  $url = get_permalink($post_id);
+
+  $payload = [
+    'name' => 'New post published',
+    'avatar' => '📝',
+    'content' => "A new post titled \"{$title}\" was published.",
+    'properties' => [
+      'post_url' => $url
+    ]
+  ];
+
+  $ch = curl_init('https://api.operational.co/events/ingest');
+  curl_setopt($ch, CURLOPT_USERPWD, 'YOUR_API_KEY:');
+  curl_setopt($ch, CURLOPT_POST, true);
+  curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($payload));
+  curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
+  curl_exec($ch);
+  curl_close($ch);
+}
+
+add_action('publish_post', 'send_operational_notification', 10, 1);
+```
+
+This code hooks into the post publish event in WordPress.
+It sends a request to Operational with details about the new post.
+Operational then delivers a push notification to your devices.
+
+## Conclusion
+
+Using Operational you can automate push notifications for new WordPress posts.
+You save time and keep your audience engaged.
+
+Learn more at [operational.co](https://operational.co).
+Try the code in our [Playground](https://operational.co/playground) for instant results.

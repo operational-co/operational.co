@@ -1,0 +1,28 @@
+---
+import BaseLayout from "@/layouts/base.astro";
+import Usecases from "@/components/usecases.vue"
+import PageHeader from "@/components/page-header.vue"
+import { getCollection, getEntry, render } from 'astro:content';
+
+const usecasesList = await getCollection('usecases');
+
+---
+
+<BaseLayout>
+  <PageHeader subtitle="">
+
+     <div slot="title">
+      <h1>
+      Use Cases
+      </h1>
+    </div>
+    <div slot="body">
+      <p>
+        Understand how Operational can help you track key events,<br /> and solve operational problems.
+      </p>
+    </div>
+
+  </PageHeader>
+  <Usecases list={usecasesList}></Usecases>
+
+</BaseLayout>

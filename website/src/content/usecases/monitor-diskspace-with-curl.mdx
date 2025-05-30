@@ -1,0 +1,54 @@
+---
+title: Monitor diskspace with cURL
+slug: monitor-diskspace-with-curl
+description: Learn how to monitor disk space usage by sending events via cURL to Operational and track storage issues early.
+date: 2025-05-22
+tags: [curl, monitoring, devops]
+icon: 💽
+---
+
+## What this article covers
+
+Monitoring disk space on servers helps prevent outages and performance issues.
+
+Imagine a web server where logs and application data fill up quickly. Without alerts, you might run out of storage and crash.
+
+![Operational in action](https://operational.co/images/pitch/ops_insitu.jpg)
+
+## What is Operational?
+
+Operational is an open-source event tracking tool for tech products.
+It lets you send structured events like disk space warnings directly from scripts or applications.
+You can view, search, and alert on these events in a central dashboard.
+
+## Setting up Operational
+
+First, sign up at [app.operational.co](https://app.operational.co) and create an account.
+
+Next, navigate to Settings and copy your API key.
+You'll use this key to authenticate cURL requests.
+
+## Sending disk space events with cURL
+
+Use the following command to report disk space usage:
+
+```bash
+curl --request POST \
+  --url https://api.operational.co/v1/events/structured \
+  --header 'Authorization: Bearer YOUR_API_KEY' \
+  --header 'Content-Type: application/json' \
+  --data '{
+    "name": "Disk space low",
+    "avatar": "💽",
+    "content": "Server alpha has only 10% disk space left."
+}'
+```
+
+This command sends a Disk space low event to Operational.
+
+## Conclusion
+
+Operational saves time by centralizing disk space alerts and other events in one place.
+You can track and search events easily without building your own system.
+
+Learn more at https://operational.co and try the [playground](https://operational.co/playground) to copy and paste snippets.

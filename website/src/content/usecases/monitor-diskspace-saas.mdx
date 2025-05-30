@@ -1,0 +1,43 @@
+---
+title: Monitor diskspace in SaaS
+slug: monitor-diskspace-saas
+description: Monitor diskspace in your SaaS to avoid downtime and plan capacity effectively.
+date: 2024-06-15
+tags: [saas, monitoring, devops]
+icon: 💾
+---
+
+## What this article is about
+Monitoring diskspace in your SaaS helps you prevent service outages and plan capacity.
+
+![Operational in action](https://operational.co/images/pitch/ops_insitu.jpg)
+
+## What is Operational
+Operational is an open-source platform for tracking events in your applications.
+It lets you send custom events like disk usage alerts and view them in a dashboard.
+
+## Setting up Operational
+1. Go to [app.operational.co](https://app.operational.co) and sign up.
+2. After login, get your API key from the workspace settings.
+3. Keep the key handy to send events from your code.
+
+## Code example
+```javascript
+import Operational from "@operational.co/sdk";
+
+const ops = new Operational("YOUR_API_KEY");
+
+const payload = {
+  name: "disk space low",
+  avatar: "💾",
+  content: "Disk usage at 92% on production server"
+};
+
+await ops.events.ingest(payload);
+```
+This code sends a diskspace warning event to Operational with details about the server usage.
+
+## Conclusion
+Using Operational saves you time and hassle by handling event tracking and alerts.
+Learn more at https://operational.co
+Try the [playground](https://operational.co/playground) to copy and paste code snippets.

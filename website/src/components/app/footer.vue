@@ -56,45 +56,49 @@ export default {
         //   title: "Pricing"
         // },
         {
+          slug: "/usecases",
+          title: "Use cases",
+        },
+        {
           slug: "/playground",
-          title: "Playground"
+          title: "Playground",
         },
         {
           slug: "/api",
-          title: "API"
+          title: "API",
         },
         {
           slug: "/pitch",
-          title: "Pitch"
+          title: "Pitch",
         },
         {
           slug: "/wordpress",
-          title: "Wordpress plugin"
+          title: "Wordpress plugin",
         },
         {
           slug: "/bubble",
-          title: "Bubble plugin"
-        }
+          title: "Bubble plugin",
+        },
       ],
       relatedLinks: [
         {
           slug: "/vs-logsnag",
-          title: "VS Logsnag"
+          title: "VS Logsnag",
         },
         {
           slug: "/open-source",
-          title: "Open Source"
+          title: "Open Source",
         },
         {
           slug: "/articles",
-          title: "Articles"
-        }
-      ]
+          title: "Articles",
+        },
+      ],
     };
   },
 
   props: {
-    posts: {}
+    posts: {},
   },
 
   computed: {
@@ -106,8 +110,8 @@ export default {
       let newPosts = JSON.parse(JSON.stringify(this.posts));
 
       return newPosts.slice(0, 4);
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -147,6 +151,7 @@ export default {
       display: block;
       margin-bottom: 0.25rem;
       font-weight: 500;
+      color: var(--color-font-heading);
     }
   }
 
@@ -167,11 +172,21 @@ export default {
     margin: 0;
     padding: 0;
     list-style: none;
-    font-size: var(--font-size-sm);
 
     li {
       display: block;
       margin-left: var(--margin);
+
+      & + li {
+        margin-top: 0.25rem;
+      }
+
+      &:before {
+        display: none;
+      }
+      &:after {
+        display: none;
+      }
     }
 
     a {

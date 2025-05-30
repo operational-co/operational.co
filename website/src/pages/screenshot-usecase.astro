@@ -2,10 +2,17 @@
 
 import ScreenshotLayout from "@/layouts/screenshot.astro";
 
-import Spacer from "@/components/ui/spacer.vue";
 import ScreenshotUsecase from "@/components/screenshot-usecase.vue";
 
-import helper from "@/lib/helper.js";
+const url = Astro.url;
+
+const params = url.searchParams;
+
+// Iterate over each parameter
+params.forEach((value, key) => {
+    console.log(`${key}: ${value}`);
+});
+
 ---
 
 <ScreenshotLayout>

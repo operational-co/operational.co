@@ -18,6 +18,23 @@ if(jsonLd) {
 
 // don't do this anymore
 let headerHidden = false;//Astro.url.pathname === '/';
+
+function getBodyClasses() {
+  const classes = [];
+  const pathSegments = Astro.url.pathname.split('/').filter(Boolean); // Split path by '/' and remove empty segments
+  
+  if (pathSegments.length === 0) {
+    // If the path is the homepage, add 'index' class
+    classes.push('index');
+  } else if (pathSegments.length > 0) {
+    // Add the first path segment as a class
+    classes.push(pathSegments[0]);
+  }
+
+  return classes.join(' ');
+}
+
+
 ---
 
 <!doctype html>
@@ -25,7 +42,7 @@ let headerHidden = false;//Astro.url.pathname === '/';
 	<head>
 		<BaseHead title={title} description={description} jsonLd={jsonLd} />
 	</head>
-	<body>
+	<body class={getBodyClasses()}>
 		<div class="bg"></div>
 		<main >
 			<Header client:load hidden={headerHidden} url={Astro.url} />
@@ -46,10 +63,12 @@ let headerHidden = false;//Astro.url.pathname === '/';
 
 
 	body {
-		font-size:16px;
-		background-color: var(--color-bg-1);
+		background-color: var(--color-bg-2);
 		overflow-x: hidden;
-		
+
+		&.index {
+			background-color: var(--color-bg-1);
+		}
 
 		> main {
 			position:relative;

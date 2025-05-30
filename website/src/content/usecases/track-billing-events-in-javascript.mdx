@@ -1,0 +1,60 @@
+---
+title: Track billing events in JavaScript
+slug: track-billing-events-in-javascript
+description: Learn to track billing events in JavaScript apps with Operational. Monitor payments, charges, and subscription updates for clear transaction visibility.
+date: 2024-08-10
+tags: [javascript, ecommerce, saas, billing]
+icon: 💳
+---
+
+## What this article covers
+
+Tracking billing events in your app helps you monitor revenue and spot payment issues quickly. For example, you can log every successful charge, failed payment, or subscription change. That gives you clear visibility into your transaction flow. It helps support teams respond faster when a payment fails.
+
+![Operational in action](https://operational.co/images/pitch/ops_insitu.jpg)
+
+## What is Operational
+
+Operational is an open source event tracking solution that helps you capture and view events in your product. You can use it to record billing events and see them in a dashboard. Every event you send shows up instantly. You can search and filter by event name or metadata.
+
+## Setting up Operational
+
+1. Go to [app.operational.co](https://app.operational.co) and create a free account.
+2. Copy your API key from the settings page.
+3. Install the SDK in your project and use the key to initialize it.
+
+## Code example
+
+```javascript
+import Operational from "@operational.co/sdk";
+
+const ops = new Operational("YOUR_API_KEY");
+
+async function trackBillingEvents() {
+  await ops.events.ingest({
+    name: "charge.success",
+    avatar: "💳",
+    content: "Customer Jane Doe completed a $29.99 charge"
+  });
+
+  await ops.events.ingest({
+    name: "charge.failed",
+    avatar: "❌",
+    content: "Payment of $49.99 failed for customer John Smith"
+  });
+
+  await ops.events.ingest({
+    name: "subscription.updated",
+    avatar: "🔄",
+    content: "Customer Jane Doe upgraded to Pro plan"
+  });
+}
+
+trackBillingEvents();
+```
+
+This snippet shows tracking three billing events: a successful charge, a failed payment, and a subscription update.
+
+## Conclusion
+
+Operational can save you time and hassle by handling event tracking infrastructure for billing. You get a clean dashboard without building one yourself. To learn more, visit https://operational.co and try the playground at https://operational.co/playground where you can copy and run snippets instantly.

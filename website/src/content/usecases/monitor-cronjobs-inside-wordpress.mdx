@@ -1,0 +1,71 @@
+---
+title: Monitor cronjobs inside Wordpress
+slug: monitor-cronjobs-inside-wordpress
+description: Learn how to track and monitor WordPress cron job executions and failures using Operational for better reliability and debugging.
+date: 2024-06-15
+tags: [wordpress, monitoring, php, cronjob]
+icon: ⏰
+---
+
+## Overview
+
+WordPress uses cron jobs to run scheduled tasks like publishing posts or cleaning up logs. If a cron job fails, it can affect site functionality and user experience.
+
+Tracking these jobs helps you spot failures early and ensures everything runs smoothly.
+
+![Operational in action](https://operational.co/images/pitch/ops_insitu.jpg)
+
+## What is Operational
+
+Operational is an open-source event tracking tool for any tech product. 
+
+You can send custom events like cron job runs, errors, or performance metrics. 
+
+Events appear in a dashboard where you can search, filter, and debug issues in real time.
+
+## Setting up Operational
+
+1. Sign up at [app.operational.co](https://app.operational.co).
+2. Create a new project and copy your API key.
+3. Keep the key handy for your WordPress setup.
+
+## Tracking cron job events in WordPress
+
+Use PHP and cURL to send a cron job event when a scheduled task runs.
+
+```php
+<?php
+// Define your API key and payload
+define('OPS_API_KEY', 'YOUR_API_KEY');
+
+$payload = [
+  'name' => 'Cron job executed',
+  'avatar' => '⏰',
+  'content' => 'WordPress daily_cleanup ran successfully for user John Smith'
+];
+
+// Send event to Operational API
+$ch = curl_init('https://api.operational.co/v1/events');
+curl_setopt($ch, CURLOPT_HTTPHEADER, [
+    'Authorization: Bearer ' . OPS_API_KEY,
+    'Content-Type: application/json'
+]);
+curl_setopt($ch, CURLOPT_POST, true);
+curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($payload));
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+$response = curl_exec($ch);
+curl_close($ch);
+
+echo $response;
+```
+
+This example sends a simple event whenever your cron job runs. Replace `daily_cleanup` and user details as needed.
+
+## Conclusion
+
+Using Operational to monitor WordPress cron jobs saves time and prevents unexpected failures.
+
+You get real-time visibility into every scheduled task without building custom dashboards.
+
+Learn more at https://operational.co and try out snippets in the [playground](https://operational.co/playground).

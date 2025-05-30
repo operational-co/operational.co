@@ -1,0 +1,127 @@
+---
+title: Track billing events in WordPress
+slug: track-billing-events-in-wordpress
+description: Learn to track billing events like payments, refunds, and subscriptions in WordPress using Operational for better transaction insights and debugging.
+date: 2025-05-22
+tags: [wordpress, billing, php, analytics]
+icon: 💳
+---
+
+## What this article covers
+
+Tracking billing events in your WordPress site helps you monitor payments, refunds, and subscriptions in real time. You can spot failed transactions or unexpected refunds quickly. For example, if a customer’s payment fails, you’ll know right away and can follow up.
+
+![Operational in Action](https://operational.co/images/pitch/ops_insitu.jpg)
+
+## What is Operational
+
+Operational is an open-source event-tracking tool that collects and displays events from any tech product. It provides a simple API to ingest events. You can use its dashboard to search, filter, and alert on events without writing custom logging code.
+
+## Setup Operational
+
+1. Go to the signup page at https://app.operational.co and create an account.
+2. In your dashboard, copy your API key.
+3. Install the Operational SDK or use HTTP requests in your WordPress plugin.
+
+## Code Examples
+
+Below are PHP snippets showing how to send different billing events from WordPress using cURL.
+
+**1. Payment Success**
+
+This example sends a successful payment event.
+
+```php
+<?php
+$apiKey = 'YOUR_API_KEY';
+$payload = [
+  'name' => 'billing_success',
+  'avatar' => '💳',
+  'content' => 'User John Smith completed payment of $29.99',
+  'metadata' => [
+    'user_email' => 'john@example.com',
+    'amount' => 29.99,
+    'currency' => 'USD'
+  ]
+];
+
+$ch = curl_init('https://api.operational.co/v1/events.ingest');
+curl_setopt($ch, CURLOPT_HTTPHEADER, [
+  'Content-Type: application/json',
+  'Authorization: Bearer ' . $apiKey
+]);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+curl_setopt($ch, CURLOPT_POST, true);
+curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($payload));
+
+$response = curl_exec($ch);
+curl_close($ch);
+
+echo $response;
+?>
+```
+
+**2. Payment Failed**
+
+This sends an event when a transaction fails.
+
+```php
+<?php
+$payload = [
+  'name' => 'billing_failed',
+  'avatar' => '💳',
+  'content' => 'Payment failed for user Jane Doe',
+  'metadata' => [
+    'user_email' => 'jane@example.com',
+    'error_code' => 'card_declined'
+  ]
+];
+// send with same cURL setup as above
+?>
+```
+
+**3. Subscription Started**
+
+Track when a user begins a subscription.
+
+```php
+<?php
+$payload = [
+  'name' => 'subscription_started',
+  'avatar' => '💳',
+  'content' => 'User Alice started monthly plan',
+  'metadata' => [
+    'plan' => 'monthly',
+    'user_email' => 'alice@example.com'
+  ]
+];
+// send with same cURL setup
+?>
+```
+
+**4. Refund Issued**
+
+Log when a refund is processed.
+
+```php
+<?php
+$payload = [
+  'name' => 'billing_refund',
+  'avatar' => '💳',
+  'content' => 'Refunded $15.00 to Bob Brown',
+  'metadata' => [
+    'user_email' => 'bob@example.com',
+    'amount' => 15.00
+  ]
+];
+// send with same cURL setup
+?>
+```
+
+Each snippet posts a billing event to Operational. Adjust the payload fields to match your needs.
+
+## Conclusion
+
+Using Operational to track billing events in WordPress saves time and reduces guesswork when payments fail or refunds occur. Its simple API lets you send structured events and view them in a unified dashboard. 
+
+Learn more at https://operational.co and try out snippets in the playground: https://operational.co/playground

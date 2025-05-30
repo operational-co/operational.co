@@ -1,0 +1,61 @@
+---
+title: View a user's profile data inside Wordpress
+slug: view-a-users-profile-data-inside-wordpress
+description: Learn how to use Operational to track and view user profile access events within your Wordpress site in real time.
+date: 2025-05-22
+tags: [wordpress, php, user-profiles]
+icon: 👤
+---
+
+## What this article is about
+
+Monitoring when someone views a user profile in your Wordpress site can help you improve security and usability. For example, you can see if admin accounts are accessed unexpectedly.  
+![Operational in action](https://operational.co/images/pitch/ops_insitu.jpg)
+
+## What is Operational
+
+Operational is a lightweight event tracking service. You can send custom events from your Wordpress site to capture actions like profile views.  
+It stores your events in a dashboard for real-time inspection and alerting.
+
+## Setting up Operational
+
+1. Go to [app.operational.co](https://app.operational.co) and sign up.  
+2. After logging in, find your API key in the settings page.  
+3. Keep the key safe. You will use it in your Wordpress code.
+
+## Code example
+
+Here is a PHP snippet that sends an event when a user views another user's profile:
+
+```php
+<?php
+// Replace with your actual API key
+$apiKey = 'API_KEY';
+
+$payload = [
+    'name' => 'View Profile',
+    'avatar' => '👤',
+    'content' => 'John Smith viewed Jane Doe\'s profile'
+];
+
+$ch = curl_init('https://api.operational.co/v1/events/ingest');
+curl_setopt($ch, CURLOPT_HTTPHEADER, [
+  'Content-Type: application/json',
+  'Authorization: Bearer ' . $apiKey
+]);
+curl_setopt($ch, CURLOPT_POST, true);
+curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($payload));
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+$response = curl_exec($ch);
+curl_close($ch);
+
+echo $response;
+```
+
+This code sends an event named "View Profile" with details about who viewed whose profile.
+
+## Conclusion
+
+Using Operational lets you track profile views without building your own logging system. You get a simple API and dashboard to view events in real time.  
+Learn more at https://operational.co and try the [playground](https://operational.co/playground) to test snippets.

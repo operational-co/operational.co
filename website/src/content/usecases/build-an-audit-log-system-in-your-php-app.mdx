@@ -1,0 +1,109 @@
+---
+title: Build an audit log system in your PHP app
+slug: build-an-audit-log-system-in-your-php-app
+description: Learn how to build an audit log system in your PHP app to track user actions, changes, and security events using Operational.
+date: 2025-06-01
+tags:
+  - php
+  - audit-log
+  - logging
+icon: 📜
+---
+
+## What this article is about
+
+An audit log helps you track important actions in your PHP application.
+You can record who did what and when it happened.
+For example, if an administrator changes a user’s role, you can save that event to review later.
+
+![Operational in action](https://operational.co/images/pitch/ops_insitu.jpg)
+
+## What is Operational
+
+Operational is an open source event tracking system.
+It lets you send custom events from your code and view them in a simple dashboard.
+You can use it to build audit logs by sending structured events for each action you want to record.
+
+## Setting up Operational
+
+1. Go to [app.operational.co](https://app.operational.co) and sign up.
+2. Create a new project and note your API key.
+3. Use the API key in your PHP code to send events.
+
+## Code examples
+
+Here are four examples of audit events you can send from your PHP app.
+
+### 1. Recording account creation
+
+```php
+<?php
+$apiKey = 'YOUR_API_KEY';
+$payload = [
+  'name' => 'account created',
+  'avatar' => '🆕',
+  'content' => 'New user John Doe signed up with email john@example.com'
+];
+
+$ch = curl_init("https://api.operational.co/v1/events/structured?key=$apiKey");
+curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'POST');
+curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($payload));
+curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
+curl_exec($ch);
+```  
+This snippet logs when a new user account is created.
+
+### 2. Recording role changes
+
+```php
+<?php
+$apiKey = 'YOUR_API_KEY';
+$payload = [
+  'name' => 'role changed',
+  'avatar' => '⚙️',
+  'content' => 'Admin Jane Doe changed role for user John Smith from editor to moderator'
+];
+
+// send the event
+echo "Sending role change event...";
+```  
+Logs when an admin updates a user’s role.
+
+### 3. Recording data exports
+
+```php
+<?php
+$apiKey = 'YOUR_API_KEY';
+$payload = [
+  'name' => 'data export',
+  'avatar' => '📤',
+  'content' => 'User John Smith exported order data for March 2025'
+];
+
+// send the event
+echo "Logging data export...";
+```  
+Tracks when a user exports data from the system.
+
+### 4. Recording order updates
+
+```php
+<?php
+$apiKey = 'YOUR_API_KEY';
+$payload = [
+  'name' => 'order status updated',
+  'avatar' => '✅',
+  'content' => 'User Alice updated order #12345 status to shipped'
+];
+
+// send the event
+echo "Logging order update...";
+```  
+Captures changes to order status for auditing.
+
+## Conclusion
+
+Using Operational for your PHP audit log saves time and keeps your records consistent.
+You can copy these snippets and get started in minutes.
+
+Learn more at https://operational.co and try the Playground at https://operational.co/playground to see live examples.

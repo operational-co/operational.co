@@ -1,13 +1,18 @@
 <template>
-  <div :class="['c-screenshot-banner']">
+  <div class="c-screenshot-banner">
     <article>
       <div>
-        <span>Operational</span>
+        <img src="/logo.png" />
+
         <h1>{{ title || "" }}</h1>
+        <p>
+          {{ description }}
+        </p>
+        <span>operational.co/usecases/{{ slug }}</span>
       </div>
     </article>
-    <section>
-      <Item :item="item" :initialExpand="true"></Item>
+    <section :style="computedStyle">
+      <Item v-if="card" :item="card" :initialExpand="true"></Item>
     </section>
   </div>
 </template>
@@ -17,65 +22,54 @@ import Item from "@operational.co/components/card/index.vue";
 
 export default {
   components: {
-    Item
+    Item,
   },
 
   data() {
     return {
       title: "",
-      cardName: "",
-      cardAvatar: "",
-      cardType: "",
-      cardContent: ""
+      description: "",
+      card: null,
+      slug: "",
+      bg: "g1",
     };
   },
 
   computed: {
-    item() {
-      let date = new Date().toISOString();
-      return {
-        id: 1,
-        createdAt: date,
-        name: this.cardName || "Card name",
-        avatar: this.cardAvatar || "⏱️",
-        type: this.cardType || "default",
-        content: this.cardContent
+    computedStyle: function () {
+      let path = `/images/screenshot/${this.bg}.jpg`;
+      let backgroundImage = `url("${path}")`;
+      let style = {
+        "background-image": backgroundImage,
       };
-    }
+
+      return style;
+    },
   },
 
   mounted() {
-    this.title = "";
-    this.cardName = "User trial ended";
-    this.cardAvatar = "🤔";
-    this.cardType = "rows";
-    this.cardContent = [
-      {
-        label: "Name",
-        content: "Shash"
-      },
-      {
-        label: "Email",
-        content: "shash@operational.co"
-      }
-    ];
+    const params = new URLSearchParams(window.location.search);
+
+    this.title = params.get("title") || "Track errors in Nodejs";
+    this.description =
+      params.get("description") ||
+      "This is a guide on tracking errors using Operational.co, a free event tracker";
+    this.slug = params.get("slug") || "track-errors-in-nodejs";
+
+    const card = params.get("card") || "";
+
+    this.bg = params.get("bg") || "g1";
+
+    try {
+      this.card = JSON.parse(card);
+    } catch (err) {
+      this.card = {
+        name: "URL PARAM ERROR",
+      };
+    }
 
     return;
-    const params = new URLSearchParams(window.location.search);
-    this.title = params.get("title") || "";
-    this.cardName = params.get("card-name") || "";
-    this.cardAvatar = params.get("card-avatar") || "";
-    this.cardType = params.get("card-type") || "";
-
-    const cardContentRaw = params.get("card-content");
-    if (cardContentRaw) {
-      try {
-        this.cardContent = JSON.parse(cardContentRaw);
-      } catch (e) {
-        this.cardContent = cardContentRaw;
-      }
-    }
-  }
+  },
 };
 </script>
 
@@ -88,49 +82,58 @@ export default {
     position: absolute;
     z-index: 2;
     top: 0;
-    left: 0;
-    width: 55%;
+    left: 8%;
+    width: 45%;
     height: 100%;
-    padding: 4rem;
-    padding-left: 5rem;
+    padding-right: 7%;
     display: flex;
     flex-direction: column;
     justify-content: center;
 
+    img {
+      width: 64px;
+      height: 64px;
+      margin-bottom: 1rem;
+    }
+
     span {
       display: block;
       margin-bottom: 1rem;
-      margin-top: -3.5rem;
-      font-size: var(--font-size-xl);
     }
 
     h1 {
-      font-size: 56px;
-      margin: 0;
+      font-size: 50px;
+      color: #fff;
+    }
+
+    p {
+      font-size: var(--font-size-xl);
+      line-height: 1.5;
+      color: #fff;
     }
   }
 
   section {
     position: absolute;
     top: 0;
-    left: 30%;
-    width: 70%;
+    left: 35%;
+    width: 65%;
     height: 100%;
-    padding-left: 20%;
+    padding-left: 10%;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background-image: url("/images/screenshot/gradient.png");
+    background-image: url("/images/screenshot/g4.jpg");
     background-size: cover;
     background-position: center;
 
     .c-card {
       margin-bottom: 0;
       z-index: 1;
-      min-width: 380px;
+      width: 420px;
       box-shadow: 0 0 32px 0 rgba(255, 255, 255, 0.1);
-      transform: scale(1.4);
+      transform: scale(1.2);
     }
 
     &:after {

@@ -1,0 +1,96 @@
+---
+title: Track cart events in WooCommerce
+slug: track-cart-events-in-woocommerce
+description: Learn how to track cart additions and removals in WooCommerce using Operational to monitor customer interactions and optimize conversion funnels.
+date: 2025-05-22
+tags:
+  - woocommerce
+  - ecommerce
+  - php
+  - tracking
+icon: 🛒
+---
+
+## What this article is about
+
+Tracking when customers add or remove items from their WooCommerce cart helps you understand shopping behavior and improve conversion rates. For example, you might see that many shoppers add a Blue T-Shirt but never check out. By sending these events to Operational, you can spot drop-off points and test new strategies.
+
+![Operational in action](https://operational.co/images/pitch/ops_insitu.jpg)
+
+## What is Operational
+
+Operational is a simple, developer-friendly platform for capturing events from your app or website. Instead of building and maintaining your own tracking backend, you send event data to Operational. You can then analyze these events in real time, set up alerts, and share insights with your team.
+
+## Setting up Operational
+
+1. Sign up at [app.operational.co](https://app.operational.co) and verify your email.
+2. Create a new project and copy your API key from the project settings.
+3. Add the API key to your WooCommerce plugin or theme files.
+
+## Code examples
+
+Below are two PHP snippets. The first tracks when a product is added to the cart. The second tracks when a product is removed.
+
+```php
+// Track product added to cart
+add_action('woocommerce_add_to_cart', function($cart_item_key, $product_id, $quantity) {
+    $apiKey = 'YOUR_API_KEY';
+    $payload = [
+        'name' => 'Product added to cart',
+        'avatar' => '🛒',
+        'content' => "John Smith added Blue T-Shirt to cart",
+        'properties' => [
+            'productId' => $product_id,
+            'quantity' => $quantity
+        ]
+    ];
+
+    $ch = curl_init('https://api.operational.co/events/ingest');
+    curl_setopt($ch, CURLOPT_HTTPHEADER, [
+        'Content-Type: application/json',
+        'Authorization: Bearer ' . $apiKey
+    ]);
+    curl_setopt($ch, CURLOPT_POST, true);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($payload));
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_exec($ch);
+    curl_close($ch);
+}, 10, 3);
+```
+
+```php
+// Track product removed from cart
+add_action('woocommerce_remove_cart_item', function($cart_item_key, $cart) {
+    $apiKey = 'YOUR_API_KEY';
+    $removed = $cart->removed_cart_contents[$cart_item_key];
+    $productName = $removed['data']->get_name();
+    $quantity = $removed['quantity'];
+
+    $payload = [
+        'name' => 'Product removed from cart',
+        'avatar' => '🛒',
+        'content' => "Sarah Lee removed $productName from cart",
+        'properties' => [
+            'productId' => $removed['product_id'],
+            'quantity' => $quantity
+        ]
+    ];
+
+    $ch = curl_init('https://api.operational.co/events/ingest');
+    curl_setopt($ch, CURLOPT_HTTPHEADER, [
+        'Content-Type: application/json',
+        'Authorization: Bearer ' . $apiKey
+    ]);
+    curl_setopt($ch, CURLOPT_POST, true);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($payload));
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_exec($ch);
+    curl_close($ch);
+}, 10, 2);
+```
+
+These snippets send cart events to Operational so you can monitor how users interact with products in real time.
+
+## Conclusion
+
+By tracking WooCommerce cart events with Operational, you gain clear insights into shopper behavior and can optimize your checkout flow faster. No need to build a complex backend—just send events and view them in the dashboard. To learn more, visit the [Operational homepage](https://operational.co) or try out the [playground](https://operational.co/playground) for easy copy-and-paste snippets.

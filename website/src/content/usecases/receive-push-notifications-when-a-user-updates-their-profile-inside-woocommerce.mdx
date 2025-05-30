@@ -1,0 +1,65 @@
+---
+title: Receive push notifications when a user updates their profile inside WooCommerce
+slug: receive-push-notifications-when-a-user-updates-their-profile-inside-woocommerce
+description: Set up push notifications in WooCommerce to alert on user profile updates with Operational.co using simple PHP code.
+date: 2024-06-20
+tags: [woocommerce, php, notifications]
+icon: 🔔
+---
+
+## What this article covers
+
+This article shows how to send push notifications when a WooCommerce user updates their profile.
+For example, if John Smith changes his email, you’ll get an alert.
+
+![Operational in action](https://operational.co/images/pitch/ops_insitu.jpg)
+
+## What is Operational
+
+Operational is a service that tracks events from any app or site.
+You can use it to log actions and get real-time alerts.
+It gives you an API and a dashboard to see all your events in one place.
+
+## Setting up Operational
+
+1. Go to https://app.operational.co and sign up or log in.
+2. In the dashboard, copy your API key from the settings.
+3. Keep the key safe. You’ll need it in your code to send events.
+
+## Code example in PHP
+
+Below is a PHP snippet that hooks into the WooCommerce profile update event and sends a notification to Operational.
+
+```php
+add_action('profile_update', 'send_profile_update_event', 10, 2);
+
+function send_profile_update_event($user_id, $old_user_data) {
+    $user_info = get_userdata($user_id);
+    $api_key = 'YOUR_API_KEY_HERE';
+
+    $payload = [
+        'name'   => 'Profile updated',
+        'avatar' => '👤',
+        'content'=> $user_info->display_name . ' updated their email to ' . $user_info->user_email
+    ];
+
+    $ch = curl_init('https://api.operational.co/v1/events/ingest');
+    curl_setopt($ch, CURLOPT_HTTPHEADER, [
+        'Authorization: Bearer ' . $api_key,
+        'Content-Type: application/json'
+    ]);
+    curl_setopt($ch, CURLOPT_POST, true);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($payload));
+    curl_exec($ch);
+    curl_close($ch);
+}
+```
+
+This code listens for any profile update in WooCommerce and sends an event with the user’s new email.
+
+## Conclusion
+
+Operational makes it easy to track user profile updates in WooCommerce and get instant alerts.
+It saves you from writing complex logging logic and lets you focus on your store.
+
+Learn more on https://operational.co and try code snippets in our playground: https://operational.co/playground

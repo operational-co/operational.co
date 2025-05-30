@@ -1,0 +1,56 @@
+---
+title: View env vars on your server in JavaScript
+slug: view-env-vars-on-your-server-in-javascript
+description: Learn to track and view server environment variables in JavaScript using Operational.co for easier monitoring and debugging.
+date: 2025-05-22
+tags:
+  - javascript
+  - env
+  - monitoring
+icon: 🔑
+---
+
+## What this article covers
+
+This article shows how to read environment variables on a JavaScript server and track them using Operational.co. Tracking env vars helps confirm critical keys are loaded.
+
+![](https://operational.co/images/pitch/ops_insitu.jpg)
+
+## What is Operational
+
+Operational is an open-source event tracking tool for any tech product. It lets you capture and view events like errors, logs, and custom actions. You can use it to track environment loads, debug server setups, and monitor key changes in real time.
+
+## Setting up Operational
+
+First sign up at [app.operational.co](https://app.operational.co). After verifying your email, create a new project. You will see your API key in the project settings. Copy it—you will need it for the code snippet below.
+
+## Code example
+
+Add the SDK and track your env vars on server start. The snippet reads selected values from `process.env` and sends them to Operational.
+
+```javascript
+import Operational from "@operational.co/sdk";
+
+const ops = new Operational("YOUR_API_KEY");
+
+const envVars = Object.entries(process.env)
+  .filter(([key]) => ["NODE_ENV", "DB_HOST"].includes(key))
+  .map(([key, val]) => `${key}=${val}`)
+  .join(", ");
+
+const payload = {
+  name: "environment variables loaded",
+  avatar: "🔑",
+  content: `Loaded environment variables: ${envVars}`
+};
+
+await ops.events.ingest(payload);
+```
+
+This example filters for `NODE_ENV` and `DB_HOST`, then sends them to your Operational project.
+
+## Conclusion
+
+Using Operational makes it easy to confirm your environment variables load correctly. It saves time by centralizing monitoring and helping you spot misconfigurations quickly.
+
+Learn more at https://operational.co and try out the code in the [playground](https://operational.co/playground).

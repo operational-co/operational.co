@@ -1,0 +1,75 @@
+---
+title: Monitor cronjobs in Node.js
+slug: monitor-cronjobs-nodejs
+description: Monitor cronjob executions in Node.js, track success and failures, and get insights using Operational.
+date: 2025-05-22
+tags:
+  - nodejs
+  - cron
+  - monitoring
+icon: ⏰
+---
+
+## What this article is about
+
+Running cronjobs in Node.js is common for tasks like sending emails or cleaning up data.
+
+Tracking their success and failure helps you catch issues early.
+
+For example, you might automate daily reports but miss errors in the job.
+
+![Operational in action](https://operational.co/images/pitch/ops_insitu.jpg)
+
+## What is Operational?
+
+Operational is a simple event tracking platform.
+
+You can send custom events for anything in your tech product.
+
+It helps you monitor jobs, errors, or user actions.
+
+You view events in a dashboard or set up alerts.
+
+## Setting up Operational
+
+First, sign up at [app.operational.co](https://app.operational.co).
+
+After you confirm your email, go to the API keys section.
+
+Copy your API key and keep it safe.
+
+You will use this key to send events from your Node.js app.
+
+## Code snippet
+
+This example shows how to send a cronjob event to Operational.
+
+```javascript
+import Operational from "@operational.co/sdk"
+
+const ops = new Operational("API_KEY")
+
+async function trackCronJob() {
+  const payload = {
+    name: "cronjob execution",
+    avatar: "⏰",
+    content: "Daily report job completed successfully by system"
+  }
+
+  await ops.events.ingest(payload)
+}
+
+trackCronJob()
+```
+
+This code logs a cronjob run. Replace API_KEY with the key from your dashboard. The payload fields set the event name, icon, and description.
+
+## Conclusion
+
+Operational saves you time by collecting cronjob metrics in one place.
+
+You can spot failures, measure runtimes, and improve reliability.
+
+Learn more at https://operational.co.
+
+Try examples in the [playground](https://operational.co/playground) to get started.

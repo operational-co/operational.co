@@ -1,0 +1,68 @@
+---
+title: "Track user signup events in WooCommerce"
+slug: "track-user-signup-events-woocommerce"
+description: "Learn how to track WooCommerce user signups with Operational for better insights into customer registrations."
+date: "2025-05-22"
+tags: ["woocommerce","php","user-tracking"]
+icon: "🎉"
+---
+
+# Track user signup events in WooCommerce
+
+## What this article is about
+
+In this article, we’ll look at why tracking user signup events in WooCommerce helps you understand customer growth.
+
+When someone registers on your store, you capture their details and send an event to Operational. That way you can monitor signup trends and act on them.
+
+![Operational in action](https://operational.co/images/pitch/ops_insitu.jpg)
+
+## What is Operational and why use it
+
+Operational is an event tracking tool designed to simplify how you collect and view product events.
+
+You can log any event from your WooCommerce store and see it in a live feed. This gives you real-time insight into user activity.
+
+## Setting up Operational
+
+1. Go to https://app.operational.co and create an account.
+2. In your dashboard, find your API key under Settings.
+3. Store your API key in a safe place. You’ll need it in your WooCommerce code.
+
+## Code example for tracking user signup in PHP
+
+```php
+// Include this in your theme’s functions.php or a custom plugin
+add_action('user_register', 'send_signup_event_to_operational', 10, 1);
+
+function send_signup_event_to_operational($user_id) {
+    $user = get_userdata($user_id);
+    $apiKey = 'API_KEY';
+    $payload = [
+        'name'    => 'user signup',
+        'avatar'  => '🎉',
+        'content' => 'New user signup: ' . $user->display_name . ' (ID: ' . $user_id . ')'
+    ];
+
+    $ch = curl_init('https://api.operational.co/events/ingest');
+    curl_setopt($ch, CURLOPT_HTTPHEADER, [
+        'Authorization: Bearer ' . $apiKey,
+        'Content-Type: application/json'
+    ]);
+    curl_setopt($ch, CURLOPT_POST, true);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($payload));
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_exec($ch);
+    curl_close($ch);
+}
+```
+
+This snippet hooks into WooCommerce user registration. It posts a signup event with the user's name and ID to Operational.
+
+## Conclusion
+
+Tracking user signups in WooCommerce with Operational gives you clear, real-time data on registrations. It saves time by handling event collection and display for you.
+
+Learn more on the Operational homepage: https://operational.co
+
+Try out snippets in our Playground: https://operational.co/playground

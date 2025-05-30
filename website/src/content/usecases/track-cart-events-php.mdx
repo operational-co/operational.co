@@ -1,0 +1,67 @@
+---
+title: "Track cart events in PHP"
+slug: "track-cart-events-php"
+description: "Learn how to track cart events like add to cart in your PHP app using Operational for insights and conversions."
+date: 2025-05-22
+tags:
+  - php
+  - ecommerce
+  - saas
+  - events
+icon: "🛒"
+---
+
+## Why track cart events in PHP?
+
+Tracking cart events helps you understand how users interact with your ecommerce store. It shows which products are popular and where users drop off. This data can boost sales and reduce abandoned carts.
+
+![Operational in action](https://operational.co/images/pitch/ops_insitu.jpg)
+
+## What is Operational?
+
+Operational is an open-source event tracking tool. It captures events from any application and sends them to a dashboard. You can track cart events in real time and analyze user behavior without complex setup.
+
+## Setting up Operational
+
+1. Go to [app.operational.co](https://app.operational.co) and sign up for an account.
+2. Create a new project and get your API key.
+3. Store the API key in a secure place or set it as an environment variable in your PHP app.
+
+## Code example
+
+The following PHP snippet shows how to send an add_to_cart event to Operational.
+
+```php
+<?php
+$apiKey = getenv('OPERATIONAL_API_KEY') ?: 'YOUR_API_KEY';
+
+$payload = [
+    'name' => 'cart updated',
+    'avatar' => '🛒',
+    'content' => 'John Smith added a new item to the cart',
+    'properties' => [
+        'event' => 'add_to_cart',
+        'product_id' => 456,
+        'quantity' => 1
+    ]
+];
+
+$ch = curl_init('https://api.operational.co/v1/events/ingest');
+curl_setopt($ch, CURLOPT_HTTPHEADER, [
+    'Content-Type: application/json',
+    'Authorization: Bearer ' . $apiKey
+]);
+curl_setopt($ch, CURLOPT_POST, true);
+curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($payload));
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+$response = curl_exec($ch);
+curl_close($ch);
+
+echo $response;
+```
+
+This code sends a cart updated event to Operational. You can change the properties to track other cart actions like remove_from_cart or checkout.
+
+## Conclusion
+
+Operational saves you time by handling event ingestion and storage. You get real-time cart data without building a custom solution. Learn more on the [Operational home page](https://operational.co). Try code snippets in the [Playground](https://operational.co/playground).

@@ -1,0 +1,66 @@
+---
+title: View env vars on your server in PHP
+slug: view-env-vars-on-your-server-in-php
+description: Fetch and display server environment variables in PHP and log them to Operational for monitoring and debugging.
+date: 2024-06-11
+tags:
+  - php
+  - server
+  - monitoring
+  - environment
+icon: 🔑
+---
+
+## What this article covers
+
+This article shows how to fetch and display environment variables on your PHP server. Accessing env vars helps explain configuration issues and eases debugging. Imagine checking your database credentials or API keys in real time.
+
+![Operational in action](https://operational.co/images/pitch/ops_insitu.jpg)
+
+## What is Operational
+
+Operational is a simple event tracking tool. It lets you send custom events from your app. You can log actions like viewing env variables. Then you see them in a dashboard. This helps you monitor and debug with context.
+
+## Setting up Operational
+
+First, sign up at https://app.operational.co and create an account. After signup, get your API key from the dashboard. You will use this key to send events from your server to Operational.
+
+## Code example
+
+Here is a PHP snippet that reads environment variables and sends them to Operational:
+
+```php
+<?php
+require 'vendor/autoload.php';
+
+use Operational\\Operational;
+
+$ops = new Operational('YOUR_API_KEY');
+
+$envVars = [
+    'APP_ENV'      => getenv('APP_ENV'),
+    'DB_HOST'      => getenv('DB_HOST'),
+    'CACHE_DRIVER' => getenv('CACHE_DRIVER')
+];
+
+$contentParts = [];
+foreach ($envVars as $key => $value) {
+    $contentParts[] = $key . '=' . $value;
+}
+
+$content = implode(', ', $contentParts);
+
+$payload = [
+    'name'    => 'viewed environment variables',
+    'avatar'  => '🔑',
+    'content' => $content
+];
+
+$ops->events->ingest($payload);
+```
+
+This code loads key environment variables and tracks a custom event in Operational. It sends the env var names and values as the event content.
+
+## Conclusion
+
+By using Operational, you can log and monitor your server environment at any time. This helps catch misconfigurations before they cause issues. Learn more at https://operational.co. Try the playground for ready-to-use snippets: https://operational.co/playground

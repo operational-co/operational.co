@@ -1,133 +1,49 @@
 ---
 // @ts-nocheck
 import BaseLayout from "@/layouts/base.astro";
-import Constrain from "@operational.co/components/ui/constrain.vue"
-import slugify from "@/lib/slugify.js";
-import getJsonld from "@/lib/get-jsonld.js";
+import {list, getItems} from "@/content/list.js";
+import Prevnext from "@operational.co/components/ui/prevnext.vue";
+import PageUsecase from "@/components/page-usecase.vue";
 
-import PageHeader from "@/components/page-header.vue"
-import UsecasesRelated from "@/components/usecases-related.vue"
+import { getCollection, getEntry, render } from 'astro:content';
 
-const postModules = import.meta.glob('../../../../packages/content/*/*.mdx', { eager: true });
+const baseSlug = 'usecases'
 
-const posts = Object.entries(postModules).map(([file, mod]) => ({
-  file,
-  ...mod
-}));
+const post = await getEntry(baseSlug, Astro.params.slug);
+const data = await render(post);
+const Content = data.Content;
 
-const params = Astro.params;
+export const getStaticPaths = async function() {
+  let items = [];
+  let baseSlug = 'usecases';
+  const usecases = await getCollection(baseSlug);
 
-let page = null;
+  for(let i = 0; i < usecases.length; i++) {
+    const usecase = usecases[i];
 
-for(let i = 0; i < usecasesList.length; i++) {
-  let p = usecasesList[i];
-  let slug = p.path.split('/');
-    slug = slug[slug.length - 1];
-
-  if(slug === params.slug) {
-    page = p;
-    break;
+    items.push({
+      params : {
+        slug : usecase.data.slug
+      }
+    })
   }
-}
 
-
-
-export const getStaticPaths = function() {
-  return [];
-  let list = [];
-  usecasesList.map((page) => {
-    let lastName = page.path.split('/');
-    lastName = lastName[lastName.length - 1];
-    if(page.path) {
-      list.push({
-        params : {
-          slug : lastName
-        }
-      })
-    }
-  });
-  return list;
-}
-
-if(!page) {
-  return;
+  return items;
 }
 
 let content = null;
 
 
-
-for(let  i = 0; i < posts.length; i++) {
-  let post = posts[i];
-  let file = post.file;
-
-  if(file.includes(page.path)) {
-    content = post;
-    break;
-  }
-}
-
-const Content = content.Content;
-const title = page.name;
-const pageTitle = `${title} - Operational`;
-const slugifiedTitle = page.name.toLowerCase().replace(/\s+/g, '-').replace(/[^\w\-]+/g, '');
-const ogImageUrl = `/images/usecases/banner-${slugifiedTitle}.png`;
-const url = Astro.url;
-const slug = url.pathname.split('/').pop();
-
-const jsonLd = getJsonld({
-  title,
-  subtitle : page.description,
-  slug,
-  bannerUrl : `/images/usecases/${slugifiedTitle}.png`
-}, 'page');
-
+const title = post.data.title;
+const description = post.data.description;
 
 ---
 
+<BaseLayout title={title} description={description}>
 
-<BaseLayout jsonLd={jsonLd} title={pageTitle} description={jsonLd.subtitle}>
-
-    <PageHeader subtitle="Use case" size="sm" image={ogImageUrl}>
-      <div slot="title">
-        <h1>
-          {page.name}
-        </h1>
-      </div>
-      <div slot="body">
-        <p>
-          {page.description}
-        </p>
-      </div>
-
-    </PageHeader>
-    
-
-  <Constrain>
+  <PageUsecase data={data} client:load pathname={Astro.url.pathname}>
     <div class="c-page">
       <Content />
     </div>
-  </Constrain>
-
-  <UsecasesRelated currentPost={page} posts={usecasesList}></UsecasesRelated>
+  </PageUsecase>
 </BaseLayout>
-
-<style>
-  .c-page {
-    border-top:var(--color-bg-5) solid 1px;
-    padding-top:2rem;
-    width:80%;
-
-    @media screen and (max-width:800px) {
-      width:100%;
-    }
-  }
-
-  .c-page-header {
-    img {
-      aspect-ratio: 776 / 323;
-      object-fit: cover;
-      object-position:center center;
-    }
-  }
-</style>

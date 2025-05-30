@@ -1,0 +1,69 @@
+---
+title: Receive push notifications in JavaScript
+slug: receive-push-notifications-in-javascript
+description: Track push notification receipts in your JavaScript app using Operational for real-time monitoring and logs.
+date: 2025-05-22
+tags:
+  - javascript
+  - push
+  - notifications
+  - web
+icon: 🔔
+---
+
+## Overview
+
+In this article, we explain how tracking push notifications received in your JavaScript app can help you monitor delivery success and user engagement. For example, you might want to know when a marketing alert reaches a user’s browser.
+
+![Operational in action](https://operational.co/images/pitch/ops_insitu.jpg)
+
+## What is Operational
+
+Operational is an open-source event tracking service. It lets you send structured events from any tech product for real-time logging and analysis. With a simple JavaScript SDK, you can record each push notification receipt and view it on the Operational dashboard. This helps you spot failed deliveries and measure engagement.
+
+## Setup Operational
+
+1. Visit [app.operational.co](https://app.operational.co) and sign up for an account.
+2. In your dashboard, create a new project and copy the API key.
+3. Install the SDK in your project:  
+   ```bash
+   npm install @operational.co/sdk
+   ```
+4. Keep your API key handy for the code example.
+
+## Code example
+
+```javascript
+// app.js
+import Operational from "@operational.co/sdk";
+
+const ops = new Operational("YOUR_API_KEY");
+
+// Register your service worker
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/sw.js')
+    .then(() => console.log('Service Worker registered'));
+}
+
+// sw.js (your service worker file)
+importScripts('https://cdn.operational.co/sdk.js');
+
+const swOps = new Operational('YOUR_API_KEY');
+
+self.addEventListener('push', async event => {
+  const data = event.data.json();
+  const payload = {
+    name: "push notification received",
+    avatar: "🔔",
+    content: `Notification titled '${data.title}' received`
+  };
+
+  await swOps.events.ingest(payload);
+});
+```
+
+This code shows how to send an event to Operational each time your service worker handles a push notification. You register the worker, listen for the `push` event, and then log the receipt with `events.ingest`.
+
+## Conclusion
+
+By tracking push notification receipts with Operational, you get instant visibility into delivery rates and user engagement without building your own logging system. Learn more at https://operational.co and try out our [playground](https://operational.co/playground) to copy and paste code snippets for your project.

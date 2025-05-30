@@ -1,0 +1,96 @@
+---
+title: Track billing events in PHP
+slug: track-billing-events-in-php
+description: Learn how to track billing events like invoice creation and payment status in your PHP app using Operational for better monitoring.
+date: 2024-06-12
+tags:
+  - php
+  - ecommerce
+  - saas
+  - billing
+icon: 💳
+---
+
+## What this article is about
+
+Tracking billing events in your PHP app helps you monitor payments and catch issues early.
+You can record actions like invoice creation, successful payments, and payment failures.
+
+![Operational in action](https://operational.co/images/pitch/ops_insitu.jpg)
+
+## Introducing Operational
+
+Operational is an open-source tool that lets you send and view events from any app.
+You can log billing actions and see them in a dashboard or forward them to your alerts.
+This helps you spot revenue problems and fix them faster.
+
+## Setting up Operational
+
+1. Go to https://app.operational.co and sign up for a free account.
+2. Create a new project in the dashboard.
+3. Copy your API key from the project settings.
+
+## Code examples and conclusion
+
+Example: Invoice Created
+
+```php
+<?php
+require 'vendor/autoload.php';
+
+use Operational\Operational;
+
+$ops = new Operational('YOUR_API_KEY');
+
+$payload = [
+    'name' => 'invoice_created',
+    'avatar' => '💳',
+    'content' => 'Invoice INV-1001 created for customer Jane Smith'
+];
+
+$ops->events->ingest($payload);
+```
+This sends an event when an invoice is created.
+
+Example: Payment Succeeded
+
+```php
+<?php
+require 'vendor/autoload.php';
+
+use Operational\Operational;
+
+$ops = new Operational('YOUR_API_KEY');
+
+$payload = [
+    'name' => 'invoice_paid',
+    'avatar' => '💳',
+    'content' => 'Invoice INV-1001 paid by Jane Smith'
+];
+
+$ops->events->ingest($payload);
+```
+This logs a successful payment event.
+
+Example: Payment Failed
+
+```php
+<?php
+require 'vendor/autoload.php';
+
+use Operational\Operational;
+
+$ops = new Operational('YOUR_API_KEY');
+
+$payload = [
+    'name' => 'payment_failed',
+    'avatar' => '❌',
+    'content' => 'Payment failed for invoice INV-1001 for customer Jane Smith'
+];
+
+$ops->events->ingest($payload);
+```
+This records a failed payment attempt.
+
+Operational helps you save time and avoid billing errors by giving you real-time insight into payment flows.
+Learn more at https://operational.co and try the interactive snippets in the playground: https://operational.co/playground

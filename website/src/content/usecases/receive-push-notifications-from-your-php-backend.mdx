@@ -1,0 +1,70 @@
+---
+title: Receive push notifications from your PHP backend
+slug: receive-push-notifications-from-your-php-backend
+description: This article shows how to send push notifications from a PHP backend using Operational, letting you inform users in real time.
+date: 2024-06-24
+tags:
+  - php
+  - push-notifications
+  - backend
+icon: 📲
+---
+
+## What this article is about
+
+Sending push notifications from your PHP backend helps you keep users engaged as events happen.
+For example, you might notify a user when they receive a new message or when a friend comes online.
+Tracking these notifications gives you insights into delivery success and user interactions.
+
+![Operational in action](https://operational.co/images/pitch/ops_insitu.jpg)
+
+## What is Operational
+
+Operational is a simple event-tracking platform. You send structured events about actions in your app or backend.
+With Operational you can view a history of events, build alerts, and explore trends.
+Use it to record when push notifications are sent and monitor their delivery.
+
+## Setting up Operational
+
+1. Go to [app.operational.co](https://app.operational.co) and sign up for a free account.
+2. Create a new project and copy your API key from the dashboard.
+3. In your PHP project, install a HTTP client like cURL or the Operational PHP SDK if available.
+4. Keep your API key secure by setting it in an environment variable.
+
+## Code example
+
+```php
+<?php
+$apiKey = getenv('OPERATIONAL_API_KEY');
+
+$data = [
+  'name' => 'push_notification_sent',
+  'avatar' => '📲',
+  'content' => 'Sent a push notification to user Jane Doe'
+];
+
+$payload = json_encode($data);
+
+$ch = curl_init('https://api.operational.co/v1/events/ingest');
+curl_setopt($ch, CURLOPT_HTTPHEADER, [
+  'Content-Type: application/json',
+  'Authorization: Bearer ' . $apiKey
+]);
+curl_setopt($ch, CURLOPT_POST, true);
+curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+$response = curl_exec($ch);
+curl_close($ch);
+
+echo $response;
+```
+
+This snippet sends a `push_notification_sent` event to Operational with an emoji and description. It logs when your PHP backend delivers a push notification.
+
+## Conclusion
+
+Operational saves you time by handling event ingestion and storage so you can focus on your application logic.
+You’ll get real-time visibility into your push notifications without building a custom pipeline.
+
+Learn more at https://operational.co and try out the code in the [playground](https://operational.co/playground).

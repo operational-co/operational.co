@@ -1,0 +1,70 @@
+---
+title: View env vars on your server inside a SaaS product
+slug: view-env-vars-on-your-server-inside-a-saas-product
+description: Learn how to track and view server environment variables inside your SaaS product with Operational for secure monitoring.
+date: 2025-05-22
+tags:
+  - saas
+  - security
+  - monitoring
+icon: 🔑
+---
+
+# 1. What this article is about
+
+Viewing environment variables on your server can help you debug and audit sensitive settings in a SaaS product.
+Tracking who accessed variables and when is key to keeping your system transparent.
+
+![Operational in action](https://operational.co/images/pitch/ops_insitu.jpg)
+
+# 2. What is Operational and how to use it to track env var views
+
+Operational is a tool that collects and displays event data from your application.
+You can send custom events when someone requests an environment variable.
+Those events appear in dashboards and timelines in your Operational workspace.
+
+# 3. Setting up Operational
+
+1. Go to https://app.operational.co and sign up for an account.
+2. Create a new project and find your API key on the project settings page.
+3. Install the @operational.co/sdk in your codebase.
+
+# 4. Code snippet
+
+This example shows how to log an event each time your app reads an environment variable.
+
+```javascript
+import Operational from "@operational.co/sdk";
+
+const ops = new Operational("API_KEY");
+
+function viewEnvVar(key) {
+  const value = process.env[key];
+
+  const payload = {
+    name: "view env var",
+    avatar: "🔑",
+    content: `User fetched environment variable ${key}`,
+    properties: {
+      key: key,
+      value: value
+    }
+  };
+
+  ops.events.ingest(payload);
+  return value;
+}
+
+// Example usage
+const dbUrl = viewEnvVar("DATABASE_URL");
+console.log("DB URL is", dbUrl);
+```
+
+This code reads the requested variable, sends an event to Operational, and returns the value.
+
+# 5. Conclusion
+
+Using Operational to track environment variable access saves you time and helps you catch misconfigurations.
+You get a clear audit trail without building your own logging UI.
+
+Learn more at https://operational.co or try out snippets in the playground at https://operational.co/playground

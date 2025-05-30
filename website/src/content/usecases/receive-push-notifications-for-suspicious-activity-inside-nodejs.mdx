@@ -1,0 +1,58 @@
+---
+title: "Receive push notifications for suspicious activity inside Node.js"
+slug: receive-push-notifications-for-suspicious-activity-inside-nodejs
+description: "Learn to detect suspicious activity in your Node.js app and send real-time push notifications using Operational's event tracking."
+date: 2025-05-22
+tags: [nodejs, notifications, security, monitoring]
+icon: 🚨
+---
+
+## What this article is about
+
+Detecting suspicious activity in your Node.js application helps you react quickly to potential security threats.
+
+![Operational in action](https://operational.co/images/pitch/ops_insitu.jpg)
+
+## What is Operational
+
+Operational is an event tracking platform. It lets you record and monitor important events in your application.
+
+You can use it to capture security-related events and trigger alerts in real time.
+
+## Setting up Operational
+
+Sign up for a free account at [app.operational.co](https://app.operational.co).
+
+Once logged in, create a new project and copy your API key.
+
+You'll use this key to authenticate your events with Operational.
+
+## Tracking suspicious activity in Node.js
+
+```javascript
+import Operational from "@operational.co/sdk";
+
+const ops = new Operational("YOUR_API_KEY");
+
+async function notifySuspiciousActivity(userId) {
+  const payload = {
+    name: "Suspicious activity detected",
+    avatar: "🚨",
+    content: "Multiple failed login attempts for user ID " + userId
+  };
+
+  await ops.events.ingest(payload);
+}
+
+notifySuspiciousActivity(123);
+```
+
+This code snippet sends a push notification to Operational when multiple failed login attempts are detected for a user.
+
+## Conclusion
+
+Using Operational to track suspicious activity in Node.js saves time and reduces manual monitoring.
+
+Learn more at https://operational.co
+
+Try it out in the playground: https://operational.co/playground

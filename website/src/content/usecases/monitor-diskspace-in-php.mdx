@@ -1,0 +1,68 @@
+---
+title: Monitor diskspace in PHP
+slug: monitor-diskspace-in-php
+description: Monitor server disk space in PHP and send alerts to Operational when free space drops below critical thresholds.
+date: 2024-06-04
+tags:
+  - php
+  - server
+  - monitoring
+icon: 💾
+---
+
+## Why monitor disk space in PHP
+
+Running out of disk space can break your PHP applications. Logs stop writing. Backups fail. Uploads error out. Monitoring disk space helps you catch these issues early. For example, a cron job writing backups may silently fail when the server runs out of room.
+
+![](https://operational.co/images/pitch/ops_insitu.jpg)
+
+## What is Operational
+
+Operational is an open source event tracking tool. You can send events from any code. It stores and displays them in a clean dashboard. Use it to alert your team when something goes wrong.
+
+## Setting up Operational
+
+1. Sign up at [app.operational.co](https://app.operational.co).
+2. Create a new project and copy your API key.
+3. Install the SDK in your PHP project with Composer.
+
+## Tracking disk space in PHP
+
+Install the SDK:
+
+```bash
+composer require operational/sdk
+```
+
+Then use this script to check disk space and send an alert:
+
+```php
+<?php
+require 'vendor/autoload.php';
+use Operational\Operational;
+
+// Replace with your project API key
+$ops = new Operational('API_KEY');
+
+// Check disk usage
+$path = '/';
+$freeBytes = disk_free_space($path);
+$totalBytes = disk_total_space($path);
+$freePercent = round($freeBytes / $totalBytes * 100, 2);
+
+// Prepare event payload
+$payload = [
+    'name' => 'Disk space low',
+    'avatar' => '💾',
+    'content' => "Server has only {$freePercent}% disk space left",
+];
+
+// Send event to Operational
+$ops->events->ingest($payload);
+```
+
+This code calculates available disk space on the root path. It then sends an event to Operational when free space is low.
+
+## Conclusion
+
+Monitoring disk space in PHP helps you avoid downtime and data loss. Operational makes it easy to send and view these alerts. Visit https://operational.co to learn more. Try out the playground and copy snippets at https://operational.co/playground.

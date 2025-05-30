@@ -1,0 +1,59 @@
+---
+title: Track user signup events inside Wordpress
+slug: track-user-signup-events-inside-wordpress
+description: Capture user signup actions on a WordPress site and send events to Operational for real-time monitoring, logging, and analysis.
+date: 2025-05-22
+tags:
+  - wordpress
+  - events
+  - php
+icon: 👥
+---
+
+## What this article is about
+
+Tracking when users sign up on your WordPress site helps you understand growth and spot signup issues. You can log each new registration, tie it to campaigns, or trigger welcome flows.
+
+![Operational in action](https://operational.co/images/pitch/ops_insitu.jpg)
+
+## What is Operational
+
+Operational is an open-source event tracking service. You can send any structured event data from your app to Operational.
+
+It stores your events and offers a dashboard for searching, filtering, and visualizing them.
+
+## Setting up Operational
+
+1. Go to [app.operational.co](https://app.operational.co) and sign up for a free account.
+2. After verifying your email, create a new project in the dashboard.
+3. Copy your API key from the project settings page. You’ll need it in your code.
+
+## Code example: Tracking a signup in PHP
+
+```php
+<?php
+require 'vendor/autoload.php';
+
+use Operational\Operational;
+
+// Initialize SDK with your API key
+$ops = new Operational('YOUR_API_KEY');
+
+// Prepare signup event payload
+$payload = [
+  'name' => 'User Signed Up',
+  'avatar' => '👥',
+  'content' => 'New user Jane Doe signed up with email jane@example.com'
+];
+
+// Send event to Operational
+$ops->events->ingest($payload);
+```
+
+This snippet initializes Operational with your API key and sends a signup event whenever a new user registers.
+
+## Conclusion
+
+Using Operational to track signup events in WordPress saves time on building logging systems. You get instant visibility into user growth and can troubleshoot registration issues quickly.
+
+Learn more at https://operational.co. Try the [playground](https://operational.co/playground) to copy, paste, and run event snippets instantly.

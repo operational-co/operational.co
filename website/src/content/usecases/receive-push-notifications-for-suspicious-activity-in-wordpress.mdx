@@ -1,0 +1,73 @@
+---
+title: Receive push notifications for suspicious activity in Wordpress
+slug: receive-push-notifications-for-suspicious-activity-in-wordpress
+description: Learn how to get real-time push notifications for suspicious WordPress site activities using Operational's event-tracking API.
+date: 2025-05-22
+tags:
+  - wordpress
+  - security
+  - notifications
+  - php
+icon: 🚨
+---
+
+## What this article covers
+
+If your WordPress site faces login attacks or file changes, you need to know right away. This article shows how to receive push notifications when suspicious activity occurs.
+
+You will see examples of how to detect failed logins and notify your team immediately.
+
+![Operational in action](https://operational.co/images/pitch/ops_insitu.jpg)
+
+## What is Operational
+
+Operational is an open-source event-tracking tool. You send it events from your apps and it delivers them as push notifications, Slack messages, and more.
+
+Use Operational to log errors, security events, and custom actions in one place. It helps you stay on top of issues without building your own alerts system.
+
+## Setting up Operational
+
+1. Sign up at [app.operational.co](https://app.operational.co).
+2. After logging in, create a new project and copy your API key.
+3. Keep your API key safe. You will use it in your WordPress setup.
+
+## Code example
+
+Below is a sample plugin snippet. It hooks into failed login attempts and sends an event to Operational.
+
+```php
+<?php
+/**
+ * Plugin Name: WP Suspicious Activity Alerts
+ * Description: Send failed login events to Operational.
+ */
+
+function send_suspicious_login_event( $username ) {
+  $api_key = 'API_KEY';
+  $data = [
+    'name'   => 'Suspicious login attempt',
+    'avatar' => '🔒',
+    'content'=> 'User john.doe had 5 failed login attempts'
+  ];
+
+  $ch = curl_init('https://api.operational.co/v2/events');
+  curl_setopt($ch, CURLOPT_HTTPHEADER, [
+    'Content-Type: application/json',
+    'Authorization: Bearer ' . $api_key
+  ]);
+  curl_setopt($ch, CURLOPT_POST, true);
+  curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+  curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+  curl_exec($ch);
+  curl_close($ch);
+}
+add_action('wp_login_failed', 'send_suspicious_login_event');
+```
+
+This code listens for failed logins and posts an event to Operational. You get instant notifications and can act fast.
+
+## Conclusion
+
+Setting up Operational for your WordPress site cuts down your response time. You no longer need custom scripts or manual checks.
+
+Learn more at https://operational.co and try the [playground](https://operational.co/playground) to copy and paste snippets instantly.

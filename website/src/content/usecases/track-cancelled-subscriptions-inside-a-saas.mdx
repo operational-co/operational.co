@@ -1,0 +1,57 @@
+---
+title: Track cancelled subscriptions inside a SaaS
+slug: track-cancelled-subscriptions-inside-a-saas
+description: Learn how to track subscription cancellation events in your SaaS app using Operational to monitor churn and improve retention.
+date: 2025-05-22
+tags:
+  - saas
+  - subscriptions
+  - analytics
+icon: ❌
+---
+
+## What this article covers
+
+Tracking when users cancel their subscriptions is key to understanding churn in your SaaS app. By logging cancellation events you can spot patterns and take action to improve retention.
+
+Imagine you run a video streaming service. When a user like John Smith cancels his monthly plan, you want to capture that event immediately to follow up or analyze trends.
+
+![Operational in action](https://operational.co/images/pitch/ops_insitu.jpg)
+
+## What is Operational
+
+Operational is a simple event tracking SDK that sends user actions from your app to a central dashboard. You can use it to record cancellations, sign-ups, errors, and more in real time.
+
+It stores each event with metadata so you can filter, search, and build reports on why users leave your service.
+
+## Setting up Operational
+
+1. Go to https://app.operational.co and create an account.
+2. In the dashboard, generate a new API key for your project.
+3. Copy the key and keep it safe.
+4. Install the SDK in your app using npm or yarn.
+
+Once you have your key, you can start sending events right away.
+
+## Code example: Track cancelled subscriptions
+
+```javascript
+import Operational from "@operational.co/sdk"
+const ops = new Operational("API_KEY");
+
+const payload = {
+  name: "subscription cancelled",
+  avatar: "❌",
+  content: "User John Smith cancelled subscription 123"
+}
+
+await ops.events.ingest(payload);
+```
+
+This snippet sends a `subscription cancelled` event to Operational with the user's name and subscription ID.
+
+## Conclusion
+
+Using Operational to track cancellations saves you time on building a custom logging system. You get instant insight into churn and can act on trends faster.
+
+Learn more at https://operational.co and try copying this example in the playground: https://operational.co/playground
