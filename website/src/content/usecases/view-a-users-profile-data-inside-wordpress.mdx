@@ -1,68 +1,58 @@
 ---
-title: View a user's profile data inside Wordpress
+title: "View a user's profile data inside Wordpress"
 slug: view-a-users-profile-data-inside-wordpress
-description: Track and view user profile access events in your Wordpress site using Operational for better monitoring and insights.
-date: 2024-06-10
+description: "Learn how to fetch and view user profile data in WordPress while tracking events with Operational for audit and analytics."
+date: 2024-06-09
 tags:
   - wordpress
   - php
-  - monitoring
 icon: 👤
 ---
 
-## Why track user profile data in Wordpress
+## Understanding User Profile Viewing in WordPress
 
-Viewing a user's profile can reveal who accessed private data and when.
-This helps with security audits and compliance.
-For example, you might need to know when an admin viewed a member's details.
+Viewing a user’s profile can help admins and plugins show personalized content and track user behavior.
 
-## Using Operational for event tracking
+For example, you might want to log when a member views another member’s profile to monitor engagement or detect suspicious activity.
 
-Operational is a simple tool to record and view custom events in your app.
-You can track profile views in Wordpress with minimal setup.
+### What is Operational
 
-![Operational usage](https://operational.co/images/misc/ops-usage.jpg)
+Operational is a lightweight event tracking tool for any tech product.
 
-## Setting up Operational
+You can use it to capture events when users view profiles in WordPress.
 
-1. Go to https://app.operational.co and sign up or log in.
-2. Create a new project for your Wordpress site.
-3. In project settings, copy your API key.
-4. Add the API key to your Wordpress configuration.
+![Operational in action](https://operational.co/images/misc/ops-usage.jpg)
 
-## Code example in PHP
+### Setting Up Operational
+
+1. Go to [app.operational.co](https://app.operational.co) and sign up for a free account.  
+2. Create a new project in your dashboard.  
+3. Copy the API key from the project settings.  
+4. Install the Operational SDK or prepare your HTTP client.
+
+### Tracking Profile Views with PHP
 
 ```php
 <?php
-$apiKey = 'YOUR_API_KEY';
+require 'vendor/autoload.php';
+
+use Operational\\Operational;
+
+$ops = new Operational('API_KEY');
+
 $payload = [
-  'name' => 'User Profile Viewed',
+  'name' => 'view user profile',
   'avatar' => '👤',
-  'content' => 'Admin viewed profile of John Smith (ID: 123)'
+  'content' => 'User John Smith viewed profile of user with ID 123'
 ];
 
-$ch = curl_init('https://api.operational.co/v1/events');
-curl_setopt($ch, CURLOPT_HTTPHEADER, [
-  "Authorization: Bearer $apiKey",
-  'Content-Type: application/json'
-]);
-curl_setopt($ch, CURLOPT_POST, true);
-curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($payload));
-curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-$response = curl_exec($ch);
-curl_close($ch);
-
-echo $response;
-?>
+$ops->events()->ingest($payload);
 ```
 
-This example sends a profile view event to Operational each time an admin opens a user's profile in Wordpress.
+This code sends an event to Operational whenever a user views another user’s profile.
 
-## Conclusion
+### Conclusion
 
-Operational can save you time by handling event ingestion, storage, and visualization.
-You do not need to build a custom logging system.
+Operational makes it easy to track user profile views and gain insights without extra setup.
 
-Learn more at https://operational.co
-
-Try the playground to copy and paste ready code snippets: https://operational.co/playground
+Learn more at https://operational.co and try examples in the [playground](https://operational.co/playground).

@@ -1,0 +1,57 @@
+---
+title: "Receive push notifications when a user updated their profile inside your SaaS"
+slug: receive-push-notifications-when-a-user-updated-their-profile-inside-your-saas
+description: "Learn to send events with Operational when a user updates their profile and trigger push notifications in your SaaS easily."
+date: 2025-05-22
+tags: ["saas", "notifications", "javascript"]
+icon: 🔔
+---
+
+## Why push notifications for profile updates matter
+
+When a user updates their profile, you want to inform other users or services in real time.
+
+For example, a team admin can see right away when a member changes their photo or contact details.
+
+### What is Operational
+
+Operational is an open-source event tracking tool for any tech product.
+
+You can use it to log events and power real-time features like push notifications.
+
+![Operational in action](https://operational.co/images/misc/ops-usage.jpg)
+
+### Setting up Operational
+
+1. Go to [app.operational.co](https://app.operational.co) and sign up.
+2. Create a new project in your dashboard.
+3. Copy your API key from project settings.
+4. Install the SDK in your codebase:
+
+   ```bash
+   npm install @operational.co/sdk
+   ```
+
+### Code example
+
+```javascript
+import Operational from "@operational.co/sdk";
+
+const ops = new Operational("API_KEY");
+
+const payload = {
+  name: "user profile updated",
+  avatar: "👤",
+  content: "Alice Johnson updated their profile"
+};
+
+await ops.events.ingest(payload);
+```
+
+This code sends an event to Operational whenever a user updates their profile. You can use it to trigger push notifications.
+
+### Conclusion
+
+Operational saves time and hassle by handling event tracking and real-time features for you.
+
+Learn more at https://operational.co or try the playground at https://operational.co/playground.

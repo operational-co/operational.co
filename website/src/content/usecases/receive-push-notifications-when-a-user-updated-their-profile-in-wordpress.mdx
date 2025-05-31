@@ -1,78 +1,79 @@
 ---
-title: "Receive push notifications when a user updated their profile in Wordpress"
-slug: "receive-push-notifications-when-a-user-updated-their-profile-in-wordpress"
-description: "Learn how to send push notifications from a Wordpress site when a user updates their profile using Operational events."
+title: Receive push notifications when a user updated their profile in Wordpress
+slug: receive-push-notifications-when-a-user-updated-their-profile-in-wordpress
+description: Learn how to send real-time push notifications when a user updates their Wordpress profile using Operational.
 date: 2025-05-22
 tags:
   - wordpress
-  - push-notifications
+  - notifications
   - php
   - webhooks
-icon: "🔔"
+icon: 🔔
 ---
 
-## What are user profile update notifications in Wordpress
+## What is profile update notification in Wordpress
 
-Receiving push notifications when a user updates their profile helps administrators stay informed of changes.
-For example, you can be alerted when a user updates their bio or contact information.
+Keeping track of user profile changes helps you stay informed.
 
-## Using Operational for tracking profile updates
+When a user updates their profile in Wordpress, you can send a push notification to your team or admins.
 
-Operational is a tool for collecting and monitoring events in your applications.
-It can send real-time notifications when significant actions occur.
+This lets you monitor changes in real time.
 
-![Operational Dashboard](https://operational.co/images/misc/ops-usage.jpg)
+### Tracking Profile Updates with Operational
 
-With Operational you can track profile updates from Wordpress and get push notifications instantly.
+![Operational in Action](https://operational.co/images/misc/ops-usage.jpg)
 
-## Setup Operational for Wordpress
+Operational is an open-source event tracking tool.
 
-Follow these steps to connect your Wordpress site to Operational:
+It captures events from any tech product.
 
-1. Sign up at [app.operational.co](https://app.operational.co).
-2. Create a new project and copy your API key.
-3. Install or update your site's dependencies to use PHP and Guzzle.
-4. Store your API key in a secure location, like an environment variable.
+You can use it to receive notifications when users update profiles.
 
-## Tracking profile updates in Wordpress with PHP
+It lets you view events in a simple dashboard.
+
+### Setting up Operational
+
+1. Go to [app.operational.co](https://app.operational.co) and sign up.
+2. Create a new project in the dashboard.
+3. Copy your API key from the project settings.
+4. Install the Operational SDK in your project.
+
+### Implementing Notifications in PHP
 
 ```php
-require 'vendor/autoload.php';
+<?php
+add_action('profile_update', function($user_id) {
+  $user_info = get_userdata($user_id);
 
-use GuzzleHttp\\Client;
+  $payload = [
+    'name' => 'User Profile Updated',
+    'avatar' => '🔄',
+    'content' => $user_info->display_name . ' updated their profile'
+  ];
 
-function notifyProfileUpdate($user_id, $user_name) {
-    $client = new Client([
-        'base_uri' => 'https://api.operational.co',
-        'headers' => [
-            'Authorization' => 'Bearer YOUR_API_KEY',
-            'Content-Type' => 'application/json',
-        ],
-    ]);
-
-    $payload = [
-        'name' => 'User Profile Updated',
-        'avatar' => '🔔',
-        'content' => "{$user_name} updated their profile",
-        'properties' => [
-            'user_id' => $user_id,
-            'user_name' => $user_name,
-        ],
-    ];
-
-    $client->post('/events', ['json' => $payload]);
-}
-
-add_action('profile_update', function($user_id, $old_user_data) {
-    $user = get_userdata($user_id);
-    notifyProfileUpdate($user_id, $user->user_login);
-}, 10, 2);
+  $ch = curl_init('https://api.operational.co/events');
+  curl_setopt($ch, CURLOPT_HTTPHEADER, [
+    'Authorization: Bearer YOUR_API_KEY',
+    'Content-Type: application/json'
+  ]);
+  curl_setopt($ch, CURLOPT_POST, true);
+  curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($payload));
+  curl_exec($ch);
+  curl_close($ch);
+});
+?>
 ```
 
-This code hooks into Wordpress's profile_update action and sends a notification to Operational when a user updates their profile.
+This code hooks into Wordpress when a user updates their profile.
 
-## Conclusion
+It builds a payload and sends it to Operational to trigger a push notification.
 
-Using Operational to receive push notifications for Wordpress profile updates saves time and lets you focus on your site.
+### Conclusion
+
+Operational saves time by capturing profile update events in real time.
+
+You can avoid manual scripts and focus on your product.
+
 Learn more at https://operational.co.
-Try examples in the playground: https://operational.co/playground
+
+Try the [playground](https://operational.co/playground) to experiment with snippets.

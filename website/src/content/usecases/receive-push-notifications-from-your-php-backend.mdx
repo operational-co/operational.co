@@ -1,0 +1,71 @@
+---
+title: Receive push notifications from your PHP backend
+slug: receive-push-notifications-from-your-php-backend
+description: Learn how to configure your PHP backend to send push notifications using Operational's lightweight event tracking API in minutes.
+date: 2025-05-22
+tags:
+  - php
+  - push
+  - notifications
+  - api
+icon: 🔔
+---
+
+## What is receiving push notifications in PHP
+
+Push notifications let your application send real-time updates to users.
+Implementing them in PHP can help you engage users with timely messages.
+For example you can send a notification when an order status changes.
+
+### Using Operational for push notifications
+
+Operational is a lightweight event tracking service.
+It can record push notification events from any backend.
+You can then view these events in a simple dashboard.
+![Operational Usage](https://operational.co/images/misc/ops-usage.jpg)
+
+### Setting up Operational
+
+1. Go to [app.operational.co](https://app.operational.co) and sign up.
+2. Create a new project in the dashboard.
+3. Copy your API key from the project settings.
+4. Keep the API key safe for your code.
+
+### Code example
+
+```php
+<?php
+require 'vendor/autoload.php';
+
+use GuzzleHttp\Client;
+
+$client = new Client([
+  'base_uri' => 'https://api.operational.co',
+  'headers' => [
+    'Authorization' => 'Bearer YOUR_API_KEY',
+    'Content-Type' => 'application/json',
+  ],
+]);
+
+$payload = [
+  'name' => 'Push notification sent',
+  'avatar' => '🔔',
+  'content' => 'Sent welcome push to user John Smith'
+];
+
+$response = $client->post('/v1/events', [
+  'json' => $payload,
+]);
+
+echo $response->getStatusCode(), "\n";
+```
+
+This code sends an event to Operational when a push notification is sent.
+It records the event name, icon, and details in the content field.
+
+### Conclusion
+
+Operational can save you time by handling event ingestion.
+You can view and filter push notification events in a dashboard.
+Learn more at https://operational.co.
+Try the [playground](https://operational.co/playground) to copy and paste code snippets.

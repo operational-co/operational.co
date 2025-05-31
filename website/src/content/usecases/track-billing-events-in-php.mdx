@@ -1,8 +1,8 @@
 ---
 title: Track billing events in PHP
 slug: track-billing-events-in-php
-description: Learn how to track billing events in your PHP application using Operational for seamless payment monitoring and event logging.
-date: 2024-06-19
+description: Learn how to use Operational to track billing events in your PHP app for invoice creation, payments, and failures.
+date: 2024-06-15
 tags:
   - php
   - ecommerce
@@ -11,80 +11,54 @@ tags:
 icon: 💳
 ---
 
-## Why track billing events in PHP?
+## What is billing event tracking in PHP
 
-Tracking billing events in your PHP app helps you monitor payments and subscriptions.
+Tracking billing events helps you monitor payments and invoices in your PHP application. It gives you real-time insight into customer transactions.
 
-For example, you can detect failed payments and notify customers immediately.
+For example, you can log when an invoice is generated, when a payment succeeds, and when a payment fails. This helps troubleshoot issues quickly.
 
-## What is Operational?
+### What is Operational
 
-Operational is an open source event tracking solution.
+Operational is an open-source tool for tracking events in any tech product. You can send billing events from your PHP backend to Operational and view them in a clean UI.
 
-It captures events from any tech product and gives you real-time insights.
+![](https://operational.co/images/misc/ops-usage.jpg)
 
-![Operational in action](https://operational.co/images/misc/ops-usage.jpg)
+### Setting up Operational
 
-You can use it to record billing events like payments, failures, and refunds.
+1. Go to https://app.operational.co and sign up for a free account.
+2. Create a new project and copy your API key.
+3. Install the PHP SDK by running:
+   ```
+   composer require operational/operational-php
+   ```
+4. Configure your project with the API key:
+   ```php
+   require 'vendor/autoload.php';
 
-## Setting up Operational
+   $ops = new Operational('YOUR_API_KEY');
+   ```
 
-1. Sign up at [app.operational.co](https://app.operational.co) and verify your email.
-2. Create a new project in your dashboard.
-3. Go to Project Settings and copy your API key.
-4. Keep the API key safe to use in your code.
-
-## Code example
+### Tracking billing events in PHP
 
 ```php
 <?php
 require 'vendor/autoload.php';
 
-use Operational\\Operational;
-
 $ops = new Operational('YOUR_API_KEY');
 
 $payload = [
-    'name' => 'billing_success',
-    'avatar' => '💳',
-    'content' => 'Subscription payment completed for user Jane Doe'
+  'name' => 'billing_success',
+  'avatar' => '💳',
+  'content' => 'Invoice #12345 paid successfully by John Doe for $49.99'
 ];
 
 $ops->events->ingest($payload);
 ```
 
-This example sends a billing_success event when a subscription payment completes.
+This code sends a billing success event to Operational with details on invoice number, payer, and amount.
 
-```php
-<?php
-// Track a failed payment
-$payload = [
-    'name' => 'billing_failed',
-    'avatar' => '⚠️',
-    'content' => 'Credit card declined for user John Smith'
-];
+### Conclusion
 
-$ops->events->ingest($payload);
-```
+Operational helps you track billing events in PHP without building a custom system. It saves time and reduces errors in monitoring payments.
 
-```php
-<?php
-// Track a refund
-$payload = [
-    'name' => 'billing_refund',
-    'avatar' => '🔙',
-    'content' => 'Refund issued for user Alice Brown order #12345'
-];
-
-$ops->events->ingest($payload);
-```
-
-## Conclusion
-
-Operational simplifies tracking billing logic in your PHP app.
-
-It saves time and reduces errors in your payment workflow.
-
-Learn more at https://operational.co.
-
-Try the playground to test snippets: https://operational.co/playground.
+Learn more at https://operational.co. Try it out in the playground: https://operational.co/playground

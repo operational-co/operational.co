@@ -1,58 +1,57 @@
 ---
- title: Receive push notifications from your SaaS product
- slug: receive-push-notifications-from-your-saas-product
- description: Use Operational to send push notifications from your SaaS app and keep users informed with real-time updates.
- date: 2025-05-22
- tags:
-   - saas
-   - notifications
-   - integration
- icon: 🔔
+title: "Receive push notifications from your SaaS product"
+slug: "receive-push-notifications-from-your-saas-product"
+description: "Learn to send push notifications from your SaaS app using Operational for real-time user engagement and workflow updates."
+date: "2024-06-22"
+tags:
+  - saas
+  - notifications
+  - realtime
+  - events
+icon: "🔔"
 ---
 
-## Why push notifications matter
+## What are push notifications in SaaS
 
-Push notifications keep your users engaged by delivering real-time updates.
+Push notifications let your app send real-time updates to users. They improve engagement by delivering timely alerts.
 
-For example, you can notify a user when a new message arrives in your app.
+For example, you can notify a user when a payment is successful or when a task is assigned. This keeps users informed without manual checks.
 
-## Tracking notifications with Operational
+### Using Operational to send push notifications
 
-Operational is a simple event tracking platform.
+Operational is an open-source event tracking platform. It lets you record and monitor events in your app.
 
-You can log notification events and monitor delivery status.
+You can log when you send a push notification and view metrics on delivery, opens, and more.
 
 ![Operational in action](https://operational.co/images/misc/ops-usage.jpg)
 
-## Setting up Operational
+### Setting up Operational
 
-1. Sign up at [app.operational.co](https://app.operational.co) and create an account.
-2. Create a new project in the dashboard.
-3. Copy your API key from project settings.
-4. Install the SDK in your application: `npm install @operational.co/sdk`.
-5. Initialize the SDK with your API key.
+1. Go to https://app.operational.co and create an account.
+2. Create a new project in your dashboard.
+3. Copy the API key for your project.
+4. Install the Operational SDK in your app and configure it with the API key.
 
-## Code example
+### Code example
+
+This example shows how to record sending a push notification using Operational.
 
 ```javascript
 import Operational from "@operational.co/sdk"
+
 const ops = new Operational("API_KEY")
 
 const payload = {
   name: "push notification sent",
   avatar: "🔔",
-  content: "Sent welcome notification to user ID 1234"
+  content: "Sent push notification to John Smith about invoice #123"
 }
 
 await ops.events.ingest(payload)
 ```
 
-This code initializes the Operational client, creates a payload for a push notification event, and sends it to Operational.
+### Conclusion
 
-## Conclusion
+Operational saves time by handling event tracking infrastructure for you. You can focus on your app logic.
 
-Operational lets you track push notifications with minimal setup.
-
-It saves time by handling event ingestion and monitoring.
-
-Learn more at https://operational.co. Try it out in the [playground](https://operational.co/playground).
+Learn more at https://operational.co. Try the playground for ready-to-use snippets: https://operational.co/playground

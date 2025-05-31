@@ -1,80 +1,94 @@
 ---
-title: Receive push notifications for suspicious activity inside your app with JavaScript
+title: "Receive push notifications for suspicious activity inside your app with JavaScript"
 slug: receive-push-notifications-for-suspicious-activity-inside-your-app-with-javascript
-description: Learn how to set up JavaScript alerts for suspicious activity in your app using Operational to stay on top of security threats.
-date: 2025-06-07
+description: "Learn how to send real-time push alerts for suspicious events in your app using Operational and JavaScript for improved security."
+date: 2025-05-22
 tags:
   - javascript
   - security
-  - notifications
-  - alerts
-icon: 🛡️
+  - push-notifications
+  - monitoring
+icon: 🚨
 ---
 
-## Why track suspicious activity in your JavaScript app?
+## What is push notification for suspicious activity
 
-Tracking unusual behavior in your app helps you spot potential threats before they cause damage.
+Push notifications for suspicious activity help you stay ahead of security threats.
 
-For example, if a user account suddenly logs in from a new location, you can get an alert and act quickly.
+When your app detects unusual behavior, like repeated failed logins or data export spikes, you get an instant alert.
 
-## What is Operational and how it helps
+This lets your team respond quickly and protect user data. For example, if five login attempts fail within a minute, you can trigger an alert right away.
 
-Operational is an open source event tracking tool for any app.
 
-It captures events like errors, messages, or custom alerts and sends push notifications.
+### What is Operational and how it works for alerts
 
-![](https://operational.co/images/misc/ops-usage.jpg)
+Operational is a lightweight event tracking tool that lets you record and monitor security events.
 
-You can set up rules to get notified on your device or team channels in minutes.
+You can send any event from your app and see it in a dashboard or get push notifications.
 
-## Setting up Operational
+![Operational in action](https://operational.co/images/misc/ops-usage.jpg)
 
-1. Sign up at https://app.operational.co.
-2. Create a new project in the dashboard.
-3. Copy your API key from project settings.
-4. Install the SDK with npm install @operational.co/sdk.
+Operational shows events in real time and helps you filter or search for specific activity.
 
-## Code examples
+
+### Setting up Operational
+
+1. Go to https://app.operational.co and sign up for an account.
+2. Create a new project in your dashboard.
+3. Copy your API key from the project settings.
+4. Install the SDK in your project with `npm install @operational.co/sdk`.
+5. Ready to start tracking events in your code.
+
+
+### Code examples for tracking suspicious activity
 
 ```javascript
 import Operational from "@operational.co/sdk";
+
 const ops = new Operational("YOUR_API_KEY");
 
-const payload = {
-  name: "Suspicious login attempt",
+const suspiciousEvent = {
+  name: "Suspicious activity detected",
   avatar: "🚨",
-  content: "Suspicious login detected for user John Doe from IP 192.168.1.10"
+  content: "Multiple failed login attempts from IP 203.0.113.45"
 };
 
-await ops.events.ingest(payload);
+await ops.events.ingest(suspiciousEvent);
 ```
-
-This example sends a push notification when a suspicious login is detected.
+This example sends an alert when several failed logins occur in a short time.
 
 ```javascript
-// Example: multiple failed login attempts
-const payload2 = {
-  name: "Multiple failed logins",
-  avatar: "🔒",
-  content: "User Jane Smith failed to log in 5 times in a row"
-};
-await ops.events.ingest(payload2);
-```
-
-```javascript
-// Example: unusual data access
-const payload3 = {
+await ops.events.ingest({
   name: "Unusual data export",
-  avatar: "⚠️",
-  content: "User Marie Curie exported a large data set unexpectedly"
-};
-await ops.events.ingest(payload3);
+  avatar: "📤",
+  content: "User Jane Doe exported 500 records"
+});
 ```
+This sends a notification when a large data export happens.
 
-## Conclusion
+```javascript
+await ops.events.ingest({
+  name: "New device login",
+  avatar: "🔑",
+  content: "User John Smith logged in from new device"
+});
+```
+This tracks logins from unfamiliar devices.
 
-Operational can save you time and hassle by handling event tracking and push notifications for suspicious activity.
+```javascript
+await ops.events.ingest({
+  name: "Admin page access",
+  avatar: "🔒",
+  content: "User admin@example.com accessed admin settings"
+});
+```
+This alerts when someone opens the admin settings page.
 
-Learn more at https://operational.co.
 
-Try the playground for quick testing and code snippets: https://operational.co/playground
+### Conclusion
+
+Operational saves you time by handling event delivery and dashboarding so you can focus on responding to threats.
+
+Learn more at https://operational.co and try live examples in the playground: https://operational.co/playground
+
+Start sending alerts in minutes and keep your app secure.

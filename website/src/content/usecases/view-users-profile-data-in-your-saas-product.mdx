@@ -1,58 +1,68 @@
 ---
-title: View user's profile data in your SaaS product
+title: "View user's profile data in your SaaS product"
 slug: view-users-profile-data-in-your-saas-product
-description: Learn how to track profile page views in your SaaS using Operational. Send events when users access their profile data.
-date: 2025-05-22
+description: "Learn how to track when users view their profile pages in your SaaS. Inspect profile view events with Operational."
+date: 2024-06-15
 tags:
   - saas
-  - javascript
-  - api
-  - tracking
+  - analytics
+  - user-tracking
 icon: 👤
 ---
 
-# What is viewing user's profile data
+## What is profile view tracking in your SaaS product
 
-In a SaaS product, showing a user their profile data helps with personalization and user engagement.
+Understanding when users view their profile pages can give you insights into user engagement.
 
-Tracking when users view their profile can give you insights into feature usage.
+Tracking these views helps you see which users are active and how often they update or check their profiles.
 
-You might add a log when John Smith opens his account page to see his details.
+You can use this data to improve user experience and tailor your product features.
 
-# Use Operational to track profile views
+### Using Operational for profile view tracking
 
-Operational is an event tracking tool you can use to capture user actions in real time.
+Operational is an open source event tracking tool for your product.
 
-It lets you send events from your app to a dashboard for monitoring and analysis.
+You can capture custom events from any part of your app and send them to a dashboard.
 
-![](https://operational.co/images/misc/ops-usage.jpg)
+This helps you centralize events and analyze user behavior more easily.
 
-# Setting up Operational
+![Operational in action](https://operational.co/images/misc/ops-usage.jpg)
+
+### Setting up Operational
 
 1. Go to https://app.operational.co and sign up for a free account.
-2. Log in and copy your API key from the settings page.
-3. Install the SDK in your project by running `npm install @operational.co/sdk`.
-4. Initialize the client with your API key.
+2. Create a new project or select an existing one in your dashboard.
+3. Find your API key under project settings.
+4. Install the SDK in your app. For JavaScript run:
+   ```
+   npm install @operational.co/sdk
+   ```
+5. Initialize the SDK with your API key as shown in the code example.
 
-# Code example
+### Code example: Tracking profile view events
+
+This example shows how to send an event each time a user views their profile page.
 
 ```javascript
 import Operational from "@operational.co/sdk"
-const ops = new Operational("API_KEY")
+
+const ops = new Operational("YOUR_API_KEY")
 
 const payload = {
-  name: "viewed profile",
+  name: "user_profile_viewed",
   avatar: "👤",
-  content: "John Smith viewed his profile page"
+  content: "Alice Johnson viewed her profile page"
 }
 
 await ops.events.ingest(payload)
 ```
 
-This snippet sends an event each time a user views their profile in your SaaS application.
+This code records a profile view event with a user name and timestamp.
 
-# Conclusion
+### Conclusion
 
-Operational saves you time by handling event ingestion and dashboards out of the box.
+Tracking profile views can help you understand user engagement and improve your product.
 
-Learn more at https://operational.co and try our live playground at https://operational.co/playground.
+Operational makes it easy to capture and view events in a single dashboard.
+
+Learn more at https://operational.co and try the playground for copy-paste snippets: https://operational.co/playground

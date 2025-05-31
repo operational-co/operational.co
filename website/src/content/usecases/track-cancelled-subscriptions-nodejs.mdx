@@ -1,58 +1,62 @@
 ---
 title: Track cancelled subscriptions in Node.js
 slug: track-cancelled-subscriptions-nodejs
-description: Learn how to capture and send cancelled subscription events from your Node.js app to Operational for tracking and analysis.
-date: 2024-07-14
+description: Learn how to use Operational to track when customers cancel subscriptions in your Node.js app.
+date: 2024-06-28
 tags:
   - nodejs
   - saas
   - subscriptions
-icon: 🔔
+icon: ❌
 ---
 
 ## What is cancelled subscription tracking in Node.js
 
-Tracking cancelled subscriptions in your Node.js backend helps you understand customer churn. When a user ends their service, you can log that event to analyze trends.
+Tracking when users cancel their subscriptions helps you understand churn.
 
-For example, if Jane Doe cancels her monthly plan, you capture that action and use it to improve retention strategies.
+In a Node.js application you can send this data to an analytics tool.
 
-## Using Operational to Track Events
+For example you might want to record who cancelled and which plan they were on.
 
-Operational lets you send and visualize events from any tech product. You can record when subscriptions are cancelled and explore them in the dashboard.
+This helps you spot trends and improve retention.
 
-![Operational usage](https://operational.co/images/misc/ops-usage.jpg)
+### Using Operational to track cancellations
 
-## Setting up Operational
+Operational is an open source event tracking tool for any product.
 
-1. Go to [app.operational.co](https://app.operational.co) and sign up for an account.
-2. Create a new project in the dashboard.
-3. Find your API key under project settings.
-4. Install the SDK in your Node.js app:
+You can use it to record cancellations in real time.
 
-   ```bash
-   npm install @operational.co/sdk
-   ```
-5. Initialize the SDK with your API key in code.
+![Operational in Action](https://operational.co/images/misc/ops-usage.jpg)
 
-## Code example
+### Setting up Operational
+
+1. Go to https://app.operational.co and sign up for an account.
+2. In the dashboard navigate to the API keys section.
+3. Copy your API key from the dashboard.
+4. Install the SDK by running `npm install @operational.co/sdk`.
+
+### Code example in Node.js
 
 ```javascript
-import Operational from "@operational.co/sdk";
-const ops = new Operational("API_KEY");
+import Operational from "@operational.co/sdk"
+
+const ops = new Operational("API_KEY")
 
 const payload = {
   name: "subscription cancelled",
-  avatar: "🔔",
-  content: "Subscription cancelled by John Smith"
-};
+  avatar: "❌",
+  content: "Customer John Smith cancelled their subscription, id 123."
+}
 
-await ops.events.ingest(payload);
+await ops.events.ingest(payload)
 ```
 
-This code snippet logs a cancelled subscription event to Operational.
+This code sends an event to Operational whenever a subscription is cancelled.
 
-## Conclusion
+### Conclusion
 
-Operational can save you time and hassle by handling event tracking and visualization for cancelled subscriptions.
+Tracking cancelled subscriptions lets you find out why users leave.
 
-Learn more at https://operational.co. You can also try out snippets in the playground: https://operational.co/playground.
+Operational makes it easy by handling event ingestion and storage.
+
+Learn more at https://operational.co and try examples in the playground at https://operational.co/playground

@@ -1,0 +1,57 @@
+---
+title: "Track user signup events in WooCommerce"
+slug: "track-user-signup-events-in-woocommerce"
+description: "Learn how to capture and send user signup events from WooCommerce to Operational for better monitoring and analytics."
+date: 2025-05-22
+tags: [woocommerce, wordpress, events, analytics]
+icon: "🎉"
+---
+
+## What is user signup tracking in WooCommerce?
+
+Tracking user signup events in WooCommerce helps you monitor new customers.
+You can send these events to a central service for analysis.
+This gives insight into signup trends and helps you spot issues early.
+
+### Introducing Operational for tracking events
+
+Operational is an open source service to collect and view events from any application.
+You can send signup events from WooCommerce and watch them in a dashboard.
+
+![Operational in action](https://operational.co/images/misc/ops-usage.jpg)
+
+### Setting up Operational
+
+1. Go to https://app.operational.co and sign up for an account.
+2. Create a new project in your dashboard.
+3. Copy your API key from the project settings.
+4. Keep your key safe for your application.
+
+### Instrumenting signup events in WooCommerce
+
+```php
+<?php
+require 'vendor/autoload.php';
+use Operational\\Operational;
+
+// Initialize the SDK with your API key
+$ops = new Operational('YOUR_API_KEY');
+
+// Prepare the event payload
+$payload = [
+  'name' => 'User Signup',
+  'avatar' => '🎉',
+  'content' => 'John Smith signed up with email john@example.com'
+];
+
+// Send the event to Operational
+$ops->events->ingest($payload);
+```
+
+This code captures a new user signup and sends it to Operational.
+
+### Conclusion
+
+Using Operational saves time and reduces setup hassle.
+You get a live view of user signups without building your own system.
+Learn more at https://operational.co or try the playground at https://operational.co/playground.

@@ -1,0 +1,68 @@
+---
+title: Monitor diskspace in Node.js
+slug: monitor-diskspace-nodejs
+description: Learn how to monitor server disk space in a Node.js app and send alerts using Operational for proactive issue management.
+date: 2024-06-07
+tags:
+  - nodejs
+  - server
+  - monitoring
+icon: 💾
+---
+
+## What is disk space monitoring in Node.js
+
+Monitoring disk space means checking how much storage your server uses.  
+This helps you prevent crashes or slowdowns.  
+For example, if log files grow too large, your service may stop working.  
+Tracking disk usage in your Node.js app lets you send alerts before issues occur.
+
+### Using Operational to track disk space
+
+Operational is an open-source event tracking tool.  
+You can record custom events from your app and view them in a dashboard.  
+Use Operational to record disk space events with minimal code.
+
+![Operational usage](https://operational.co/images/misc/ops-usage.jpg)
+
+### Setting up Operational
+
+1. Go to [app.operational.co](https://app.operational.co) and sign up for an account.  
+2. Create a new project and copy the API key.  
+3. Keep the API key for use in your Node.js app.
+
+### Code example: sending disk space alerts
+
+```javascript
+import Operational from "@operational.co/sdk"
+
+const ops = new Operational("YOUR_API_KEY")
+
+// Function to get disk usage percentage
+function getDiskUsage() {
+  // Example logic to calculate disk usage
+  return 85
+}
+
+const used = getDiskUsage()
+
+if (used > 80) {
+  const payload = {
+    name: "disk space low",
+    avatar: "💾",
+    content: `Server disk space at ${used}% usage`
+  }
+
+  await ops.events.ingest(payload)
+}
+```
+
+This code checks disk usage and sends an alert event to Operational when usage exceeds 80%.
+
+### Conclusion
+
+Operational can save time by handling event storage and dashboards.  
+You get alerts for disk space issues without building your own system.  
+
+Learn more at https://operational.co  
+Try the playground to copy and paste snippets: https://operational.co/playground

@@ -1,83 +1,68 @@
 ---
 title: Track cart events in SaaS
 slug: track-cart-events-in-saas
-description: Learn how to capture and track cart events in your SaaS product to improve user behavior analysis and drive conversions.
-date: 2024-06-10
-tags:
-  - saas
-  - events
-  - analytics
+description: Discover how to track cart events in your SaaS product using Operational for better user insights.
+date: 2024-06-11
+tags: ["saas", "product", "analytics"]
 icon: 🛒
 ---
 
-## Understanding Cart Events in SaaS
+## What is cart event tracking in SaaS
 
-Cart events refer to user actions around the shopping cart in your SaaS application. Tracking these events helps you see how users add, remove, and purchase items. For example, if many users add items but abandon before checkout, you can optimize the flow to boost conversions.
+Tracking cart events helps you understand how users interact with your product. For example, you can record when a user adds an item to their cart to measure engagement and conversion.
 
-Monitoring cart events gives insight into drop-off points and user intent. You can send targeted messages or offers to users who abandoned carts.
+### What is Operational and tracking events
 
-## Using Operational to Track Cart Events
-
-Operational is an open-source toolkit for capturing events in any tech product. It provides a simple API to ingest and view events in real time.
-
-You can use Operational to track cart events like items added, removed, and purchases. It stores and displays events in a unified dashboard.
+Operational is an open source event tracking tool for any product. It uses a single API to ingest events from your SaaS. You can use it to log cart events and view them in real time.
 
 ![Operational in action](https://operational.co/images/misc/ops-usage.jpg)
 
-## Setting Up Operational
+### Setting up Operational
 
-1. Go to https://app.operational.co and sign up for a free account.
-2. In your dashboard, create a new project and copy the API key.
-3. Install the SDK in your application:
+1. Go to [app.operational.co](https://app.operational.co) and sign up.
+2. Create a new workspace for your project.
+3. Navigate to settings and copy your API key.
+4. Install the SDK in your app with npm or yarn.
 
-   ```bash
-   npm install @operational.co/sdk
-   ```
-4. Keep your API key handy for initializing the client.
-
-## Code Examples
-
-The following JavaScript examples show how to track different cart events with Operational.
+### Code example
 
 ```javascript
 import Operational from "@operational.co/sdk";
-const ops = new Operational("YOUR_API_KEY");
 
-// 1. Track when a user adds an item to the cart
-const payload1 = {
-  name: "Cart Item Added",
-  avatar: "🛒",
-  content: "User Jane Doe added product T-shirt to cart"
-};
-await ops.events.ingest(payload1);
+const ops = new Operational("API_KEY");
 
-// 2. Track when a user removes an item from the cart
-const payload2 = {
-  name: "Cart Item Removed",
-  avatar: "🗑️",
-  content: "User Jane Doe removed product T-shirt from cart"
+// Add item to cart
+const addItemPayload = {
+  name: "Item Added to Cart",
+  avatar: "➕",
+  content: "jane.doe@example.com added 'Wireless Mouse' (ID: 456) to cart"
 };
-await ops.events.ingest(payload2);
 
-// 3. Track when a user views the cart
-const payload3 = {
-  name: "Cart Viewed",
-  avatar: "🛒",
-  content: "User Jane Doe viewed their shopping cart"
-};
-await ops.events.ingest(payload3);
+await ops.events.ingest(addItemPayload);
 
-// 4. Track when a user completes a purchase
-const payload4 = {
-  name: "Checkout Completed",
-  avatar: "✅",
-  content: "User Jane Doe purchased 3 items totaling $75"
+// Remove item from cart
+const removeItemPayload = {
+  name: "Item Removed from Cart",
+  avatar: "➖",
+  content: "jane.doe@example.com removed 'Wireless Mouse' (ID: 456) from cart"
 };
-await ops.events.ingest(payload4);
+
+await ops.events.ingest(removeItemPayload);
+
+// Checkout started
+const checkoutPayload = {
+  name: "Checkout Started",
+  avatar: "💳",
+  content: "jane.doe@example.com started checkout with 3 items"
+};
+
+await ops.events.ingest(checkoutPayload);
 ```
 
-These snippets capture key cart interactions. Replace `YOUR_API_KEY` and user/item details as needed.
+The code above shows how to track adding items, removing items, and starting checkout events in your SaaS.
 
-## Conclusion
+### Conclusion
 
-Operational simplifies capturing and analyzing cart events in your SaaS product. It saves you time by offering a consistent API and real-time dashboard. Learn more at https://operational.co and try the snippets in the Playground: https://operational.co/playground
+Using Operational saves you time and hassle by handling event tracking for you. You can focus on building features instead of infrastructure.
+
+Learn more at https://operational.co. Try the [playground](https://operational.co/playground) to copy and paste snippets.

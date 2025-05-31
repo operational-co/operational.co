@@ -1,8 +1,8 @@
 ---
 title: Build an audit log system in Wordpress
 slug: build-an-audit-log-system-in-wordpress
-description: Learn how to build an audit log system in Wordpress using Operational to record user actions and site events efficiently.
-date: 2024-06-23
+description: Track changes and user actions in your WordPress site by building an audit log system with Operational.
+date: 2025-05-22
 tags:
   - wordpress
   - audit-log
@@ -10,145 +10,83 @@ tags:
 icon: 📜
 ---
 
-# What is an audit log in Wordpress?
+## What is an audit log system in WordPress
 
-An audit log records actions and changes on your Wordpress site. It can track user logins, post updates, plugin activations, and more.
+An audit log system records changes and actions that occur on your site.
+It helps you track who did what and when.
+For example, you can see when a post was edited and by which user.
 
-For example, you might want to know when a user edits a page or deletes a comment. An audit log helps you monitor these events and find issues quickly.
+### What is Operational
 
-# Tracking events with Operational
+Operational is an open source platform to capture events from your app.
+You can send audit events from WordPress to Operational.
+This lets you store and view logs in one place.
 
-Operational is an open source service for capturing events in your app. You can use it to send audit events from Wordpress to a dashboard.
+![](https://operational.co/images/misc/ops-usage.jpg)
 
-![Operational usage](https://operational.co/images/misc/ops-usage.jpg)
+### Setting up Operational
 
-With Operational you get:
-- A central place for all site events.
-- Easy search and filter.
-- Secure API and data handling.
-
-# Setting up Operational
-
-Follow these steps to get started:
-
-1. Sign up for an account at [app.operational.co](https://app.operational.co).
+1. Go to https://app.operational.co and sign up for an account.
 2. Create a new project and copy your API key.
-3. Install [Guzzle](https://github.com/guzzle/guzzle) in your Wordpress plugin or theme.
-4. Use the API key in your code to send events.
+3. Install the Operational SDK or configure API access for PHP.
+4. Keep your API key safe to send events securely.
 
-# Code examples
-
-Below are examples of how to log key actions in Wordpress using PHP and Guzzle.
-
-## 1. Log user login
-
-This code sends an event when a user logs in.
+### Tracking audit events in PHP
 
 ```php
 <?php
-use GuzzleHttp\Client;
+require 'vendor/autoload.php';
 
-$client = new Client();
 $apiKey = 'YOUR_API_KEY';
 
 $payload = [
-  'name' => 'user_logged_in',
-  'avatar' => '🔑',
-  'content' => "User John Doe logged in",
-  'tags' => ['audit', 'login'],
-  'metadata' => [
-    'user_id' => 45
-  ]
+    'name' => 'user updated post',
+    'avatar' => '✍️',
+    'content' => 'John Smith edited post titled “My first blog post”.'
 ];
 
-$client->post('https://api.operational.co/events/ingest', [
-  'headers' => [
-    'Authorization' => "Bearer $apiKey",
-    'Content-Type' => 'application/json'
-  ],
-  'json' => $payload
+$ch = curl_init('https://api.operational.co/v1/events');
+curl_setopt($ch, CURLOPT_HTTPHEADER, [
+    'Content-Type: application/json',
+    'Authorization: Bearer ' . $apiKey,
 ]);
+curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($payload));
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+$response = curl_exec($ch);
+curl_close($ch);
+
+// Now the audit event is sent to Operational
 ```
-
-## 2. Log post creation
-
-This example records when a new post is created.
 
 ```php
 <?php
-use GuzzleHttp\Client;
-
-$client = new Client();
-// ...
-
+// Track user login
 $payload = [
-  'name' => 'post_created',
-  'avatar' => '📝',
-  'content' => "User Jane Smith created post 'Hello World'",
-  'tags' => ['audit', 'post'],
-  'metadata' => [
-    'post_id' => 123,
-    'user_id' => 77
-  ]
+    'name' => 'user login',
+    'avatar' => '🔑',
+    'content' => 'Alice logged in to the WordPress dashboard.'
 ];
-
-// ...
+// send with curl as before...
 ```
-
-## 3. Log plugin activation
-
-Track when a plugin is activated.
 
 ```php
 <?php
-use GuzzleHttp\Client;
-
-$client = new Client();
-// ...
-
+// Track role change
 $payload = [
-  'name' => 'plugin_activated',
-  'avatar' => '🔌',
-  'content' => "Plugin 'SEO Optimizer' activated by admin",
-  'tags' => ['audit', 'plugin'],
-  'metadata' => [
-    'plugin_slug' => 'seo-optimizer',
-    'user_role' => 'administrator'
-  ]
+    'name' => 'role changed',
+    'avatar' => '🔄',
+    'content' => 'Bob was upgraded from subscriber to editor.'
 ];
-
-// ...
+// send with curl as before...
 ```
 
-## 4. Log comment moderation
+This code shows how to send different audit events from WordPress to Operational.
 
-Capture comment approval or deletion.
+### Conclusion
 
-```php
-<?php
-use GuzzleHttp\Client;
+An audit log system helps you monitor actions and changes on your site.
+Operational makes it easy to collect and view these events.
 
-$client = new Client();
-// ...
-
-$payload = [
-  'name' => 'comment_deleted',
-  'avatar' => '🗑️',
-  'content' => "Comment #456 deleted by moderator",
-  'tags' => ['audit', 'comment'],
-  'metadata' => [
-    'comment_id' => 456,
-    'moderator_id' => 88
-  ]
-];
-
-// ...
-```
-
-# Conclusion
-
-An audit log helps you understand site activity and troubleshoot issues.
-
-Operational makes it simple to send and view events in one place.
-
-Learn more at https://operational.co and try examples in the [Playground](https://operational.co/playground).
+Learn more at https://operational.co.
+Try the playground for ready code snippets: https://operational.co/playground

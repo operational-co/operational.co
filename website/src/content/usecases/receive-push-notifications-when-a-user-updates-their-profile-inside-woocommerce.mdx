@@ -1,67 +1,65 @@
 ---
 title: Receive push notifications when a user updates their profile inside WooCommerce
 slug: receive-push-notifications-when-a-user-updates-their-profile-inside-woocommerce
-description: Learn how to send real-time push notifications with Operational when WooCommerce users update their profile in your PHP store.
-date: 2024-06-25
-tags:
-  - woocommerce
-  - php
-  - notifications
-  - wordpress
+description: Learn how to set up real-time push notifications for WooCommerce user profile updates using Operational.
+date: 2024-06-01
+tags: [woocommerce, php, notifications]
 icon: 🔔
 ---
 
-## Why send push notifications for WooCommerce profile updates
+## Why track WooCommerce profile updates?
 
-When a customer changes their profile details in your WooCommerce store, you may want to stay informed. Real-time notifications let you react quickly.
+When a customer updates their profile on your WooCommerce store, you might want to know right away.
 
-For example, if a user updates their shipping address, you can verify it before shipping their order. Or welcome them with a personalized message.
+Real-time alerts help you monitor user activity and improve support.
 
-## Tracking profile updates with Operational
+### Tracking events with Operational
 
-Operational is an open-source event tracking platform. You can send custom events from your code and view them in a unified dashboard.
+Operational is an open-source event tracking tool for any tech product.
+You can send events when users change their data and get instant notifications.
 
-Use Operational to receive push notifications when profile updates happen in WooCommerce.
+![Operational in action](https://operational.co/images/misc/ops-usage.jpg)
 
-![Operational usage](https://operational.co/images/misc/ops-usage.jpg)
+### Setting up Operational
 
-## Setting up Operational
-
-1. Sign up for an account at [app.operational.co](https://app.operational.co).
-2. Create a new project in the dashboard.
+1. Sign up at [app.operational.co](https://app.operational.co).
+2. Create a new project for your WooCommerce store.
 3. Copy your API key from the project settings.
-4. Keep your API key safe for use in your code.
+4. Keep your API key handy for your PHP code.
 
-## Example: sending events in PHP
+### Code example: Sending profile update events in PHP
 
 ```php
 <?php
-$apiKey = 'API_KEY';
+$apiKey = 'YOUR_API_KEY';
+
 $payload = [
-  'name' => 'WooCommerce Profile Updated',
-  'avatar' => '👤',
-  'content' => 'User John Smith updated their profile'
+  'name' => 'User profile updated',
+  'avatar' => '🔔',
+  'content' => 'Customer Jane Doe updated her address',
+  'properties' => [
+    'user_id' => 456,
+    'email' => 'jane.doe@example.com'
+  ]
 ];
 
 $ch = curl_init('https://api.operational.co/v1/events');
+curl_setopt($ch, CURLOPT_POST, true);
 curl_setopt($ch, CURLOPT_HTTPHEADER, [
   'Content-Type: application/json',
   'Authorization: Bearer ' . $apiKey
 ]);
-curl_setopt($ch, CURLOPT_POST, true);
 curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($payload));
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-
 $response = curl_exec($ch);
 curl_close($ch);
-
 echo $response;
 ```
 
-This snippet sends a real-time event to Operational whenever a user updates their profile in WooCommerce.
+This PHP snippet sends a profile update event to Operational with user details.
 
-## Conclusion
+### Conclusion
 
-Integrating Operational for push notifications saves time and effort. You get instant alerts for profile updates without building your own system.
-
-Learn more at https://operational.co. Try out code snippets in our [Playground](https://operational.co/playground).
+Operational saves you time by handling event tracking and notifications.
+You can learn more at https://operational.co
+Try the playground for ready-made snippets: https://operational.co/playground

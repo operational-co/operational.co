@@ -1,0 +1,82 @@
+---
+title: Track cart events in PHP
+slug: track-cart-events-php
+description: Learn to record user cart events in your PHP e-commerce app using Operational for better sales insights and customer experience.
+date: 2024-06-20
+tags:
+  - php
+  - ecommerce
+  - saas
+  - analytics
+icon: 🛒
+---
+
+## What are cart events in PHP
+
+Cart events capture key interactions in your e-commerce PHP app. These include actions like adding an item to the cart, removing it, and completing checkout.
+
+Tracking these events helps you understand user behavior. For example, you can see which products are most often added but not purchased.
+
+With this data, you can optimize your store and boost conversions.
+
+### Using Operational to Track Cart Events
+
+Operational is an open-source event tracking service. It lets you send custom events from any tech stack.
+
+You can use Operational to record cart events in real time. This gives you a clear view of user actions and sales trends.
+
+![Operational in action](https://operational.co/images/misc/ops-usage.jpg)
+
+### Setting Up Operational
+
+1. Go to [app.operational.co](https://app.operational.co) and sign up for a free account.
+2. Create a new project for your PHP store.
+3. In your project settings, copy the API key.
+4. Install the PHP SDK with Composer:
+
+   ```bash
+   composer require operational/operational
+   ```
+
+5. Add the API key to your environment or config file.
+
+### Code Snippet: Tracking Cart Events in PHP
+
+```php
+<?php
+require 'vendor/autoload.php';
+
+use Operational\Operational;
+
+$ops = new Operational('YOUR_API_KEY');
+
+// User adds an item to cart
+$ops->events->ingest([
+  'name'   => 'add_to_cart',
+  'avatar' => '🛒',
+  'content'=> 'User John Smith added product ID 123 to cart'
+]);
+
+// User removes an item from cart
+$ops->events->ingest([
+  'name'   => 'remove_from_cart',
+  'avatar' => '🗑️',
+  'content'=> 'User John Smith removed product ID 123 from cart'
+]);
+
+// User completes checkout
+$ops->events->ingest([
+  'name'   => 'checkout',
+  'avatar' => '✅',
+  'content'=> 'User John Smith completed purchase of order 456'
+]);
+?>
+```
+
+The snippet shows how to send different cart events. Replace `YOUR_API_KEY` with your actual key.
+
+### Conclusion
+
+By tracking cart events with Operational, you get clear insights into customer actions. This saves time building custom analytics and helps you make data-driven decisions.
+
+Learn more on the [Operational homepage](https://operational.co) or try the live code in the [playground](https://operational.co/playground).

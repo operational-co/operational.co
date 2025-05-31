@@ -1,67 +1,87 @@
 ---
 title: Track cancelled subscriptions in JavaScript
 slug: track-cancelled-subscriptions-in-javascript
-description: Guide to logging subscription cancellations in a JavaScript app with Operational. Track churn events easily and analyze customer behavior.
-date: 2024-06-13
+description: Guide to monitoring and reporting subscription cancellations in your JavaScript app using Operational for timely alerts and analytics.
+date: 2025-05-22
 tags:
   - javascript
   - saas
-  - analytics
-  - churn
-icon: 💔
+  - subscriptions
+  - monitoring
+icon: 🚫
 ---
 
-# Why track cancelled subscriptions
+## What is cancellation tracking in JavaScript
 
-Tracking subscription cancellations in your JavaScript app helps you understand churn. You can see when and why users leave.
+Tracking cancelled subscriptions helps you spot churn and follow up with users.
 
-For example, if many users cancel a plan after a specific action, you can improve that part of your product.
+For example, if a user opts out of your service, you can log that event and trigger outreach or analytics updates.
 
-# What is Operational
+This keeps your revenue data accurate and gives insight into why users leave.
 
-Operational is an open-source event tracking tool that captures your key product events.
+### Why track cancellations
 
-You can send events like subscription cancellations to Operational and view them in real time.
+- Understand churn trends over time
+- Automate email campaigns to retain users
+- Improve product based on cancellation reasons
 
-![Operational usage](https://operational.co/images/misc/ops-usage.jpg)
 
-# Setting up Operational
+### What is Operational and how it works for cancellations
 
-1. Sign up at [app.operational.co](https://app.operational.co) and create a team.
-2. Copy your API key from the project settings.
-3. Install the SDK with `npm install @operational.co/sdk`.
-4. Initialize the client in your code.
+Operational is an open-source event tracking tool that ingests and displays your events in real time.
 
-# Code example
+You can send cancellation events from your JavaScript app and view them on the dashboard.
+
+<img src="https://operational.co/images/misc/ops-usage.jpg" alt="Operational in action" />
+
+With Operational you get:
+
+- Instant alerts when cancellations spike
+- Search and filter on event properties
+- Lightweight SDKs for quick setup
+
+
+### Setting up Operational
+
+1. Visit [app.operational.co](https://app.operational.co) and sign up for a free account.
+2. Log in and create a new project in your dashboard.
+3. Copy the API key from the project settings.
+4. Install the SDK in your JavaScript project:
+   ```bash
+   npm install @operational.co/sdk
+   ```
+
+
+### Tracking cancelled subscriptions in JavaScript
 
 ```javascript
-import Operational from "@operational.co/sdk";
+import Operational from "@operational.co/sdk"
 
-const ops = new Operational("YOUR_API_KEY");
+const ops = new Operational("YOUR_API_KEY")
 
-const payload = {
-  name: "subscription_cancelled",
-  avatar: "💔",
-  content: "Jane Doe cancelled her Pro Plan subscription.",
-  properties: {
-    user_id: 12345,
-    email: "jane.doe@example.com",
-    subscription_id: "sub_67890",
-    plan: "Pro Plan"
+async function reportCancellation(userId, userName, plan) {
+  const payload = {
+    name: "subscription cancelled",
+    avatar: "🚫",
+    content: `User ${userName} cancelled subscription for ${plan}`
   }
-};
 
-await ops.events.ingest(payload);
+  await ops.events.ingest(payload)
+}
+
+// Example usage
+reportCancellation(123, "John Smith", "Premium Plan")
 ```
 
-This snippet records a subscription cancellation event with user and plan details.
+This code imports the Operational SDK, creates a client with your API key, and sends a cancellation event with user details.
 
-# Conclusion
 
-Operational helps you track cancellations without building your own pipeline.
+### Conclusion
 
-You can save time and focus on reducing churn.
+Operational makes it easy to track subscription cancellations in your JavaScript app.
 
-Learn more at https://operational.co.
+It saves you time by handling event ingestion, storage, and real-time updates.
 
-Try the [playground](https://operational.co/playground) to copy and paste code snippets.
+Learn more at https://operational.co or try out the code snippets in the playground:
+
+https://operational.co/playground

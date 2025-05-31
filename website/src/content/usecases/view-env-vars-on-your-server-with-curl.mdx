@@ -1,48 +1,47 @@
 ---
 title: View env vars on your server with cURL
 slug: view-env-vars-on-your-server-with-curl
-description: Guide to fetch environment variables on your server using cURL and track the action in Operational.
-date: 2025-06-18
+description: Use cURL to view environment variables on a remote server and track each access event with Operational.
+date: 2025-05-22
 tags:
   - curl
-  - server
+  - env
   - devops
-icon: 🔍
+icon: 🔑
 ---
 
-## Why view environment variables on your server
+## Why view environment variables with cURL
 
-Environment variables store sensitive info like API keys, database URLs, and secrets. Viewing them helps debug configuration issues. For example, if your app can’t connect to a database, checking the DB_URL value can reveal typos or missing credentials.
+Environment variables store configuration details like API keys and database URLs. Accessing them helps debug issues.
 
-## Tracking environment access with Operational
+When you need to inspect your server setup, running a cURL command against a secure endpoint can show you the variables.
 
-Operational is an open-source event tracking platform. It logs actions in your system and sends them to a central dashboard. You can use it to track when and how often you view env vars on a server.
+For example, on a staging server you might want to confirm that the DATABASE_URL is set correctly.
 
-![](https://operational.co/images/misc/ops-usage.jpg)
+### What is Operational
 
-## Setting up Operational
+Operational is an open source event tracking platform for any tech product.
 
-1. Go to [app.operational.co](https://app.operational.co) and sign up.
-2. Create a new workspace or select an existing one.
-3. In workspace settings, find and copy your API key.
-4. Keep your API key safe. You’ll need it for cURL requests.
+You can use it to log each time someone views environment variables. That helps you audit access and catch unexpected changes.
 
-## Tracking env var views with cURL
+![Operational in action](https://operational.co/images/misc/ops-usage.jpg)
 
-Use the following command to send an event to Operational each time you fetch environment variables:
+### Setting up Operational
+
+1. Go to https://app.operational.co and sign up.
+2. Create a new project in your dashboard.
+3. Copy the project's API key.
+
+### Code example: Log environment view events
 
 ```bash
-curl -X POST https://api.operational.co/events?api_key=API_KEY \
-  -H "Content-Type: application/json" \
-  -d '{
-    "name": "view environment variables",
-    "avatar": "🔍",
-    "content": "Fetched environment variables on server using cURL"
-  }'
+curl -X POST https://api.operational.co/v1/events/ingest -H "Authorization: Bearer YOUR_API_KEY" -H "Content-Type: application/json" -d '{ "name": "view environment variables", "avatar": "🔑", "content": "User john.doe viewed env vars on server" }'
 ```
 
-This command posts a JSON payload to Operational. It records the event name, avatar, and a brief description.
+This command sends an event to Operational whenever someone retrieves environment variables.
 
-## Conclusion
+### Conclusion
 
-Tracking environment variable access helps with auditing and debugging. Operational makes it easy to log these actions automatically. Visit https://operational.co to learn more. Try the [playground](https://operational.co/playground) for quick snippets and demos.
+Using Operational to log when environment variables are viewed can save time debugging and improve security.
+
+Learn more at https://operational.co. Try the playground for copy-and-paste examples: https://operational.co/playground

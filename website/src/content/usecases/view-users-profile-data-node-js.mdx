@@ -1,0 +1,56 @@
+---
+title: View user's profile data in Node.js
+slug: view-users-profile-data-node-js
+description: Learn how to track and view user profile events in a Node.js app using Operational.
+date: 2024-06-14
+tags:
+  - nodejs
+  - events
+  - operational
+icon: 👤
+---
+
+## What is profile view tracking in Node.js
+
+Tracking when a user views their profile is important. It helps you understand user behavior.
+
+For example, you can see which users check their profile the most. This data can guide product decisions.
+
+### What is Operational
+
+Operational is an open source event tracking tool. You can send events from any tech stack.
+
+It shows your data in real time in a simple dashboard.
+
+![Operational in action](https://operational.co/images/misc/ops-usage.jpg)
+
+### Setting up Operational
+
+1. Go to [app.operational.co](https://app.operational.co) and sign up.
+2. Create a new project in your dashboard.
+3. Copy the API key from the project settings.
+4. Install the SDK in your Node.js app.
+
+### Tracking profile view event with code
+
+```javascript
+import Operational from "@operational.co/sdk";
+
+const ops = new Operational("API_KEY");
+
+const payload = {
+  name: "view_profile",
+  avatar: "👤",
+  content: "User John Smith viewed their profile"
+};
+
+await ops.events.ingest(payload);
+```
+
+This code sends a "view_profile" event to Operational. You can see it in your dashboard.
+
+### Conclusion
+
+Operational saves time by giving you a quick way to track events. You don't need to build your own tracking system.
+
+Learn more at https://operational.co. Try the playground to copy and paste snippets: https://operational.co/playground.

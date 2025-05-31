@@ -1,63 +1,50 @@
 ---
-title: "Monitor diskspace with cURL"
-slug: "monitor-diskspace-with-curl"
-description: "Learn how to monitor disk space by sending metrics via cURL to Operational for alerts and real-time dashboards."
-date: 2025-05-22
+title: Monitor diskspace with cURL
+slug: monitor-diskspace-with-curl
+description: Monitor disk space with cURL and send alerts to Operational when free storage falls below threshold.
+date: 2024-06-07
 tags:
   - curl
   - monitoring
-  - devops
+  - diskspace
+  - shell
 icon: 💽
 ---
 
-## Why monitor disk space with cURL
+## What is disk space monitoring with cURL
 
-Disk space can fill up quickly and cause apps to fail or slow down. Sending regular usage metrics helps you spot issues before they impact users. For example, if your root partition hits 90 percent, you can trigger an alert and free up space.
+Monitoring disk space helps ensure your servers do not run out of storage and keep applications running smoothly.
+Using cURL to send alerts lets you automate notifications when space is low.
 
-Using cURL to send these metrics means you can schedule checks in a cron job or run them inside a container without extra dependencies.
+### How Operational helps with disk space monitoring
 
-## Track disk space with Operational
+Operational provides a simple API to ingest events from any tool or script.
+You can send disk space alerts directly to your operational dashboard.
 
-Operational is a lightweight event tracking service. It lets you send metrics, errors, and alerts from any tech stack. You can view live dashboards, set up thresholds, and get notifications when things go wrong.
+![](https://operational.co/images/misc/ops-usage.jpg)
 
-![Operational in action](https://operational.co/images/misc/ops-usage.jpg)
+### Setting up Operational
 
-With Operational you can:
+1. Go to [app.operational.co](https://app.operational.co) and sign up for a free account.
+2. Create a new project or select an existing one.
+3. In your project settings, find your API key.
+4. Copy the API key for use in your scripts.
 
-- Send custom events or metrics in seconds
-- Build real-time dashboards without code
-- Set up alerts on any event or data point
-
-## Setting up Operational
-
-1. Go to [app.operational.co](https://app.operational.co) and create a free account.
-2. In the dashboard, click on **API Keys** and copy your secret key.
-3. Store the key in an environment variable named `OPS_API_KEY`.
-4. Verify your setup by running a test event in the playground.
-
-## Sending disk space metrics with cURL
+### Example: Sending disk space alerts with cURL
 
 ```bash
-#!/bin/bash
-
-# Get disk usage for the root partition
-USAGE=$(df --output=pcent / | tail -1 | tr -dc '0-9')
-
-# Send the metric to Operational
-curl -X POST "https://api.operational.co/v1/events/ingest" \
-  -H "Authorization: Bearer $OPS_API_KEY" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "name": "disk usage",
-    "avatar": "💽",
-    "content": "Disk usage at '$USAGE'% on /dev/sda1"
-  }'
+curl -X POST https://events.operational.co/v1/ingest -H "Authorization: Bearer YOUR_API_KEY" -H "Content-Type: application/json" --data '{
+  "name": "Low disk space",
+  "avatar": "💽",
+  "content": "Disk space is below threshold on server1: only 5% remaining"
+}'
 ```
 
-This script fetches the current usage of `/dev/sda1` and posts it to Operational. You can run it every five minutes in cron to keep your dashboard updated.
+This command sends a low disk space alert to Operational when storage runs low.
 
-## Conclusion
+### Conclusion
 
-Operational saves you time by handling event ingestion, dashboards, and alerts in one place. You can focus on your infrastructure instead of building a custom monitoring tool.
-
-Learn more at https://operational.co. Try the [playground](https://operational.co/playground) to copy and paste examples and see live results.
+Monitoring disk space with cURL and Operational saves time and prevents outages.
+Operational handles your alerts in one dashboard.
+Learn more on https://operational.co
+Try it in the playground: https://operational.co/playground

@@ -1,0 +1,74 @@
+---
+title: Receive push notifications for suspicious activity inside Node.js
+slug: receive-push-notifications-for-suspicious-activity-inside-node-js
+description: Learn to detect and notify on suspicious activity in your Node.js app using Operational's SDK and push alerts setup quickly.
+date: 2025-05-22
+tags:
+  - nodejs
+  - security
+  - notifications
+icon: 🚨
+---
+
+## What is suspicious activity detection in Node.js
+
+Receiving alerts for odd behavior in your Node.js app helps you catch security issues early.
+Imagine a hacker trying multiple login attempts.
+Getting push notifications lets you act fast and protect user data.
+
+### Tracking suspicious activity with Operational
+
+Operational is an open-source event tracking tool.
+It captures events from any tech product and triggers alerts.
+You can define events for suspicious actions and send notifications.
+
+![](https://operational.co/images/misc/ops-usage.jpg)
+
+### Setup Operational for your Node.js app
+
+1. Sign up at [app.operational.co](https://app.operational.co).
+2. Create a new project in the dashboard.
+3. Copy your API key from project settings.
+4. Install the SDK: `npm install @operational.co/sdk`.
+
+### Code example: Sending alerts for suspicious activity
+
+```javascript
+import Operational from "@operational.co/sdk"
+const ops = new Operational("API_KEY")
+
+// Example 1: Failed login attempts
+const payload1 = {
+  name: "failed login attempt",
+  avatar: "🚨",
+  content: "User John Smith failed to login 5 times"
+}
+await ops.events.ingest(payload1)
+
+// Example 2: Login from unusual location
+const payload2 = {
+  name: "unusual login location",
+  avatar: "🚨",
+  content: "User John Smith logged in from 8.8.8.8, a new location"
+}
+await ops.events.ingest(payload2)
+
+// Example 3: Multiple password reset requests
+const payload3 = {
+  name: "multiple password reset",
+  avatar: "🚨",
+  content: "User John Smith requested password reset 3 times within 5 minutes"
+}
+await ops.events.ingest(payload3)
+```
+
+These examples show how to send different suspicious activity events with Operational.
+
+### Conclusion
+
+Operational saves time by handling event ingestion and notifications.
+You can focus on your code while getting real-time push alerts.
+Learn more at https://operational.co  
+Play with snippets in the playground: https://operational.co/playground
+
+---

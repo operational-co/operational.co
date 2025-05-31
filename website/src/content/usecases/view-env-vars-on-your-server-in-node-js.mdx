@@ -1,0 +1,64 @@
+---
+title: View env vars on your server in Node.js
+slug: view-env-vars-on-your-server-in-node-js
+description: Learn how to view environment variables in a Node.js server and monitor them with Operational for real-time event tracking.
+date: 2024-06-19
+tags:
+ - nodejs
+ - environment
+ - monitoring
+icon: 🔑
+---
+
+## What is viewing environment variables in Node.js
+
+Viewing environment variables on your server helps you confirm configuration values.
+
+This can be useful when you need to check API URLs or database credentials during runtime.
+
+For example, you might want to log the value of DB_HOST to ensure your service connects to the right database.
+
+### Using Operational for environment variable monitoring
+
+Operational is an open-source event tracking tool for any tech product.
+
+You can use it to log when your application reads or changes environment variables.
+
+This helps you audit configuration access and catch unexpected values.
+
+![Operational in action](https://operational.co/images/misc/ops-usage.jpg)
+
+### Setting Up Operational
+
+1. Go to https://app.operational.co and create an account.
+2. Generate a new API key from the dashboard.
+3. Install the SDK in your Node.js project.
+4. Keep your API key safe and do not expose it publicly.
+
+### Code Example
+
+```js
+import Operational from "@operational.co/sdk"
+const ops = new Operational("YOUR_API_KEY")
+
+function logEnvVar(name) {
+  const value = process.env[name]
+  ops.events.ingest({
+    name: "Environment Variable Read",
+    avatar: "🔑",
+    content: `${name} = ${value}`
+  })
+}
+
+logEnvVar("DB_HOST")
+```
+
+This example reads the DB_HOST environment variable and sends an event to Operational.
+
+### Conclusion
+
+Tracking environment variable access can help you debug configuration issues.
+
+Operational provides an easy way to capture these events and review them in real time.
+
+Learn more at https://operational.co and try the playground for quick experiments: https://operational.co/playground

@@ -1,62 +1,55 @@
 ---
 title: Track user signup events in JavaScript
 slug: track-user-signup-events-in-javascript
-description: Learn how to record user signup events in your JavaScript apps using Operational to monitor onboarding and drive growth insights.
-date: 2025-05-22
+description: Learn how to track user signup events in your JavaScript application using Operational for better analytics and user onboarding insights.
+date: 2024-06-15
 tags:
   - javascript
   - ecommerce
   - saas
   - analytics
-icon: 🎉
----
+icon: 🆕
 
-## What is user signup event tracking in JavaScript?
+## What is user signup tracking in JavaScript
 
-Tracking a user signup event means recording when a person creates an account on your site or app. This data helps you see how many new users join over time.
+Tracking user signup events helps you understand new user growth. It shows when and how users join your service. By capturing signup data, you can measure marketing success and improve onboarding flow. For example, you can see which sources drive the most registrations.
 
-For example, an online store can track the number of signups launched by different marketing campaigns. That insight helps you invest in the most effective channels.
+### Using Operational for event tracking
 
-## What is Operational?
-
-Operational is an open-source service for collecting and storing events from your app. You can send events from your front end or back end and view them in a dashboard.
-
-You define event names and attach details like user id or email. Operational keeps these events so you can search, filter, and analyze them later.
+Operational lets you capture and view signup events in real time. You can send events from your JavaScript code and see them on the dashboard.
 
 ![Operational in action](https://operational.co/images/misc/ops-usage.jpg)
 
-## Setting up Operational
+### Setting up Operational
 
-1. Go to [app.operational.co](https://app.operational.co) and sign up for a free account.
-2. In the dashboard, copy your API key from the project settings.
-3. Install the SDK in your JavaScript project:  
+1. Go to [app.operational.co](https://app.operational.co) and sign up.
+2. Create a new project in your dashboard.
+3. Copy your API key from project settings.
+4. Install the SDK with npm:
+   ```bash
+   npm install @operationalco/sdk
    ```
-   npm install @operational.co/sdk
-   ```
-4. Add your API key to your code so you can send events.
 
-## Tracking signup events in JavaScript
+### Tracking signup events in JavaScript
 
 ```javascript
-import Operational from '@operational.co/sdk'
-const ops = new Operational('YOUR_API_KEY')
+import Operational from "@operationalco/sdk";
+
+const ops = new Operational("API_KEY");
 
 const payload = {
-  name: 'user signup',
-  avatar: '🎉',
-  content: 'New user Jane Doe registered.',
-  email: 'jane.doe@example.com'
-}
+  name: "user signup",
+  avatar: "🆕",
+  content: "User Jane Doe signed up"
+};
 
-await ops.events.ingest(payload)
+await ops.events.ingest(payload);
 ```
 
-This code sends a "user signup" event with details about the new user to Operational.
+This code initializes the Operational client, creates a payload for a signup event, and sends it to your project. You can see the event in your Operational dashboard.
 
-## Conclusion
+### Conclusion
 
-Recording signup events helps you monitor growth and improve onboarding.
+With Operational, you can save time by quickly tracking signup events without building your own system. It gives you real-time insights into user onboarding.
 
-Operational saves you time by handling event storage and retrieval. You can build queries in the dashboard or use the [playground](https://operational.co/playground) to try code snippets.
-
-Learn more on the [Operational website](https://operational.co).
+Learn more at https://operational.co. Try the playground to copy and paste snippets: https://operational.co/playground

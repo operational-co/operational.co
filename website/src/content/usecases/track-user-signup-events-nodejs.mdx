@@ -1,61 +1,55 @@
 ---
 title: Track user signup events in Node.js
 slug: track-user-signup-events-nodejs
-description: Learn how to track user signup events in your Node.js app using Operational for real-time analytics.
-date: 2025-05-22
-tags:
-  - nodejs
-  - ecommerce
-  - saas
-  - analytics
-icon: 📝
+description: Learn how to track user signup events in your Node.js app using Operational. Follow setup, integrate SDK, and capture signups.
+date: 2024-06-12
+tags: [nodejs, ecommerce, saas, analytics]
+icon: 🎉
 ---
 
-## What are user signup events in Node.js
+## What is user signup event tracking in Node.js
 
-User signup events capture when someone creates an account in your Node.js application. Tracking these events helps you understand user growth and conversion rates.
+Tracking user signup events in a Node.js app helps you understand how users join your service.
+You can measure marketing success and conversion rates.
+For example, you might track when someone signs up after clicking an ad.
+This lets you see which channels drive the most signups.
 
-For example, when a customer registers on your e-commerce site, you can log their email and timestamp to monitor marketing campaign performance.
+### Introducing Operational for event tracking
 
-## Tracking signup events with Operational
+Operational is an open source tool for tracking events in any tech product.
+It lets you send events from your Node.js server to a dashboard.
+You can view signup counts, filter by date, and slice by user attributes.
 
-Operational is an open-source event tracking tool you can add to any tech product. It lets you capture actions like user signup and view them in real time.
+![Operational in action](https://operational.co/images/misc/ops-usage.jpg)
 
-![](https://operational.co/images/misc/ops-usage.jpg)
+### Setting up Operational
 
-With a few lines of code, you can send events to Operational and explore them in a dashboard.
+1. Create an account at [app.operational.co](https://app.operational.co).
+2. In your dashboard, copy your API key.
+3. Install the SDK: `npm install @operational.co/sdk`
+4. Initialize the SDK with your key in your project.
 
-## Setting up Operational
+### Code example: Tracking signup events
 
-1. Sign up at [app.operational.co](https://app.operational.co) and confirm your email.
-2. Create a new project in the dashboard.
-3. Copy your API key from the project settings.
-4. Install the Node.js SDK:
-   
-   ```bash
-   npm install @operational.co/sdk
-   ```
-
-## Code example: Tracking user signup events in Node.js
-
-```js
+```javascript
 import Operational from "@operational.co/sdk"
 
-const ops = new Operational("API_KEY")
+const ops = new Operational("YOUR_API_KEY")
 
 const payload = {
-  name: "user_signup",
-  avatar: "📝",
-  content: "John Smith signed up with email john@example.com"
+  name: "User Signed Up",
+  avatar: "🎉",
+  content: "New user John Smith signed up"
 }
 
 await ops.events.ingest(payload)
 ```
-This code logs a `user_signup` event with the user's name and email. Replace `API_KEY` with your key from the dashboard.
 
-## Conclusion
+This snippet records a signup event each time a user called John Smith completes registration.
 
-Tracking user signup events with Operational saves you time and effort. You get real-time insights without building your own pipeline.
+### Conclusion
 
-Learn more at https://operational.co. Try out live snippets in the
-[playground](https://operational.co/playground).
+Tracking user signups helps you measure growth and optimize your onboarding flow.
+Operational saves time by handling event delivery and storage.
+Learn more at https://operational.co
+Try the playground to copy and paste snippets: https://operational.co/playground

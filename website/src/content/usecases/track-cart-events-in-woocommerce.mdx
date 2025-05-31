@@ -1,0 +1,79 @@
+---
+title: Track cart events in WooCommerce
+slug: track-cart-events-in-woocommerce
+description: Capture add to cart actions in WooCommerce and send them to Operational for real-time insights.
+date: 2024-06-10
+tags: [woocommerce, ecommerce, php]
+icon: 🛒
+---
+
+## What is cart event tracking in WooCommerce
+
+Tracking cart events lets you record when customers add items to their cart.
+This insight can help you improve product recommendations and marketing.
+For example, you can see which items are most often added and follow up with customers who abandon their carts.
+
+### Introducing Operational
+
+Operational is an open-source service for capturing events in any application.
+You can send cart updates to its dashboard for easy monitoring.
+It gives you real-time analytics without building your own event pipeline.
+
+![Operational in action](https://operational.co/images/misc/ops-usage.jpg)
+
+### Setup Operational
+
+1. Go to https://app.operational.co and sign up for a free account.
+2. Create a new project in your dashboard.
+3. Copy your API key from project settings.
+4. Install Guzzle HTTP client in your project:
+   ```
+   composer require guzzlehttp/guzzle
+   ```
+
+### Tracking cart events in WooCommerce (PHP)
+
+```php
+<?php
+use GuzzleHttp\Client;
+
+// Listen for add to cart events
+add_action('woocommerce_add_to_cart', function($cart_item_key, $product_id, $quantity) {
+    $apiKey = 'YOUR_API_KEY';
+    $client = new Client();
+
+    $userName = wp_get_current_user()->display_name;
+    $productName = wc_get_product($product_id)->get_name();
+
+    $payload = [
+        'name'    => 'Cart Updated',
+        'avatar'  => '🛒',
+        'content' => sprintf(
+            '%s added %dx %s to cart',
+            $userName,
+            $quantity,
+            $productName
+        )
+    ];
+
+    $client->post('https://api.operational.co/events', [
+        'headers' => [
+            'Authorization' => 'Bearer ' . $apiKey,
+            'Content-Type'  => 'application/json'
+        ],
+        'json' => $payload
+    ]);
+});
+```
+
+This code listens for add to cart events in WooCommerce.
+It builds a payload with the user name, quantity, and product name.
+Then it sends the event to Operational using an HTTP POST request.
+
+### Conclusion
+
+Operational saves you time by handling event ingestion and analytics.
+You get insights without building custom pipelines.
+
+Learn more at https://operational.co.
+Try the playground to test snippets: https://operational.co/playground

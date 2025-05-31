@@ -1,0 +1,72 @@
+---
+title: Monitor diskspace in PHP
+slug: monitor-diskspace-php
+description: This guide shows how to monitor server disk space from your PHP app using Operational for alerts and metrics tracking.
+date: 2025-05-22
+tags:
+  - php
+  - server
+  - monitoring
+icon: 💾
+---
+
+## Why monitor disk space in PHP
+
+Monitoring disk space in your PHP application helps prevent server failures.
+
+When disk usage hits critical levels your app can break or logs can be lost.
+
+Detecting low disk space early keeps your service running smoothly.
+
+### What is Operational
+
+Operational is an open source event tracking system.
+
+You can send custom events or metrics to Operational for real time insights.
+
+Use it to track disk space alerts and stay ahead of issues.
+
+![Operational Usage](https://operational.co/images/misc/ops-usage.jpg)
+
+### Setting up Operational
+
+1. Go to [app.operational.co](https://app.operational.co) and sign up or log in.
+2. Create a new project for your application.
+3. Copy the API key from your project settings.
+
+### Tracking disk space events in PHP
+
+```php
+<?php
+$apiKey = "API_KEY";
+
+$payload = [
+  "name" => "Disk space low",
+  "avatar" => "💾",
+  "content" => "Server disk space at 10% on /var/www"
+];
+
+$ch = curl_init("https://api.operational.co/events.ingest");
+curl_setopt($ch, CURLOPT_HTTPHEADER, [
+  "Content-Type: application/json",
+  "Authorization: Bearer $apiKey",
+]);
+curl_setopt($ch, CURLOPT_POST, true);
+curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($payload));
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+$response = curl_exec($ch);
+curl_close($ch);
+
+echo $response;
+```
+
+This snippet checks disk usage and sends an event to Operational when space is low.
+
+### Conclusion
+
+Using Operational saves time and effort by centralizing disk space alerts.
+
+Learn more on the [Operational home page](https://operational.co).
+
+Try out event tracking in the [playground](https://operational.co/playground).

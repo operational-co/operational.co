@@ -1,0 +1,74 @@
+---
+title: "View user's profile data in PHP"
+slug: "view-users-profile-data-in-php"
+description: "A guide to fetch and display a user's profile data in PHP while tracking events with Operational SDK."
+date: 2024-06-05
+tags:
+  - php
+  - saas
+  - tracking
+icon: "👤"
+---
+
+## What is viewing user profiles in PHP
+
+When you build a PHP application you often need to show profile information for each user.
+
+Tracking when a user views another’s profile helps you understand engagement.
+
+For example, you might log an event when John Smith sees Jane Doe’s profile.
+
+This data can help you improve user experience and tailor content.
+
+### Introducing Operational
+
+Operational is an open-source event tracking service.
+
+It lets you capture events from any application with minimal setup.
+
+You can record custom events like profile views, button clicks, or page loads.
+
+![Operational in action](https://operational.co/images/misc/ops-usage.jpg)
+
+### Setup Operational
+
+To start sending events with Operational:
+
+1. Go to [app.operational.co](https://app.operational.co) and sign up for an account.
+2. Create a new project and copy your API key.
+3. Install the PHP SDK or use your preferred HTTP client:
+   ```bash
+   composer require operational/sdk
+   ```
+4. Initialize the SDK in your code with your API key.
+
+### Code example: Tracking profile view event
+
+```php
+<?php
+require 'vendor/autoload.php';
+
+use Operational\Operational;
+
+$ops = new Operational('YOUR_API_KEY');
+
+$payload = [
+    'name'    => 'Profile Viewed',
+    'avatar'  => '👤',
+    'content' => 'User John Smith viewed profile of Jane Doe'
+];
+
+$ops->events->ingest($payload);
+```
+
+This example sends a "Profile Viewed" event to Operational whenever someone views a user's profile. You can view it in your dashboard.
+
+### Conclusion
+
+Using Operational saves time by handling event capture and storage for you.
+
+You don’t need to build your own analytics backend.
+
+Learn more on the [Operational home page](https://operational.co).
+
+Experiment with snippets in the [Playground](https://operational.co/playground) to get started quickly.

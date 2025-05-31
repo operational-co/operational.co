@@ -1,73 +1,64 @@
 ---
-title: View user's profile data in WooCommerce
-slug: view-users-profile-data-in-woocommerce
-description: Learn how to fetch and log user profile data view events in WooCommerce with Operational for better insights.
-date: 2025-05-22
+title: "View user's profile data in WooCommerce"
+slug: "view-users-profile-data-in-woocommerce"
+description: "Learn to track user profile views in WooCommerce and send events to Operational for analysis and monitoring."
+date: "2024-06-15"
 tags:
- - woocommerce
- - php
-icon: 👤
+  - woocommerce
+  - wordpress
+  - saas
+  - analytics
+icon: "👤"
 ---
 
-## What is viewing user profile data in WooCommerce?
+## Understanding User Profile Data in WooCommerce
 
-Viewing user profile data in WooCommerce helps you understand customer behavior.
+Viewing a user's profile data in your WooCommerce store helps you personalize experiences and troubleshoot account issues.
 
-It lets you tailor offers and improve your store.
+For example, you may want to log when a customer updates their address or views order history.
 
-For example, tracking when a user checks their address or account history can highlight engagement.
+### Using Operational to Track Profile Views
 
-## Using Operational to track profile view events
+Operational is an event tracking platform that captures structured events from any tech product.
 
-Operational is an open-source event tracking tool.
-
-It lets you log events like profile views in any tech product.
+You can use Operational to record when users view their profiles in WooCommerce and analyze these events over time.
 
 ![Operational in action](https://operational.co/images/misc/ops-usage.jpg)
 
-You can record each profile view in WooCommerce to analyze user activity.
+### Setting Up Operational
 
-## Setting up Operational
+1. Go to [app.operational.co](https://app.operational.co) and sign up for an account.
+2. Create a new workspace for your WooCommerce store.
+3. Locate your API key in the workspace settings and copy it.
 
-1. Go to [app.operational.co](https://app.operational.co) and sign up.
-2. Create a project in your dashboard.
-3. Copy your API key from the project settings.
-4. Install the PHP SDK or prepare HTTP requests.
-
-## Tracking profile view events in PHP
+### Tracking Profile Views in WooCommerce
 
 ```php
 <?php
-$apiKey = 'YOUR_API_KEY';
+require 'vendor/autoload.php';
+use Operational\Operational;
+
+$ops = new Operational('API_KEY');
+
 $payload = [
-  'name' => 'User Profile Viewed',
-  'avatar' => '👤',
-  'content' => 'Alice Smith viewed her profile data.'
+    'name' => 'Profile View',
+    'avatar' => '👤',
+    'content' => 'User John Smith viewed WooCommerce profile',
+    'properties' => [
+        'user_id' => 123,
+        'display_name' => 'John Smith',
+        'email' => 'john@example.com'
+    ]
 ];
 
-$ch = curl_init('https://api.operational.co/v1/events');
-curl_setopt($ch, CURLOPT_HTTPHEADER, [
-  'Content-Type: application/json',
-  'Authorization: ' . 'Bearer ' . $apiKey,
-]);
-curl_setopt($ch, CURLOPT_POST, true);
-curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($payload));
-curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-
-$response = curl_exec($ch);
-curl_close($ch);
-
-echo $response;
+$response = $ops->events->ingest($payload);
+echo 'Event sent with status: ' . $response->getStatusCode();
 ```
 
-This code sends a User Profile Viewed event to Operational recording the user name and action.
+This snippet sends a profile view event to Operational whenever a customer views their WooCommerce profile.
 
-## Conclusion
+### Conclusion
 
-Operational makes tracking user profile views in WooCommerce simple.
+Tracking user profile views in WooCommerce with Operational saves you time and helps you understand customer behavior.
 
-It saves setup time and helps you focus on insights.
-
-Learn more at https://operational.co
-
-Try the [playground](https://operational.co/playground) to run snippets.
+Learn more at https://operational.co and try the playground for copy-paste snippets: https://operational.co/playground

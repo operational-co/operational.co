@@ -1,45 +1,40 @@
 ---
-title: "Track billing events in JavaScript"
-slug: "track-billing-events-in-javascript"
-description: "Learn how to track billing events in your JavaScript app using Operational to monitor transactions, subscriptions, and payment flows effortlessly."
+title: Track billing events in JavaScript
+slug: track-billing-events-in-javascript
+description: Learn how to record billing events like subscriptions and invoices in your JavaScript app using Operational and track revenue actions.
 date: 2025-05-22
 tags:
   - javascript
   - ecommerce
   - saas
-  - events
-icon: 💰
+  - billing
+icon: 💳
 ---
 
-## What are billing events in JavaScript
+## What is billing event tracking in JavaScript
 
-Tracking billing events means capturing user actions like payments, refunds, or subscription changes.
+Tracking billing events helps you monitor revenue and user subscriptions.
 
-For example, when a customer completes a payment, you can record the amount, plan, and user details.
+When a user buys a plan or renews a subscription, logging that event lets you analyze revenue and user behavior.
 
-This helps you monitor revenue, spot failed payments, and improve user support.
+For example, you might record when a customer upgrades from free to pro.
 
-## Using Operational for billing events tracking
+### What is Operational and how to use it for billing events
 
-Operational is an open source tool that lets you send events from your app to a dashboard.
+Operational is an open-source tool for event tracking.
 
-You can track billing events in real time and filter them by type, user, or date.
+It lets you send structured events from your application to a dashboard.
 
-![Operational in action](https://operational.co/images/misc/ops-usage.jpg)
+![Operational usage](https://operational.co/images/misc/ops-usage.jpg)
 
-## Getting started with Operational
+### Setting up Operational
 
-Follow these steps to set up Operational in your project:
+1. Go to https://app.operational.co and sign up for an account.
+2. Create a new project in the dashboard.
+3. Copy your API key from project settings.
+4. Install the SDK in your JavaScript app.
 
-1. Go to [app.operational.co](https://app.operational.co) and sign up or log in.
-2. Create a new project from your dashboard.
-3. In project settings, copy your API key.
-4. In your app folder, run `npm install @operational.co/sdk`.
-5. Import the SDK and initialize it with your API key.
-
-## Example: Tracking billing events
-
-This code initializes Operational and logs a billing event when a user completes a payment.
+### Code example
 
 ```javascript
 import Operational from "@operational.co/sdk";
@@ -47,18 +42,22 @@ import Operational from "@operational.co/sdk";
 const ops = new Operational("API_KEY");
 
 const payload = {
-  name: "billing_event",
-  avatar: "💰",
-  content: "User John Doe completed a payment of $29.99 for subscription Pro Plan"
+  name: "billing_success",
+  avatar: "💳",
+  content: "Subscription plan upgraded to Pro for $49/month"
 };
 
 await ops.events.ingest(payload);
 ```
 
-## Conclusion
+This snippet logs a billing_success event with details about the subscription event.
 
-Operational saves time by handling event delivery and storage for you.
+### Conclusion
 
-You can focus on coding while it records all billing events reliably.
+Tracking billing events helps you understand revenue flow and user upgrades.
 
-Learn more at https://operational.co and test these snippets in the playground: https://operational.co/playground.
+Operational makes it easy to log and analyze these events.
+
+Learn more at https://operational.co.
+
+Try it yourself in the playground: https://operational.co/playground

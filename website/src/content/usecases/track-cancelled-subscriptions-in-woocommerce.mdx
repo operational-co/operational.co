@@ -1,0 +1,62 @@
+---
+title: "Track cancelled subscriptions in WooCommerce"
+slug: "track-cancelled-subscriptions-in-woocommerce"
+description: "Learn to track cancelled subscriptions in WooCommerce using Operational. Set up event ingestion, monitor cancellations, and gain customer insights easily."
+date: 2024-06-15
+tags:
+  - woocommerce
+  - subscriptions
+  - tracking
+icon: ❌
+---
+
+## What is subscription cancellation tracking in WooCommerce
+
+Tracking when customers cancel their subscriptions helps you understand churn and improve your offerings.
+
+For example, if a user with a monthly plan ends their subscription, you can log this event and follow up with a retention campaign.
+
+### Why use Operational for tracking cancellations
+
+Operational is an open-source event tracking tool that makes logging events easy.
+
+It offers a simple SDK to send events and a dashboard to view them.
+
+![Operational in action](https://operational.co/images/misc/ops-usage.jpg)
+
+### Setting up Operational
+
+1. Go to [app.operational.co](https://app.operational.co) and create an account.
+2. In your dashboard, create a new project for your WooCommerce store.
+3. Copy the API key from the project settings.
+4. Install the Operational PHP SDK via Composer.
+
+### Code example
+
+```php
+<?php
+require 'vendor/autoload.php';
+use Operational\Sdk;
+
+$ops = new Sdk("API_KEY");
+
+$payload = [
+  "name" => "subscription cancelled",
+  "avatar" => "❌",
+  "content" => "Subscription ID 123 for John Smith has been cancelled"
+];
+
+$ops->events->ingest($payload);
+```
+
+This snippet sends an event when a customer cancels a subscription. It uses the Operational PHP SDK, sets the event name, avatar, and content with cancellation details.
+
+### Conclusion
+
+Tracking cancellations in WooCommerce with Operational can save you time and provide clear insights on churn.
+
+You can see all events in the dashboard and react quickly.
+
+Learn more at https://operational.co
+
+Try it in the playground: https://operational.co/playground

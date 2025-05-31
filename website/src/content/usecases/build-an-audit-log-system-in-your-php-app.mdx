@@ -1,91 +1,103 @@
 ---
-title: "Build an audit log system in your PHP app"
-slug: "build-an-audit-log-system-in-your-php-app"
-description: "Learn to capture user actions and changes in your PHP app using Operational for a clear audit log."
+title: Build an audit log system in your PHP app
+slug: build-an-audit-log-system-in-your-php-app
+description: Learn how to record user actions and system changes by building an audit log in your PHP app with Operational.
 date: 2025-05-22
-tags: [php, audit-log, logging, backend]
-icon: "📜"
+tags:
+  - php
+  - audit
+  - logs
+icon: 📜
 ---
 
-# What is an audit log in PHP
+## What is an audit log system in PHP
 
-An audit log records key actions and changes in your application.
+An audit log system lets you record user actions and system changes over time.
+It helps you track who did what and when.
+For example, recording when a user updates their profile or an admin changes permissions can simplify debugging and compliance.
 
-In a PHP app you might log when a user updates their profile or an admin deletes a record.
+### Using Operational to track audit events
 
-That history helps you track who did what and when.
+Operational is an open-source event tracking solution.
+It lets you capture and view events from any application.
+You can use it to log audit events in a simple and structured way.
 
-# Why use Operational for audit logs
+![](https://operational.co/images/misc/ops-usage.jpg)
 
-Operational is a simple event tracking service.
+### Setting up Operational
 
-You send it events from your code and it stores them for you.
-
-You can view, filter, and search audit events in its dashboard.
-
-![Operational in action](https://operational.co/images/misc/ops-usage.jpg)
-
-# Setup Operational
-
-Follow these steps to start sending events:
-
-1. Go to [app.operational.co](https://app.operational.co) and sign up.
+1. Go to https://app.operational.co and sign up.
 2. Create a new project in your dashboard.
-3. In project settings, copy your API key.
-4. Install the PHP SDK with Composer:
+3. Copy the API key from the project settings.
+4. Install the PHP SDK with composer:
    ```bash
-   composer require operational/operational-php
+   composer require operational/sdk
    ```
+5. Save the API key in your environment variables.
 
-# Code examples
+### Implementation in PHP
 
 ```php
 <?php
 require 'vendor/autoload.php';
 
-use Operational\Operational;
+use Operational\\Operational;
 
-$ops = new Operational("YOUR_API_KEY");
+$ops = new Operational('YOUR_API_KEY');
 
-// 1. User created
-$ops->events->ingest([
-  'name' => 'user.created',
-  'avatar' => '🎉',
-  'content' => 'User John Smith created a new account',
-  'properties' => [
-    'userId' => 123
-  ]
-]);
+$payload = [
+    'name' => 'user_updated_profile',
+    'avatar' => '📝',
+    'content' => 'User John Smith updated their profile',
+    'metadata' => [
+        'user_id' => 123,
+        'changes' => [
+            'email' => 'new@example.com'
+        ]
+    ]
+];
 
-// 2. User updated profile
-$ops->events->ingest([
-  'name' => 'user.updated',
-  'avatar' => '✏️',
-  'content' => 'User Jane Doe changed password',
-  'properties' => [
-    'userId' => 456,
-    'field' => 'password'
-  ]
-]);
-
-// 3. Record deleted by admin
-$ops->events->ingest([
-  'name' => 'record.deleted',
-  'avatar' => '🗑️',
-  'content' => 'Admin Mike Lee deleted order #789',
-  'properties' => [
-    'adminId' => 12,
-    'orderId' => 789
-  ]
-]);
+$ops->events->ingest($payload);
 ```
 
-The examples show how to send different audit events to Operational.
+```php
+<?php
+// Example: Admin changes user permissions
+$payload = [
+    'name' => 'admin_changed_permissions',
+    'avatar' => '🔒',
+    'content' => 'Admin Jane Doe granted editor rights to user 456',
+    'metadata' => [
+        'admin_id' => 789,
+        'user_id' => 456,
+        'new_role' => 'editor'
+    ]
+];
 
-# Conclusion
+$ops->events->ingest($payload);
+```
 
-With Operational you get a ready-made audit log without building a database schema or UI.
+```php
+<?php
+// Example: Record data deletion
+$payload = [
+    'name' => 'record_deleted',
+    'avatar' => '🗑️',
+    'content' => 'User John Smith deleted record 321',
+    'metadata' => [
+        'user_id' => 123,
+        'record_id' => 321
+    ]
+];
 
-It saves time and keeps your code clean.
+$ops->events->ingest($payload);
+```
 
-Learn more at https://operational.co and try the live playground at https://operational.co/playground.
+These examples show how to send different audit events from your PHP app to Operational.
+
+### Conclusion
+
+Building an audit log system in your PHP app helps track changes and user actions.
+Operational makes it easy to capture and view these events without extra setup.
+Learn more at https://operational.co.
+Try the playground for quick snippets at https://operational.co/playground.

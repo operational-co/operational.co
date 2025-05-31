@@ -1,68 +1,62 @@
 ---
 title: View env vars on your server inside a SaaS product
 slug: view-env-vars-on-your-server-inside-a-saas-product
-description: Learn how to track and view your server environment variables inside a SaaS dashboard using Operational for real-time insights and auditing.
-date: 2025-05-22
+description: Learn how to surface server environment variables in a SaaS dashboard using Operational for better debugging.
+date: 2024-06-02
 tags:
   - saas
-  - nodejs
-  - env-vars
+  - devops
+  - monitoring
+  - security
 icon: 🔑
 ---
 
-## What is viewing environment variables in a SaaS dashboard
+## What it means to view environment variables inside a SaaS product
 
-Viewing environment variables inside a SaaS dashboard helps you audit and debug your applications.
+Environment variables store configuration details on your server.
+Being able to view them inside your SaaS dashboard can help with debugging.
+You can spot misconfigurations without SSH access.
+For example, you might check database host and credentials when an app fails to connect.
 
-For example, you might need to confirm that the DATABASE_URL value is correct after a deployment.
+### Introducing Operational for environment variable visibility
 
-Tracking each view gives your team visibility into who accessed sensitive configuration settings.
-
-## Using Operational to track views
-
-Operational lets you log events like viewing environment variables in your SaaS product.
-
-You can send event data in real time and review it in a clean interface.
-
+Operational is an open source event tracking tool.
+You can send snapshots of your environment variables as events.
+This lets you view them in your Operational dashboard.
 ![Operational in action](https://operational.co/images/misc/ops-usage.jpg)
 
-## Setting up Operational
+### Setting up Operational
 
-1. Go to https://app.operational.co and sign up or log in.
-2. Create a new workspace and get your API key.
-3. Install the SDK with npm:
+1. Visit [app.operational.co](https://app.operational.co) and sign up for a free account.
+2. Log in and go to the API Keys section.
+3. Create a new API key and copy it for later.
+4. Install the Operational SDK:
 
    ```bash
    npm install @operational.co/sdk
    ```
-4. Initialize the SDK in your code:
 
-   ```js
-   import Operational from "@operational.co/sdk";
-   const ops = new Operational("API_KEY");
-   ```
+### Sending environment variables to Operational
 
-## Code snippet
-
-```js
+```javascript
 import Operational from "@operational.co/sdk";
-const ops = new Operational("API_KEY");
+
+const ops = new Operational("YOUR_API_KEY");
 
 const payload = {
-  name: "view environment variables",
+  name: "env_vars_snapshot",
   avatar: "🔑",
-  content: "Alice viewed environment variables on production server"
-}
+  content: "Production environment variables: DB_HOST=prod-db.example.com, DB_USER=admin, SECRET_KEY=secret123"
+};
 
 await ops.events.ingest(payload);
 ```
 
-This code sends an event when a user views environment variables.
+This code sends a snapshot of your server environment variables to Operational.
 
-## Conclusion
+### Conclusion
 
-Operational saves you time by handling event tracking and storage.
-
-You can learn more at https://operational.co
-
-Try the playground to copy and paste snippets: https://operational.co/playground
+Viewing environment variables inside a SaaS dashboard saves time and hassle.
+You avoid SSH access and speed up debugging.
+Learn more at https://operational.co.
+Try the playground to copy and paste code snippets: https://operational.co/playground.

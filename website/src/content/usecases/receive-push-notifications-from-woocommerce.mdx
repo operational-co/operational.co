@@ -1,72 +1,56 @@
 ---
 title: Receive push notifications from WooCommerce
 slug: receive-push-notifications-from-woocommerce
-description: Learn how to send real-time push notifications for new orders in WooCommerce using Operational.
-date: 2025-05-22
+description: Learn how to receive WooCommerce push notifications and send them to Operational for real-time order tracking and alert management.
+date: 2024-06-12
 tags:
   - woocommerce
-  - php
+  - push
   - notifications
 icon: 🔔
 ---
 
-## What are push notifications in WooCommerce
+## What are WooCommerce push notifications
 
-Push notifications let you send real-time alerts to your app or dashboard when certain events happen in WooCommerce. For example, you can get a notification for every new order.
+Push notifications let you get real-time alerts when certain events happen in your WooCommerce store. For example, you can receive a notification when a new order is placed.
 
-These alerts help you stay on top of orders without checking your store continuously.
+Tracking these events helps you stay on top of your store activity and respond faster.
 
-## Track WooCommerce notifications with Operational
+### Tracking notifications with Operational
 
-Operational is an open source event tracking tool. You can use it to capture and visualize events like new orders.
+Operational is an event tracking service that captures and displays events from any application. You can send WooCommerce notifications to Operational and view them in a dashboard.
 
-![Operational Usage](https://operational.co/images/misc/ops-usage.jpg)
+![Operational in action](https://operational.co/images/misc/ops-usage.jpg)
 
-To track WooCommerce events, send event data to Operational and view it in real time in the dashboard.
+### Setting up Operational
 
-## Setting up Operational
+1. Go to [app.operational.co](https://app.operational.co) and sign up.
+2. Create a new API key from your workspace settings.
+3. Copy the API key for your integration.
+4. Keep the key handy for your code.
 
-1. Go to [app.operational.co](https://app.operational.co) and sign up for a free account.
-2. Create a new project and copy your API key.
-3. Install the Operational PHP SDK or use the API.
-4. Keep your API key handy for the code snippet.
-
-## Code example: Sending push notifications from WooCommerce
-
-The example below hooks into the WooCommerce order event and sends a push notification to Operational.
+### Example code
 
 ```php
-<?php
-// Add this to your theme's functions.php or a custom plugin
+require 'vendor/autoload.php';
 
-add_action('woocommerce_thankyou', 'send_push_notification');
+use Operational\\Operational;
 
-function send_push_notification($order_id) {
-    $order = wc_get_order($order_id);
-    $name = 'New WooCommerce Order';
-    $avatar = '🛒';
-    $content = "Order #{$order_id} from {$order->get_billing_first_name()} {$order->get_billing_last_name()}";
+$ops = new Operational('YOUR_API_KEY');
 
-    $body = json_encode([
-        'name' => $name,
-        'avatar' => $avatar,
-        'content' => $content
-    ]);
+$payload = [
+  'name' => 'New WooCommerce Order',
+  'avatar' => '📦',
+  'content' => 'Order #12345 placed by John Smith'
+];
 
-    wp_remote_post('https://api.operational.co/v1/events', [
-        'headers' => [
-            'Authorization' => 'Bearer YOUR_API_KEY',
-            'Content-Type' => 'application/json'
-        ],
-        'body' => $body
-    ]);
-}
+$ops->events->ingest($payload);
 ```
 
-This code listens for new orders and sends the order info to Operational.
+This example shows how to ingest a new order event into Operational when WooCommerce sends a push notification.
 
-## Conclusion
+### Conclusion
 
-Operational makes it easy to get real-time notifications from your WooCommerce store. You save time by seeing new orders instantly.
+Operational saves time and reduces the effort of building your own notification system. You can monitor events in one place and act on them quickly.
 
-Learn more at https://operational.co and try the code in the playground: https://operational.co/playground.
+Learn more at https://operational.co. Try live examples in our [Playground](https://operational.co/playground).

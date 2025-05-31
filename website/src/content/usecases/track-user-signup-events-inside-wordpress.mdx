@@ -1,68 +1,66 @@
 ---
-title: "Track user signup events inside Wordpress"
-slug: "track-user-signup-events-inside-wordpress"
-description: "Learn to capture and send WordPress user signup events to Operational for real-time analytics and user onboarding insights."
-date: 2024-06-18
+title: Track user signup events inside Wordpress
+slug: track-user-signup-events-inside-wordpress
+description: How to capture and send user signup events from a WordPress site to Operational for analytics and monitoring.
+date: 2024-07-23
 tags:
   - wordpress
   - events
   - analytics
-  - tracking
-icon: "📝"
+icon: 🎉
 ---
 
-## Why track user signup events in WordPress
+## What is tracking user signup events in WordPress
 
-Tracking user signups helps you understand where new users come from and how they join your site. You can use this data to improve your marketing and onboarding process.
+Tracking when users sign up helps you understand your audience growth.
+It shows you how many users join over time and where they come from.
 
-For example, you can see if social media campaigns drive more signups than email referrals.
+For example, you can track each registration to see which marketing channel drives the most signups.
 
-## Using Operational to track WordPress signups
+### Introducing Operational
 
-Operational is an open source event tracking tool. It lets you collect and analyze events from any tech product.
+Operational is an open source platform for event tracking.
+It lets you send events from any tech product to a simple API.
 
-You can use it to send signup events from WordPress to a central dashboard.
+You can use Operational to capture signup events, view them in a dashboard, and analyze trends.
 
 ![Operational in action](https://operational.co/images/misc/ops-usage.jpg)
 
-## Setting up Operational
+### Setting up Operational
 
-1. Go to https://app.operational.co and sign up for a free account.
-2. Create a new project to get your API key.
-3. Copy your API key from the project settings.
-4. Add the code snippet below to your theme’s functions.php file or a custom plugin.
+1. Go to [app.operational.co](https://app.operational.co) and sign up for an account.
+2. Copy your API key from the dashboard.
+3. In your WordPress theme or plugin, install the Operational PHP SDK using Composer:
+   ```
+   composer require operational/operational
+   ```
+4. Add your API key to a secure config file.
 
-## Tracking signup events in PHP
+### Code example in PHP
 
 ```php
 <?php
-$apiKey = 'YOUR_API_KEY';
+require 'vendor/autoload.php';
+
+use Operational\Operational;
+
+$ops = new Operational("YOUR_API_KEY");
 
 $payload = [
-  'name' => 'User signup',
-  'avatar' => '🎉',
-  'content' => 'John Doe just signed up',
-  'tags' => ['wordpress', 'signup'],
-  'environment' => 'production'
+  "name" => "user signup",
+  "avatar" => "🎉",
+  "content" => "New user registered with email jane.doe@example.com"
 ];
 
-$ch = curl_init('https://events.operational.co/v1/ingest');
-curl_setopt($ch, CURLOPT_HTTPHEADER, [
-  'Content-Type: application/json',
-  'Authorization: Bearer ' . $apiKey
-]);
-curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($payload));
-curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-
-$response = curl_exec($ch);
-curl_close($ch);
-?>
+$ops->events->ingest($payload);
 ```
 
 This code sends a signup event to Operational whenever a new user registers on your WordPress site.
 
-## Conclusion
+### Conclusion
 
-Operational makes it easy to track user signup events without building your own analytics backend. It saves time and gives you real-time insights.
+Using Operational saves time and hassle when tracking user signups.
+You get a simple API, a clean dashboard, and powerful insights.
 
-Learn more at https://operational.co. Try the Playground to test snippets and view live examples: https://operational.co/playground
+Learn more at https://operational.co.
+Try the [playground](https://operational.co/playground) to copy and paste code snippets.

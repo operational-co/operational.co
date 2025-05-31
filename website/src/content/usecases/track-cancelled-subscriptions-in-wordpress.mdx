@@ -1,65 +1,96 @@
 ---
 title: Track cancelled subscriptions in Wordpress
 slug: track-cancelled-subscriptions-in-wordpress
-description: Learn how to log and monitor cancelled subscriptions in your WordPress site using Operational. Improve subscription insights and customer retention.
-date: 2024-07-01
-tags:
-  - wordpress
-  - subscriptions
-  - php
-  - analytics
-icon: ❌
+description: Learn to track when users cancel subscriptions in Wordpress using Operational for real-time monitoring and analysis.
+date: 2024-06-16
+tags: [wordpress, subscriptions, php]
+icon: 🔄
 ---
 
-# What is subscription cancellation tracking in WordPress
+## What is subscription cancellation tracking in Wordpress
 
-Tracking cancelled subscriptions helps you understand churn and improve your service. For example, if a user cancels a premium plan on your WooCommerce site, logging that event lets you analyze trends over time.
+Tracking when users cancel subscriptions helps you understand churn and improve retention.
 
-# Using Operational to track cancellations
+If someone leaves, you can capture that event and analyze why.
 
-Operational is an event-based platform that captures actions in your app. You can send cancellation events to Operational and view them in your dashboard.
+For example, you might log when a user cancels a recurring plan on your Wordpress site. This data guides your marketing and support.
 
-![Operational dashboard](https://operational.co/images/misc/ops-usage.jpg)
+### Using Operational to track cancellations
 
-# Setting up Operational
+Operational is an open-source event tracking tool.
 
-1. Go to https://app.operational.co and sign up for a free account.
-2. In the dashboard, create a new project.
-3. From project settings, copy your API key.
-4. Keep the key safe for use in your code.
+It captures events from any tech product.
 
-# Code example
+You can send cancellation events to Operational for real-time insights and dashboards.
+
+![Operational usage](https://operational.co/images/misc/ops-usage.jpg)
+
+### Setting up Operational
+
+1. Go to https://app.operational.co and sign up for an account.
+2. Log in and navigate to your **API Keys** section.
+3. Create a new key and copy your **API Key**.
+4. Keep your key safe for use in your server code.
+
+### Code examples
 
 ```php
 <?php
-$ch = curl_init();
-
-$data = [
-  'name' => 'Subscription Cancelled',
-  'avatar' => '❌',
-  'content' => 'User John Smith cancelled subscription ID 1234'
+$apiKey = "YOUR_API_KEY";
+$payload = [
+    "name" => "subscription cancelled",
+    "avatar" => "🔄",
+    "content" => "User Jane Doe cancelled subscription ID 456",
+    "tags" => ["subscription", "cancelled", "wordpress"]
 ];
-
-curl_setopt($ch, CURLOPT_URL, 'https://api.operational.co/v1/events/ingest');
-curl_setopt($ch, CURLOPT_POST, true);
+$ch = curl_init("https://api.operational.co/v1/events/ingest");
 curl_setopt($ch, CURLOPT_HTTPHEADER, [
-  'Content-Type: application/json',
-  'Authorization: Bearer YOUR_API_KEY'
+    "Authorization: Bearer $apiKey",
+    "Content-Type: application/json"
 ]);
-curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-
+curl_setopt($ch, CURLOPT_POST, true);
+curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($payload));
 $response = curl_exec($ch);
 curl_close($ch);
-?>
+echo $response;
 ```
 
-This snippet sends a cancellation event to Operational whenever a subscription is cancelled in WordPress.
+This example sends a basic subscription cancellation event.
 
-# Conclusion
+```php
+<?php
+// Include additional user data
+$apiKey = "YOUR_API_KEY";
+$payload = [
+    "name" => "subscription cancelled",
+    "avatar" => "🔄",
+    "content" => "User John Smith cancelled the Pro plan subscription",
+    "tags" => ["subscription", "cancelled", "wordpress"],
+    "metadata" => [
+        "user_id" => 789,
+        "plan" => "Pro"
+    ]
+];
+$ch = curl_init("https://api.operational.co/v1/events/ingest");
+curl_setopt($ch, CURLOPT_HTTPHEADER, [
+    "Authorization: Bearer $apiKey",
+    "Content-Type: application/json"
+]);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+curl_setopt($ch, CURLOPT_POST, true);
+curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($payload));
+$response = curl_exec($ch);
+curl_close($ch);
+echo $response;
+```
 
-Using Operational for tracking cancelled subscriptions saves time and reduces manual logs. You get insights on churn and can act quickly.
+This example includes user metadata and plan details.
 
-Learn more on the Operational website: https://operational.co
+### Conclusion
 
-Try the playground to copy and paste snippets: https://operational.co/playground
+Operational helps you record cancellation events without building complex infrastructure.
+
+You get real-time insights and can focus on improving user retention.
+
+Learn more at https://operational.co and try code snippets in the playground at https://operational.co/playground.  

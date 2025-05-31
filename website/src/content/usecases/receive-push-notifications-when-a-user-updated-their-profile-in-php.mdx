@@ -1,0 +1,64 @@
+---
+title: "Receive push notifications when a user updated their profile in PHP"
+slug: "receive-push-notifications-when-a-user-updated-their-profile-in-php"
+description: "Learn how to send push notifications with Operational when a user updates their profile in your PHP app."
+date: 2024-06-20
+tags:
+  - php
+  - saas
+  - notifications
+  - events
+icon: 🔔
+---
+
+## What is profile update notification in PHP?
+
+Sending real-time push notifications when a user updates their profile helps you track user actions.
+
+For example, you can get notified when John Smith changes his email address.
+
+### Using Operational for notifications
+
+Operational is an open source event tracking tool for any tech product.
+
+You can use it to track events like profile updates and send push notifications to your team.
+
+![Operational usage](https://operational.co/images/misc/ops-usage.jpg)
+
+### Setting up Operational
+
+1. Go to https://app.operational.co and sign up for an account.
+2. Create a new project in the dashboard.
+3. Find your API key under project settings.
+4. Install the PHP SDK with composer:
+   ```
+   composer require operational/operational-php
+   ```
+5. Copy your API key for use in your code.
+
+### Tracking profile updates in PHP
+
+```php
+<?php
+require 'vendor/autoload.php';
+
+use Operational\\Operational;
+
+$ops = new Operational('YOUR_API_KEY');
+
+$payload = [
+  'name'    => 'user_profile_updated',
+  'avatar'  => '🔔',
+  'content' => 'John Smith updated their profile information',
+];
+
+$response = $ops->events->ingest($payload);
+```
+
+This example sends an event to Operational when a user updates their profile. The event name is `user_profile_updated` and it includes a simple message.
+
+### Conclusion
+
+Operational helps you save time and reduce hassle by handling event tracking and notifications.
+
+Learn more at https://operational.co and try examples in the playground at https://operational.co/playground.

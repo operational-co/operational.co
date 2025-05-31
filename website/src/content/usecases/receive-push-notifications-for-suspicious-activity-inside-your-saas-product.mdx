@@ -1,58 +1,69 @@
 ---
-title: "Receive push notifications for suspicious activity inside your SaaS product"
-slug: "receive-push-notifications-for-suspicious-activity-inside-your-saas-product"
-description: "Learn how to send real-time push alerts for suspicious actions in your SaaS app with Operational to improve security and user trust."
-date: 2024-06-17
+title: Receive push notifications for suspicious activity inside your SaaS product
+slug: receive-push-notifications-for-suspicious-activity-inside-your-saas-product
+description: Learn how to send instant alerts for suspicious behavior in your SaaS product using Operational event tracking.
+date: 2024-06-15
 tags:
   - saas
   - notifications
   - security
-icon: 🚨
+  - alerts
+icon: 🔔
 ---
 
-## Understanding push alerts for suspicious activity in SaaS
+## Why track suspicious activity
 
-Detecting and responding to unusual behavior in your SaaS app helps prevent fraud and protect user data.
+Tracking suspicious activity helps you detect threats early.
 
-For example, if a user logs in from an unrecognized IP address or makes repeated failed login attempts, you want to know right away.
+For example, you may spot a sudden spike in login attempts or unusual data exports.
 
-This article shows how to send real-time push notifications when such events occur.
+By sending instant alerts, your team can act before issues escalate.
 
-## What is Operational and how it helps
+### What is Operational and how it works
 
-Operational is an open-source event tracking tool that captures events from your app and routes them to your dashboard.
+Operational is an open source event tracking tool.
 
-You can monitor key actions and set up alerts for events like failed logins, data exports, or permission changes.
+It captures events in your product and routes them to your channels.
 
-![Operational in action](https://operational.co/images/misc/ops-usage.jpg)
+You can use it to trigger push notifications for key events.
 
-## Setting up Operational
+![Operational usage](https://operational.co/images/misc/ops-usage.jpg)
 
-1. Go to [app.operational.co](https://app.operational.co) and sign up for a free account.
-2. Create a new project by clicking "New Project" in your dashboard.
-3. Open the project settings and copy your API key.
-4. Install the SDK in your codebase using your preferred package manager.
+### Setting up Operational
 
-## Code example: Tracking suspicious login attempts
+1. Go to [app.operational.co](https://app.operational.co) and sign up for an account.
+2. In the dashboard, create a new project and copy the API key.
+3. Install the SDK in your app:
+   ```bash
+   npm install @operational.co/sdk
+   ```
+4. Initialize the client with your API key.
+
+### Code snippet
 
 ```javascript
-import Operational from "@operational.co/sdk"
+import Operational from "@operational.co/sdk";
 
-const ops = new Operational("API_KEY")
+const ops = new Operational("API_KEY");
 
 const payload = {
-  name: "suspicious login attempt",
-  avatar: "🚨",
-  content: "User John Smith logged in from unknown IP 203.0.113.45"
-}
+  name: "Suspicious login detected",
+  avatar: "🔒",
+  content: "User John Smith logged in from a new device in Moscow"
+};
 
-await ops.events.ingest(payload)
+await ops.events.ingest(payload);
 ```
 
-This snippet sends an event to Operational whenever a user logs in from an unrecognized IP address.
+This example sends an event when a suspicious login occurs.
+Operational captures the event and triggers your push notification.
 
-## Conclusion
+### Conclusion
 
-Using Operational for tracking suspicious activity saves time and reduces security risks by sending instant push alerts.
+Operational saves you time and reduces manual work.
 
-Learn more at https://operational.co and try out code samples in the playground: https://operational.co/playground
+You get real-time alerts for threats in your SaaS product.
+
+Learn more:
+- Home: https://operational.co
+- Playground: https://operational.co/playground

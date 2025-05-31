@@ -1,0 +1,81 @@
+---
+title: Track billing events in Node.js
+slug: track-billing-events-nodejs
+description: Learn how to capture and monitor billing events in your Node.js app using Operational for real-time insights and reliable invoicing workflows.
+date: 2025-05-22
+tags: ["nodejs", "ecommerce", "saas", "billing"]
+icon: 💳
+---
+
+## What is billing event tracking in Node.js
+
+Tracking billing events in your Node.js app helps you monitor payments, subscriptions, and refunds in real time. For example, you can log when a customer’s payment succeeds and alert your team on failures.
+
+### Tracking billing events with Operational
+
+Operational is an open-source event tracking tool. You can use it to ingest and view billing events from your app in a single dashboard.
+
+![Operational usage](https://operational.co/images/misc/ops-usage.jpg)
+
+### Setting up Operational
+
+1. Go to the signup page at [app.operational.co](https://app.operational.co) and create an account.
+2. In your dashboard, copy your API key.
+3. Install the SDK in your project: `npm install @operational.co/sdk`.
+4. Keep your API key handy for the code examples below.
+
+### Code examples
+
+The following snippets show how to track different billing events in Node.js using Operational.
+
+```javascript
+import Operational from "@operational.co/sdk";
+const ops = new Operational("API_KEY");
+
+const payload = {
+  "name": "subscription created",
+  "avatar": "💳",
+  "content": "New subscription for John Smith: Pro Plan."
+};
+
+await ops.events.ingest(payload);
+```
+
+This example tracks a new subscription event.
+
+```javascript
+import Operational from "@operational.co/sdk";
+const ops = new Operational("API_KEY");
+
+const payload = {
+  "name": "payment successful",
+  "avatar": "✅",
+  "content": "Payment of $20.00 received from Jane Doe."
+};
+
+await ops.events.ingest(payload);
+```
+
+This example logs a successful payment.
+
+```javascript
+import Operational from "@operational.co/sdk";
+const ops = new Operational("API_KEY");
+
+const payload = {
+  "name": "refund processed",
+  "avatar": "↩️",
+  "content": "Refund of $20.00 issued to Jane Doe."
+};
+
+await ops.events.ingest(payload);
+```
+
+This example records a refund event.
+
+### Conclusion
+
+Tracking billing events with Operational can save you time and hassle when managing payments and subscriptions. It offers a simple API and real-time dashboard.
+
+Learn more on the Operational website: https://operational.co  
+Try the playground to copy and test snippets: https://operational.co/playground

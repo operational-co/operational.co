@@ -1,98 +1,87 @@
 ---
 title: Build an audit log system in your SaaS product
 slug: build-an-audit-log-system-in-your-saas-product
-description: Learn how to track key actions in your SaaS app with Operational’s audit logging system.
-date: 2025-05-22
+description: Learn to create a reliable audit log in your SaaS using Operational to track key user actions securely.
+date: 2024-06-25
 tags:
-  - saas
-  - audit-log
-  - logging
-  - security
-icon: 📝
+ - saas
+ - audit
+ - logging
+icon: 📜
 ---
 
 ## What is an audit log system in SaaS?
 
-An audit log system records key actions in your SaaS app.
+An audit log system records key actions that users or admins perform in your application.
 
-For example, you can track when a user updates their billing plan or when an admin changes permissions.
+It helps with debugging, security audits and compliance.
 
-This helps you monitor changes, meet compliance, and troubleshoot issues.
+For example, when a user updates billing settings, you store a record of who did what and when.
 
-## Track actions with Operational
+### Using Operational to track audit events
 
-Operational is an open-source event tracking tool.
+Operational is an open-source tracking platform for tech products.
 
-It lets you send events like user actions and view them in a real-time dashboard.
+You can send events from your code and view them in a dashboard.
 
-![Operational dashboard](https://operational.co/images/misc/ops-usage.jpg)
+![](https://operational.co/images/misc/ops-usage.jpg)
 
-## Setting up Operational
+You can filter by event name, date or user. It helps you investigate issues faster.
 
-1. Go to [app.operational.co](https://app.operational.co) and sign up.
-2. Create a new project in the dashboard.
-3. Copy your API key for use in your code.
+### Setting up Operational
 
-## Code examples for audit logging
+1. Sign up at [app.operational.co](https://app.operational.co).
+2. Create a new project and copy your API key.
+3. Install the SDK in your project with npm install @operational.co/sdk.
+4. Keep your API key safe and add it to your environment variables.
+
+### Code examples
 
 ```javascript
-import Operational from "@operational.co/sdk"
-const ops = new Operational("YOUR_API_KEY")
+import Operational from "@operational.co/sdk";
+const ops = new Operational("API_KEY");
 
+// Example 1: Account creation
 const payload1 = {
-  name: "audit_log",
-  avatar: "📝",
-  content: "User Jane Doe created a new account",
-  metadata: {
-    userId: 123,
-    action: "create_account"
-  }
-}
+  name: "account created",
+  avatar: "✅",
+  content: "User John Smith created a new account"
+};
+await ops.events.ingest(payload1);
 
-await ops.events.ingest(payload1)
-```
-
-Example 1 logs when a new user signs up.
-
-```javascript
+// Example 2: Password change
 const payload2 = {
-  name: "audit_log",
-  avatar: "📝",
-  content: "Admin John Smith changed user role",
-  metadata: {
-    userId: 456,
-    changedBy: "John Smith",
-    action: "role_change"
-  }
-}
+  name: "password changed",
+  avatar: "🔒",
+  content: "User Jane Doe updated her password"
+};
+await ops.events.ingest(payload2);
 
-await ops.events.ingest(payload2)
-```
-
-Example 2 logs role updates.
-
-```javascript
+// Example 3: Account deletion
 const payload3 = {
-  name: "audit_log",
-  avatar: "📝",
-  content: "User Alice Lee updated billing info",
-  metadata: {
-    userId: 789,
-    action: "update_billing"
-  }
-}
+  name: "account deleted",
+  avatar: "🗑️",
+  content: "User Mark Lee deleted their account"
+};
+await ops.events.ingest(payload3);
 
-await ops.events.ingest(payload3)
+// Example 4: Billing update
+const payload4 = {
+  name: "billing updated",
+  avatar: "💳",
+  content: "User Alex Kim changed billing information"
+};
+await ops.events.ingest(payload4);
 ```
 
-Example 3 logs billing updates.
+This code shows how to send different audit events to Operational for tracking and review.
 
-## Conclusion
+### Conclusion
 
-Operational saves time by handling event tracking and storage.
+Operational saves time and hassle by handling event ingestion, storage and inspection.
 
-You can focus on your app logic while seeing audit logs in one place.
+You get a ready dashboard and filters to view your audit logs.
 
-Learn more at https://operational.co
+Learn more at https://operational.co.
 
-Try the playground with ready snippets at https://operational.co/playground
+Try it in the playground: https://operational.co/playground.

@@ -1,0 +1,71 @@
+---
+title: Track user signup events in PHP
+slug: track-user-signup-events-in-php
+description: Learn how to integrate Operational in PHP to send user signup events for real-time analytics and improved onboarding insights.
+date: 2024-06-10
+tags:
+  - php
+  - ecommerce
+  - saas
+  - analytics
+icon: 📝
+---
+
+## What is user signup tracking in PHP
+
+Tracking user signup events helps you know who is joining your app.
+
+In an ecommerce site, you can see when a new account is created.
+
+You can use this data to measure marketing, track conversions and spot issues quickly.
+
+### Introducing Operational for event tracking
+
+Operational is an open source tool to collect events from any tech product.
+
+It lets you send custom events and view them in a simple dashboard.
+
+![Operational dashboard](https://operational.co/images/misc/ops-usage.jpg)
+
+You can use it to track signups in your PHP application.
+
+### Setting up Operational
+
+1. Go to [app.operational.co](https://app.operational.co) and sign up.
+2. Create a new project and copy the API key.
+3. In your PHP project run:
+
+   ```bash
+   composer require operational/sdk-php
+   ```
+
+4. Use your API key in code to send events.
+
+### Tracking signup events in PHP
+
+```php
+<?php
+require 'vendor/autoload.php';
+
+use Operational\\Operational;
+
+$ops = new Operational('YOUR_API_KEY');
+
+$payload = [
+  'name' => 'user signup',
+  'avatar' => '🆕',
+  'content' => 'New user John Smith signed up with email john@example.com'
+];
+
+$ops->events->ingest($payload);
+```
+
+This snippet shows how to send a signup event when a new user registers.
+
+### Conclusion
+
+Tracking signups with Operational can save time on building analytics from scratch.
+
+You get real time insights and a simple setup.
+
+Learn more at https://operational.co and try examples in the playground: https://operational.co/playground

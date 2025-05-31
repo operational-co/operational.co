@@ -1,77 +1,60 @@
 ---
 title: Receive push notifications in JavaScript
 slug: receive-push-notifications-in-javascript
-description: Learn how to receive browser push notifications with JavaScript and track events in Operational for better insights.
-date: 2025-05-22
+description: Learn how to receive and track push notifications in your JavaScript web app using Operational for real-time event monitoring.
+date: 2024-06-17
 tags:
   - javascript
+  - web
   - push-notifications
 icon: 🔔
 ---
 
-## What are push notifications in JavaScript
+## What are push notifications in JavaScript?
 
-Push notifications let web apps send messages to users even when the page is closed.
+Push notifications let web apps send messages to users even when the app is not open. They work through service workers in the browser.
 
-They work through service workers and the Push API.
+For example, a chat app can notify users of new messages when they are offline.
 
-For example, a chat app can alert users when a new message arrives.
+### Using Operational to track push notification events
 
-Handling these events in your code helps you give timely updates to your users.
+Operational is an open-source tool for logging events in any tech product. You can send a record each time a push notification is received.
 
-## Track push events with Operational
+<img src="https://operational.co/images/misc/ops-usage.jpg" alt="Operational in action" />
 
-Operational is an open-source tool to collect and view events from your app.
+This helps you monitor delivery rates and troubleshoot issues.
 
-You can record each notification receipt and see how often users get updates.
+### Setting up Operational
 
-![Operational in action](https://operational.co/images/misc/ops-usage.jpg)
+1. Go to [app.operational.co](https://app.operational.co) and sign up.
+2. Create a new project and copy your API key.
+3. Install the SDK with `npm install @operational.co/sdk`.
+4. Initialize the client in your code.
 
-With Operational you get a simple dashboard to filter, search, and analyze push events.
-
-## Setting up Operational
-
-Follow these steps to start sending events:
-
-1. Go to https://app.operational.co and create a free account.
-2. Log in and create a new project to get your API key.
-3. Copy the API key from your project settings.
-4. Install the SDK in your project with `npm install @operational.co/sdk`.
-
-## Code example
+### Tracking push notification events
 
 ```javascript
 import Operational from "@operational.co/sdk";
 
-const ops = new Operational("API_KEY");
+const ops = new Operational("YOUR_API_KEY");
 
-// Register your service worker
-navigator.serviceWorker.register('/sw.js')
-  .then(registration => {
-    console.log('Service worker registered');
-  });
+// Example service worker listener
+navigator.serviceWorker.addEventListener("push", event => {
+  // Sample data structure: { message: "Hello from John Doe" }
+  const data = event.data.json();
 
-// Listen for push events and send to Operational
-navigator.serviceWorker.addEventListener('push', event => {
-  const payload = {
-    name: "push notification received",
+  ops.events.ingest({
+    name: "Push notification received",
     avatar: "🔔",
-    content: "New message from John Smith"
-  };
-
-  ops.events.ingest(payload);
+    content: `New message: ${data.message}`
+  });
 });
 ```
 
-This code registers a service worker and listens for incoming push events.
-When a notification arrives, it sends an event to Operational with basic details.
+This code listens for incoming push messages and logs each one to Operational with the message content.
 
 ## Conclusion
 
-Using Operational to track push notifications saves time on building your own logging system.
+Using Operational for push notification events saves time on logging and monitoring. You can focus on building features.
 
-You get a dashboard to view and filter notification events instantly.
-
-Learn more at https://operational.co.
-
-Try the playground for live code examples: https://operational.co/playground
+Learn more at https://operational.co. Try the playground for ready-to-use snippets: https://operational.co/playground.

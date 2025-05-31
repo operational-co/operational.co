@@ -1,0 +1,98 @@
+---
+title: Monitor cronjobs in PHP
+slug: monitor-cronjobs-in-php
+description: Monitor your PHP cronjobs with Operational. Track job success, failures, and runtime easily to keep your scheduled tasks running smoothly.
+date: 2025-05-22
+tags:
+  - php
+  - server
+  - monitoring
+icon: ⏰
+---
+
+## What is cronjob monitoring in PHP?
+
+Monitoring cronjobs in PHP helps you ensure scheduled tasks run as expected.
+
+For example, you might have a nightly backup or report generation.
+
+Tracking their success and failures lets you respond quickly to issues.
+
+### Track cronjobs with Operational
+
+Operational is an open-source platform for tracking events in your applications.
+
+You can use it to log cronjob runs, failures, and performance metrics.
+
+![Operational Usage](https://operational.co/images/misc/ops-usage.jpg)
+
+### Setting up Operational
+
+1. Go to [app.operational.co](https://app.operational.co) and sign up for a free account.
+2. Create a new project for your PHP application.
+3. Navigate to the project settings to find your API key.
+4. Copy the API key and store it in a safe place or environment variable.
+
+### Code examples
+
+```php
+<?php
+$apiKey = 'API_KEY';
+$payload = [
+  'name' => 'cronjob_success',
+  'avatar' => '✅',
+  'content' => 'Daily report cronjob finished successfully in 85 seconds'
+];
+
+$ch = curl_init('https://api.operational.co/v1/events');
+curl_setopt($ch, CURLOPT_HTTPHEADER, [
+  'Authorization: Bearer ' . $apiKey,
+  'Content-Type: application/json'
+]);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($payload));
+$result = curl_exec($ch);
+curl_close($ch);
+echo $result;
+?>
+```
+
+This example logs a successful cronjob run.
+
+```php
+<?php
+$apiKey = 'API_KEY';
+$payload = [
+  'name' => 'cronjob_failure',
+  'avatar' => '🚨',
+  'content' => 'Backup cronjob failed with exit code 1'
+];
+
+// ... send HTTP request as above ...
+?>
+```
+
+This example reports a cronjob failure.
+
+```php
+<?php
+$apiKey = 'API_KEY';
+$payload = [
+  'name' => 'cronjob_skipped',
+  'avatar' => '⏭️',
+  'content' => 'Cleanup cronjob skipped due to active lock file'
+];
+
+// ... send HTTP request as above ...
+?>
+```
+
+This example tracks a skipped cronjob due to a lock.
+
+### Conclusion
+
+Using Operational to monitor your PHP cronjobs can save you time and reduce headaches.
+
+You get real-time visibility into job status, run times, and errors.
+
+Learn more on the [Operational website](https://operational.co) or try the [playground](https://operational.co/playground) to copy and paste snippets.

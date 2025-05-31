@@ -1,59 +1,59 @@
 ---
 title: Receive push notifications from your Node.js backend
 slug: receive-push-notifications-nodejs-backend
-description: Learn to send and track push notifications from your Node.js backend using Operational for real-time event monitoring and debugging.
+description: Learn how to send and track push notifications from your Node.js backend using Operational for clear event monitoring.
 date: 2025-05-22
 tags:
   - nodejs
-  - notifications
   - push
-  - monitoring
+  - notifications
+  - backend
 icon: 🔔
 ---
 
-## What are push notifications in Node.js
+## What are push notifications in Node.js?
 
-Push notifications let your server send real-time messages to users. In a Node.js backend, this can inform clients about updates, alerts, or reminders.
+Push notifications let your backend send messages to a user device. They can inform users about events in real time.
 
-For example, you might notify a user when a new message arrives or when a task is complete.
+For example, you might notify a user when a new order is ready.
 
-## Tracking push events with Operational
+### Using Operational to track push notifications
 
-Operational helps you monitor and analyze events like push notifications.
+Operational is an open source event tracking tool. It captures and displays events from your apps.
+
 
 ![Operational in action](https://operational.co/images/misc/ops-usage.jpg)
 
-You can log each notification event to see delivery rates and errors.
+You can use it to monitor push notification events from your Node.js backend.
 
-## Setting up Operational
+### Setting up Operational
 
-1. Go to https://app.operational.co and create an account.
-2. In your dashboard, copy the API key.
-3. Install the SDK: `npm install @operational.co/sdk`.
-4. Save the API key in your environment variables as `OPERATIONAL_API_KEY`.
+1. Go to [app.operational.co](https://app.operational.co)
+2. Sign up or log in
+3. Create a new workspace
+4. Generate an API key
+5. Copy the key for use in your code
 
-## Code example
+### Code example for tracking push notifications
 
 ```javascript
-import Operational from "@operational.co/sdk";
+import Operational from "@operational.co/sdk"
 
-const ops = new Operational(process.env.OPERATIONAL_API_KEY);
+const ops = new Operational("YOUR_API_KEY")
 
 const payload = {
-  name: "push notification received",
+  name: "push notification sent",
   avatar: "🔔",
-  content: "Push notification sent to user John Smith"
-};
+  content: "Sent push notification to user John Smith"
+}
 
-await ops.events.ingest(payload);
+await ops.events.ingest(payload)
 ```
 
-This code initializes Operational with your API key and logs a push notification event.
+This code tracks when your backend sends a push notification.
 
-## Conclusion
+### Conclusion
 
-Using Operational saves time and hassle when monitoring push notifications from your Node.js backend.
+Operational helps you see all your push notification events in one place. It saves time and boosts reliability.
 
-Learn more at https://operational.co.
-
-You can try code snippets in the playground: https://operational.co/playground.
+Learn more at https://operational.co. Try the playground to copy and paste snippets: https://operational.co/playground

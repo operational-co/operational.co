@@ -1,0 +1,87 @@
+---
+title: Track billing events in WooCommerce
+slug: track-billing-events-woocommerce
+description: Track WooCommerce billing events with Operational. Learn to set up, send events, and monitor invoices and payments easily.
+date: 2024-06-14
+tags:
+  - woocommerce
+  - php
+  - billing
+  - analytics
+icon: 💰
+---
+
+## What is billing event tracking in WooCommerce?
+
+Tracking billing events helps you monitor payment flows in your store.  
+You can see when invoices are created, paid, or fail.  
+For example, you might want to alert your team when a payment fails to follow up.
+
+### Using Operational for billing events
+
+Operational lets you send and view events in a dashboard.  
+You can record all billing steps and search or filter them easily.
+
+![Operational dashboard](https://operational.co/images/misc/ops-usage.jpg)
+
+### Setting up Operational
+
+1. Go to [app.operational.co](https://app.operational.co)
+2. Sign up for an account or log in
+3. In the dashboard, go to Settings and create a new API key
+4. Copy your API key for use in your code
+
+### PHP code examples for billing events
+
+```php
+<?php
+$opsKey = 'YOUR_API_KEY';
+
+$payload = [
+  'name' => 'invoice paid',
+  'avatar' => '💰',
+  'content' => 'Invoice #123 paid by John Smith for $49.99'
+];
+
+$ch = curl_init('https://events.operational.co/v1');
+curl_setopt($ch, CURLOPT_HTTPHEADER, [
+    'Authorization: Bearer ' . $opsKey,
+    'Content-Type: application/json',
+]);
+curl_setopt($ch, CURLOPT_POST, true);
+curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($payload));
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+$response = curl_exec($ch);
+curl_close($ch);
+
+echo $response;
+?>
+```
+
+This code sends an "invoice paid" event to Operational.
+
+```php
+// Tracking a failed invoice
+$payload['name'] = 'invoice failed';
+$payload['avatar'] = '❌';
+$payload['content'] = 'Invoice #124 failed for Jane Doe due to payment error';
+
+// send as above
+```
+
+```php
+// Tracking a new invoice creation
+$payload['name'] = 'invoice created';
+$payload['avatar'] = '🧾';
+$payload['content'] = 'Invoice #125 created for Acme Corp for $199.00';
+
+// send as above
+```
+
+### Conclusion
+
+Operational saves time by handling event storage and search for you.  
+You focus on billing logic and let Operational show live events.  
+Learn more at https://operational.co.  
+Try the playground to copy and paste snippets: https://operational.co/playground.

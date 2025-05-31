@@ -1,76 +1,78 @@
 ---
-title: Monitor cronjobs inside Wordpress
-slug: monitor-cronjobs-inside-wordpress
-description: Learn how to monitor WordPress cronjobs and report their success or failures using Operational for reliable scheduled tasks.
-date: 2024-06-14
+title: "Monitor cronjobs inside Wordpress"
+slug: "monitor-cronjobs-inside-wordpress"
+description: "Learn how to monitor and track WordPress cronjob executions using Operational.co to ensure scheduled tasks run reliably and catch failures."
+date: "2024-10-10"
 tags:
   - wordpress
   - cronjobs
   - monitoring
   - php
-icon: 🕒
+icon: "⏰"
 ---
 
-## What is cronjob monitoring in WordPress?
+## What is cronjob monitoring in WordPress
 
-WordPress uses a pseudo-cron system to schedule tasks like publishing posts, cleaning up drafts, and backup routines. If a cronjob fails, you might miss important tasks. Monitoring cronjobs helps you catch failures and ensures your site stays healthy. For example, a daily cleanup cronjob might delete old data. If it stops running, your database can fill up fast.
+WordPress uses cron-like tasks to schedule repeated actions.  
+These cronjobs perform tasks like publishing scheduled posts, cleaning up items, or sending emails.  
 
-## Using Operational for cronjob monitoring
+Monitoring these jobs helps you catch failures, track performance, and ensure your site runs smoothly.  
+For example, if a backup cronjob fails, you need an alert to fix it before losing data.
 
-Operational is an open-source event tracking service. It lets you send events when a cronjob runs or fails. You can view these events in a dashboard and get alerts on issues.
+### Tracking cronjobs with Operational
 
-![Operational in action](https://operational.co/images/misc/ops-usage.jpg)
+Operational is an open-source toolkit for capturing and tracking events in any tech product.  
+You can use Operational to log cronjob executions in your WordPress site.  
+It provides a simple API to send event data to your Operational dashboard.
 
-By tracking cronjob success and failures, you can respond quickly and keep your site running smoothly.
+![Operational Usage](https://operational.co/images/misc/ops-usage.jpg)
 
-## Setting up Operational
+### Setting up Operational
 
-1. Visit [app.operational.co](https://app.operational.co) and create an account.  
-2. Create a new project from the dashboard.  
-3. Copy the API key from project settings.  
-4. Install the PHP SDK with composer:
-   ```bash
-   composer require @operational.co/sdk
-   ```
+1. Go to https://app.operational.co and create an account.  
+2. Verify your email and log in to the dashboard.  
+3. Create a new project for your WordPress site.  
+4. Copy the API key provided in the project settings.
 
-## Code example for WordPress cronjob monitoring
-
-These examples show how to report cronjob success and failure events in PHP.
+### Tracking WordPress cronjob events
 
 ```php
 <?php
-require 'vendor/autoload.php';
-
-use Operational\Operational;
-
-$ops = new Operational('YOUR_API_KEY');
-
+// Send a successful cronjob execution event to Operational
 $payload = [
-  'name'   => 'cronjob success',
-  'avatar' => '🕒',
-  'content'=> 'Cleanup cronjob completed for June 14',
+    'name' => 'Cronjob Executed',
+    'avatar' => '⏰',
+    'content' => 'Daily backup cronjob ran successfully on example.com at 03:00 AM'
 ];
 
-$ops->events->ingest($payload);
+$ch = curl_init('https://api.operational.co/events/ingest');
+curl_setopt($ch, CURLOPT_HTTPHEADER, [
+    'Authorization: Bearer YOUR_API_KEY',
+    'Content-Type: application/json'
+]);
+curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($payload));
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+$response = curl_exec($ch);
+curl_close($ch);
 ```
 
 ```php
 <?php
-require 'vendor/autoload.php';
-
-use Operational\Operational;
-
-$ops = new Operational('YOUR_API_KEY');
-
+// Send a failed cronjob execution event to Operational
 $payload = [
-  'name'   => 'cronjob failed',
-  'avatar' => '❌',
-  'content'=> 'Backup cronjob did not run on June 14',
+    'name' => 'Cronjob Failed',
+    'avatar' => '⏰',
+    'content' => 'Hourly cleanup cronjob failed on example.com at 02:15 AM'
 ];
 
-$ops->events->ingest($payload);
+// The same cURL setup as above, using your API key and endpoint
 ```
 
-## Conclusion
+These examples show how to report both successful and failed cronjobs to your Operational dashboard.
 
-Monitoring your WordPress cronjobs ensures your scheduled tasks run reliably. Operational saves time by providing a simple API and dashboard to track events. Learn more at https://operational.co and try the [playground](https://operational.co/playground) to copy and paste code snippets instantly.
+### Conclusion
+
+Using Operational to monitor WordPress cronjobs saves time and helps you catch issues early.  
+You can view real-time events and trends in one place.  
+Learn more at https://operational.co or try snippets in our Playground: https://operational.co/playground

@@ -1,0 +1,70 @@
+---
+title: Receive push notifications when a user updated their profile in Node.js
+slug: receive-push-notifications-when-a-user-updated-their-profile-in-node-js
+description: Learn how to send push notifications on user profile updates in Node.js using Operational.
+date: 2024-06-20
+tags:
+  - nodejs
+  - notifications
+  - events
+icon: 🔔
+---
+
+## What is profile update notification in Node.js
+
+When a user changes their profile it is important to let other parts of your system know.
+
+Sending push notifications on profile updates helps keep user data in sync across services.
+
+For example you might notify a dashboard when John Smith changes his email.
+
+### What is Operational
+
+Operational is an open source event tracking tool.
+
+It lets you send events from any tech product.
+
+You can use Operational to track profile updates and trigger push notifications.
+
+![Operational in action](https://operational.co/images/misc/ops-usage.jpg)
+
+### Setting up Operational
+
+1. Go to [app.operational.co](https://app.operational.co) and sign up.
+2. Create a new project in the dashboard.
+3. Copy your API key from the project settings.
+4. Install the SDK in your Node.js app:
+
+   ```bash
+   npm install @operational.co/sdk
+   ```
+
+### Code example
+
+```javascript
+import Operational from "@operational.co/sdk"
+
+const ops = new Operational("API_KEY")
+
+const payload = {
+  name: "profile_update",
+  avatar: "👤",
+  content: "User John Smith updated their profile",
+  properties: {
+    userId: 123,
+    updatedFields: ["email", "avatar"]
+  }
+}
+
+await ops.events.ingest(payload)
+```
+
+This snippet shows how to send a profile_update event with user details and changed fields.
+
+### Conclusion
+
+Using Operational saves time by handling event tracking and notifications for you.
+
+You can learn more at https://operational.co.
+
+Try copy, paste, and play with snippets in the Operational playground: https://operational.co/playground.

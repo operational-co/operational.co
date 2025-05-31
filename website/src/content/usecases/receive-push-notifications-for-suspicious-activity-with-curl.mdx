@@ -1,43 +1,55 @@
 ---
 title: Receive push notifications for suspicious activity with cURL
 slug: receive-push-notifications-for-suspicious-activity-with-curl
-description: Learn how to use Operational with cURL to get push notifications for suspicious activity. Track events and alert your team quickly.
-date: 2024-06-15
-tags:
-  - curl
-  - notifications
-  - security
+description: Learn to send push alerts for suspicious activity using Operational API and cURL. Setup steps and code examples included.
+date: 2025-05-22
+tags: [curl, security, notifications, api]
 icon: 🚨
 ---
 
-## Why track suspicious activity?
+## What are push notifications for suspicious activity
 
-Suspicious actions like multiple failed logins or unusual access can signal a security threat.
-Implementing alerts helps you catch issues early.
+Suspicious activity alerts inform you when unusual events occur in your system.
 
-## What is Operational and how to use it?
+For example, you might detect multiple failed login attempts or access from an unfamiliar IP address.
 
-Operational lets you track events and send real-time alerts. You can use it to notify your team when something unusual happens.
+Push notifications let you respond quickly and enhance security.
 
-![Operational in action](https://operational.co/images/misc/ops-usage.jpg)
+### Using Operational to send alerts
 
-## Setting up Operational
+Operational is an open-source event tracking tool for tech products.
+
+It can send push notifications when you log security events.
+
+![Operational usage](https://operational.co/images/misc/ops-usage.jpg)
+
+### Setting up Operational for cURL
 
 1. Go to [app.operational.co](https://app.operational.co) and sign up.
-2. Create a new project or team.
-3. Copy your API key from the dashboard.
-4. Keep your API key safe; you will use it in your requests.
+2. Create a new project in the dashboard.
+3. Navigate to the API keys section.
+4. Copy your API key and keep it secure.
 
-## Sending events with cURL
+### cURL example
 
 ```bash
-curl https://api.operational.co/events.ingest?api_key=YOUR_API_KEY -H 'Content-Type: application/json' -d '{\"name\":\"Suspicious login attempt\",\"avatar\":\"🔒\",\"content\":\"User John Smith had 5 failed login attempts from IP 192.168.0.1\"}'
+curl -X POST https://api.operational.co/events/ingest \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -d '{
+    "name": "Suspicious login detected",
+    "avatar": "🚨",
+    "content": "Multiple failed login attempts for user john.doe@example.com",
+    "tags": ["security", "login"]
+}'
 ```
 
-This command sends a suspicious activity event to Operational and triggers a push notification.
+This command sends a suspicious login event to Operational and triggers a push notification.
 
-## Conclusion
+### Conclusion
 
-Using Operational saves time and helps you stay on top of security issues.
-Learn more at [Operational](https://operational.co).
-Try the [playground](https://operational.co/playground) to copy and test snippets.
+Operational saves time by handling push notification setup and delivery for security events.
+
+Learn more at [Operational home page](https://operational.co).
+
+Try examples in the [playground](https://operational.co/playground).

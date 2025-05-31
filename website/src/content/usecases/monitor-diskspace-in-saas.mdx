@@ -1,52 +1,56 @@
 ---
 title: Monitor diskspace in SaaS
 slug: monitor-diskspace-in-saas
-description: Learn how to monitor disk space in your SaaS application using Operational for real-time alerts and insights.
-date: 2024-06-15
-tags: [saas, monitoring, devops]
+description: Learn how to monitor disk space in your SaaS application and send alerts through Operational to catch issues early.
+date: 2024-06-10
+tags:
+  - saas
+  - monitoring
 icon: 💾
 ---
 
-## Why monitor disk space in SaaS
+## What is disk space monitoring in SaaS
 
-Monitoring disk space in your SaaS application helps you avoid downtime and data loss.  
-For example, if your server is running out of storage, you can get alerts before it impacts users.
+Monitoring disk space helps keep your SaaS running smoothly.
 
-## Tracking disk usage with Operational
+If disk space runs out, your service might stop storing data or crash.
 
-Operational is a lightweight event tracking platform.  
-You can send custom events to monitor metrics like disk usage over time.  
+For example, if your production database server runs out of space, you might lose user uploads.
 
-![Operational in action](https://operational.co/images/misc/ops-usage.jpg)
+### Using Operational for disk space monitoring
 
-## Setting up Operational
+Operational is a lightweight event tracking tool for any application.
 
-1. Go to https://app.operational.co and sign up for a free account.  
-2. In your dashboard, navigate to API Keys and create a new key.  
-3. Copy the API key for your project.
+It lets you send events when disk space crosses thresholds and view them in a dashboard.
 
-## Code example
+![](https://operational.co/images/misc/ops-usage.jpg)
+
+### Setting up Operational
+
+1. Go to https://app.operational.co and sign up for an account.
+2. Create a new project in the dashboard.
+3. Navigate to project settings and copy your API key.
+4. Install the Operational SDK in your application.
+
+### Tracking disk space with code
 
 ```javascript
-import Operational from "@operational.co/sdk";
-
-const ops = new Operational("YOUR_API_KEY");
+import Operational from "@operational.co/sdk"
+const ops = new Operational("API_KEY")
 
 const payload = {
-  name: "Low disk space alert",
+  name: "Disk space low",
   avatar: "💾",
-  content: "Server alpha has 5% disk space remaining"
-};
+  content: "Server Alpha is below 10% disk space"
+}
 
-await ops.events.ingest(payload);
+await ops.events.ingest(payload)
 ```
 
-This code initializes the Operational client and sends a disk space alert event.
+This code checks your disk usage and sends an event to Operational when space gets low.
 
-## Conclusion
+### Conclusion
 
-Using Operational lets you set up disk space monitoring with minimal code.  
-You get real-time alerts and an easy way to visualize storage metrics.
+Operational makes it easy to monitor disk space in your SaaS and get alerts before problems arise.
 
-Learn more at https://operational.co  
-Try it in the playground: https://operational.co/playground
+Learn more at https://operational.co and try the playground at https://operational.co/playground

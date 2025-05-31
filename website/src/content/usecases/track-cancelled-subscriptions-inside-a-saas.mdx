@@ -1,60 +1,74 @@
 ---
 title: Track cancelled subscriptions inside a SaaS
 slug: track-cancelled-subscriptions-inside-a-saas
-description: Learn how to capture and monitor subscription cancellation events in your SaaS product using Operational
-date: 2024-06-07
+description: Learn how to track cancelled subscriptions in your SaaS with Operational to monitor churn, understand user behavior, and boost retention.
+date: 2024-06-14
 tags:
   - saas
+  - cancellations
   - subscriptions
   - analytics
-  - events
-icon: 🔔
+icon: 📉
 ---
 
-## What is subscription cancellation tracking in SaaS
+## Why track cancelled subscriptions in your SaaS
 
-Subscription cancellation tracking helps you understand churn in your product. When a user cancels a plan, you capture data like user ID, plan name, and reason. For example, if John Smith ends a Pro Plan subscription, tracking helps you spot trends and improve retention.
+When a customer cancels their subscription you lose revenue and insights.
 
-## Using Operational for tracking cancellations
+Tracking cancellations helps you spot churn trends early.
 
-Operational captures events from any tech product in real time. You can send cancellation events and view them on a unified dashboard.
+You can reach out to users who left and improve your service.
 
-![Operational in action](https://operational.co/images/misc/ops-usage.jpg)
+For example, if many users drop after a trial end you can adjust your onboarding.
 
-## Setting up Operational
+### Using Operational for tracking cancellations
 
-1. Go to https://app.operational.co and sign up for an account.
-2. Create a new project in your dashboard.
-3. Navigate to Settings to find your API key.
-4. Install the SDK in your codebase.
+Operational is an open-source tool for capturing events in your app.
 
-## Code example
+You can send each cancellation as an event to see it in a dashboard.
+
+It works with any tech stack and scales with your user base.
+
+![Operational usage](https://operational.co/images/misc/ops-usage.jpg)
+
+### Setup Operational for event tracking
+
+1. Go to https://app.operational.co and create an account.
+2. In your project settings find and copy your API key.
+3. Install the SDK in your codebase:
+
+   ```bash
+   npm install @operational.co/sdk
+   ```
+4. Initialize the client with your API key:
+
+   ```javascript
+   import Operational from "@operational.co/sdk"
+   const ops = new Operational("YOUR_API_KEY")
+   ```
+
+### Code example: tracking cancellations
 
 ```javascript
-import Operational from "@operational.co/sdk";
+import Operational from "@operational.co/sdk"
 
-const ops = new Operational("API_KEY");
+const ops = new Operational("YOUR_API_KEY")
 
 const payload = {
   name: "subscription cancelled",
-  avatar: "🔔",
-  content: "User John Smith cancelled subscription, plan: Pro Plan",
-  properties: {
-    userId: 1234,
-    plan: "Pro Plan",
-    reason: "No longer needed"
-  }
-};
+  avatar: "📉",
+  content: "User John Smith cancelled subscription plan Pro"
+}
 
-await ops.events.ingest(payload);
+await ops.events.ingest(payload)
 ```
 
-This code sends a cancellation event with details about the user, plan, and reason.
+This example sends an event when a user cancels their Pro subscription. You can view these events in your Operational dashboard.
 
-## Conclusion
+### Conclusion
 
-Tracking cancellations helps reduce churn and improve your product.
+Operational saves you time by handling event ingestion and visualization.
 
-Operational saves you time by handling event collection and visualization.
+You can focus on reducing churn instead of building custom tracking.
 
-Learn more at https://operational.co and try out the playground at https://operational.co/playground.
+Learn more at https://operational.co and try examples in the playground: https://operational.co/playground
