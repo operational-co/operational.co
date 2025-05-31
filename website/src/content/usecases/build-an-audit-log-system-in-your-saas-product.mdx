@@ -1,78 +1,97 @@
 ---
 title: Build an audit log system in your SaaS product
 slug: build-an-audit-log-system-in-your-saas-product
-description: Learn how to implement a detailed audit log in your SaaS app to track user actions, improve security, and maintain compliance.
-date: 2023-10-06
-tags: ["saas","audit-log","security"]
+description: Learn how to track key actions in your SaaS app with Operational’s audit logging system.
+date: 2025-05-22
+tags:
+  - saas
+  - audit-log
+  - logging
+  - security
 icon: 📝
----
 
-## What this article is about
+## What is an audit log system in SaaS?
 
-An audit log keeps a record of user actions in your SaaS app. It helps with security, debugging, and compliance.
+An audit log system records key actions in your SaaS app.
 
-For example, you can record when a user updates their billing info or deletes an account.
+For example, you can track when a user updates their billing plan or when an admin changes permissions.
 
-![Operational in action](https://operational.co/images/pitch/ops_insitu.jpg)
+This helps you monitor changes, meet compliance, and troubleshoot issues.
 
-## What is Operational and how it can be used to track audit events
+## Track actions with Operational
 
-Operational is an open source toolkit for capturing events in any tech product.
+Operational is an open-source event tracking tool.
 
-You can log audit events with a simple API call.
+It lets you send events like user actions and view them in a real-time dashboard.
 
-It lets you view a timeline of actions and filter by user, event type, or date.
+![Operational dashboard](https://operational.co/images/misc/ops-usage.jpg)
 
 ## Setting up Operational
 
 1. Go to [app.operational.co](https://app.operational.co) and sign up.
-2. Create a new project and copy your API key.
-3. Install the SDK in your code base.
+2. Create a new project in the dashboard.
+3. Copy your API key for use in your code.
 
-## Code examples
+## Code examples for audit logging
 
-```js
+```javascript
 import Operational from "@operational.co/sdk"
-
 const ops = new Operational("YOUR_API_KEY")
 
-// Track user login
-await ops.events.ingest({
-  name: "user.login",
-  avatar: "🔑",
-  content: "User John Smith logged in to the dashboard"
-})
+const payload1 = {
+  name: "audit_log",
+  avatar: "📝",
+  content: "User Jane Doe created a new account",
+  metadata: {
+    userId: 123,
+    action: "create_account"
+  }
+}
 
-// Track email update
-await ops.events.ingest({
-  name: "user.update_email",
-  avatar: "✉️",
-  content: "User Jane Doe changed email from jane@example.com to jane@newmail.com"
-})
-
-// Track account deletion
-await ops.events.ingest({
-  name: "user.delete_account",
-  avatar: "🗑️",
-  content: "User Alice Johnson deleted her account"
-})
-
-// Track permission change
-await ops.events.ingest({
-  name: "user.change_role",
-  avatar: "⚙️",
-  content: "User Bob Lee was promoted to admin"
-})
+await ops.events.ingest(payload1)
 ```
 
-These examples show how to record key actions in your audit log.
+Example 1 logs when a new user signs up.
+
+```javascript
+const payload2 = {
+  name: "audit_log",
+  avatar: "📝",
+  content: "Admin John Smith changed user role",
+  metadata: {
+    userId: 456,
+    changedBy: "John Smith",
+    action: "role_change"
+  }
+}
+
+await ops.events.ingest(payload2)
+```
+
+Example 2 logs role updates.
+
+```javascript
+const payload3 = {
+  name: "audit_log",
+  avatar: "📝",
+  content: "User Alice Lee updated billing info",
+  metadata: {
+    userId: 789,
+    action: "update_billing"
+  }
+}
+
+await ops.events.ingest(payload3)
+```
+
+Example 3 logs billing updates.
 
 ## Conclusion
 
-An audit log system gives you insights into user behavior and helps meet security and compliance needs.
+Operational saves time by handling event tracking and storage.
 
-Operational makes it easy to capture and view events without building a custom pipeline.
+You can focus on your app logic while seeing audit logs in one place.
 
 Learn more at https://operational.co
 
-Try the playground for instant examples: https://operational.co/playground
+Try the playground with ready snippets at https://operational.co/playground

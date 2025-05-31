@@ -1,0 +1,61 @@
+---
+title: Track user signup events in Node.js
+slug: track-user-signup-events-nodejs
+description: Learn how to track user signup events in your Node.js app using Operational for real-time analytics.
+date: 2025-05-22
+tags:
+  - nodejs
+  - ecommerce
+  - saas
+  - analytics
+icon: 📝
+---
+
+## What are user signup events in Node.js
+
+User signup events capture when someone creates an account in your Node.js application. Tracking these events helps you understand user growth and conversion rates.
+
+For example, when a customer registers on your e-commerce site, you can log their email and timestamp to monitor marketing campaign performance.
+
+## Tracking signup events with Operational
+
+Operational is an open-source event tracking tool you can add to any tech product. It lets you capture actions like user signup and view them in real time.
+
+![](https://operational.co/images/misc/ops-usage.jpg)
+
+With a few lines of code, you can send events to Operational and explore them in a dashboard.
+
+## Setting up Operational
+
+1. Sign up at [app.operational.co](https://app.operational.co) and confirm your email.
+2. Create a new project in the dashboard.
+3. Copy your API key from the project settings.
+4. Install the Node.js SDK:
+   
+   ```bash
+   npm install @operational.co/sdk
+   ```
+
+## Code example: Tracking user signup events in Node.js
+
+```js
+import Operational from "@operational.co/sdk"
+
+const ops = new Operational("API_KEY")
+
+const payload = {
+  name: "user_signup",
+  avatar: "📝",
+  content: "John Smith signed up with email john@example.com"
+}
+
+await ops.events.ingest(payload)
+```
+This code logs a `user_signup` event with the user's name and email. Replace `API_KEY` with your key from the dashboard.
+
+## Conclusion
+
+Tracking user signup events with Operational saves you time and effort. You get real-time insights without building your own pipeline.
+
+Learn more at https://operational.co. Try out live snippets in the
+[playground](https://operational.co/playground).

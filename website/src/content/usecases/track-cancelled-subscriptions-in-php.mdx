@@ -1,67 +1,59 @@
 ---
 title: Track cancelled subscriptions in PHP
 slug: track-cancelled-subscriptions-in-php
-description: Learn how to monitor and log when subscribers cancel their SaaS subscriptions using Operational's PHP SDK, simplifying billing analytics.
-date: 2025-05-22
+description: Learn to track cancelled subscriptions events in your PHP SaaS application using Operational for better retention and customer insights.
+date: 2024-06-05
 tags:
   - php
   - saas
   - subscriptions
-  - billing
-icon: 🛑
+icon: 🚫
 ---
 
-## What this article covers
+## What is subscription cancellation tracking in PHP
 
-This article explains how to track subscription cancellations in your PHP backend. Monitoring churn helps you respond to trends.
+Tracking when users cancel helps you understand churn and improve retention. In a SaaS app, cancellations signal pain points.
 
-![Operational in action](https://operational.co/images/pitch/ops_insitu.jpg)
+For example, if a user cancels after a billing error, you can reach out to fix the issue and win them back.
 
-## What is Operational?
+## Using Operational to track cancellations
 
-Operational is an event tracking tool for any tech product. You can log structured events like subscription cancellations.
+Operational is an event tracking platform for any tech product. You can log events without hosting your own analytics stack.
 
-It captures event details and user properties. This helps you analyze and reduce churn.
+![Operational dashboard](https://operational.co/images/misc/ops-usage.jpg)
+
+You send a simple payload and Operational captures, stores, and lets you explore it instantly.
 
 ## Setting up Operational
 
-First, sign up at https://app.operational.co and log in.
+1. Go to [app.operational.co](https://app.operational.co) and sign up.
+2. Create a new project in your dashboard.
+3. Copy the project API key from settings.
+4. Install the PHP SDK: `composer require operational/sdk-php`.
 
-Copy your API key from the dashboard.
-
-Install the PHP SDK in your project. Then you are ready to send events.
-
-## Code example
+## Code example in PHP
 
 ```php
 <?php
 require 'vendor/autoload.php';
+
 use Operational\\Operational;
 
 $ops = new Operational('YOUR_API_KEY');
 
 $payload = [
-    'name' => 'subscription cancelled',
-    'avatar' => '🛑',
-    'content' => 'User John Doe cancelled their subscription',
-    'properties' => [
-        'user_id' => 12345,
-        'plan' => 'Pro',
-        'cancelled_at' => '2025-05-22T10:00:00Z'
-    ],
+  'name' => 'subscription cancelled',
+  'avatar' => '🚫',
+  'content' => 'User John Smith cancelled their subscription'
 ];
 
-$response = $ops->events->ingest($payload);
-
-echo "Event sent with ID: {$response['id']}";
+$ops->events->ingest($payload);
 ```
 
-This code initializes the SDK, builds a payload, and sends a "subscription cancelled" event.
+This code sends a "subscription cancelled" event with user details to Operational.
 
 ## Conclusion
 
-Tracking cancellations with Operational lets you spot churn fast. It saves you time by handling event logging.
+Tracking cancellations helps you reduce churn and improve your product. Operational makes it simple to log and explore events.
 
-Learn more at https://operational.co.
-
-Try examples in our playground: https://operational.co/playground
+Learn more at https://operational.co. Visit our [playground](https://operational.co/playground) to copy and paste snippets.

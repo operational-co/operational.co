@@ -1,0 +1,63 @@
+---
+title: Track billing events in Node.js
+slug: track-billing-events-in-node-js
+description: Learn how to capture and track billing events in your Node.js app using Operational. Includes setup, onboarding, and code examples.
+date: 2025-05-22
+tags:
+  - nodejs
+  - ecommerce
+  - saas
+  - billing
+icon: 💳
+---
+
+## What is billing event tracking in Node.js
+
+Tracking billing events helps you monitor when your users make payments or subscribe to plans.
+
+For example, you can capture when a customer purchases a subscription to your Pro plan.
+
+## Using Operational to track billing events
+
+Operational is an open source platform for capturing and managing events from your applications.
+
+You can send billing events from your code and view them in a unified dashboard.
+
+![Operational usage](https://operational.co/images/misc/ops-usage.jpg)
+
+## Setup Operational
+
+1. Go to https://app.operational.co and sign up.
+2. Create a new project in your dashboard.
+3. In project settings, copy the API key.
+4. Install the SDK in your Node.js app:
+
+```bash
+npm install @operational.co/sdk
+```
+
+## Code example
+
+This example shows how to send a billing event when a user completes a purchase.
+
+```javascript
+import Operational from "@operational.co/sdk"
+
+const ops = new Operational("API_KEY")
+
+const payload = {
+  name: "billing event",
+  avatar: "💳",
+  content: "User John Smith purchased a Pro plan for $49.99"
+}
+
+await ops.events.ingest(payload)
+```
+
+## Conclusion
+
+Operational saves time and hassle by giving you a simple way to track billing events in one place.
+
+Learn more at https://operational.co
+
+Try the playground at https://operational.co/playground

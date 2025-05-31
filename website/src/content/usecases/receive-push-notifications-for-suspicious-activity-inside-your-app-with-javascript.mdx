@@ -1,86 +1,80 @@
 ---
 title: Receive push notifications for suspicious activity inside your app with JavaScript
 slug: receive-push-notifications-for-suspicious-activity-inside-your-app-with-javascript
-description: Learn how to send real-time push alerts for suspicious user activity in your JavaScript app using Operational's event tracking.
-date: 2024-06-15
+description: Learn how to set up JavaScript alerts for suspicious activity in your app using Operational to stay on top of security threats.
+date: 2025-06-07
 tags:
   - javascript
   - security
   - notifications
-icon: 🚨
+  - alerts
+icon: 🛡️
 ---
 
-## What this article is about
+## Why track suspicious activity in your JavaScript app?
 
-In this article, you’ll learn how to receive instant push notifications when your JavaScript app detects suspicious activity.
+Tracking unusual behavior in your app helps you spot potential threats before they cause damage.
 
-For example, you can catch multiple failed login attempts and alert your support team in real time.
+For example, if a user account suddenly logs in from a new location, you can get an alert and act quickly.
 
-![Operational in action](https://operational.co/images/pitch/ops_insitu.jpg)
+## What is Operational and how it helps
 
-## What is Operational
+Operational is an open source event tracking tool for any app.
 
-Operational is an open-source event tracking platform for any tech product.
+It captures events like errors, messages, or custom alerts and sends push notifications.
 
-You can send custom events for errors, security checks, or user behavior to Operational.
+![](https://operational.co/images/misc/ops-usage.jpg)
 
-When a suspicious event arrives, Operational can forward it as a push notification to your team’s phones or messaging channels.
+You can set up rules to get notified on your device or team channels in minutes.
 
 ## Setting up Operational
 
-1. Go to [app.operational.co](https://app.operational.co) and sign up for a free account.
-2. In your dashboard, create a new project to get your API key.
-3. Copy the API key to use in your JavaScript code.
+1. Sign up at https://app.operational.co.
+2. Create a new project in the dashboard.
+3. Copy your API key from project settings.
+4. Install the SDK with npm install @operational.co/sdk.
 
 ## Code examples
 
-### Example 1: Suspicious login attempt
 ```javascript
-import Operational from "@operational.co/sdk"
-const ops = new Operational("YOUR_API_KEY")
+import Operational from "@operational.co/sdk";
+const ops = new Operational("YOUR_API_KEY");
 
 const payload = {
   name: "Suspicious login attempt",
   avatar: "🚨",
-  content: "User John Smith attempted multiple failed logins"
-}
+  content: "Suspicious login detected for user John Doe from IP 192.168.1.10"
+};
 
-await ops.events.ingest(payload)
+await ops.events.ingest(payload);
 ```
-This code sends a login attempt event. Operational will push an alert when it ingests this event.
 
-### Example 2: Unusual file access
+This example sends a push notification when a suspicious login is detected.
+
 ```javascript
-import Operational from "@operational.co/sdk"
-const ops = new Operational("YOUR_API_KEY")
-
-const payload = {
-  name: "Unusual file access",
+// Example: multiple failed login attempts
+const payload2 = {
+  name: "Multiple failed logins",
   avatar: "🔒",
-  content: "File "/etc/passwd" was accessed by service account 123"
-}
-
-await ops.events.ingest(payload)
+  content: "User Jane Smith failed to log in 5 times in a row"
+};
+await ops.events.ingest(payload2);
 ```
-This tracks a potentially risky file read and triggers a notification.
 
-### Example 3: Multiple failed two-factor attempts
 ```javascript
-import Operational from "@operational.co/sdk"
-const ops = new Operational("YOUR_API_KEY")
-
-const payload = {
-  name: "Blocked two-factor attempts",
-  avatar: "🔐",
-  content: "User Alice Williams failed 2FA three times in one minute"
-}
-
-await ops.events.ingest(payload)
+// Example: unusual data access
+const payload3 = {
+  name: "Unusual data export",
+  avatar: "⚠️",
+  content: "User Marie Curie exported a large data set unexpectedly"
+};
+await ops.events.ingest(payload3);
 ```
-This example catches repeated two-factor failures and alerts your security team.
 
 ## Conclusion
 
-With Operational, you can stop chasing unknown threats and get notified instantly when suspicious actions happen.
+Operational can save you time and hassle by handling event tracking and push notifications for suspicious activity.
 
-Learn more at https://operational.co and try code samples in our playground: https://operational.co/playground
+Learn more at https://operational.co.
+
+Try the playground for quick testing and code snippets: https://operational.co/playground

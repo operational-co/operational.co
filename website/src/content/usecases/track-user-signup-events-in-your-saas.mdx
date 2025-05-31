@@ -1,8 +1,8 @@
 ---
 title: Track user signup events in your SaaS
 slug: track-user-signup-events-in-your-saas
-description: Track new user signup events in your SaaS to understand growth and optimize onboarding workflows with real-time analytics.
-date: 2025-05-22
+description: Track signup events in your SaaS using Operational to measure user acquisition, improve onboarding, and gain actionable insights.
+date: 2024-06-19
 tags:
   - saas
   - analytics
@@ -10,42 +10,48 @@ tags:
 icon: 🎉
 ---
 
-## What this article is about
+## Why track signup events in your SaaS
 
-Tracking user signup events in your SaaS helps you see growth trends and spot bottlenecks in onboarding. For example, when a new customer like Alice Johnson creates an account, you can log that event and later analyze signup rates.
+Tracking signup events helps you understand how users find and join your platform. You can measure the impact of marketing campaigns. You can see which referral sources bring the most new accounts.
 
-![Operational in action](https://operational.co/images/pitch/ops_insitu.jpg)
+For example, if a user named John Smith signs up after clicking an email link, you can capture that data. This insight helps you optimize your onboarding flow.
 
-## What is Operational
+## Using Operational for event tracking
 
-Operational is a lightweight event-tracking SDK and dashboard. It lets you send custom events from your app and view them in real time. You can track signups, errors, feature usage, and more without building your own pipeline.
+Operational is an open source tool for capturing events in any tech product. It lets you send signup data in seconds and view it in a clean dashboard.
 
-## Setup
+![Operational in action](https://operational.co/images/misc/ops-usage.jpg)
+
+You can use Operational to collect signup events and build reports. It works with any language or framework and stores data securely.
+
+## Setting up Operational
 
 1. Go to https://app.operational.co and sign up for a free account.
-2. In your dashboard, create a new project and copy the API key.
-3. Install the SDK in your codebase and use the API key to initialize it.
+2. Create a new workspace for your SaaS project.
+3. In the workspace settings, copy your API key.
+4. Store the API key in your environment variables for secure use.
 
-## Code example
-
-The snippet below shows how to record a user signup event in Node.js:
+## Code example: Track a signup event in JavaScript
 
 ```javascript
 import Operational from "@operational.co/sdk"
 
-const ops = new Operational("YOUR_API_KEY")
+const ops = new Operational("API_KEY")
 
 const payload = {
   name: "user signup",
   avatar: "🎉",
-  content: "New user signup: John Smith (ID 123)"
+  content: "New user signup: John Smith"
 }
 
 await ops.events.ingest(payload)
 ```
 
-This code initializes the Operational client with your key and sends a `user signed up` event. You can view this event in your Operational dashboard.
+This code sends a signup event for a new user named John Smith. The avatar 🎉 makes it easy to spot signup activity in your event stream.
 
 ## Conclusion
 
-By logging signup events with Operational, you get instant visibility into your onboarding funnel. Skip building a custom analytics backend and start tracking in minutes. Learn more at https://operational.co and try copy-pasting code in the playground: https://operational.co/playground
+Operational saves you time by handling event collection and storage. You can focus on improving your onboarding and user experience. 
+
+Learn more at https://operational.co. Try the copy-and-paste snippets in the playground: https://operational.co/playground
+

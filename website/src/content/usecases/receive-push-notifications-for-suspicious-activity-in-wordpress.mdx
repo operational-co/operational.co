@@ -1,73 +1,103 @@
 ---
 title: Receive push notifications for suspicious activity in Wordpress
 slug: receive-push-notifications-for-suspicious-activity-in-wordpress
-description: Learn how to get real-time push notifications for suspicious WordPress site activities using Operational's event-tracking API.
+description: Learn how to set up push notifications for suspicious activity in your WordPress site using Operational for real-time alerts.
 date: 2025-05-22
 tags:
   - wordpress
   - security
   - notifications
-  - php
 icon: 🚨
 ---
 
-## What this article covers
+## Why Monitor Suspicious Activity in WordPress
 
-If your WordPress site faces login attacks or file changes, you need to know right away. This article shows how to receive push notifications when suspicious activity occurs.
+Monitoring suspicious activity helps you detect issues like unauthorized logins or file changes. For instance, if an outside user tries to access the admin area, you can get alerted right away.
 
-You will see examples of how to detect failed logins and notify your team immediately.
+## Tracking Suspicious Events with Operational
 
-![Operational in action](https://operational.co/images/pitch/ops_insitu.jpg)
+Operational is an event tracking platform that captures actions from your application and sends them to a dashboard or notification service. You can use it to send push alerts whenever suspicious events occur on your site.
 
-## What is Operational
-
-Operational is an open-source event-tracking tool. You send it events from your apps and it delivers them as push notifications, Slack messages, and more.
-
-Use Operational to log errors, security events, and custom actions in one place. It helps you stay on top of issues without building your own alerts system.
+![Operational in action](https://operational.co/images/misc/ops-usage.jpg)
 
 ## Setting up Operational
 
-1. Sign up at [app.operational.co](https://app.operational.co).
-2. After logging in, create a new project and copy your API key.
-3. Keep your API key safe. You will use it in your WordPress setup.
+1. Go to [app.operational.co](https://app.operational.co) and sign up for a free account.
+2. Create a new project for your WordPress site.
+3. Copy your API key from the project settings.
+4. Install the Operational PHP SDK:
+   ```bash
+   composer require operational/operational
+   ```
+5. Add your API key to your site's configuration or environment variables.
 
-## Code example
+## Code Examples
 
-Below is a sample plugin snippet. It hooks into failed login attempts and sends an event to Operational.
+Example 1: Suspicious Login Attempt
 
 ```php
 <?php
-/**
- * Plugin Name: WP Suspicious Activity Alerts
- * Description: Send failed login events to Operational.
- */
+require 'vendor/autoload.php';
 
-function send_suspicious_login_event( $username ) {
-  $api_key = 'API_KEY';
-  $data = [
-    'name'   => 'Suspicious login attempt',
-    'avatar' => '🔒',
-    'content'=> 'User john.doe had 5 failed login attempts'
-  ];
+use Operational\Operational;
 
-  $ch = curl_init('https://api.operational.co/v2/events');
-  curl_setopt($ch, CURLOPT_HTTPHEADER, [
-    'Content-Type: application/json',
-    'Authorization: Bearer ' . $api_key
-  ]);
-  curl_setopt($ch, CURLOPT_POST, true);
-  curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
-  curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-  curl_exec($ch);
-  curl_close($ch);
-}
-add_action('wp_login_failed', 'send_suspicious_login_event');
+$ops = new Operational('YOUR_API_KEY');
+
+$payload = [
+  'name' => 'Suspicious login attempt',
+  'avatar' => '🚨',
+  'content' => 'Multiple failed login attempts detected for user admin.'
+];
+
+$ops->events->ingest($payload);
 ```
 
-This code listens for failed logins and posts an event to Operational. You get instant notifications and can act fast.
+This code sends an alert when a login attempt fails more than three times.
+
+Example 2: File Change Detected
+
+```php
+<?php
+require 'vendor/autoload.php';
+
+use Operational\Operational;
+
+$ops = new Operational('YOUR_API_KEY');
+
+$payload = [
+  'name' => 'Unexpected file change',
+  'avatar' => '🚨',
+  'content' => 'File style.css was modified outside of approved channels.'
+];
+
+$ops->events->ingest($payload);
+```
+
+This snippet notifies you when a core or theme file is changed.
+
+Example 3: Plugin Deactivation Alert
+
+```php
+<?php
+require 'vendor/autoload.php';
+
+use Operational\Operational;
+
+$ops = new Operational('YOUR_API_KEY');
+
+$payload = [
+  'name' => 'Plugin deactivated',
+  'avatar' => '🚨',
+  'content' => 'The security plugin was deactivated by user John Smith.'
+];
+
+$ops->events->ingest($payload);
+```
+
+This example alerts you whenever a plugin is turned off.
 
 ## Conclusion
 
-Setting up Operational for your WordPress site cuts down your response time. You no longer need custom scripts or manual checks.
+With Operational you can get instant push notifications for any suspicious activity on your WordPress site. It saves time and effort by sending real-time alerts and keeping all events in one place.
 
-Learn more at https://operational.co and try the [playground](https://operational.co/playground) to copy and paste snippets instantly.
+Learn more at https://operational.co. Try out the playground at https://operational.co/playground and copy your own snippets.

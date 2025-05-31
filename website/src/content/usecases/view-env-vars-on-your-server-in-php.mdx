@@ -1,66 +1,78 @@
 ---
-title: View env vars on your server in PHP
-slug: view-env-vars-on-your-server-in-php
-description: Fetch and display server environment variables in PHP and log them to Operational for monitoring and debugging.
-date: 2024-06-11
+title: "View env vars on your server in PHP"
+slug: "view-env-vars-on-your-server-in-php"
+description: "Learn how to view and manage environment variables in PHP applications on your server using built-in functions and best practices."
+date: 2024-06-15
 tags:
   - php
   - server
-  - monitoring
-  - environment
-icon: 🔑
+  - env
+icon: "🗝️"
 ---
 
-## What this article covers
+## Understanding Environment Variables in PHP
 
-This article shows how to fetch and display environment variables on your PHP server. Accessing env vars helps explain configuration issues and eases debugging. Imagine checking your database credentials or API keys in real time.
+Environment variables hold configuration data outside your code. In PHP, they help you keep sensitive data like database credentials safe.
 
-![Operational in action](https://operational.co/images/pitch/ops_insitu.jpg)
+For example, instead of hardcoding a database password, you can store it in an env var and fetch it with `getenv('DB_PASS')`.
 
-## What is Operational
+Using env vars makes your code more secure and easier to move between environments.
 
-Operational is a simple event tracking tool. It lets you send custom events from your app. You can log actions like viewing env variables. Then you see them in a dashboard. This helps you monitor and debug with context.
+## Using Operational for Event Tracking
 
-## Setting up Operational
+Operational is a simple tool to capture events in your applications. You can log actions like fetching env vars to monitor usage and detect issues.
 
-First, sign up at https://app.operational.co and create an account. After signup, get your API key from the dashboard. You will use this key to send events from your server to Operational.
+![Operational in action](https://operational.co/images/misc/ops-usage.jpg)
 
-## Code example
+With Operational you get a dashboard that shows every event in real time. Use it to understand how often users or systems read env vars without digging through logs.
 
-Here is a PHP snippet that reads environment variables and sends them to Operational:
+## Setting Up Operational
+
+1. Go to [app.operational.co](https://app.operational.co) and sign up for a free account.
+2. In your dashboard, create a new API key under the **Settings** section.
+3. Copy the API key and keep it safe.
+4. You’re ready to send events from your PHP code.
+
+## Tracking Env Var Views with PHP
 
 ```php
 <?php
-require 'vendor/autoload.php';
+// Replace YOUR_API_KEY with your actual key
+$apiKey = 'YOUR_API_KEY';
 
-use Operational\\Operational;
-
-$ops = new Operational('YOUR_API_KEY');
-
-$envVars = [
-    'APP_ENV'      => getenv('APP_ENV'),
-    'DB_HOST'      => getenv('DB_HOST'),
-    'CACHE_DRIVER' => getenv('CACHE_DRIVER')
-];
-
-$contentParts = [];
-foreach ($envVars as $key => $value) {
-    $contentParts[] = $key . '=' . $value;
-}
-
-$content = implode(', ', $contentParts);
-
+// Prepare the event payload
 $payload = [
-    'name'    => 'viewed environment variables',
-    'avatar'  => '🔑',
-    'content' => $content
+  'name'   => 'view environment variables',
+  'avatar' => '🗝️',
+  'content'=> 'Fetched server env vars successfully'
 ];
 
-$ops->events->ingest($payload);
+// Initialize cURL
+$ch = curl_init('https://api.operational.co/v1/events/ingest');
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+curl_setopt($ch, CURLOPT_HTTPHEADER, [
+  'Content-Type: application/json',
+  'Authorization: Bearer ' . $apiKey
+]);
+curl_setopt($ch, CURLOPT_POST, true);
+curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($payload));
+
+// Send the event
+$response = curl_exec($ch);
+curl_close($ch);
+
+// Handle the response
+if ($response === false) {
+    echo "Failed to send event.";
+} else {
+    echo "Event sent successfully.";
+}
 ```
 
-This code loads key environment variables and tracks a custom event in Operational. It sends the env var names and values as the event content.
+This snippet sends an event to Operational when your PHP code reads environment variables.
 
 ## Conclusion
 
-By using Operational, you can log and monitor your server environment at any time. This helps catch misconfigurations before they cause issues. Learn more at https://operational.co. Try the playground for ready-to-use snippets: https://operational.co/playground
+Using Operational, you can track how often your PHP application accesses environment variables. This helps you spot unexpected reads and maintain security.
+
+Learn more on the [Operational homepage](https://operational.co). Try the [playground](https://operational.co/playground) to copy and paste snippets and see events in action.

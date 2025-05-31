@@ -5,13 +5,19 @@
         <span> More usecases </span>
       </div>
       <div class="c-usecases-related__list">
-        <a :href="post.path" v-for="(post, i) in computedList" :key="i">
-          <span>{{ post.name }}</span>
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <a :href="`/usecases/${post.data.slug}`" v-for="(post, i) in computedList" :key="i">
+          <span>{{ post.data.icon }} {{ post.data.title }}</span>
+          <svg
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
             <path
               d="M14 6L20 12L14 18M19 12H4"
               stroke="currentColor"
-              stroke-width="1.5"
+              stroke-width="2"
               stroke-linecap="round"
               stroke-linejoin="round"
             />
@@ -29,35 +35,29 @@ import Subtitle from "./ui/subtitle.vue";
 export default {
   components: {
     Constrain,
-    Subtitle
+    Subtitle,
   },
 
   props: {
     currentPost: {},
-    posts: {}
+    posts: {},
   },
 
   computed: {
     computedList: function () {
-      let posts = this.posts;
+      let posts = this.posts || [];
 
       let post = this.currentPost;
-      let currentSlug = post.path.split("/");
-      currentSlug = currentSlug[currentSlug.length - 1];
-
       posts = posts.filter((p) => {
-        let slug = p.path.split("/");
-        slug = slug[slug.length - 1];
-
-        if (slug === currentSlug) {
+        if (p.data.slug === post.data.slug) {
           return false;
         }
         return true;
       });
 
       return posts;
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -82,6 +82,8 @@ export default {
       font-weight: 500;
 
       border-bottom: var(--color-bg-3) solid 1px;
+
+      transition: all var(--transition-time) linear;
 
       &:hover,
       &:active {

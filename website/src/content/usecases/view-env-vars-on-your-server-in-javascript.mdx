@@ -1,56 +1,63 @@
 ---
 title: View env vars on your server in JavaScript
 slug: view-env-vars-on-your-server-in-javascript
-description: Learn to track and view server environment variables in JavaScript using Operational.co for easier monitoring and debugging.
+description: Learn to access and display environment variables on your server using JavaScript and Node.js with simple code examples.
 date: 2025-05-22
-tags:
-  - javascript
-  - env
-  - monitoring
+tags: [javascript, server, environment-variables, nodejs]
 icon: 🔑
 ---
 
-## What this article covers
+# Why view environment variables on your server in JavaScript
 
-This article shows how to read environment variables on a JavaScript server and track them using Operational.co. Tracking env vars helps confirm critical keys are loaded.
+Viewing environment variables on your server helps you debug configuration issues.
 
-![](https://operational.co/images/pitch/ops_insitu.jpg)
+For example, you might need to confirm that NODE_ENV is set to production before starting your server.
 
-## What is Operational
+# What is Operational and how to use it
 
-Operational is an open-source event tracking tool for any tech product. It lets you capture and view events like errors, logs, and custom actions. You can use it to track environment loads, debug server setups, and monitor key changes in real time.
+Operational is a simple event tracking service for any tech product.
 
-## Setting up Operational
+You can send events when you view or update env vars. This helps audit access and debugging.
 
-First sign up at [app.operational.co](https://app.operational.co). After verifying your email, create a new project. You will see your API key in the project settings. Copy it—you will need it for the code snippet below.
+![Operational in action](https://operational.co/images/misc/ops-usage.jpg)
 
-## Code example
+# Setting up Operational
 
-Add the SDK and track your env vars on server start. The snippet reads selected values from `process.env` and sends them to Operational.
+1. Visit [app.operational.co](https://app.operational.co) and sign up for a free account.
+2. Create a new project and locate your API key in the project settings.
+3. Install the SDK in your project with `npm install @operational.co/sdk`.
+4. Save the API key in a secure env var on your server, for example `OP_API_KEY`.
+
+# Code examples
+
+Below is a Node.js example showing how to read server env vars and send them as an event to Operational.
 
 ```javascript
 import Operational from "@operational.co/sdk";
 
-const ops = new Operational("YOUR_API_KEY");
+const ops = new Operational(process.env.OP_API_KEY);
 
-const envVars = Object.entries(process.env)
-  .filter(([key]) => ["NODE_ENV", "DB_HOST"].includes(key))
-  .map(([key, val]) => `${key}=${val}`)
-  .join(", ");
+const envVars = {
+  PATH: process.env.PATH,
+  NODE_ENV: process.env.NODE_ENV,
+  PORT: process.env.PORT
+};
 
 const payload = {
-  name: "environment variables loaded",
+  name: "server environment variables viewed",
   avatar: "🔑",
-  content: `Loaded environment variables: ${envVars}`
+  content: `Env vars: PATH=${envVars.PATH}, NODE_ENV=${envVars.NODE_ENV}, PORT=${envVars.PORT}`
 };
 
 await ops.events.ingest(payload);
 ```
 
-This example filters for `NODE_ENV` and `DB_HOST`, then sends them to your Operational project.
+This code reads key environment variables and sends them to Operational as an event.
 
-## Conclusion
+# Conclusion
 
-Using Operational makes it easy to confirm your environment variables load correctly. It saves time by centralizing monitoring and helping you spot misconfigurations quickly.
+Using Operational to log env var access can save you time and hassle when debugging.
 
-Learn more at https://operational.co and try out the code in the [playground](https://operational.co/playground).
+See more at https://operational.co
+
+Try it now in the [playground](https://operational.co/playground).

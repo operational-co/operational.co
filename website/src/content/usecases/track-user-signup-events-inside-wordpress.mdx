@@ -1,59 +1,68 @@
 ---
-title: Track user signup events inside Wordpress
-slug: track-user-signup-events-inside-wordpress
-description: Capture user signup actions on a WordPress site and send events to Operational for real-time monitoring, logging, and analysis.
-date: 2025-05-22
+title: "Track user signup events inside Wordpress"
+slug: "track-user-signup-events-inside-wordpress"
+description: "Learn to capture and send WordPress user signup events to Operational for real-time analytics and user onboarding insights."
+date: 2024-06-18
 tags:
   - wordpress
   - events
-  - php
-icon: 👥
+  - analytics
+  - tracking
+icon: "📝"
 ---
 
-## What this article is about
+## Why track user signup events in WordPress
 
-Tracking when users sign up on your WordPress site helps you understand growth and spot signup issues. You can log each new registration, tie it to campaigns, or trigger welcome flows.
+Tracking user signups helps you understand where new users come from and how they join your site. You can use this data to improve your marketing and onboarding process.
 
-![Operational in action](https://operational.co/images/pitch/ops_insitu.jpg)
+For example, you can see if social media campaigns drive more signups than email referrals.
 
-## What is Operational
+## Using Operational to track WordPress signups
 
-Operational is an open-source event tracking service. You can send any structured event data from your app to Operational.
+Operational is an open source event tracking tool. It lets you collect and analyze events from any tech product.
 
-It stores your events and offers a dashboard for searching, filtering, and visualizing them.
+You can use it to send signup events from WordPress to a central dashboard.
+
+![Operational in action](https://operational.co/images/misc/ops-usage.jpg)
 
 ## Setting up Operational
 
-1. Go to [app.operational.co](https://app.operational.co) and sign up for a free account.
-2. After verifying your email, create a new project in the dashboard.
-3. Copy your API key from the project settings page. You’ll need it in your code.
+1. Go to https://app.operational.co and sign up for a free account.
+2. Create a new project to get your API key.
+3. Copy your API key from the project settings.
+4. Add the code snippet below to your theme’s functions.php file or a custom plugin.
 
-## Code example: Tracking a signup in PHP
+## Tracking signup events in PHP
 
 ```php
 <?php
-require 'vendor/autoload.php';
+$apiKey = 'YOUR_API_KEY';
 
-use Operational\Operational;
-
-// Initialize SDK with your API key
-$ops = new Operational('YOUR_API_KEY');
-
-// Prepare signup event payload
 $payload = [
-  'name' => 'User Signed Up',
-  'avatar' => '👥',
-  'content' => 'New user Jane Doe signed up with email jane@example.com'
+  'name' => 'User signup',
+  'avatar' => '🎉',
+  'content' => 'John Doe just signed up',
+  'tags' => ['wordpress', 'signup'],
+  'environment' => 'production'
 ];
 
-// Send event to Operational
-$ops->events->ingest($payload);
+$ch = curl_init('https://events.operational.co/v1/ingest');
+curl_setopt($ch, CURLOPT_HTTPHEADER, [
+  'Content-Type: application/json',
+  'Authorization: Bearer ' . $apiKey
+]);
+curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($payload));
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+$response = curl_exec($ch);
+curl_close($ch);
+?>
 ```
 
-This snippet initializes Operational with your API key and sends a signup event whenever a new user registers.
+This code sends a signup event to Operational whenever a new user registers on your WordPress site.
 
 ## Conclusion
 
-Using Operational to track signup events in WordPress saves time on building logging systems. You get instant visibility into user growth and can troubleshoot registration issues quickly.
+Operational makes it easy to track user signup events without building your own analytics backend. It saves time and gives you real-time insights.
 
-Learn more at https://operational.co. Try the [playground](https://operational.co/playground) to copy, paste, and run event snippets instantly.
+Learn more at https://operational.co. Try the Playground to test snippets and view live examples: https://operational.co/playground

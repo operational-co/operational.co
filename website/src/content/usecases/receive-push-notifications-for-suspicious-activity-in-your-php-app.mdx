@@ -1,100 +1,128 @@
 ---
-title: "Receive push notifications for suspicious activity in your PHP app"
+title: Receive push notifications for suspicious activity in your PHP app
 slug: receive-push-notifications-for-suspicious-activity-in-your-php-app
-description: "Learn how to get real-time push alerts for suspicious activity in your PHP application using Operational events."
-date: 2024-06-20
+description: Learn how to send push notifications for suspicious events in your PHP app using Operational for real-time security alerts.
+date: 2025-05-22
 tags:
   - php
   - security
   - notifications
-  - events
 icon: 🚨
 ---
 
-## What this article covers
+## What is suspicious activity monitoring in PHP?
 
-This article shows how to get instant push notifications when your PHP app spots suspicious behavior. You might track repeated login failures, odd IP addresses or sudden spikes in password resets.
+Monitoring suspicious activity in your PHP application means detecting events like failed logins, unusual file access, or SQL injection attempts.
 
-Real-time alerts help you react fast and stop attacks early.
+When you receive instant push notifications, you can react quickly to potential security breaches.
 
-![Operational in action](https://operational.co/images/pitch/ops_insitu.jpg)
+For example, if someone tries to log in with the wrong password multiple times, you get an alert and can investigate before damage happens.
 
-## What is Operational
+## Track events with Operational
 
-Operational is an event tracking tool for developers.
+Operational is an open source event-tracking tool you can use to send and view security events from any tech stack.
 
-You log key actions as events and send them to Operational.
+It lets you define events, add avatars, and push notifications instantly when something unusual happens.
 
-It stores, groups and notifies you about events in real time.
-
-You can use it to track and alert on security issues in any app.
+![Operational in action](https://operational.co/images/misc/ops-usage.jpg)
 
 ## Setting up Operational
 
-1. Go to the sign up page at [app.operational.co](https://app.operational.co) and create an account.
-2. In your project settings, copy your read key. This is your API key.
-3. Keep the key safe. You will use it to send events from your PHP app.
+Follow these steps to start tracking suspicious events:
 
-## Code snippet
+1. Go to [app.operational.co](https://app.operational.co) and sign up for a free account.
+2. Create a new project in your dashboard.
+3. Copy the project API key under Settings.
+4. Install the PHP SDK with Composer:
+   ```
+   composer require operational/operational
+   ```
+5. Add your API key to your environment as `OPERATIONAL_API_KEY`.
 
-Below is a PHP example using Guzzle to send different suspicious activity events to Operational.
+## Code examples for suspicious events
+
+The following examples show how to send different security alerts to Operational.
+
+### 1. Suspicious login attempt
+This snippet sends an event when failed logins exceed a threshold.
 
 ```php
 <?php
 require 'vendor/autoload.php';
+use Operational\Operational;
 
-use GuzzleHttp\Client;
+$ops = new Operational(getenv('OPERATIONAL_API_KEY'));
 
-$client = new Client();
-$apiKey = 'YOUR_API_KEY';
-
-// Example 1: Suspicious login attempts
-$payload1 = [
-  'key' => $apiKey,
-  'body' => [
-    'name' => 'Suspicious login attempt',
-    'avatar' => '🚨',
-    'content' => 'Multiple failed login attempts detected for user john.smith'
-  ]
+$payload = [
+    'name' => 'suspicious login attempt',
+    'avatar' => '🔒',
+    'content' => 'Multiple failed login attempts detected for user John Smith'
 ];
 
-$client->post('https://api.operational.co/event-ingest', [
-  'json' => $payload1
-]);
-
-// Example 2: Unusual geolocation access
-$payload2 = [
-  'key' => $apiKey,
-  'body' => [
-    'name' => 'Unusual geolocation',
-    'avatar' => '🌍',
-    'content' => 'User jane.doe accessed account from Russia'
-  ]
-];
-
-$client->post('https://api.operational.co/event-ingest', [
-  'json' => $payload2
-]);
-
-// Example 3: Excessive password resets
-$payload3 = [
-  'key' => $apiKey,
-  'body' => [
-    'name' => 'Multiple password resets',
-    'avatar' => '🔑',
-    'content' => 'User john.smith requested 5 reset emails in 2 minutes'
-  ]
-];
-
-$client->post('https://api.operational.co/event-ingest', [
-  'json' => $payload3
-]);
+$ops->events->ingest($payload);
 ```
 
-Each snippet sends a different event to Operational. You will get push alerts when these calls happen.
+### 2. Unauthorized file access
+This example alerts when someone tries to read a protected file.
+
+```php
+<?php
+require 'vendor/autoload.php';
+use Operational\Operational;
+
+$ops = new Operational(getenv('OPERATIONAL_API_KEY'));
+
+$payload = [
+    'name' => 'unauthorized file access',
+    'avatar' => '📁',
+    'content' => 'User with ID 123 tried to access config.php without permission'
+];
+
+$ops->events->ingest($payload);
+```
+
+### 3. SQL injection attempt
+Send an alert when input patterns match injection signatures.
+
+```php
+<?php
+require 'vendor/autoload.php';
+use Operational\Operational;
+
+$ops = new Operational(getenv('OPERATIONAL_API_KEY'));
+
+$payload = [
+    'name' => 'sql injection detected',
+    'avatar' => '🛡️',
+    'content' => 'Possible SQL injection from IP 203.0.113.5 on login form'
+];
+
+$ops->events->ingest($payload);
+```
+
+### 4. Suspicious IP address
+Alert when a blocked IP tries to connect.
+
+```php
+<?php
+require 'vendor/autoload.php';
+use Operational\Operational;
+
+$ops = new Operational(getenv('OPERATIONAL_API_KEY'));
+
+$payload = [
+    'name' => 'suspicious IP address',
+    'avatar' => '🌐',
+    'content' => 'Connection attempt from blacklisted IP 198.51.100.22'
+];
+
+$ops->events->ingest($payload);
+```
 
 ## Conclusion
 
-Using Operational for security alerts saves you time and worry. You can centralize tracking, get instant notifications and act quickly.
+By using Operational, you get real-time push notifications for any suspicious activity in your PHP app.
 
-Learn more at https://operational.co and try the [playground](https://operational.co/playground) to copy and run snippets in seconds.
+It saves time by centralizing alerts and letting you focus on fixing issues.
+
+Learn more at https://operational.co and try the code in the [playground](https://operational.co/playground).

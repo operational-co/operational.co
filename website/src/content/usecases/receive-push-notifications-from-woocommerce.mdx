@@ -1,0 +1,72 @@
+---
+title: Receive push notifications from WooCommerce
+slug: receive-push-notifications-from-woocommerce
+description: Learn how to send real-time push notifications for new orders in WooCommerce using Operational.
+date: 2025-05-22
+tags:
+  - woocommerce
+  - php
+  - notifications
+icon: 🔔
+---
+
+## What are push notifications in WooCommerce
+
+Push notifications let you send real-time alerts to your app or dashboard when certain events happen in WooCommerce. For example, you can get a notification for every new order.
+
+These alerts help you stay on top of orders without checking your store continuously.
+
+## Track WooCommerce notifications with Operational
+
+Operational is an open source event tracking tool. You can use it to capture and visualize events like new orders.
+
+![Operational Usage](https://operational.co/images/misc/ops-usage.jpg)
+
+To track WooCommerce events, send event data to Operational and view it in real time in the dashboard.
+
+## Setting up Operational
+
+1. Go to [app.operational.co](https://app.operational.co) and sign up for a free account.
+2. Create a new project and copy your API key.
+3. Install the Operational PHP SDK or use the API.
+4. Keep your API key handy for the code snippet.
+
+## Code example: Sending push notifications from WooCommerce
+
+The example below hooks into the WooCommerce order event and sends a push notification to Operational.
+
+```php
+<?php
+// Add this to your theme's functions.php or a custom plugin
+
+add_action('woocommerce_thankyou', 'send_push_notification');
+
+function send_push_notification($order_id) {
+    $order = wc_get_order($order_id);
+    $name = 'New WooCommerce Order';
+    $avatar = '🛒';
+    $content = "Order #{$order_id} from {$order->get_billing_first_name()} {$order->get_billing_last_name()}";
+
+    $body = json_encode([
+        'name' => $name,
+        'avatar' => $avatar,
+        'content' => $content
+    ]);
+
+    wp_remote_post('https://api.operational.co/v1/events', [
+        'headers' => [
+            'Authorization' => 'Bearer YOUR_API_KEY',
+            'Content-Type' => 'application/json'
+        ],
+        'body' => $body
+    ]);
+}
+```
+
+This code listens for new orders and sends the order info to Operational.
+
+## Conclusion
+
+Operational makes it easy to get real-time notifications from your WooCommerce store. You save time by seeing new orders instantly.
+
+Learn more at https://operational.co and try the code in the playground: https://operational.co/playground.

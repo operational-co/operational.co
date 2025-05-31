@@ -1,0 +1,58 @@
+---
+title: Track cancelled subscriptions in Node.js
+slug: track-cancelled-subscriptions-nodejs
+description: Learn how to capture and send cancelled subscription events from your Node.js app to Operational for tracking and analysis.
+date: 2024-07-14
+tags:
+  - nodejs
+  - saas
+  - subscriptions
+icon: 🔔
+---
+
+## What is cancelled subscription tracking in Node.js
+
+Tracking cancelled subscriptions in your Node.js backend helps you understand customer churn. When a user ends their service, you can log that event to analyze trends.
+
+For example, if Jane Doe cancels her monthly plan, you capture that action and use it to improve retention strategies.
+
+## Using Operational to Track Events
+
+Operational lets you send and visualize events from any tech product. You can record when subscriptions are cancelled and explore them in the dashboard.
+
+![Operational usage](https://operational.co/images/misc/ops-usage.jpg)
+
+## Setting up Operational
+
+1. Go to [app.operational.co](https://app.operational.co) and sign up for an account.
+2. Create a new project in the dashboard.
+3. Find your API key under project settings.
+4. Install the SDK in your Node.js app:
+
+   ```bash
+   npm install @operational.co/sdk
+   ```
+5. Initialize the SDK with your API key in code.
+
+## Code example
+
+```javascript
+import Operational from "@operational.co/sdk";
+const ops = new Operational("API_KEY");
+
+const payload = {
+  name: "subscription cancelled",
+  avatar: "🔔",
+  content: "Subscription cancelled by John Smith"
+};
+
+await ops.events.ingest(payload);
+```
+
+This code snippet logs a cancelled subscription event to Operational.
+
+## Conclusion
+
+Operational can save you time and hassle by handling event tracking and visualization for cancelled subscriptions.
+
+Learn more at https://operational.co. You can also try out snippets in the playground: https://operational.co/playground.

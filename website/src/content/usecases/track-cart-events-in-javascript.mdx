@@ -1,8 +1,8 @@
 ---
 title: Track cart events in JavaScript
 slug: track-cart-events-in-javascript
-description: Track cart events in JavaScript with Operational. Record add to cart, remove from cart, and checkout actions with simple code.
-date: 2024-07-18
+description: Learn how to track shopping cart events in your JavaScript app with Operational to understand user actions and improve sales.
+date: 2025-05-22
 tags:
   - javascript
   - ecommerce
@@ -11,67 +11,43 @@ tags:
 icon: 🛒
 ---
 
-## 1. What this article covers
+# Why track cart events in JavaScript
 
-This article explains how to track shopping cart interactions in JavaScript using Operational. Tracking cart events helps you understand user behavior.
+Tracking cart events helps you understand user behavior when they add or remove items. For example, you can see which products are added most often and identify drop-offs in the checkout flow.
 
-For example, you can log when a user adds items to see which products are most popular.
+# What is Operational
 
-![Operational In Action](https://operational.co/images/pitch/ops_insitu.jpg)
+Operational is a lightweight analytics tool for capturing events in your app. You can send custom events and view them in real time to make data-driven decisions.
 
-## 2. What is Operational
+![Operational Usage](https://operational.co/images/misc/ops-usage.jpg)
 
-Operational is an open source tool for logging events from your app. Use it to record user actions, errors, and business metrics.
+# Setting up Operational
 
-You send events with a name, avatar, and content. Operational stores and displays them in real time.
+1. Go to [app.operational.co](https://app.operational.co).
+2. Sign up for a free account.
+3. Create a new project.
+4. Copy your API key.
 
-## 3. Setup Operational
-
-First, sign up at [app.operational.co](https://app.operational.co) to get your free account.
-
-After signing up, go to your dashboard and copy your API key.
-
-Keep this key handy. You will use it in your code to send events.
-
-## 4. Code examples
-
-Import the SDK and create a client with your API key.
+# Code example
 
 ```javascript
 import Operational from "@operational.co/sdk";
+
 const ops = new Operational("YOUR_API_KEY");
 
-// Add item to cart
-const addPayload = {
-  name: "Added item to cart",
+const payload = {
+  name: "product added to cart",
   avatar: "🛒",
-  content: "User John Smith added product ID 123 to the cart"
+  content: "Alice added a laptop to cart"
 };
-await ops.events.ingest(addPayload);
 
-// Remove item from cart
-const removePayload = {
-  name: "Removed item from cart",
-  avatar: "🛒",
-  content: "User John Smith removed product ID 123 from the cart"
-};
-await ops.events.ingest(removePayload);
-
-// Start checkout
-const checkoutPayload = {
-  name: "Checkout started",
-  avatar: "💳",
-  content: "User John Smith started checkout for order ID 456"
-};
-await ops.events.ingest(checkoutPayload);
+await ops.events.ingest(payload);
 ```
 
-These examples show how to log cart add, remove, and checkout events.
+The code example sends a custom "product added to cart" event whenever a user adds an item.
 
-## Conclusion
+# Conclusion
 
-Operational makes it easy to track cart events without building your own backend.
+Operational makes tracking cart events in JavaScript simple and fast. You can skip complex setup and get real-time insights.
 
-It saves time and gives you real time insights.
-
-Learn more at https://operational.co and try the [playground](https://operational.co/playground) to copy and paste snippets.
+Learn more at https://operational.co and try the playground at https://operational.co/playground.

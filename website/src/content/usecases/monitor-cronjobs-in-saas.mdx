@@ -1,72 +1,73 @@
 ---
 title: Monitor cronjobs in SaaS
 slug: monitor-cronjobs-in-saas
-description: Learn how to monitor and log scheduled tasks in your SaaS product using Operational. Catch failures, track job runs easily.
-date: 2025-05-28
+description: Learn how to monitor scheduled cronjobs in your SaaS using Operational to detect failures, delays, or unexpected behavior automatically.
+date: 2025-06-15
 tags:
   - saas
   - cronjobs
   - monitoring
-  - devops
 icon: 🕒
 ---
 
-## What this article is about
+## What is cronjob monitoring in SaaS
 
-Cronjobs run tasks at set intervals in your SaaS product. Monitoring them helps you catch failures, track timings, and ensure smooth operations.
+Scheduled tasks or cronjobs run at set times to perform important work like sending reports or cleaning data. When one of these tasks fails or runs late, it can cause delays or missed deadlines.
 
-For example, a daily report job might fail silently without alerts. With proper monitoring, you get instant visibility into issues.
+Monitoring cronjobs helps you catch failures, errors, and slow runs. For example, if a nightly billing job fails, you can alert on that immediately and avoid revenue issues.
 
-![Operational in action](https://operational.co/images/pitch/ops_insitu.jpg)
+## Using Operational to monitor cronjobs
 
-## Why use Operational for cronjob monitoring
+Operational is an event tracking tool that ingests and visualizes custom events from your application. You can send events for successful runs, errors, or warnings from your cronjobs. 
 
-Operational lets you send structured events whenever your scheduled tasks run. You can log successes, capture failures, and add context like run duration or user ID.
+This gives you a dashboard of cronjob health and history.
 
-This makes it easy to search, filter, and alert on cronjob events in one place.
+![Operational in action](https://operational.co/images/misc/ops-usage.jpg)
 
 ## Setting up Operational
 
-1. Go to [app.operational.co](https://app.operational.co) and sign up or log in.
-2. Create a new project and copy your API key from the dashboard.
-3. Install the SDK in your project: `npm install @operational.co/sdk`.
-4. Keep your API key handy for code integration.
+To start sending events from your cronjobs:
 
-## Tracking cronjob events with code
+1. Go to https://app.operational.co and sign up or log in.
+2. In your workspace, navigate to API Keys under settings.
+3. Create a new API key and give it a name like “Cronjob Monitor Key.”
+4. Copy the API key; you will use it in your code.
+
+## Code examples
+
+Here are examples of tracking cronjob events in Node.js using the Operational SDK.
 
 ```javascript
 import Operational from "@operational.co/sdk"
 
-const ops = new Operational("YOUR_API_KEY")
+const ops = new Operational("API_KEY")
 
-async function runDailyReport() {
-  try {
-    // ... your cronjob logic ...
-    const payload = {
-      name: "cronjob completed",
-      avatar: "🕒",
-      content: "Daily report job finished for user 123"
-    }
+// 1. Successful run event
+await ops.events.ingest({
+  name: "cronjob completed",
+  avatar: "🕒",
+  content: "Daily report job finished successfully for user Jane Doe"
+})
 
-    await ops.events.ingest(payload)
-  } catch (error) {
-    const payload = {
-      name: "cronjob failed",
-      avatar: "🚨",
-      content: "Daily report job failed with error: timeout"
-    }
+// 2. Failure event
+await ops.events.ingest({
+  name: "cronjob failed",
+  avatar: "❌",
+  content: "Invoice generation job failed for order 12345"
+})
 
-    await ops.events.ingest(payload)
-  }
-}
-
-runDailyReport()
+// 3. Delay warning event
+await ops.events.ingest({
+  name: "cronjob delayed",
+  avatar: "⚠️",
+  content: "Cleanup task took longer than expected: 120 seconds"
+})
 ```
 
-This code sends a success event when the daily report finishes and an error event if something goes wrong.
+These examples show how to send different event types for your scheduled tasks. You can customize the `name`, `avatar`, and `content` to suit your needs.
 
 ## Conclusion
 
-Monitoring cronjobs with Operational saves you time and gives clear insights into scheduled task health. You can set up alerts, filter runs, and spot issues fast.
+Operational makes it easy to track and visualize cronjob outcomes. You can spot failures or delays in real time and respond faster.
 
-Learn more on the [Operational homepage](https://operational.co) and try out sample snippets in the [playground](https://operational.co/playground).
+Learn more at https://operational.co. Try our playground to copy and paste snippets: https://operational.co/playground

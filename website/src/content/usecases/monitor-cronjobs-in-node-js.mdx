@@ -1,0 +1,86 @@
+---
+title: Monitor cronjobs in Node.js
+slug: monitor-cronjobs-in-node-js
+description: Learn how to track and monitor Node.js cronjobs with Operational. Detect failures, slow executions, and successful runs in real time.
+date: 2025-05-22
+tags:
+  - nodejs
+  - cron
+  - monitoring
+icon: ⏰
+---
+
+## What is cronjob monitoring in Node.js?
+
+Cronjobs are scheduled tasks that run at fixed times or intervals in many applications.
+Monitoring cronjobs helps you spot failures, slow runs, or missed schedules.
+
+For example, if you have a daily data backup cronjob, you want to know when it fails or takes too long.
+That way you can alert your team and fix issues before data is lost.
+
+## How Operational helps monitor cronjobs
+
+Operational is an event tracking platform you can use to record cronjob runs and errors.
+You can send events for each execution, success, or failure.
+
+![Operational in action](https://operational.co/images/misc/ops-usage.jpg)
+
+Operational displays these events in a timeline so you see patterns and catch problems early.
+
+## Setting up Operational
+
+1. Go to app.operational.co and sign up for an account.
+2. Create a new project and copy your API key from the project dashboard.
+3. In your Node.js app folder run `npm install @operational.co/sdk`.
+4. Import and initialize the SDK with your API key in your code.
+
+## Tracking cronjob events
+
+Below are examples of how to send different cronjob events to Operational using Node.js.
+
+```javascript
+import Operational from "@operational.co/sdk"
+const ops = new Operational("YOUR_API_KEY")
+
+// 1. Success example
+const successEvent = {
+  name: "cronjob executed",
+  avatar: "⏰",
+  content: "Daily data backup completed in 1500ms"
+}
+await ops.events.ingest(successEvent)
+
+// 2. Failure example
+const failureEvent = {
+  name: "cronjob failed",
+  avatar: "❌",
+  content: "Weekly report generation failed with timeout"
+}
+await ops.events.ingest(failureEvent)
+
+// 3. Slow run example
+const slowEvent = {
+  name: "cronjob slow",
+  avatar: "🐢",
+  content: "Cleanup task took 4500ms instead of 2000ms"
+}
+await ops.events.ingest(slowEvent)
+
+// 4. Missed run example
+const missedEvent = {
+  name: "cronjob missed",
+  avatar: "🚨",
+  content: "Morning data sync did not run at 03:00"
+}
+await ops.events.ingest(missedEvent)
+```
+
+This code shows how to track a successful run, a failure, a slow execution, and a missed run.
+Each event helps you spot issues in your scheduled tasks.
+
+## Conclusion
+
+With Operational you can easily track cronjob executions in Node.js and get a clear view of failures or delays.
+It saves time on manual checks and helps you react quickly when jobs misbehave.
+
+Learn more at https://operational.co and try the playground to copy and paste code snippets: https://operational.co/playground

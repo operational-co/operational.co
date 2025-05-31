@@ -1,0 +1,80 @@
+---
+title: Build an audit log system in Node.js
+slug: build-an-audit-log-system-in-nodejs
+description: Learn how to build an audit log system in Node.js to track user and system events for compliance and debugging.
+date: 2024-06-11
+tags:
+  - nodejs
+  - audit-log
+  - javascript
+  - backend
+icon: 📝
+---
+
+## Why build an audit log system in Node.js
+
+An audit log records key actions in your app. It helps track user changes and system events for security and compliance.
+
+For example, you can log when a user updates their profile or deletes an account. This record makes it easy to review past actions and debug issues.
+
+## Tracking events with Operational
+
+Operational is an open source tool to collect and view events in your app. You can send structured audit events to Operational and explore them in a web UI.
+
+![Operational in action](https://operational.co/images/misc/ops-usage.jpg)
+
+This lets you filter events, search by user, and spot unusual activity quickly.
+
+## Setting up Operational
+
+1. Go to https://app.operational.co and sign up for free.  
+2. Create a new project in your dashboard.  
+3. Copy your API key from the project settings.  
+4. Install the SDK in your Node.js app:  
+   ```bash
+   npm install @operational.co/sdk
+   ```
+
+## Code examples
+
+```javascript
+import Operational from "@operational.co/sdk";
+
+const ops = new Operational("YOUR_API_KEY");
+
+const payload = {
+  name: "User profile update",
+  avatar: "🖊️",
+  content: "User John Smith updated their email address"
+};
+
+await ops.events.ingest(payload);
+```
+
+```javascript
+const payload = {
+  name: "Account deletion",
+  avatar: "🗑️",
+  content: "User Alice Brown deleted their account"
+};
+
+await ops.events.ingest(payload);
+```
+
+```javascript
+const payload = {
+  name: "Role change",
+  avatar: "🔑",
+  content: "Admin Michael Lee granted moderator role to user Sarah Davis"
+};
+
+await ops.events.ingest(payload);
+```
+
+These examples show how to record different audit events. Replace `YOUR_API_KEY` and event details to fit your app.
+
+## Conclusion
+
+With Operational, you can build a full audit log system without extra infrastructure. It saves time and helps you meet compliance and debug needs.
+
+Learn more at https://operational.co. Try the playground to copy and paste snippets: https://operational.co/playground

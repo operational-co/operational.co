@@ -1,0 +1,73 @@
+---
+title: View user's profile data in WooCommerce
+slug: view-users-profile-data-in-woocommerce
+description: Learn how to fetch and log user profile data view events in WooCommerce with Operational for better insights.
+date: 2025-05-22
+tags:
+ - woocommerce
+ - php
+icon: 👤
+---
+
+## What is viewing user profile data in WooCommerce?
+
+Viewing user profile data in WooCommerce helps you understand customer behavior.
+
+It lets you tailor offers and improve your store.
+
+For example, tracking when a user checks their address or account history can highlight engagement.
+
+## Using Operational to track profile view events
+
+Operational is an open-source event tracking tool.
+
+It lets you log events like profile views in any tech product.
+
+![Operational in action](https://operational.co/images/misc/ops-usage.jpg)
+
+You can record each profile view in WooCommerce to analyze user activity.
+
+## Setting up Operational
+
+1. Go to [app.operational.co](https://app.operational.co) and sign up.
+2. Create a project in your dashboard.
+3. Copy your API key from the project settings.
+4. Install the PHP SDK or prepare HTTP requests.
+
+## Tracking profile view events in PHP
+
+```php
+<?php
+$apiKey = 'YOUR_API_KEY';
+$payload = [
+  'name' => 'User Profile Viewed',
+  'avatar' => '👤',
+  'content' => 'Alice Smith viewed her profile data.'
+];
+
+$ch = curl_init('https://api.operational.co/v1/events');
+curl_setopt($ch, CURLOPT_HTTPHEADER, [
+  'Content-Type: application/json',
+  'Authorization: ' . 'Bearer ' . $apiKey,
+]);
+curl_setopt($ch, CURLOPT_POST, true);
+curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($payload));
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+$response = curl_exec($ch);
+curl_close($ch);
+
+echo $response;
+```
+
+This code sends a User Profile Viewed event to Operational recording the user name and action.
+
+## Conclusion
+
+Operational makes tracking user profile views in WooCommerce simple.
+
+It saves setup time and helps you focus on insights.
+
+Learn more at https://operational.co
+
+Try the [playground](https://operational.co/playground) to run snippets.

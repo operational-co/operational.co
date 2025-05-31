@@ -1,86 +1,64 @@
 ---
 title: Track billing events in your SaaS
 slug: track-billing-events-in-your-saas
-description: Learn how to track billing events in your SaaS using Operational to monitor invoices, payments, and subscription updates.
-date: 2024-06-14
+description: Learn how to log and monitor billing events in your SaaS product using Operational to improve revenue tracking, customer insights.
+date: 2024-07-21
 tags:
   - saas
   - billing
-  - analytics
+  - monitoring
 icon: 💳
 ---
 
-## What this article is about
+# What is billing event tracking in your SaaS
 
-Tracking billing events in your SaaS helps you monitor invoices, payments, and subscription changes in real time.
+Billing events show when customers are charged.
 
-For example, if a customer’s payment fails, you can alert your support team instantly.
+Tracking these events helps you verify payments and understand revenue.
 
-![Operational in action](https://operational.co/images/pitch/ops_insitu.jpg)
+For example, logging a charge of $49 for the Pro Plan lets you reconcile accounts and spot issues.
 
-## What is Operational
+# Track billing events with Operational
 
-Operational is an open-source event tracking platform for any tech product.
+You can use Operational to send billing events to a central dashboard.
 
-It lets you send structured events like errors, user actions, or billing updates.
+![Operational Overview](https://operational.co/images/misc/ops-usage.jpg)
 
-You can then view these events in a dashboard or integrate with other tools.
+Operational stores events so you can search and analyze them later.
 
-## Setting up Operational
+This improves visibility into your billing.
 
-1. Sign up at [app.operational.co](https://app.operational.co).
-2. Create a new project and get your API key.
-3. Install the SDK in your code:
+# Setting up Operational
 
-```bash
-npm install @operational.co/sdk
-```
+1. Go to https://app.operational.co and sign up for an account.
+2. Create a new project in the dashboard.
+3. Copy your API key from the project settings.
+4. Install the SDK and initialize it in your code.
 
-4. Store your API key in an environment variable:
-
-```bash
-export OP_API_KEY=your_api_key_here
-```
-
-## Code examples for tracking billing events
-
-These examples show how to send different billing events.
+# Code Example
 
 ```javascript
-import Operational from "@operational.co/sdk"
-const ops = new Operational(process.env.OP_API_KEY)
+import Operational from "@operational.co/sdk";
 
-// Invoice created event
-const invoiceCreated = {
-  name: "invoice created",
-  avatar: "💳",
-  content: "Invoice #123 created for $49.99 by John Doe"
-}
-await ops.events.ingest(invoiceCreated)
+const ops = new Operational("API_KEY");
 
-// Payment succeeded event
-const paymentSucceeded = {
-  name: "payment succeeded",
+const payload = {
+  name: "billing event",
   avatar: "💳",
-  content: "Invoice #123 paid successfully by John Doe"
-}
-await ops.events.ingest(paymentSucceeded)
+  content: "Customer John Smith was charged $49 for Pro Plan"
+};
 
-// Payment failed event
-const paymentFailed = {
-  name: "payment failed",
-  avatar: "💳",
-  content: "Payment for invoice #124 failed for Jane Smith"
-}
-await ops.events.ingest(paymentFailed)
+await ops.events.ingest(payload);
 ```
 
-Each example sends a billing event to Operational so you can monitor your revenue flow.
+This code logs a billing event when a customer is charged.
 
-## Conclusion
+# Conclusion
 
-Operational saves you time and hassle by letting you track billing events without building your own system.
+Operational saves time by handling event tracking infrastructure.
 
-Learn more on the [home page](https://operational.co).
+You can focus on your product while staying informed about billing activity.
 
-Try the [playground](https://operational.co/playground) to copy and paste snippets and see them in action.
+Learn more at https://operational.co.
+
+Try the playground to copy and paste snippets: https://operational.co/playground.

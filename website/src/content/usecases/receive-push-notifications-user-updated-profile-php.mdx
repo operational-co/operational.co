@@ -1,0 +1,69 @@
+---
+title: Receive push notifications when a user updated their profile in PHP
+slug: receive-push-notifications-user-updated-profile-php
+description: Learn how to send push notifications when a user updates their profile using PHP and Operational.
+date: 2024-06-20
+tags:
+  - php
+  - saas
+  - notifications
+icon: 🔔
+---
+
+## Why track profile updates in PHP
+
+Knowing when a user changes their profile helps keep your system in sync. You might need to update a CRM or alert admins when contact details change.
+
+For example, if a user updates their email address, you want other services to know immediately.
+
+## Using Operational for notifications
+
+Operational is a simple event tracking service. You can send structured events and trigger notifications or workflows.
+
+![Operational usage](https://operational.co/images/misc/ops-usage.jpg)
+
+With one API call, you send any event and let Operational handle delivery and routing.
+
+## Setting up Operational
+
+1. Go to https://app.operational.co and sign up.
+2. Create a new project in your dashboard.
+3. Copy your API key from project settings.
+4. Keep the key safe; you'll use it in your code.
+
+## Send profile update event with PHP
+
+The code below shows how to post a profile update event to Operational. Replace `YOUR_API_KEY` with the key from your dashboard.
+
+```php
+<?php
+$apiKey = 'YOUR_API_KEY';
+$data = [
+    'name' => 'user profile updated',
+    'avatar' => '🔔',
+    'content' => 'John Smith updated their profile email to john@example.com'
+];
+
+$ch = curl_init('https://api.operational.co/v1/events');
+curl_setopt($ch, CURLOPT_HTTPHEADER, [
+    'Authorization: Bearer ' . $apiKey,
+    'Content-Type: application/json'
+]);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+curl_setopt($ch, CURLOPT_POST, true);
+curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+
+$response = curl_exec($ch);
+curl_close($ch);
+
+echo $response;
+?>
+```
+
+This snippet sends a push notification event when a user updates their profile.
+
+## Conclusion
+
+Operational saves time by handling your event delivery and notifications. You don’t need to build your own infrastructure.
+
+Learn more at https://operational.co and explore the playground for copy-and-paste examples: https://operational.co/playground

@@ -86,7 +86,7 @@ export default {
       // box-shadow:
       //   0 0 32px 0 rgba(255, 255, 255, 0.15),
       //   0 0 128px 0 rgba(255, 255, 255, 0.05);
-      transform: scale(1.85);
+      transform: scale(2);
     }
 
     footer {

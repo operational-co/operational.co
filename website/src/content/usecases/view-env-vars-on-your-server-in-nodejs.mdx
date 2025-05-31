@@ -1,0 +1,65 @@
+---
+title: "View env vars on your server in Node.js"
+slug: "view-env-vars-on-your-server-in-nodejs"
+description: "Learn how to access and display environment variables on a Node.js server and log them with Operational for debugging."
+date: 2024-06-19
+tags:
+  - nodejs
+  - env
+  - server
+icon: "🔑"
+---
+
+## What are environment variables in Node.js servers?
+
+Environment variables store configuration outside your code. They let you change settings without editing files.
+
+For example, you might set PORT to tell your app which port to listen on. You can also store API keys or mode settings.
+
+Viewing these values at runtime helps you debug issues quickly and ensure your server runs with the right configuration.
+
+## Using Operational to track variable access
+
+Operational is an open source tool for tracking events in your applications.
+
+You can log when and how you read environment variables. This helps you audit configuration loads across environments.
+
+![Operational in action](https://operational.co/images/misc/ops-usage.jpg)
+
+## Setting up Operational
+
+First, create a free account and get your API key:
+
+1. Go to [app.operational.co](https://app.operational.co) and sign up.
+2. Verify your email and log in to the dashboard.
+3. Copy your project API key from the settings page.
+4. Install the SDK in your project with `npm install @operational.co/sdk`.
+
+## Code example: Logging environment variables
+
+```js
+import Operational from "@operational.co/sdk"
+
+const ops = new Operational("YOUR_API_KEY")
+
+const port = process.env.PORT || "3000"
+const mode = process.env.NODE_ENV || "development"
+
+const payload = {
+  name: "view environment variables",
+  avatar: "🔑",
+  content: `Loaded PORT=${port} and NODE_ENV=${mode}`
+}
+
+await ops.events.ingest(payload)
+```
+
+This example shows how to read `PORT` and `NODE_ENV` in Node.js and send an event to Operational with those values.
+
+## Conclusion
+
+Viewing environment variables helps you debug and manage your server config.
+
+Operational makes logging these events easy and consistent.
+
+Learn more at https://operational.co and try code snippets in the playground: https://operational.co/playground

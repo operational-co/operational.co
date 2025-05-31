@@ -1,56 +1,61 @@
 ---
 title: Receive push notifications from cURL
 slug: receive-push-notifications-from-curl
-description: Use cURL to send events to Operational and receive push notifications for real-time alert tracking in your workflow.
+description: Learn how to receive and process push notifications using cURL with Operational. Set up your API key and send events easily.
 date: 2025-05-22
 tags:
   - curl
-  - push
   - notifications
   - api
 icon: 🔔
 ---
 
-## What this article covers
+## Why use cURL for push notifications
 
-This article shows how to use cURL to send push notification events to Operational and receive real-time alerts. You can track when a notification is delivered or fails, helping you monitor critical updates.
+Receiving push notifications can help you test and debug event streams in your application.
 
-For example, you might want to know immediately when a server status update is sent to a mobile app.
+Using cURL gives you a fast way to catch incoming events without writing extra code.
 
-![Operational in action](https://operational.co/images/pitch/ops_insitu.jpg)
+For example, you can verify that your payment service sends notifications correctly by sending them to a local endpoint and inspecting the payload.
 
-## What is Operational?
+## About Operational
 
-Operational is an open-source event tracking service that helps you capture and stream events from any tech product. You can track notifications, errors, user actions, and more.
+Operational is an open source platform to track and manage events across your tech stack.
 
-By sending events to Operational, you get a unified dashboard and real-time alerts wherever you work.
+You can send events, view them in a unified dashboard, and integrate with popular tools.
 
-## Setting up Operational
+Integrating with Operational helps you gain real-time insights into your workflows.
 
-1. Sign up at [app.operational.co](https://app.operational.co).
-2. After verifying your email, go to the API keys section in your project settings.
-3. Copy your API key – you’ll use it to authenticate cURL requests.
+![Operational in action](https://operational.co/images/misc/ops-usage.jpg)
 
-## Sending push notification events with cURL
+## Setup Operational
 
-Use the following cURL command to send a push notification event to Operational:
+1. Visit [app.operational.co](https://app.operational.co) and sign up for an account.
+2. Create a new project in the dashboard.
+3. Copy your API key from the project settings.
+4. Keep the key handy for sending events with cURL.
+
+## Sending events with cURL
+
+This example shows how to send a push notification event to Operational using cURL.
 
 ```bash
-curl -X POST https://api.operational.co/v1/events \
-  -H "Authorization: Bearer YOUR_API_KEY" \
+curl https://api.operational.co/events \
   -H "Content-Type: application/json" \
+  -H "Authorization: Bearer API_KEY" \
   -d '{
-    "name": "push notification delivered",
+    "name": "push notification received",
     "avatar": "🔔",
-    "content": "Sent push notification to Jane Doe"
+    "content": "Received a push notification from Stripe"
   }'
 ```
 
-This example sends an event named "push notification delivered" with an alert emoji and a message indicating who received the notification.
+This command posts an event named “push notification received” to your Operational project. You can replace the content with your own service name or message.
 
 ## Conclusion
 
-Using Operational with cURL saves time and reduces complexity when tracking push notifications. You get instant visibility and alerts without building your own infrastructure.
+Operational saves you time by handling event ingestion and display out of the box.
 
-Learn more at https://operational.co and try out snippets in the [playground](https://operational.co/playground).  
-Operational makes tracking and alerting fast and easy.
+You can focus on your application while Operational manages the data flow.
+
+Learn more at https://operational.co and try the [playground](https://operational.co/playground) to copy and paste snippets instantly.

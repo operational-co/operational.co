@@ -1,58 +1,69 @@
 ---
-title: "Receive push notifications for suspicious activity inside Node.js"
+title: Receive push notifications for suspicious activity inside Node.js
 slug: receive-push-notifications-for-suspicious-activity-inside-nodejs
-description: "Learn to detect suspicious activity in your Node.js app and send real-time push notifications using Operational's event tracking."
-date: 2025-05-22
-tags: [nodejs, notifications, security, monitoring]
+description: Learn how to receive push notifications for suspicious events in your Node.js app using Operational.
+date: 2024-06-04
+tags:
+  - nodejs
+  - alerts
+  - security
 icon: 🚨
 ---
 
-## What this article is about
+## Why track suspicious activity in Node.js
 
-Detecting suspicious activity in your Node.js application helps you react quickly to potential security threats.
+Keeping your Node.js application secure means spotting unusual behavior fast. One example is repeated failed login attempts from the same IP. If you miss these, they can lead to brute force attacks or account takeovers.
 
-![Operational in action](https://operational.co/images/pitch/ops_insitu.jpg)
+By receiving push notifications, you can act on suspicious events right away. This helps you protect user data and maintain trust.
 
-## What is Operational
+## Using Operational for suspicious activity alerts
 
-Operational is an event tracking platform. It lets you record and monitor important events in your application.
+Operational is an open source event tracking tool for any tech product. You can use it to send alerts when your app detects suspicious behavior.
 
-You can use it to capture security-related events and trigger alerts in real time.
+![Operational in action](https://operational.co/images/misc/ops-usage.jpg)
 
-## Setting up Operational
+With Operational, you send events via a simple SDK and get instant notifications. It integrates with your workflow and saves you time on building custom alert systems.
 
-Sign up for a free account at [app.operational.co](https://app.operational.co).
+## Setup Operational in Node.js
 
-Once logged in, create a new project and copy your API key.
+1. Go to https://app.operational.co and sign up for a free account.
+2. Create a new project to get your API key.
+3. Install the SDK in your app folder:
 
-You'll use this key to authenticate your events with Operational.
+   ```bash
+   npm install @operational.co/sdk
+   ```
 
-## Tracking suspicious activity in Node.js
+4. Copy your API key and note it for your code.
+
+## Code example: Sending push notifications
+
+The following code listens for suspicious events and sends a push notification using Operational.
 
 ```javascript
-import Operational from "@operational.co/sdk";
+import Operational from "@operational.co/sdk"
 
-const ops = new Operational("YOUR_API_KEY");
+const ops = new Operational("YOUR_API_KEY")
 
-async function notifySuspiciousActivity(userId) {
+// Example when you detect a suspicious event
+async function alertSuspiciousActivity(ip) {
   const payload = {
-    name: "Suspicious activity detected",
+    name: "Suspicious Activity Detected",
     avatar: "🚨",
-    content: "Multiple failed login attempts for user ID " + userId
-  };
+    content: `Multiple failed login attempts from IP ${ip}`
+  }
 
-  await ops.events.ingest(payload);
+  await ops.events.ingest(payload)
 }
 
-notifySuspiciousActivity(123);
+// Trigger the alert
+alertSuspiciousActivity("192.168.1.100")
 ```
 
-This code snippet sends a push notification to Operational when multiple failed login attempts are detected for a user.
+This code sets up the Operational client, creates a payload with details of the suspicious activity, and sends it. You will receive a push notification as soon as the event is ingested.
 
 ## Conclusion
 
-Using Operational to track suspicious activity in Node.js saves time and reduces manual monitoring.
+Using Operational lets you skip building custom alert systems. You get instant push notifications for suspicious activity and can respond faster.
 
-Learn more at https://operational.co
-
-Try it out in the playground: https://operational.co/playground
+Learn more at https://operational.co and try out the Playground at https://operational.co/playground to copy and paste code snippets.

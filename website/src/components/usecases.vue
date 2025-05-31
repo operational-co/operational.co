@@ -45,6 +45,8 @@ export default {
       if (!Array.isArray(items) || items.length === 0) {
         return [];
       }
+
+      console.log(items);
       // Start from the first item's tags...
       return (
         items
@@ -129,6 +131,36 @@ export default {
 
         h3 {
           margin-bottom: 0.5rem;
+        }
+      }
+    }
+  }
+
+  @media screen and (max-width: 576px) {
+    ul {
+      li {
+        a {
+          display: block;
+          border-radius: 0.5rem;
+
+          img {
+            height: 120px;
+            width: 100%;
+          }
+
+          article {
+            padding: 0.75rem;
+
+            p {
+              display: none;
+            }
+
+            h3 {
+              font-size: var(--font-size);
+              line-height: 1.4;
+              margin-bottom: 0;
+            }
+          }
         }
       }
     }

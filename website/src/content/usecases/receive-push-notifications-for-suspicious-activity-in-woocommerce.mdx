@@ -1,137 +1,87 @@
 ---
-title: Receive push notifications for suspicious activity in WooCommerce
+title: "Receive push notifications for suspicious activity in WooCommerce"
 slug: receive-push-notifications-for-suspicious-activity-in-woocommerce
-description: Learn how to send push notifications from WooCommerce for suspicious activities using Operational’s event tracking to get real-time alerts.
-date: 2025-05-22
+description: "Learn how to get real-time push alerts for suspicious orders and logins in WooCommerce using Operational."
+date: 2024-06-28
 tags:
   - woocommerce
-  - ecommerce
-  - security
   - php
+  - alerts
+  - security
 icon: 🚨
 ---
 
-## What this article covers
+## Why get push alerts for suspicious activity in WooCommerce
 
-This article explains how to get real-time push notifications in WooCommerce for suspicious activities, such as multiple failed login attempts or high-value orders.
-These alerts help you react quickly to potential security issues and protect your store.
+Suspicious actions in your store can lead to chargebacks or fraud.
 
-![Operational in action](https://operational.co/images/pitch/ops_insitu.jpg)
+Getting real-time notifications helps you react quickly.
 
-## What is Operational
+For example, if someone tries multiple failed logins or places a high-value order from a new location, you want to know right away.
 
-Operational is an open-source event tracking platform. It captures events from your app or website and shows them in real time.
-You can define custom events, like suspicious activity, and get instant notifications on your phone or desktop.
+Push alerts bring those events to your phone or Slack so you can investigate immediately.
 
-Use Operational to get better visibility into your WooCommerce store. Track security events, order anomalies, and more without writing complex integrations.
+## What is Operational and how it works
+
+Operational is a lightweight event tracking tool.
+
+It lets you send custom events when something important happens in your app.
+
+You can set up push notifications for any event, including suspicious orders or login attempts.
+
+It works with a simple HTTP API or SDK.
+
+You can view events in the dashboard or forward them to Slack, email, or webhooks.
+
+![Operational in action](https://operational.co/images/misc/ops-usage.jpg)
 
 ## Setting up Operational
 
-1. Sign up at [app.operational.co](https://app.operational.co) and log in.
-2. Go to your project and copy the API key from the settings page.
-3. Install the PHP cURL extension if you don’t have it.
-4. Keep your API key handy. You’ll use it in the code snippets below.
+1. Go to [app.operational.co](https://app.operational.co) and sign up for a free account.
+2. Create a new workspace for your WooCommerce store.
+3. In the dashboard, copy your API key from Settings > API Keys.
+4. Install the PHP SDK or ensure cURL is available on your server.
+5. Add your API key to your WooCommerce plugin or theme code.
 
-## Code examples
-
-Below are three examples showing how to send push notifications for different suspicious activities in WooCommerce. Replace `YOUR_API_KEY` with the key you got from the dashboard.
-
-### Example 1: Suspicious login attempts
-
-This code sends an alert when a user fails to log in.
+## Tracking suspicious activity in PHP
 
 ```php
 <?php
-function notify_suspicious_login() {
-  $payload = [
-    'name' => 'Suspicious Login Attempt',
+// Include dependencies or ensure cURL is enabled
+
+$apiKey = 'API_KEY';
+
+// Example payload for a suspicious login attempt
+data:
+$payload = [
+    'name' => 'Suspicious login attempt',
     'avatar' => '🚨',
-    'content' => 'Multiple failed login attempts for user john@example.com'
-  ];
+    'content' => 'User John Smith from IP 192.168.0.1 had 5 failed login attempts'
+];
 
-  $ch = curl_init('https://api.operational.co/ingest');
-  curl_setopt($ch, CURLOPT_HTTPHEADER, [
-    'Authorization: Bearer YOUR_API_KEY',
-    'Content-Type: application/json'
-  ]);
-  curl_setopt($ch, CURLOPT_POST, true);
-  curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($payload));
-  curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-  curl_exec($ch);
-  curl_close($ch);
-}
+$ch = curl_init('https://api.operational.co/events');
+curl_setopt($ch, CURLOPT_HTTPHEADER, [
+    'Content-Type: application/json',
+    "Authorization: Bearer $apiKey"
+]);
+curl_setopt($ch, CURLOPT_POST, true);
+curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($payload));
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
-add_action('wp_login_failed', 'notify_suspicious_login');
+$response = curl_exec($ch);
+curl_close($ch);
+
+echo $response;
 ```
 
-### Example 2: High-value order detection
-
-This code alerts you when an order over $500 is placed.
-
-```php
-<?php
-function notify_high_value_order($order_id) {
-  $order = wc_get_order($order_id);
-  if ($order->get_total() > 500) {
-    $payload = [
-      'name' => 'High-Value Order Detected',
-      'avatar' => '💰',
-      'content' => 'Order #1024 for $750 placed by john@example.com'
-    ];
-
-    $ch = curl_init('https://api.operational.co/ingest');
-    curl_setopt($ch, CURLOPT_HTTPHEADER, [
-      'Authorization: Bearer YOUR_API_KEY',
-      'Content-Type: application/json'
-    ]);
-    curl_setopt($ch, CURLOPT_POST, true);
-    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($payload));
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_exec($ch);
-    curl_close($ch);
-  }
-}
-
-add_action('woocommerce_thankyou', 'notify_high_value_order', 10, 1);
-```
-
-### Example 3: Multiple payment failures
-
-This code sends a notification when a customer’s payment fails three times.
-
-```php
-<?php
-function track_failed_payments($order_id) {
-  $order = wc_get_order($order_id);
-  $failures = get_user_meta($order->get_user_id(), 'payment_failures', true) + 1;
-  update_user_meta($order->get_user_id(), 'payment_failures', $failures);
-
-  if ($failures >= 3) {
-    $payload = [
-      'name' => 'Payment Failures Alert',
-      'avatar' => '⚠️',
-      'content' => 'User john@example.com had 3 payment failures'
-    ];
-
-    $ch = curl_init('https://api.operational.co/ingest');
-    curl_setopt($ch, CURLOPT_HTTPHEADER, [
-      'Authorization: Bearer YOUR_API_KEY',
-      'Content-Type: application/json'
-    ]);
-    curl_setopt($ch, CURLOPT_POST, true);
-    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($payload));
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_exec($ch);
-    curl_close($ch);
-  }
-}
-
-add_action('woocommerce_order_status_failed', 'track_failed_payments', 10, 1);
-```
+This code sends a custom event to Operational whenever a login attempt fails multiple times. You can adapt it to track orders, cart changes, and more.
 
 ## Conclusion
 
-Using Operational with WooCommerce helps you stay on top of potential security issues.
-Instead of manually checking logs, you get instant push notifications for events that matter.
+With Operational, you get instant alerts for any suspicious activity in WooCommerce.
 
-Learn more at https://operational.co and try the [playground](https://operational.co/playground) to copy, paste, and test snippets.
+That saves time and helps you stop fraud before it happens.
+
+Learn more on the [Operational homepage](https://operational.co).
+
+Try out examples in the [playground](https://operational.co/playground) and copy the snippets you need.

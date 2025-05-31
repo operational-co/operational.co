@@ -31,18 +31,18 @@ const renderer = {
 
     const text = this.parser.parseInline(tokens);
     return `<a href="${href}" ${rel}>${text}</a>`;
-  }
+  },
 };
 
 marked.use({
-  renderer
+  renderer,
 });
 
 function getSections(post) {
   if (!post.content_markdown) {
     return {
       sections: [],
-      headings: []
+      headings: [],
     };
   }
   const lexer = new marked.Lexer({});
@@ -60,7 +60,7 @@ function getSections(post) {
 
       sections.push({
         "@type": "Thing",
-        name: token.text
+        name: token.text,
       });
 
       headings.push(token.text);
@@ -69,7 +69,7 @@ function getSections(post) {
 
   return {
     sections,
-    headings
+    headings,
   };
 }
 
@@ -106,6 +106,72 @@ function getJsonld(obj, type = "post") {
       console.log(err);
     }
   }
+  if (type === "usecase") {
+    try {
+      json = getUsecaseJsonLd(obj);
+    } catch (err) {
+      console.log(`JsonLd not generated for type ${type}`);
+      console.log(err);
+    }
+  }
+  return json;
+}
+
+function getUsecaseJsonLd(post) {
+  let title = post.title;
+  let subtitle = post.subtitle;
+  let bannerUrl = `https://operational.co/images/usecases/${post.data.slug}-banner.webp`;
+  let authorName = "Shash";
+  let authorUrl = "https://x.com/shash122tfu";
+  let publisherName = "Operational";
+  let publisherLogo = "https://operational.co/favicons/apple-touch-icon.png";
+  let pageUrl = post.path ? post.path : `https://operational.co/usecases/${post.data.slug}`;
+  let datePublished = post.date_created ? formatDate(post.data.date) : null;
+  let dateModified = post.date_updated ? formatDate(post.date_updated) : null;
+  //let { sections, headings } = getSections(post);
+
+  let json = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: title,
+    alternativeHeadline: subtitle,
+    author: {
+      "@type": "Person",
+      url: authorUrl,
+      name: authorName,
+    },
+    publisher: {
+      "@type": publisherName,
+      name: publisherName,
+      logo: {
+        "@type": "ImageObject",
+        url: publisherLogo,
+      },
+    },
+    datePublished: datePublished,
+    //dateModified: dateModified,
+    mainEntityOfPage: {
+      "@type": "WebPage",
+      "@id": pageUrl,
+    },
+    description: subtitle,
+    //articleSection: headings,
+    image: {
+      "@type": "ImageObject",
+      url: bannerUrl,
+    },
+    url: pageUrl,
+    isPartOf: {
+      "@type": "Blog",
+      name: publisherName,
+      publisher: {
+        "@type": "Organization",
+        name: publisherName,
+      },
+    },
+    //about: sections
+  };
+
   return json;
 }
 
@@ -130,27 +196,27 @@ function getPostJsonLd(post) {
     author: {
       "@type": "Person",
       url: authorUrl,
-      name: authorName
+      name: authorName,
     },
     publisher: {
       "@type": publisherName,
       name: publisherName,
       logo: {
         "@type": "ImageObject",
-        url: publisherLogo
-      }
+        url: publisherLogo,
+      },
     },
     datePublished: datePublished,
     dateModified: dateModified,
     mainEntityOfPage: {
       "@type": "WebPage",
-      "@id": pageUrl
+      "@id": pageUrl,
     },
     description: subtitle,
     articleSection: headings,
     image: {
       "@type": "ImageObject",
-      url: bannerUrl
+      url: bannerUrl,
     },
     url: pageUrl,
     isPartOf: {
@@ -158,10 +224,10 @@ function getPostJsonLd(post) {
       name: publisherName,
       publisher: {
         "@type": "Organization",
-        name: publisherName
-      }
+        name: publisherName,
+      },
     },
-    about: sections
+    about: sections,
   };
 
   return json;
@@ -191,7 +257,7 @@ function getPageJsonLd(post) {
     isPartOf: {
       "@type": "WebSite",
       name: publisherName,
-      url: baseUrl
+      url: baseUrl,
     },
     // potentialAction: {
     //   "@type": "Action",
@@ -206,14 +272,14 @@ function getPageJsonLd(post) {
       "@type": "Organization",
       name: publisherName,
       url: baseUrl,
-      logo: publisherLogo
+      logo: publisherLogo,
     },
     about: {
       "@type": "SoftwareApplication",
       name: title,
       applicationCategory: "WebApplication",
       operatingSystem: "All",
-      browserRequirements: "Requires JavaScript"
+      browserRequirements: "Requires JavaScript",
     },
     breadcrumb: {
       "@type": "BreadcrumbList",
@@ -222,22 +288,22 @@ function getPageJsonLd(post) {
           "@type": "ListItem",
           position: 1,
           name: "Home",
-          item: baseUrl
+          item: baseUrl,
         },
         {
           "@type": "ListItem",
           position: 2,
           name: title,
-          item: pageUrl
-        }
-      ]
-    }
+          item: pageUrl,
+        },
+      ],
+    },
   };
 
   if (post.bannerUrl) {
     json.image = {
       "@type": "ImageObject",
-      url: post.bannerUrl
+      url: post.bannerUrl,
     };
   }
 

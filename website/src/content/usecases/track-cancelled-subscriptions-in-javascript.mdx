@@ -1,37 +1,38 @@
 ---
 title: Track cancelled subscriptions in JavaScript
 slug: track-cancelled-subscriptions-in-javascript
-description: Learn how to detect and track when users cancel their subscriptions using Operational analytics in a JavaScript app.
-date: 2024-01-15
+description: Guide to logging subscription cancellations in a JavaScript app with Operational. Track churn events easily and analyze customer behavior.
+date: 2024-06-13
 tags:
   - javascript
   - saas
-  - subscriptions
-  - events
-icon: 📉
+  - analytics
+  - churn
+icon: 💔
 ---
 
-## Why track cancelled subscriptions?
+# Why track cancelled subscriptions
 
-Tracking subscription cancellations helps you keep your data up to date.
-You can alert support teams or start feedback flows.
-It helps you understand churn and fix issues early.
+Tracking subscription cancellations in your JavaScript app helps you understand churn. You can see when and why users leave.
 
-![Operational in action](https://operational.co/images/pitch/ops_insitu.jpg)
+For example, if many users cancel a plan after a specific action, you can improve that part of your product.
 
-## What is Operational?
+# What is Operational
 
-Operational is an open source event tracking tool.
-It lets you send custom events from any app.
-You can view, filter, and query events in a simple dashboard.
+Operational is an open-source event tracking tool that captures your key product events.
 
-## Setting up Operational
+You can send events like subscription cancellations to Operational and view them in real time.
 
-First, sign up at [app.operational.co](https://app.operational.co).
-Copy your API key from the dashboard.
-You will use this key to send events from your JavaScript code.
+![Operational usage](https://operational.co/images/misc/ops-usage.jpg)
 
-## Code example
+# Setting up Operational
+
+1. Sign up at [app.operational.co](https://app.operational.co) and create a team.
+2. Copy your API key from the project settings.
+3. Install the SDK with `npm install @operational.co/sdk`.
+4. Initialize the client in your code.
+
+# Code example
 
 ```javascript
 import Operational from "@operational.co/sdk";
@@ -39,20 +40,28 @@ import Operational from "@operational.co/sdk";
 const ops = new Operational("YOUR_API_KEY");
 
 const payload = {
-  name: "subscription cancelled",
-  avatar: "🔔",
-  content: "User Jane Doe cancelled subscription 1234"
+  name: "subscription_cancelled",
+  avatar: "💔",
+  content: "Jane Doe cancelled her Pro Plan subscription.",
+  properties: {
+    user_id: 12345,
+    email: "jane.doe@example.com",
+    subscription_id: "sub_67890",
+    plan: "Pro Plan"
+  }
 };
 
 await ops.events.ingest(payload);
 ```
 
-This code sends an event when a user cancels their subscription.
-You can customize the name, avatar, and content fields.
+This snippet records a subscription cancellation event with user and plan details.
 
-## Conclusion
+# Conclusion
 
-Operational makes it easy to track subscription cancellations.
-You save time building analytics from scratch.
-Learn more at https://operational.co
-Try out snippets in the playground: https://operational.co/playground
+Operational helps you track cancellations without building your own pipeline.
+
+You can save time and focus on reducing churn.
+
+Learn more at https://operational.co.
+
+Try the [playground](https://operational.co/playground) to copy and paste code snippets.

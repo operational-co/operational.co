@@ -1,92 +1,106 @@
 ---
 title: Track billing events in WooCommerce
 slug: track-billing-events-in-woocommerce
-description: Learn how to track WooCommerce billing events using Operational to monitor purchases, refunds, and subscriptions in your store.
-date: 2024-06-24
+description: Learn how to track billing events in WooCommerce using Operational to monitor sales, payments and refunds in real time.
+date: 2024-06-15
 tags:
   - woocommerce
   - ecommerce
-  - php
-  - payments
+  - billing
 icon: 💳
 ---
 
-## What this article is about
+## Why track billing events in WooCommerce
 
-Tracking billing events in your WooCommerce store helps you monitor orders, refunds, and subscription renewals in real time. You can spot issues early and improve customer support.
+Tracking billing events in your WooCommerce store helps you keep an eye on sales, payments and refunds.
+For example, you can monitor when a customer completes an order or requests a refund.
+This data can improve customer service and spot issues quickly.
 
-![Operational in action](https://operational.co/images/pitch/ops_insitu.jpg)
+## Using Operational for billing event tracking
 
-## What is Operational
+Operational is an event tracking platform for any tech product.
+You can send billing events from WooCommerce to Operational and view them in real time.
 
-Operational is an open-source event tracking tool. It lets you collect structured events from any tech product.
-
-You can send purchase, refund, or subscription events and view them in one dashboard. This helps you keep an eye on key billing activities.
+![Operational usage](https://operational.co/images/misc/ops-usage.jpg)
 
 ## Setting up Operational
 
-1. Sign up at [app.operational.co](https://app.operational.co).
-2. Copy your API key from the dashboard.
+1. Go to [app.operational.co](https://app.operational.co) and sign up.
+2. Log in and open the API Keys page.
+3. Click Create new key and give it a name.
+4. Copy the API key to use in your code.
 
-You’ll use this key to send events from your WooCommerce store to Operational.
+## Code examples
 
-## Tracking billing events in WooCommerce
-
-Below are code examples in PHP that show how to send different billing events. Each snippet uses curl to post an event.
-
-### 1. Order placed
 ```php
 <?php
-$apiKey = "API_KEY";
+$apiKey = "YOUR_API_KEY";
+$url = "https://api.operational.co/v1/events/ingest";
+
 $payload = [
-  "name" => "Order placed",
-  "avatar" => "💳",
-  "content" => "Order #12345 by John Doe for $49.99 completed"
+  "name" => "New order completed",
+  "avatar" => "🛒",
+  "content" => "Order #1234 for John Smith was paid",
+  "metadata" => [
+    "order_id" => 1234,
+    "amount" => 59.99,
+    "currency" => "USD"
+  ]
 ];
 
-$ch = curl_init("https://api.operational.co/v1/events");
+$ch = curl_init($url);
 curl_setopt($ch, CURLOPT_HTTPHEADER, [
-    "Content-Type: application/json",
-    "Authorization: Bearer $apiKey"
+  "Content-Type: application/json",
+  "Authorization: Bearer $apiKey"
 ]);
 curl_setopt($ch, CURLOPT_POST, true);
 curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($payload));
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
 $response = curl_exec($ch);
 curl_close($ch);
+
 echo $response;
-?>
 ```
-This sends an event when a new order is placed.
 
-### 2. Refund processed
+This code sends a "New order completed" event to Operational with order details.
+
 ```php
 <?php
-$apiKey = "API_KEY";
+// Track payment failure
 $payload = [
-  "name" => "Refund processed",
-  "avatar" => "💸",
-  "content" => "Refund of $15.00 for Order #12345 issued to Jane Smith"
+  "name" => "Payment failed",
+  "avatar" => "❌",
+  "content" => "Order #1245 for Alice Johnson failed to process",
+  "metadata" => [
+    "order_id" => 1245,
+    "reason" => "card_declined"
+  ]
 ];
-// same curl setup as above
-```
-This logs when a refund is issued.
 
-### 3. Subscription renewed
+curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($payload));
+curl_exec($ch);
+```
+
 ```php
 <?php
-$apiKey = "API_KEY";
+// Track refund
 $payload = [
-  "name" => "Subscription renewed",
-  "avatar" => "🔄",
-  "content" => "Monthly plan renewed for User ID 67890"
+  "name" => "Order refunded",
+  "avatar" => "💰",
+  "content" => "Order #1234 for John Smith was refunded",
+  "metadata" => [
+    "order_id" => 1234,
+    "refund_amount" => 59.99
+  ]
 ];
-// same curl setup as above
+
+curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($payload));
+curl_exec($ch);
 ```
-This records each subscription renewal.
 
 ## Conclusion
 
-Using Operational to track billing events in WooCommerce saves time and prevents missed orders or refunds. All your events appear in one dashboard. You can explore more and try snippets in our [playground](https://operational.co/playground).
-
-Learn more at https://operational.co
+Operational can save time and hassle by collecting billing events from WooCommerce.
+You get a central view of orders, payments and refunds without building your own system.
+Learn more at https://operational.co. You can try it in the [playground](https://operational.co/playground) by copying and pasting snippets.

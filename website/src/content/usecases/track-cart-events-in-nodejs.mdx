@@ -1,0 +1,51 @@
+---
+title: Track cart events in Node.js
+slug: track-cart-events-in-nodejs
+description: Learn how to track shopping cart events in your Node.js app using Operational for real-time insights and analytics.
+date: 2025-05-22
+tags:
+  - nodejs
+  - ecommerce
+  - saas
+  - javascript
+icon: 🛒
+---
+
+## What is cart event tracking in Node.js
+
+Tracking cart events in your Node.js application helps you understand user behavior and optimize your sales funnel. For example, you can see when a user adds or removes items from their cart. This insight lets you spot drop-offs and improve your checkout flow.
+
+## Using Operational for cart event tracking
+
+Operational is an open source analytics tool that captures events from any product. You can send cart events to Operational and view them in real time.
+
+![Operational Usage](https://operational.co/images/misc/ops-usage.jpg)
+
+## Setup Operational
+
+1. Visit [app.operational.co](https://app.operational.co) and sign up for a free account.
+2. Create a new project in the dashboard.
+3. Copy your API key from the project settings.
+4. Install the SDK in your Node.js app.
+
+## Code example
+
+```javascript
+import Operational from "@operational.co/sdk";
+
+const ops = new Operational("YOUR_API_KEY");
+
+const payload = {
+  name: "cart_item_added",
+  avatar: "🛒",
+  content: "User Jane Doe added product 'Laptop' to the cart"
+};
+
+await ops.events.ingest(payload);
+```
+
+This code example shows how to send a cart_item_added event when a user adds an item to the cart.
+
+## Conclusion
+
+Tracking cart events with Operational saves you time and reduces manual data processing. You get real-time insights and clear dashboards without extra setup. Learn more at https://operational.co. Try code snippets in our Playground: https://operational.co/playground

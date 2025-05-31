@@ -1,66 +1,65 @@
 ---
 title: Track cancelled subscriptions in Wordpress
 slug: track-cancelled-subscriptions-in-wordpress
-description: Learn how to capture and send cancelled subscription events from WordPress to Operational for better churn insights and reporting.
-date: 2025-05-22
+description: Learn how to log and monitor cancelled subscriptions in your WordPress site using Operational. Improve subscription insights and customer retention.
+date: 2024-07-01
 tags:
   - wordpress
   - subscriptions
+  - php
   - analytics
-icon: 🔕
+icon: ❌
 ---
 
-## Why track cancelled subscriptions
+# What is subscription cancellation tracking in WordPress
 
-Tracking cancelled subscriptions helps you spot churn. It lets you know why customers leave. You can act fast. You can improve your plans.
+Tracking cancelled subscriptions helps you understand churn and improve your service. For example, if a user cancels a premium plan on your WooCommerce site, logging that event lets you analyze trends over time.
 
-For example, if many users cancel a premium plan after one month, you can adjust pricing.
+# Using Operational to track cancellations
 
-<img src="https://operational.co/images/pitch/ops_insitu.jpg" alt="Operational in action"/>
+Operational is an event-based platform that captures actions in your app. You can send cancellation events to Operational and view them in your dashboard.
 
-## What is Operational
+![Operational dashboard](https://operational.co/images/misc/ops-usage.jpg)
 
-Operational is an open source event tracking tool. It collects events from your app. You can view and filter data in real time. You can track any event, like signups, purchases, and cancellations. It helps you understand user behavior.
+# Setting up Operational
 
-## Setting up Operational
+1. Go to https://app.operational.co and sign up for a free account.
+2. In the dashboard, create a new project.
+3. From project settings, copy your API key.
+4. Keep the key safe for use in your code.
 
-1. Go to [app.operational.co](https://app.operational.co) and sign up.
-2. Create a new project.
-3. Copy your API key from the project settings.
-4. Keep the key safe.
-
-## Sending cancellation events in WordPress
-
-Use this code in your theme or plugin. It runs when a WooCommerce subscription is cancelled.
+# Code example
 
 ```php
-add_action('woocommerce_subscription_status_cancelled', 'send_cancel_event', 10, 1);
+<?php
+$ch = curl_init();
 
-function send_cancel_event($subscription) {
-  $api_key = 'YOUR_API_KEY';
-  $user = $subscription->get_user()->display_name;
-  $plan = $subscription->get_items()[0]->get_name();
+$data = [
+  'name' => 'Subscription Cancelled',
+  'avatar' => '❌',
+  'content' => 'User John Smith cancelled subscription ID 1234'
+];
 
-  $payload = [
-    'name' => 'subscription cancelled',
-    'avatar' => '🔕',
-    'content' => "User {$user} cancelled the {$plan} subscription"
-  ];
+curl_setopt($ch, CURLOPT_URL, 'https://api.operational.co/v1/events/ingest');
+curl_setopt($ch, CURLOPT_POST, true);
+curl_setopt($ch, CURLOPT_HTTPHEADER, [
+  'Content-Type: application/json',
+  'Authorization: Bearer YOUR_API_KEY'
+]);
+curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
-  wp_remote_post('https://api.operational.co/v1/events', [
-    'headers' => [
-      'Authorization' => 'Bearer ' . $api_key,
-      'Content-Type' => 'application/json',
-    ],
-    'body' => json_encode($payload),
-  ]);
-}
+$response = curl_exec($ch);
+curl_close($ch);
+?>
 ```
 
-This code listens for cancellations. It builds a payload. Then it sends the event to Operational.
+This snippet sends a cancellation event to Operational whenever a subscription is cancelled in WordPress.
 
-## Conclusion
+# Conclusion
 
-Operational can save time tracking cancelled subscriptions. You get real data on churn. You can act on insights.
+Using Operational for tracking cancelled subscriptions saves time and reduces manual logs. You get insights on churn and can act quickly.
 
-Learn more at https://operational.co. Try the playground at https://operational.co/playground.
+Learn more on the Operational website: https://operational.co
+
+Try the playground to copy and paste snippets: https://operational.co/playground

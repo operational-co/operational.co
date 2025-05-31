@@ -4,10 +4,14 @@ import BaseLayout from "@/layouts/base.astro";
 import {list, getItems} from "@/content/list.js";
 import Prevnext from "@operational.co/components/ui/prevnext.vue";
 import PageUsecase from "@/components/page-usecase.vue";
-
+import UsecasesRelated from "@/components/usecases-related.vue";
+import getJsonld from "@/lib/get-jsonld.js";
 import { getCollection, getEntry, render } from 'astro:content';
+import Usecases from "@/components/usecases.vue";
 
 const baseSlug = 'usecases'
+
+const posts = await getCollection(baseSlug);
 
 const post = await getEntry(baseSlug, Astro.params.slug);
 const data = await render(post);
@@ -37,13 +41,16 @@ let content = null;
 const title = post.data.title;
 const description = post.data.description;
 
+const jsonLd = getJsonld(post, 'usecase');
+
 ---
 
-<BaseLayout title={title} description={description}>
+<BaseLayout jsonLd={jsonLd} title={title} description={description}>
 
   <PageUsecase data={data} client:load pathname={Astro.url.pathname}>
     <div class="c-page">
       <Content />
+      <UsecasesRelated posts={posts} currentPost={post}></UsecasesRelated>
     </div>
   </PageUsecase>
 </BaseLayout>
