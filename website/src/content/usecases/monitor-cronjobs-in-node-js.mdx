@@ -12,8 +12,9 @@ icon: ⏱️
 
 ## What is cronjob monitoring in Node.js
 
-Monitoring cronjobs in Node.js helps you catch failures and track performance of scheduled tasks.
-For example, you might send daily reports or clean up data every hour.
+If you're using a package like `croner`,  monitoring cronjobs in Node.js helps you catch failures and track performance of scheduled tasks.
+For example, you might send daily reports to yourself or clean up data every hour.
+
 If a job fails silently, you lose insights and might miss critical alerts.
 
 ### Using Operational to Track Cronjobs
@@ -40,6 +41,8 @@ This helps you spot issues and analyze job runs over time.
 ### Example Code
 
 The code below shows how to send events when a cronjob starts, succeeds, or fails.
+
+Paste this code examples inside your cronjob functions.
 
 ```javascript
 import Operational from "@operational.co/sdk";
@@ -71,6 +74,6 @@ This example shows how to log different stages of a cronjob.
 
 ### Conclusion
 
-Operational can save you time by collecting cronjob events in one dashboard.
-You avoid manual logging and get real-time alerts for failures.
+Operational can save you time by collecting cronjob events in one dashboard. You avoid manual logging and get real-time alerts for failures.
+
 Learn more at https://operational.co and try the playground at https://operational.co/playground.

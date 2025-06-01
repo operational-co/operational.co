@@ -17,24 +17,30 @@ Audit logging records important actions in your application.
 
 For example, tracking when a user updates their email helps with security and debugging.
 
-An audit log shows who did what and when in your system.
+An audit log shows you who did what and when in your system. This can help with KYC, chargeback documentation, compliance stuff, and more.
 
 ### Using Operational for Audit Logging
 
 Operational is an open source event tracking tool.
 
-You can use it to send structured audit events from your Node.js app.
+You can use it to send audit log events from your Node.js app.
 
 ![Operational Usage](https://operational.co/images/misc/ops-usage.jpg)
 
 ### Setting Up Operational
 
 1. Go to [app.operational.co](https://app.operational.co) and sign up.
-2. Create a new project for your audit logs.
+2. Create a new project.
 3. Copy your API key from project settings.
 4. Store the key as an environment variable in your app.
+5. Install the Nodejs SDK for Operational
+```bash
+npm install --save @operational.co/sdk
+```
 
 ### Example Code
+
+Pepper calls to the Operational SDK in your code.
 
 Below are examples of tracking audit events in Node.js.
 
@@ -96,6 +102,6 @@ Each snippet shows how to send a different audit event to Operational.
 
 Operational helps you build an audit log system with minimal setup.
 
-You can track user and system actions in one place.
+You can track user and system actions in one place. You can also receive push notifications for these events right on your device too.
 
-Learn more at https://operational.co and try out snippets in our [playground](https://operational.co/playground).
+Learn more at https://operational.co and try out ready-to-paste code snippets in our [playground](https://operational.co/playground).

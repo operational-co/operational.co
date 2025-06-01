@@ -37,6 +37,20 @@ export default {
   computed: {
     computedList: function () {
       let list = this.list;
+
+      list.sort((a, b) => {
+        // Accessing the title property inside data
+        let titleA = a.data.title.toUpperCase(); // ignore upper and lowercase
+        let titleB = b.data.title.toUpperCase(); // ignore upper and lowercase
+        if (titleA < titleB) {
+          return -1;
+        }
+        if (titleA > titleB) {
+          return 1;
+        }
+        return 0; // titles must be equal
+      });
+
       return list;
     },
     tags: function () {

@@ -10,11 +10,14 @@ tags:
 icon: 📜
 ---
 
-## What is an audit log system in PHP
+## What is an audit log system
 
 An audit log system lets you record user actions and system changes over time.
 It helps you track who did what and when.
+
 For example, recording when a user updates their profile or an admin changes permissions can simplify debugging and compliance.
+
+You can set this up in your Laravel, Symphony or raw PHP backend.
 
 ### Using Operational to track audit events
 
@@ -31,7 +34,7 @@ You can use it to log audit events in a simple and structured way.
 3. Copy the API key from the project settings.
 4. Install the PHP SDK with composer:
    ```bash
-   composer require operational/sdk
+   composer require operational/sdk-php
    ```
 5. Save the API key in your environment variables.
 
@@ -48,13 +51,7 @@ $ops = new Operational('YOUR_API_KEY');
 $payload = [
     'name' => 'user_updated_profile',
     'avatar' => '📝',
-    'content' => 'User John Smith updated their profile',
-    'metadata' => [
-        'user_id' => 123,
-        'changes' => [
-            'email' => 'new@example.com'
-        ]
-    ]
+    'content' => 'User John Smith updated their profile'
 ];
 
 $ops->events->ingest($payload);
@@ -66,8 +63,8 @@ $ops->events->ingest($payload);
 $payload = [
     'name' => 'admin_changed_permissions',
     'avatar' => '🔒',
-    'content' => 'Admin Jane Doe granted editor rights to user 456',
-    'metadata' => [
+    'type' => 'json',
+    'content' => [
         'admin_id' => 789,
         'user_id' => 456,
         'new_role' => 'editor'
@@ -83,8 +80,9 @@ $ops->events->ingest($payload);
 $payload = [
     'name' => 'record_deleted',
     'avatar' => '🗑️',
-    'content' => 'User John Smith deleted record 321',
-    'metadata' => [
+    'type' => 'json',
+    'content' => [
+        'description' => 'User John Smith deleted record 321',
         'user_id' => 123,
         'record_id' => 321
     ]
@@ -99,5 +97,6 @@ These examples show how to send different audit events from your PHP app to Oper
 
 Building an audit log system in your PHP app helps track changes and user actions.
 Operational makes it easy to capture and view these events without extra setup.
+
 Learn more at https://operational.co.
-Try the playground for quick snippets at https://operational.co/playground.
+Try the playground for ready-to-paste code snippets at https://operational.co/playground.
