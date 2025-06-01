@@ -54,24 +54,24 @@ const renderer = {
 
     const text = this.parser.parseInline(tokens);
     return `<a href="${href}" ${rel}>${text}</a>`;
-  }
+  },
 };
 
 marked.use({
-  renderer
+  renderer,
 });
 
 export default {
   components: {
     Constrain,
     Toc,
-    ArticleRelated
+    ArticleRelated,
   },
 
   props: {
     post: {},
     nextPost: {},
-    posts: {}
+    posts: {},
   },
 
   methods: {
@@ -88,7 +88,7 @@ export default {
       const options = {
         year: "numeric",
         month: "long",
-        day: "numeric"
+        day: "numeric",
       };
 
       date = new Intl.DateTimeFormat("en-US", options).format(date);
@@ -108,7 +108,7 @@ export default {
 
       list.push({
         title: "Introduction",
-        link: "#"
+        link: "#",
       });
 
       for (let i = 0; i < tokens.length; i++) {
@@ -119,16 +119,16 @@ export default {
 
           list.push({
             title: token.text,
-            link: `#${escapedText}`
+            link: `#${escapedText}`,
           });
         }
       }
 
       return list;
-    }
+    },
   },
 
-  fetchKey: "articles"
+  fetchKey: "articles",
 };
 </script>
 

@@ -59,8 +59,6 @@ export default {
       if (!Array.isArray(items) || items.length === 0) {
         return [];
       }
-
-      console.log(items);
       // Start from the first item's tags...
       return (
         items

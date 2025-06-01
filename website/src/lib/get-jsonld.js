@@ -95,7 +95,7 @@ function getJsonld(obj, type = "post") {
       json = getPostJsonLd(obj);
     } catch (err) {
       console.log(`JsonLd not generated for type ${type}`);
-      console.log(err);
+      //console.log(err);
     }
   }
   if (type === "page") {
@@ -103,7 +103,7 @@ function getJsonld(obj, type = "post") {
       json = getPageJsonLd(obj);
     } catch (err) {
       console.log(`JsonLd not generated for type ${type}`);
-      console.log(err);
+      //console.log(err);
     }
   }
   if (type === "usecase") {
@@ -111,7 +111,7 @@ function getJsonld(obj, type = "post") {
       json = getUsecaseJsonLd(obj);
     } catch (err) {
       console.log(`JsonLd not generated for type ${type}`);
-      console.log(err);
+      //console.log(err);
     }
   }
   return json;

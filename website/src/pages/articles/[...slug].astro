@@ -2,11 +2,12 @@
 import helper from "@/lib/helper.js";
 import ArticleHeader from "@/components/article-header.vue";
 import ArticleSlug from "@/components/article-slug.vue";
+import ArticleUsecases from "@/components/article-usecases.vue";
 import BaseLayout from "@/layouts/base.astro";
 import getJsonld from "@/lib/get-jsonld.js";
+import { getCollection } from 'astro:content';
 
 export async function getStaticPaths() {
-	//const posts = await getCollection('blog');
 
 	let posts = await helper.common();
 
@@ -48,6 +49,8 @@ let seoTitle = `${post.title} - Operational`;
 
 const jsonLd = getJsonld(post);
 
+const usecases = await getCollection('usecases');
+
 ---
 
 
@@ -57,4 +60,5 @@ const jsonLd = getJsonld(post);
 	<ArticleHeader post={post}></ArticleHeader>
 	<ArticleSlug posts={posts} post={post} nextPost={nextPost}>
 	</ArticleSlug>
+	<ArticleUsecases usecases={usecases}></ArticleUsecases>
 </BaseLayout>

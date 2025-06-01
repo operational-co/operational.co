@@ -8,7 +8,13 @@
     <div class="c-article-related__list">
       <a :href="`/articles/${post.slug}`" v-for="(post, i) in computedList" :key="i">
         <span>{{ post.title }}</span>
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <svg
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
           <path
             d="M14 6L20 12L14 18M19 12H4"
             stroke="currentColor"
@@ -27,13 +33,13 @@ import ArticleCard from "@/components/ui/article-card.vue";
 
 export default {
   components: {
-    ArticleCard
+    ArticleCard,
   },
 
   props: {
     nextPost: {},
     post: {},
-    posts: {}
+    posts: {},
   },
 
   computed: {
@@ -51,8 +57,8 @@ export default {
       });
 
       return posts;
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -98,6 +104,11 @@ export default {
       &:hover,
       &:active {
         color: var(--color-primary);
+      }
+
+      svg {
+        margin-left: 0.5rem;
+        min-width: 24px;
       }
     }
   }
