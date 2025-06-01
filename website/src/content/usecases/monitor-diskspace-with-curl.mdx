@@ -14,6 +14,7 @@ icon: 💽
 ## What is disk space monitoring with cURL
 
 Monitoring disk space helps ensure your servers do not run out of storage and keep applications running smoothly.
+
 Using cURL to send alerts lets you automate notifications when space is low.
 
 ### How Operational helps with disk space monitoring
@@ -42,9 +43,43 @@ curl -X POST https://events.operational.co/v1/ingest -H "Authorization: Bearer Y
 
 This command sends a low disk space alert to Operational when storage runs low.
 
+If you prefer an entire bash script:
+
+```bash
+#!/bin/bash
+
+# Set your API key here
+API_KEY="YOUR_API_KEY"
+
+# Path to check
+CHECK_PATH="/var/www"
+
+# Threshold percentage
+THRESHOLD=10
+
+# Get available disk space as a percentage (removes the % sign)
+USAGE=$(df -h "$CHECK_PATH" | awk 'NR==2 {print $5}' | sed 's/%//')
+
+# If usage is 90% or more, disk space is less than 10%
+if [ "$USAGE" -ge $((100 - THRESHOLD)) ]; then
+  curl -X POST https://events.operational.co/v1/ingest \
+    -H "Authorization: Bearer $API_KEY" \
+    -H "Content-Type: application/json" \
+    --data "{
+      \"name\": \"Low disk space\",
+      \"avatar\": \"💽\",
+      \"notify\": \"true\",
+      \"content\": \"Disk space is below threshold on $(hostname): only $((100 - USAGE))% remaining\"
+    }"
+fi
+```
+
+Going further, you can also set a crontab that runs this script every day.
+
 ### Conclusion
 
 Monitoring disk space with cURL and Operational saves time and prevents outages.
-Operational handles your alerts in one dashboard.
+Operational handles your alerts in one dashboard and sends push notifications to your device.
+
 Learn more on https://operational.co
-Try it in the playground: https://operational.co/playground
+Try ready-to-paste cURL code snippets inside the Playground: https://operational.co/playground

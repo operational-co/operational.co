@@ -13,7 +13,7 @@ icon: "⏰"
 
 ## What is cronjob monitoring in WordPress
 
-WordPress uses cron-like tasks to schedule repeated actions.  
+WordPress uses [cron-like tasks](https://developer.wordpress.org/plugins/cron/) to schedule repeated actions.  
 These cronjobs perform tasks like publishing scheduled posts, cleaning up items, or sending emails.  
 
 Monitoring these jobs helps you catch failures, track performance, and ensure your site runs smoothly.  
@@ -39,6 +39,7 @@ It provides a simple API to send event data to your Operational dashboard.
 ```php
 <?php
 // Send a successful cronjob execution event to Operational
+// Add this inside add_action( 'bl_cron_hook', 'bl_cron_exec' ); hook
 $payload = [
     'name' => 'Cronjob Executed',
     'avatar' => '⏰',
@@ -73,6 +74,8 @@ These examples show how to report both successful and failed cronjobs to your Op
 
 ### Conclusion
 
-Using Operational to monitor WordPress cronjobs saves time and helps you catch issues early.  
-You can view real-time events and trends in one place.  
+Using Operational to monitor WordPress cronjobs saves time and helps you catch issues early.
+ 
+You can view real-time events and trends in one place. You can also make it send push notifications to your device.
+
 Learn more at https://operational.co or try snippets in our Playground: https://operational.co/playground

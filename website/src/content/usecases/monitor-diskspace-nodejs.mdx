@@ -13,9 +13,15 @@ icon: 💾
 ## What is disk space monitoring in Node.js
 
 Monitoring disk space means checking how much storage your server uses.  
-This helps you prevent crashes or slowdowns.  
-For example, if log files grow too large, your service may stop working.  
-Tracking disk usage in your Node.js app lets you send alerts before issues occur.
+This helps you prevent crashes or slowdowns.
+
+You can monitor diskspace using packages like `systeminformation` or hack your own.
+
+For example, if log files grow too large, your service may stop working. `.npm` cache is a big offender.
+
+And since most VPS instances have low default disk space, you're better off implementing this early on.
+
+Tracking disk usage in your Node.js app lets you send alerts before these issues occur.
 
 ### Using Operational to track disk space
 
@@ -39,6 +45,7 @@ import Operational from "@operational.co/sdk"
 const ops = new Operational("YOUR_API_KEY")
 
 // Function to get disk usage percentage
+// Use `systeminformation` or something similar
 function getDiskUsage() {
   // Example logic to calculate disk usage
   return 85
@@ -62,7 +69,7 @@ This code checks disk usage and sends an alert event to Operational when usage e
 ### Conclusion
 
 Operational can save time by handling event storage and dashboards.  
-You get alerts for disk space issues without building your own system.  
+You get alerts for disk space issues without building your own system, and also receive push alerts for these events.
 
 Learn more at https://operational.co  
-Try the playground to copy and paste snippets: https://operational.co/playground
+Try the playground for ready-to-paste code snippets: https://operational.co/playground
