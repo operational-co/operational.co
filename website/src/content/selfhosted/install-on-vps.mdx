@@ -25,11 +25,10 @@ This is the fastest method to install Operational. This method requires that:
 After that, run this inside your VPS as root.
 
 
-<Code lang="bash" client:load>
-```
+
+```bash
 curl -fsSL https://raw.githubusercontent.com/operational-co/operational.co/master/bin/setup-vps.sh -o setup-vps.sh && sudo bash setup-vps.sh
 ```
-</Code>
 
 This script will:
 
@@ -73,7 +72,7 @@ If you wish to update your copy of Operational, perform these steps:
 
 - ssh inside your server
 - go to /home/operational.go
-- run `git fetch origin`. If this doesn't work, set your git remove to operational's github repo.
+- run `git fetch origin`. If this doesn't work, set your git remote to operational's github repo.
 - cd to `/app` and run `npm run build`
 - restart nodejs by running `pm2 restart 0`
 

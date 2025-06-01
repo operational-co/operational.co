@@ -27,13 +27,11 @@ Here's a video on setting up Operational via Coolify:
 
 5. Setup a Docker image
   Get the Docker image url from [here](https://github.com/operational-co/operational.co/pkgs/container/operational.co).
-6. Enter env vars
-  You'll need these vars:
-
-  - APP_URL: set this to the default url Coolify assigns(you can change this later on)
-  - DATABASE_URL: set this as the connection string of the mysql database you've setup earlier
-  - PORT: set this to 2000
-  - VITE_API_URL: set this to the backend url
+6. Enter these env vars inside Coolify:
+   - `APP_URL`: set this to the default URL Coolify assigns (you can change this later on)
+   - `DATABASE_URL`: set this as the connection string of the MySQL database you've set up earlier
+   - `PORT`: set this to 2000
+   - `VITE_API_URL`: set this to the backend URL
 
 You'll need to also create a backend url manually. In the video, I couldn't get this to work via Coolify's UI so I manually added container labels.
 
@@ -41,18 +39,16 @@ But you don't need to do that. All you need to do is to add two domains in the d
 
 If Coolify's UI barfs, paste this code at the end of the container labels and replace api-yourfrontendurl with your backend:
 
-<Code lang="bash">
-```
+```bash
 traefik.http.routers.backend-4337.rule=Host(`api-yourfrontendurl`)
 traefik.http.routers.backend-4337.entryPoints=http
 traefik.http.routers.backend-4337.service=backend-4337
 traefik.http.services.backend-4337.loadbalancer.server.port=4337
 ```
-</Code>
 
 And paste the backend url in the VITE_API_URL env var as the value.
 
-7. Deploy your docker container.
+Lastly, deploy your container inside Coolify.
 
 ---
 

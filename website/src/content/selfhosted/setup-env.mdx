@@ -6,7 +6,6 @@ date: 2025-03-15
 ---
 
 import Item from "@operational.co/components/card/index.vue";
-import Code from "@operational.co/components/code/index.vue";
 
 # Setup env vars
 
@@ -14,8 +13,7 @@ Env vars control how the server will function. For hosted deployments, read thro
 
 ## Backend setup
 
-<Code lang="bash" client:load>
-```
+```bash
 # REQUIRED. mysql database connection string, eg: mysql://mysql-user:mysql-password@host:port/db-name
 DATABASE_URL="mysql://root:gjkesbgkjak@19.43.119.82:2000/operational" 
 
@@ -62,16 +60,13 @@ SMTP_PORT=""
 SMTP_USERNAME=""
 SMTP_PASSWORD=""
 ```
-</Code>
 
 ## App setup
 
-<Code lang="bash" client:load>
-```
+```bash
 # REQUIRED. Set this the to url your api server is accessible to. Defaults to http://localhost:2000
 VITE_API_URL="http://localhost:2000"
 
 # Only set this if you have vapid details. Set this to the value of VAPID_PUBLIC_KEY from your backend .env
 VITE_PUSH_SERVER_KEY=""
 ```
-</Code>

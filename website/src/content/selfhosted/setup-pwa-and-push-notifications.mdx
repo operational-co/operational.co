@@ -6,7 +6,6 @@ date: 2025-03-15
 ---
 
 import Item from "@operational.co/components/card/index.vue";
-import Code from "@operational.co/components/code/index.vue";
 
 # Setup Push Notifications
 
@@ -35,21 +34,17 @@ You'll also need a valid email address in this format: `mailto:abc@domain.com`
 
 Now you need to set these 3 things up as env vars inside your backend's env file like this:
 
-<Code lang="bash" client:load>
+```bash
+VAPID_EMAIL="mailto:email@domain.com" # Your email
+VAPID_PUBLIC_KEY="" # <- Vapid public key
+VAPID_PRIVATE_KEY=""  # <- Vapid private key
+```
 
-```
-VAPID_EMAIL="mailto:email@domain.com"
-VAPID_PUBLIC_KEY="BP3td0Ocfd62J-Ggu9ma4SzWIwd5auBDG2rYD4K1uYOU1Q_LfVEKh9oYQqRLx6IITBHTIObZvAzXOJEzAmRGaoA"
-VAPID_PRIVATE_KEY="XAi7fu38VfY_Nm7JssLDxrpdHVRUPjtugWAlAqakKp1"
-```
-</Code>
+And then add this env var inside your app's .env:
 
-And then add this env var to your app's .env:
-<Code lang="bash" client:load>
+```bash
+VITE_PUSH_SERVER_KEY=""  # <- Vapid public key
 ```
-VITE_PUSH_SERVER_KEY="BP3td0Ocfd62J-Ggu9ma4SzWIwd5auBDG2rYD4K1uYOU1Q_LfVEKh9oYQqRLx6IITBHTIObZvAzXOJEzAmRGaoA" // vapid public key
-```
-</Code>
 
 Then run `npm run build` inside app. This will set the env var inside the app.
 
@@ -59,7 +54,7 @@ If you're using docker image, you just need to redeploy after adding env vars.
 
 ## 3. Enable PWA mode
 
-Pwa means Progressive Web App. Without this, you won't be able to receive push notifications. On desktops, this is not necessary but you install 'install' PWA at least once.
+Pwa means Progressive Web App. Without this, you won't be able to receive push notifications. On desktops, this is not necessary but you need to 'install' PWA at least once.
 
 ### Enabling PWA on mobile
 
@@ -93,4 +88,4 @@ Click on that and enable notifications.
 
 ---
 
-That's all you need to setup notifications. Once setup, you can test this by clicking on the "send test notification button".
+That's all you need to setup notifications. Once setup, you can test this by clicking on the "send test notification button" inside settings/notifications.

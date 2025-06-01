@@ -45,14 +45,12 @@ You'll need to pass the `DATABASE_URL` env as a bare minimum.
 
 Here's a basic example with ports and env vars:
 
-<Code lang="bash" client:load>
-```
+```bash
 docker run -d \
 -p 80:80 \
 -p 4337:4337 \
 -e DATABASE_URL="mysql://root:password@127.0.0.1/operational"
 ```
-</Code>
 
 Note that the backslashes are for breaking the command up into multiple lines.
 
@@ -60,8 +58,7 @@ Note that the backslashes are for breaking the command up into multiple lines.
 
 This example has everything you need for a proper production ready deployment
 
-<Code lang="bash" client:load>
-```
+```bash
 docker run -d \
   -p 80:80 \
   -p 4337:4337 \
@@ -80,7 +77,6 @@ docker run -d \
   -e CORS="" \
   ops-test
 ```
-</Code>
 
 - DATABASE_URL: mysql connection string
 - VITE_API_URL: url of the backend.

@@ -17,9 +17,9 @@ import Code from "@operational.co/components/code/index.vue";
 <br />
 <br />
 
-Operational has a nice onboarding process where you will be asked to create your account.
+Once you've setup your instance, open your browser and go to the frontend url.
 
-By default, Operational will be accessible on localhost:8080. Go there and you will be guided though the process.
+Here, we have a onboarding process where you'll be asked to create your account.
 
 Here are the steps:
 
@@ -27,21 +27,23 @@ Here are the steps:
 
 This is a basic check to see whether the app can connect to the server.
 
-If yes, it will show you some stats about the server.
-If no, it will tell you what went wrong. Most likely this is due to cors issues.
+If successful, it will show you some stats about the server.
+If not, it will tell you what went wrong. Most likely this will be due to CORS issues. Make sure you've set correct env vars.
 
 ### Create your account
 
-This form will create your account and project.
+Next, you'll be asked to create your account.
 
 Once created you can't create another account(unless you delete your account from the database) and the onboarding steps won't show up again.
 
 ### Api key
 
-You will be shown your API key.
+Next, you'll be shown your API key.
 
 ---
 
 That's all.
 
 Remember - inside the Playground all code examples should work out-of-the-box since they will have your api key and the baseUrl will be set to your API_URL.
+
+After completing the onboarding process, I highly recommend reading through the [Manual](https://operational.co/manual/introduction).
