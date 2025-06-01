@@ -339,6 +339,11 @@
             inside your product and free up your time.
           </p>
         </article>
+        <div class="text-center">
+          <a href="/usecases" class="btn btn-fancy">
+            <span> View usecases </span>
+          </a>
+        </div>
       </Constrain>
     </div>
 
