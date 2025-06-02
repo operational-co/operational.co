@@ -182,7 +182,9 @@ const component = {
 
   // Sets code to activate the user and sends it off in a email
   async sendActivation(user) {
-    let code = `ops-activate-${nanoid()}`;
+    // generate a 6 digit code
+    let code = Math.floor(100000 + Math.random() * 900000);
+    code = `ops-activate-${code}`;
 
     let form = {
       id: user.id,

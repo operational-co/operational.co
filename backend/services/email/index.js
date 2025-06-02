@@ -232,8 +232,8 @@ class Email {
       Click this link to verify your email:
       ${link}
 
-      Regards
       Shash
+      Founder, Operational
     `;
 
     return await this.send({
@@ -258,8 +258,8 @@ class Email {
       Click this link to reset your password.
       ${link}
 
-      Regards
       Shash
+      Founder, Operational
     `;
 
     return await this.send({
@@ -285,8 +285,8 @@ class Email {
 
       Your project "${workspace.name}" has been created!
 
-      Regards
       Shash
+      Founder, Operational
     `;
 
     return await this.send({
@@ -321,8 +321,8 @@ class Email {
 
       If you have any questions or need assistance, feel free to reach out at shash@operational.co
 
-      Regards
       Shash
+      Founder, Operational
     `;
 
     return await this.send({

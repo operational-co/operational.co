@@ -8,7 +8,7 @@
           :class="['c-input-checkbox-group__item', { active: selected.includes(option.value || option.key) }]"
           v-for="(option, i) in options"
           :key="i"
-          @click.prevent="toggleSlug(option.value || option.key)"
+          @click="toggleSlug($event, option.value || option.key)"
         >
           <input
             name="input-options"
@@ -27,9 +27,7 @@
               />
             </svg>
 
-            <span>
-              {{ option.key }}
-            </span>
+            <span v-html="option.key"> </span>
           </label>
         </div>
       </div>
@@ -56,6 +54,10 @@ export default {
   watch: {
     selected: {
       handler(newVal) {
+        newVal = JSON.parse(JSON.stringify(newVal));
+        if (newVal.length === 0) {
+          newVal = null;
+        }
         this.onChange(newVal);
       },
       deep: true
@@ -87,11 +89,20 @@ export default {
         return [];
       }
     },
+    type: {
+      default: ""
+    },
     handleChange: {}
   },
 
   methods: {
-    toggleSlug: function (slug) {
+    toggleSlug: function (e, slug) {
+      if (e.target.closest("a")) {
+        return;
+      }
+
+      e.preventDefault();
+
       if (this.selected.includes(slug)) {
         let i = this.selected.indexOf(slug);
         if (i > -1) {

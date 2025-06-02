@@ -376,6 +376,11 @@ export default {
 
     li {
       margin: 0;
+      padding-left: 0;
+
+      &:before {
+        display: none;
+      }
 
       a {
         display: grid;

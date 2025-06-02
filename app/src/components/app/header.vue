@@ -37,8 +37,7 @@
 
     <div :class="['c-app-header__mobile', { active: showNav === true }]">
       <router-link to="/settings">
-        <Avatar v-if="user && !user.avatar" :size="24" :name="user.email"> </Avatar>
-        <img v-if="user && user.avatar" class="c-avatar" :src="`${assetPath}/${user.avatar}`" />
+        <Avatar :user="user"> </Avatar>
         <span v-if="user"> {{ user.firstName }} </span>
       </router-link>
 
@@ -216,8 +215,9 @@ export default {
   height: 56px;
 
   .c-avatar {
-    width: 32px;
-    height: 32px;
+    width: 24px !important;
+    height: 24px;
+    min-width: 24px !important;
     border-radius: 99px;
     object-fit: cover;
     object-position: center center;

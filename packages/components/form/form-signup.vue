@@ -66,6 +66,7 @@ export default {
         password: {
           label: "Password",
           type: "InputPassword",
+          placeholder: "********",
           validations: {
             required: {
               params: null,
@@ -78,6 +79,21 @@ export default {
             maxLength: {
               params: 50,
               message: "Password cannot be more than 50 characters"
+            }
+          }
+        },
+        agree: {
+          type: "InputCheckboxGroup",
+          options: [
+            {
+              key: `I agree to the <a target="_blank" href="https://operational.co/terms">Terms & Conditions</a>`,
+              value: "agree"
+            }
+          ],
+          validations: {
+            required: {
+              params: null,
+              message: "You need to accept the TOS before signup"
             }
           }
         }
@@ -95,6 +111,11 @@ export default {
 
   methods: {
     async submissionFx(e) {
+      console.log(e);
+      if (!e.agree) {
+        throw err;
+      }
+      return;
       try {
         const res = await this.$store.user.signup(e);
         console.log(res);
@@ -106,4 +127,12 @@ export default {
 };
 </script>
 
-<style lang="scss"></style>
+<style lang="scss">
+.f-login {
+  .c-input-checkbox-group {
+    &__inner {
+      display: block;
+    }
+  }
+}
+</style>
