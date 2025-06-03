@@ -43,7 +43,7 @@ $payload = [
   'content' => 'Invoice #123 paid by John Smith for $49.99'
 ];
 
-$ch = curl_init('https://events.operational.co/v1');
+$ch = curl_init('https://api.operational.co/api/v1/ingest');
 curl_setopt($ch, CURLOPT_HTTPHEADER, [
     'Authorization: Bearer ' . $opsKey,
     'Content-Type: application/json',

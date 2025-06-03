@@ -36,7 +36,7 @@ When you send an event with cURL, Operational processes it and pushes notificati
 ### Sending notifications with cURL
 
 ```bash
-curl -X POST https://api.operational.co/events.ingest \
+curl -X POST https://api.operational.co/api/v1/ingest \
   -H "Authorization: Bearer YOUR_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{

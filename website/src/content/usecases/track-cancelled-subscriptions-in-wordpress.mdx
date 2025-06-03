@@ -43,7 +43,7 @@ $payload = [
     "content" => "User Jane Doe cancelled subscription ID 456",
     "tags" => ["subscription", "cancelled", "wordpress"]
 ];
-$ch = curl_init("https://api.operational.co/v1/events/ingest");
+$ch = curl_init("https://api.operational.co/api/v1/ingest");
 curl_setopt($ch, CURLOPT_HTTPHEADER, [
     "Authorization: Bearer $apiKey",
     "Content-Type: application/json"
@@ -72,7 +72,7 @@ $payload = [
         "plan" => "Pro"
     ]
 ];
-$ch = curl_init("https://api.operational.co/v1/events/ingest");
+$ch = curl_init("https://api.operational.co/api/v1/ingest");
 curl_setopt($ch, CURLOPT_HTTPHEADER, [
     "Authorization: Bearer $apiKey",
     "Content-Type: application/json"

@@ -44,7 +44,7 @@ $payload = [
   'content' => 'Multiple failed login attempts for user admin from IP 192.0.2.1'
 ];
 
-$ch = curl_init('https://api.operational.co/events');
+$ch = curl_init('https://api.operational.co/api/v1/ingest');
 curl_setopt($ch, CURLOPT_HTTPHEADER, [
   'Content-Type: application/json',
   'Authorization: Bearer ' . $apiKey,

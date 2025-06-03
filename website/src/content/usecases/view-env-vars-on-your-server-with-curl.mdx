@@ -35,7 +35,7 @@ You can use it to log each time someone views environment variables. That helps 
 ### Code example: Log environment view events
 
 ```bash
-curl -X POST https://api.operational.co/v1/events/ingest -H "Authorization: Bearer YOUR_API_KEY" -H "Content-Type: application/json" -d '{ "name": "view environment variables", "avatar": "🔑", "content": "User john.doe viewed env vars on server" }'
+curl -X POST https://api.operational.co/api/v1/ingest -H "Authorization: Bearer YOUR_API_KEY" -H "Content-Type: application/json" -d '{ "name": "view environment variables", "avatar": "🔑", "content": "User john.doe viewed env vars on server" }'
 ```
 
 This command sends an event to Operational whenever someone retrieves environment variables.

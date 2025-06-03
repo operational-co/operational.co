@@ -1,7 +1,7 @@
 <template>
   <div
     :class="['c-card-header', { expandable: expandable === true }, { context: type === 'context' }]"
-    @click.prevent="onClick"
+    @click.prevent="onClick($event)"
   >
     <span v-if="debug" class="c-card-header__debug">
       {{ item.id }}
@@ -14,41 +14,21 @@
       <span :title="item.createdAt">
         {{ date }}
       </span>
-      <!-- <div class="div">&nbsp;•&nbsp;</div> -->
       <span>
         {{ item.name }}
       </span>
-      <!-- <template v-if="item.notify">
-        <span class="div">&nbsp;•&nbsp;</span>
-        <span title="This event had a notification">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path
-              fill-rule="evenodd"
-              clip-rule="evenodd"
-              d="M12 2.00004C8.06401 2.00004 4.73599 4.91377 4.21579 8.81524L3.00878 17.8679C2.97068 18.1536 3.05773 18.4419 3.24762 18.6588C3.4375 18.8756 3.71174 19 4 19H7.35364C8.25779 20.7479 9.96137 22 12 22C14.0386 22 15.7422 20.7479 16.6464 19H20C20.2883 19 20.5625 18.8756 20.7524 18.6588C20.9423 18.4419 21.0293 18.1536 20.9912 17.8679L19.7842 8.81524C19.264 4.91377 15.936 2.00004 12 2.00004ZM14.2218 19H9.77824C10.3872 19.6373 11.1768 20 12 20C12.8232 20 13.6128 19.6373 14.2218 19Z"
-              fill="currentColor"
-            />
-            <path
-              fill-rule="evenodd"
-              clip-rule="evenodd"
-              d="M4.60192 1.98256C5.0247 2.33791 5.07936 2.96871 4.72401 3.39149C3.75212 4.54779 3.05168 5.93763 2.71857 7.46366C2.60079 8.00324 2.06789 8.34517 1.52831 8.22739C0.98873 8.10961 0.646797 7.57671 0.76458 7.03713C1.16861 5.1862 2.01784 3.50277 3.19299 2.10465C3.54834 1.68187 4.17914 1.62721 4.60192 1.98256ZM19.3981 1.98256C19.8209 1.62721 20.4517 1.68187 20.807 2.10465C21.9822 3.50278 22.8314 5.1862 23.2355 7.03713C23.3532 7.57671 23.0113 8.10961 22.4717 8.22739C21.9321 8.34517 21.3993 8.00324 21.2815 7.46366C20.9484 5.93763 20.2479 4.54779 19.276 3.39149C18.9207 2.96871 18.9753 2.33791 19.3981 1.98256Z"
-              fill="currentColor"
-            />
-          </svg>
-        </span>
-      </template>
-      <template v-if="item.category">
-        <span class="div">&nbsp;•&nbsp;</span>
-        <span>
-          {{ item.category }}
-        </span>
-      </template> -->
     </div>
-    <!-- <div class="c-card-header__labels">
-      <span v-if="item.notify"> N </span>
-      <span v-if="item.contexts && item.contexts.length"> C </span>
-      <span v-if="item.actions && item.actions.length"> A </span>
-    </div> -->
+    <div class="c-card-header__dropdown">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path
+          d="M3 7H21M3 17H21"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      </svg>
+    </div>
     <div class="c-card-header__expand">
       <template v-if="expandable">
         <svg v-if="!expand" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -125,7 +105,7 @@ export default {
 <style lang="scss">
 .c-card-header {
   display: grid;
-  grid-template-columns: max-content 1fr max-content;
+  grid-template-columns: max-content 1fr max-content max-content;
   grid-column-gap: var(--margin-lg);
   padding: var(--margin-lg);
   user-select: none;
@@ -191,6 +171,24 @@ export default {
   //   }
   // }
 
+  &__dropdown {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    font-size: var(--font-size-lg);
+    font-weight: 500;
+    overflow: hidden;
+    user-select: none;
+    cursor: pointer;
+
+    opacity: 0.25;
+
+    transition: all var(--transition-time) ease-out;
+  }
+
   &__expand {
     display: inline-flex;
     align-items: center;
@@ -226,14 +224,6 @@ export default {
     overflow: hidden;
     text-overflow: ellipsis;
     user-select: initial;
-
-    .div {
-      display: inline-block;
-      margin: 0;
-      width: 16px;
-      text-align: center;
-      opacity: 0.65;
-    }
 
     span {
       display: inline-block;
@@ -312,9 +302,6 @@ export default {
 
     &__title {
       line-height: 1.1;
-      .div {
-        width: 14px;
-      }
 
       span {
         &:first-child {

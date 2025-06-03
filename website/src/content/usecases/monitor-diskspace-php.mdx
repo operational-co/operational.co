@@ -49,7 +49,7 @@ $payload = [
   "content" => "Server disk space at 10% on /var/www"
 ];
 
-$ch = curl_init("https://api.operational.co/events.ingest");
+$ch = curl_init("https://api.operational.co/api/v1/ingest");
 curl_setopt($ch, CURLOPT_HTTPHEADER, [
   "Content-Type: application/json",
   "Authorization: Bearer $apiKey",

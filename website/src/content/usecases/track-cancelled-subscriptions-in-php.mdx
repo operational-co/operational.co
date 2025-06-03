@@ -41,7 +41,7 @@ $payload = [
 ];
 
 // Send event to Operational
-$ch = curl_init('https://api.operational.co/events');
+$ch = curl_init('https://api.operational.co/api/v1/ingest');
 curl_setopt($ch, CURLOPT_POST, true);
 curl_setopt($ch, CURLOPT_HTTPHEADER, [
   'Authorization: Bearer ' . $apiKey,

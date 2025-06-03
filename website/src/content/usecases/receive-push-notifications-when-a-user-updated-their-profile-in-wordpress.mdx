@@ -51,7 +51,7 @@ add_action('profile_update', function($user_id) {
     'content' => $user_info->display_name . ' updated their profile'
   ];
 
-  $ch = curl_init('https://api.operational.co/events');
+  $ch = curl_init('https://api.operational.co/api/v1/ingest');
   curl_setopt($ch, CURLOPT_HTTPHEADER, [
     'Authorization: Bearer YOUR_API_KEY',
     'Content-Type: application/json'

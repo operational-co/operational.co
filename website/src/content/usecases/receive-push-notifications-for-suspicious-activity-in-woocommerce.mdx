@@ -45,7 +45,7 @@ $payload = [
 ];
 
 // Send event to Operational
-$ch = curl_init('https://api.operational.co/v1/events.ingest');
+$ch = curl_init('https://api.operational.co/api/v1/ingest');
 curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'POST');
 curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($payload));
 curl_setopt($ch, CURLOPT_HTTPHEADER, [
