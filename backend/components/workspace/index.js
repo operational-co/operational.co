@@ -8,6 +8,7 @@ import Metric from "#components/metric/index.js";
 import InvoiceModel from "#components/invoice/model.js";
 
 import prisma from "#lib/prisma.js";
+import prismaTimeout from "#lib/prisma-timeout.js";
 import config from "#lib/config.js";
 import generateCost from "@operational.co/lib/generate-cost.js";
 import generateJwt from "#lib/generate-jwt.js";

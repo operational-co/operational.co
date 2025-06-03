@@ -49,6 +49,8 @@ const app = express();
 async function runExperiments() {
   await ops.log(`avatar:🤖 Server started`);
 
+  await Workspace.recomputeCategories();
+
   //await Workspace.billUsers();
 
   //await Website.getStats();

@@ -18,7 +18,7 @@
         {{ item.name }}
       </span>
     </div>
-    <div class="c-card-header__dropdown">
+    <!-- <div class="c-card-header__dropdown">
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path
           d="M3 7H21M3 17H21"
@@ -28,7 +28,7 @@
           stroke-linejoin="round"
         />
       </svg>
-    </div>
+    </div> -->
     <div class="c-card-header__expand">
       <template v-if="expandable">
         <svg v-if="!expand" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -105,7 +105,7 @@ export default {
 <style lang="scss">
 .c-card-header {
   display: grid;
-  grid-template-columns: max-content 1fr max-content max-content;
+  grid-template-columns: max-content 1fr max-content;
   grid-column-gap: var(--margin-lg);
   padding: var(--margin-lg);
   user-select: none;
