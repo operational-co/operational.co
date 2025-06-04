@@ -11,7 +11,6 @@ ENV VITE_PUSH_SERVER_KEY=$VITE_PUSH_SERVER_KEY
 
 WORKDIR /monorepo
 COPY . .
-RUN npm install
 
 WORKDIR /monorepo/app
 RUN npm run build
