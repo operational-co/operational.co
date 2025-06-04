@@ -17,7 +17,6 @@
     "@directus/sdk": "12.0.1",
     "@operational.co/app": "*",
     "@operational.co/components": "*",
-    "@operational.co/content": "^1.0.1",
     "@operational.co/lib": "*",
     "@operational.co/styles": "*",
     "@speed-highlight/core": "1.2.6",
