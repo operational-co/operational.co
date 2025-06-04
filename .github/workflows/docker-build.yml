@@ -1,7 +1,10 @@
 name: Build and Push to GHCR
 
 on:
-  push: {}
+  push:
+    tags:
+      - "v*" # ONLY triggers on version tags like v1.2.3
+# Remove branches: don't listen to branch pushes anymore
 
 permissions:
   contents: read
@@ -25,17 +28,15 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Determine version
+      - name: Extract version
         id: version
         shell: bash
         run: |
-          if [[ "${GITHUB_REF}" =~ ^refs/tags/v(.+)$ ]]; then
-            # If it’s a tag like refs/tags/v1.2.3, extract “1.2.3”
-            echo "version=${BASH_REMATCH[1]}" >> "$GITHUB_OUTPUT"
-          else
-            # Otherwise, use “latest”
-            echo "version=latest" >> "$GITHUB_OUTPUT"
-          fi
+          echo "version=${GITHUB_REF#refs/tags/v}" >> "$GITHUB_OUTPUT"
+
+      - name: Debug version output
+        run: |
+          echo "Docker tag version: ${{ steps.version.outputs.version }}"
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v6
