@@ -4,7 +4,8 @@
   "scripts": {
     "start-backend": "npm install  && cd backend && npm install && npm run start",
     "start-website": "npm install && cd website && npm install && npm run build && npm run start",
-    "ssh": "ssh ubuntu@54.224.194.81"
+    "ssh": "ssh ubuntu@54.224.194.81",
+    "docker-build": "docker build -t operational -f docker/Dockerfile ."
   },
   "workspaces": [
     "packages/*",
