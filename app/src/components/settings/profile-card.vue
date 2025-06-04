@@ -1,7 +1,7 @@
 <template>
   <div class="c-settings-profile-card">
     <header>
-      <img v-if="user && user.avatar" class="c-avatar" :src="`${assetPath}/${user.avatar}`" />
+      <Avatar :user="user"></Avatar>
       <article>
         <p>{{ user.firstName }} {{ user.lastName }}</p>
         <span>{{ user.email }}</span>
@@ -40,11 +40,13 @@
 <script>
 import Constrain from "@operational.co/components/ui/constrain.vue";
 import Code from "@operational.co/components/code/index.vue";
+import Avatar from "@operational.co/components/ui/avatar.vue";
 
 export default {
   components: {
     Constrain,
     Code,
+    Avatar,
   },
 
   data: function () {
@@ -131,14 +133,9 @@ export default {
     padding: var(--margin-lg);
     border-bottom: var(--color-bg-3) solid 1px;
 
-    img {
+    .c-avatar {
       width: var(--img-width);
       height: var(--img-width);
-      display: block;
-      border-radius: 99px;
-      background-color: var(--color-bg-4);
-      object-fit: cover;
-      object-position: center center;
     }
 
     p {

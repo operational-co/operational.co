@@ -13,7 +13,6 @@
         <router-link to="/"> Events </router-link>
         <router-link to="/settings"> Settings </router-link>
         <router-link to="/playground"> Playground </router-link>
-        <router-link to="/docs">Docs</router-link>
         <!-- <a href="#" @click.prevent="onSupport"> Support </a> -->
       </section>
 
@@ -38,7 +37,7 @@
     <div :class="['c-app-header__mobile', { active: showNav === true }]">
       <router-link to="/settings">
         <Avatar :user="user"> </Avatar>
-        <span v-if="user"> {{ user.firstName }} </span>
+        <span> Profile </span>
       </router-link>
 
       <router-link to="/">
@@ -264,6 +263,9 @@ export default {
         top: 0;
         right: 0;
         height: 100%;
+
+        display: flex;
+        align-items: center;
       }
     }
 
@@ -465,7 +467,7 @@ export default {
 
         > span {
           display: inline-block;
-          margin-top: var(--margin-sm);
+          margin-top: 2px;
           font-size: var(--font-size-xs);
           font-weight: 500;
         }

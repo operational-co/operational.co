@@ -22,11 +22,11 @@ export default function (example, ctx) {
   }
 
   if (notify) {
-    form.notify = item.notify;
+    form.notify = true;
   }
 
   if (test) {
-    form.test = item.test;
+    form.test = true;
   }
 
   if (item.actions) {
