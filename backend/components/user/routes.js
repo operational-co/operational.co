@@ -76,6 +76,11 @@ const signup = async (req, res) => {
     ...req.body,
   };
 
+  // log this
+  console.log(form.agree);
+
+  delete form.agree;
+
   try {
     data = await component.signup(form);
   } catch (err) {

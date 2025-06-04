@@ -62,7 +62,7 @@ This example has everything you need for a proper production ready deployment
 docker run -d \
   -p 80:80 \
   -p 4337:4337 \
-  -e DATABASE_URL="mysql://root:qKz7y26Q2wp3@49.13.149.99:9009/operational-staging" \
+  -e DATABASE_URL="mysql://root:password@127.0.0.1/operational-staging" \
   -e VITE_API_URL="http://localhost:4337" \
   -e APP_URL="http://localhost" \
   -e VAPID_EMAIL="mailto:your-email@example.com" \

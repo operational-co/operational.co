@@ -30,6 +30,10 @@ if (!function_exists('Operational\ops')) {
 
         $baseurl = get_option('operational_baseurl', 'https://api.operational.co');
 
+        if(!$baseurl) {
+            $baseurl = 'https://api.operational.co';
+        }
+
         $url = $baseurl . "/api/v1/ingest";
         
         if (empty($token)) {
@@ -46,6 +50,8 @@ if (!function_exists('Operational\ops')) {
             ),
             'method' => 'POST',
         );
+
+        
         
         $response = wp_remote_post($url, $args);
         

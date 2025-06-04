@@ -137,15 +137,6 @@ export const useAppStore = defineStore(config.name, {
   getters: {
     ...appStore.exportGetters(),
 
-    baseApiUrl: function () {
-      const API_URL =
-        window?.__APP_CONFIG__?.VITE_API_URL ||
-        import.meta.env.VITE_API_URL ||
-        `http://localhost:2000`;
-
-      return API_URL;
-    },
-
     isSelfHosted: function () {
       if (import.meta.env.VITE_SELFHOSTED && import.meta.env.VITE_SELFHOSTED === "false") {
         return false;
@@ -168,7 +159,9 @@ export const useAppStore = defineStore(config.name, {
     baseApiUrl: function () {
       let baseUrl = `http://localhost:2000`;
       if (window?.__APP_CONFIG__?.VITE_API_URL) {
-        console.log("using baseUrl from window?.__APP_CONFIG__?.VITE_API_URL");
+        console.log(
+          `using baseUrl from window?.__APP_CONFIG__?.VITE_API_URL: ${window?.__APP_CONFIG__?.VITE_API_URL}`,
+        );
         baseUrl = window?.__APP_CONFIG__?.VITE_API_URL;
       } else if (STATIC_API_URL) {
         console.log("Using build-time API URL");

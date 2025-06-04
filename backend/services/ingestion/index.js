@@ -202,7 +202,9 @@ class Ingestion {
       throw err;
     });
 
-    payload = await this.part2(payload);
+    payload = await this.part2(payload).catch((err) => {
+      throw err;
+    });
 
     return payload;
   }

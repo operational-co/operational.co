@@ -1,0 +1,7 @@
+{
+    "name": "operational/plugin-wordpress",
+    "type": "wordpress-plugin",
+    "require": {
+        "operational/sdk-php": "^1.0"
+    }
+}

@@ -249,8 +249,8 @@ export default {
   mounted: function () {
     this.$refs.footer.setToken(this.context.token);
 
-    if (import.meta.env.VITE_API_URL) {
-      this.context.baseUrl = import.meta.env.VITE_API_URL;
+    if (this.$store && this.$store.app && this.$store.app.baseApiUrl) {
+      this.context.baseUrl = this.$store.app.baseApiUrl;
     }
   }
 };

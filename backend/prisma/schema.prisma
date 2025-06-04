@@ -97,7 +97,7 @@ model Events {
   name        String?
   actions     Json?
   avatar      String?
-  content     String?   @db.VarChar(1000)
+  content     String?   @db.VarChar(6000)
   type        EventType @default(text)
   test        Boolean   @default(false)
   notify      Boolean   @default(false)

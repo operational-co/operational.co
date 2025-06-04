@@ -111,11 +111,9 @@ export default {
 
   methods: {
     async submissionFx(e) {
-      console.log(e);
       if (!e.agree) {
         throw err;
       }
-      return;
       try {
         const res = await this.$store.user.signup(e);
         console.log(res);
