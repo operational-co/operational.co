@@ -32,7 +32,7 @@ services:
       VAPID_PRIVATE_KEY: ""
       PORT: ""
       SECRET: ""
-      REMOVE_TEST_EVENTS_AT: ""
+      REMOVE_TEST_EVENTS_AFTER: ""
       CORS: "*"
       RESEND: ""
       ADMIN_EMAIL: admin@email.com

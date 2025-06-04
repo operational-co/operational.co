@@ -21,10 +21,10 @@ Fork the project and git clone from there. There are two upsides:
 - If we accidently push a breaking change, you won't be affected.
 - Easier to migrate from. Once we release a version, just pull upstream for the new version number.
 
-### Increase REMOVE_EVENTS_AT env var
+### Increase REMOVE_EVENTS_AFTER env var
 
 This env var controls when events are flushed out of the system.
 
 If you're using Operational as a audit log or something similar, you want to increase this to 2-3 years.
 
-2 years = `REMOVE_EVENTS_AT="730"`
+2 years = `REMOVE_EVENTS_AFTER="730"`

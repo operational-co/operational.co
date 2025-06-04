@@ -72,8 +72,8 @@ docker run -d \
   -e PORT=2000 \
   -e SECRET="your-secret" \
   -e ADMIN_EMAIL="shashwat.amin@yahoo.com" \
-  -e REMOVE_EVENTS_AT="120" \
-  -e REMOVE_TEST_EVENTS_AT="7" \
+  -e REMOVE_EVENTS_AFTER="120" \
+  -e REMOVE_TEST_EVENTS_AFTER="7" \
   -e CORS="" \
   ops-test
 ```
@@ -88,8 +88,8 @@ docker run -d \
 - PORT: optional, port for the nodejs backend, defaults to 2000. Generally speaking, you don't need to modify this at all.
 - SECRET: a long randomized string used for hashing passwords and sessions. Just enter a random string.
 - ADMIN_EMAIL: optional, sets the email sender. If you have set RESEND, set this to one of your verified domain's emails.
-- REMOVE_EVENTS_AT: optional, sets when a event is removed from the system. Defaults to one year.
-- REMOVE_TEST_EVENTS_AT: optional, sets when a test event is removed from the system. Defaults to seven days.
+- REMOVE_EVENTS_AFTER: optional, sets when a event is removed from the system. Defaults to one year.
+- REMOVE_TEST_EVENTS_AFTER: optional, sets when a test event is removed from the system. Defaults to seven days.
 - CORS: optional. If you've set APP_URL, you don't need this. But if your frontend can't connect to your backend, set this to "\*"
 
 We have more documentation about [env vars here](/selfhosted/setup-env).
