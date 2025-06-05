@@ -8,6 +8,8 @@
           <article class="c-page" v-html="toHtml(post)"></article>
         </div>
 
+        <ArticleAuthor></ArticleAuthor>
+
         <ArticleRelated :posts="posts" :post="post" :nextPost="nextPost"></ArticleRelated>
       </div>
     </Constrain>
@@ -20,6 +22,7 @@ import helper from "@/lib/helper.js";
 import Constrain from "@operational.co/components/ui/constrain.vue";
 import Toc from "@/components/article-toc.vue";
 import ArticleRelated from "@/components/article-related.vue";
+import ArticleAuthor from "./article-author.vue";
 
 import { marked } from "marked";
 
@@ -66,6 +69,7 @@ export default {
     Constrain,
     Toc,
     ArticleRelated,
+    ArticleAuthor,
   },
 
   props: {
