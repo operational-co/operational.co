@@ -8,7 +8,7 @@
       </article>
     </header>
     <footer>
-      <section>
+      <section v-if="!isDemo">
         <h5>API Key</h5>
         <Code v-if="apikey" :text="apikey.key"> </Code>
       </section>
@@ -62,6 +62,9 @@ export default {
   },
 
   computed: {
+    isDemo: function () {
+      return this.$store.workspace.isDemo;
+    },
     isSelfHosted: function () {
       const condition = this.$store.app.isSelfHosted;
       return condition;
