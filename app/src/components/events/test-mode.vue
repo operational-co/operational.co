@@ -46,11 +46,14 @@ export default {
   display: flex;
   align-items: center;
   padding-right: 0;
+  margin-left: auto;
 
   span {
-    font-size: var(--font-size-sm);
-    margin-right: var(--margin);
-    opacity: 0.8;
+    &:first-child {
+      font-size: var(--font-size-sm);
+      margin-right: var(--margin);
+      opacity: 0.8;
+    }
   }
 
   &.active {

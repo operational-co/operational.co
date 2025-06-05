@@ -155,6 +155,7 @@ export default {
     grid-row-gap: var(--margin-lg);
 
     .c-code {
+      margin-bottom: 0;
     }
 
     section {

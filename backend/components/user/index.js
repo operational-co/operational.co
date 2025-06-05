@@ -152,7 +152,7 @@ const component = {
 
       // send activation code
       console.time("activation send");
-      await this.sendActivation(user);
+      const activationCode = await this.sendActivation(user);
       console.timeEnd("activation send");
 
       // generate session
@@ -162,12 +162,37 @@ const component = {
       const jwt = generateJwt(session.sid);
       console.timeEnd("session creation");
 
-      await ops.events.ingest({
+      const event = {
         avatar: "😃",
-        name: `User signup`,
+        name: `user signup`,
         category: "user",
         contextStart: true,
         contextId: `user-signup-${user.id}`,
+        type: "rows",
+        content: [
+          {
+            label: "ID",
+            content: user.id,
+          },
+          {
+            label: "Name",
+            content: user.firstName + " " + user.lastName,
+          },
+          {
+            label: "Email",
+            content: user.email,
+          },
+          {
+            label: "Activation code",
+            content: activationCode,
+          },
+        ],
+      };
+
+      console.log(event);
+
+      await ops.events.ingest(event).catch((err) => {
+        console.log(err);
       });
 
       return {
@@ -202,6 +227,8 @@ const component = {
       name: `User activation email sent`,
       contextId: `user-signup-${user.id}`,
     });
+
+    return code;
   },
 
   async logout(token) {
@@ -264,6 +291,13 @@ const component = {
   },
 
   async updatePassword(form, user) {
+    await ops.events.ingest({
+      avatar: "📋",
+      name: `user password update`,
+      category: "user",
+      type: "json",
+    });
+
     user = await User.client.findUnique({
       where: {
         id: user.id,

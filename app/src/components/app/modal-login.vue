@@ -23,8 +23,7 @@
       </div>
 
       <div class="m-login__body" v-if="currentTab === 'signup'">
-        <FormSignup v-if="code === '1337'"></FormSignup>
-        <InputCode v-if="code !== '1337'" v-model="code"></InputCode>
+        <FormSignup></FormSignup>
         <hr />
         <section>
           <p>

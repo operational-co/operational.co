@@ -19,10 +19,9 @@ import Email from "#services/email/index.js";
 import Billing from "#services/billing/index.js";
 import Session from "#services/session/index.js";
 import { customAlphabet } from "nanoid";
+import ops from "#lib/ops.js";
 
 const nanoid = customAlphabet("1234567890abcdefghijklmnopqrstuvwxyz", 24);
-
-import ops from "#lib/ops.js";
 
 import moment from "moment";
 
@@ -120,6 +119,14 @@ const component = {
         onboardingStep: "intro",
       },
     });
+
+    let e = {
+      name: `user activated and email verified`,
+      category: `user`,
+      contextId: `user-signup-${user.id}`,
+    };
+
+    await ops.events.ingest(e);
 
     return newUser;
   },

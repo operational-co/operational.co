@@ -626,10 +626,6 @@ export default {
       margin-bottom: 0;
     }
 
-    .c-events-test-mode {
-      margin-left: auto;
-    }
-
     > a {
       margin-left: auto;
       font-weight: 500;

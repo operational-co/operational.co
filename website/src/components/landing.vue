@@ -21,8 +21,8 @@
 				</div> -->
 
         <div class="btn-container">
-          <a target="_blank" href="https://discord.gg/BdTbsQhRzc" class="btn btn-fancy btn-primary">
-            <span> Join the waitlist </span>
+          <a target="_blank" href="https:app.operational.co" class="btn btn-fancy btn-primary">
+            <span> Signup </span>
 
             <svg
               width="24"
@@ -58,7 +58,7 @@
           </a>
         </div>
 
-        <div class="script-container">
+        <!-- <div class="script-container">
           <span class="article-text">Or self host:</span>
           <Code :copy="false">docker pull ghcr.io/operational-co/operational.co:latest </Code>
           <p>
@@ -66,7 +66,7 @@
             <a href="/selfhosted/docker">with Coolify</a> or
             <a href="/selfhosted/install-locally">install locally.</a>
           </p>
-        </div>
+        </div> -->
 
         <nav>
           <span @click="setTopic('saas')" :class="[{ active: currentTopic === 'saas' }]">
