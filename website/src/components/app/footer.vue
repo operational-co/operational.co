@@ -133,12 +133,12 @@ export default {
           title: "Pitch",
         },
         {
-          slug: "/wordpress",
-          title: "Wordpress plugin",
+          slug: "/pricing",
+          title: "Pricing",
         },
         {
-          slug: "/bubble",
-          title: "Bubble plugin",
+          slug: "/wordpress",
+          title: "Wordpress plugin",
         },
       ],
       relatedLinks: [
