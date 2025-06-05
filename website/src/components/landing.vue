@@ -21,7 +21,7 @@
 				</div> -->
 
         <div class="btn-container">
-          <a target="_blank" href="https:app.operational.co" class="btn btn-fancy btn-primary">
+          <a href="https://app.operational.co" class="btn btn-fancy btn-primary">
             <span> Signup </span>
 
             <svg
