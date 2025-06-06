@@ -4,7 +4,7 @@
       <!-- <Background></Background> -->
       <Constrain size="sm">
         <div class="text-center">
-          <h1>The open-source alerting layer for your product</h1>
+          <h1>The open-source event tracker your product</h1>
           <p>
             Track what matters. Get notified instantly.<br />
             Integrate in minutes, not hours.
