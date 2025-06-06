@@ -4,10 +4,10 @@
       <!-- <Background></Background> -->
       <Constrain size="sm">
         <div class="text-center">
-          <h1>The open-source alerting layer for your SaaS stack</h1>
+          <h1>The open-source alerting layer for your product</h1>
           <p>
             Track what matters. Get notified instantly.<br />
-            No dashboards, just decisions.
+            Integrate in minutes, not hours.
           </p>
         </div>
         <article class="article-container article-text">
@@ -209,7 +209,7 @@
         <h2 class="text-center">Track & respond to your product in realtime</h2>
         <div class="d-explainer__inner left">
           <article>
-            <h3>Get notified for critical events</h3>
+            <h3>Critical events → phone. Immediately.</h3>
             <p>Receive push notifications on your mobile or in the webapp.</p>
           </article>
           <section>
