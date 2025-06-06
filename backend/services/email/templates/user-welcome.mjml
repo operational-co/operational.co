@@ -2,22 +2,20 @@
 
 <mj-raw>
   <p>Hi {{= it.user.firstName}}, welcome to Operational!</p>
-  <h3>
-  API keys
-  </h3>
   <p>
-  Your API keys are located at <a href="{{= it.context.APP_URL }}/profile">app.operational.co/profile</a>.
+    Operational is in the beta phase and as such, you won't be charged for events. We'll let you
+    know when it exits the beta phase.
   </p>
-  <h3>
-  API Docs
-  </h3>
+  <h3>API keys</h3>
   <p>
-  API Docs are located at <a href="https://operational.co/api">operational.co/api</a>.
+    Your API keys are located at
+    <a href="{{= it.context.APP_URL }}/profile">app.operational.co/profile</a>.
   </p>
-  <h3>
-  Support
-  </h3>
+  <h3>API Docs</h3>
+  <p>API Docs are located at <a href="https://operational.co/api">operational.co/api</a>.</p>
+  <h3>Support</h3>
   <p>
-  Talk to us via the in-app chat widget located at the bottom right corner of the webapp. Or just reply back to this email!
+    Talk to us via the in-app chat widget located at the bottom right corner of the webapp. Or just
+    reply back to this email!
   </p>
 </mj-raw>

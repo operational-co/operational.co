@@ -1,10 +1,14 @@
 <template>
   <div class="c-landing-intro">
     <div class="d-intro">
-      <Background></Background>
+      <!-- <Background></Background> -->
       <Constrain size="sm">
         <div class="text-center">
-          <h1>Open-source Event Tracker for your product</h1>
+          <h1>The open-source alerting layer for your SaaS stack</h1>
+          <p>
+            Track what matters. Get notified instantly.<br />
+            No dashboards, just decisions.
+          </p>
         </div>
         <article class="article-container article-text">
           <p>
@@ -953,6 +957,7 @@ await ops.events.ingest({
       position: relative;
       z-index: 1;
       text-align: center;
+      margin-bottom: 1rem;
     }
 
     .article-text {
