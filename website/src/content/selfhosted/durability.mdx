@@ -11,7 +11,7 @@ import Code from "@operational.co/components/code/index.vue";
 
 # Durability testing
 
-Operational has been tested successfully for upto 2 million events on a basic $5 VPS on hetzner.
+Operational self-hosted has been tested successfully for upto 2 million events on a basic $5 VPS on hetzner.
 
 Here's how we conducted the test and the results we got.
 
@@ -29,11 +29,9 @@ We setup another server which would continously pump events to the test server. 
 
 This test ran continously for 5 days and at the end, test server has accumulated more than 2 million events(2314636).
 
-This meant the test server receive 19,288 events per hours, or 321 events per minute.
+This meant the test server receive 19,288 events per hour, or 321 events per minute.
 
 ## Results
-
-My primary concern were read speeds.
 
 - When browsing the test server, there was no noticeable delay.
 - Category filters worked great.
@@ -41,7 +39,7 @@ My primary concern were read speeds.
 - Scrolling would load events fine.
 - Search wasn't working(existing bug)
 
-Here are the queries I used:
+Database statistics:
 ```sql
 SELECT COUNT(*) AS event_count
 FROM Events;
@@ -57,3 +55,5 @@ WHERE table_schema = 'operational'
 GROUP BY table_schema;
 ```
 = 3599.00000000 mb
+
+I'm very satisfied with the results. After dumping a ton of events on a basic VPS, it ran smoothly without any hiccups.
