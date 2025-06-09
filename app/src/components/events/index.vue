@@ -546,7 +546,7 @@ export default {
   .ptr {
     position: fixed;
     z-index: 4;
-    top: -35px;
+    top: -37px;
     width: 100%;
     height: 40px;
     //display: flex;

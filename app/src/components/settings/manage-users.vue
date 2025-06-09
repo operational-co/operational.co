@@ -243,5 +243,54 @@ export default {
       background-color: var(--color-bg-3);
     }
   }
+
+  @media screen and (max-width: 576px) {
+    &__header {
+      display: none;
+    }
+
+    &__item {
+      display: grid;
+      grid-template-rows: auto auto auto;
+      grid-template-columns: 32px 1fr 64px 80px; // total of 4 columns
+      column-gap: 8px; // optional
+      border-top: none;
+      border-bottom: none;
+
+      &:not(:last-of-type) {
+        border-bottom: none;
+      }
+
+      // 1st row (2 columns: 32px + 1fr)
+      & > span:nth-child(1) {
+        grid-column: 1; // 32px avatar
+        grid-row: 1;
+      }
+      & > span:nth-child(2) {
+        grid-column: 2 / span 3; // full name across rest of the row
+        grid-row: 1;
+      }
+
+      // 2nd row (3 columns: 1fr 64px 128px)
+      & > span:nth-child(3) {
+        grid-column: 1 / span 2; // email (1fr)
+        grid-row: 2;
+      }
+      & > span:nth-child(4) {
+        grid-column: 3; // role (64px)
+        grid-row: 2;
+      }
+      & > span:nth-child(5) {
+        grid-column: 4; // status or other (128px)
+        grid-row: 2;
+      }
+
+      // 3rd row (optional buttons etc.)
+      & > span:nth-child(6) {
+        grid-column: 1 / span 4;
+        grid-row: 3;
+      }
+    }
+  }
 }
 </style>

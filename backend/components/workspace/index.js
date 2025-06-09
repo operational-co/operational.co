@@ -27,7 +27,33 @@ const nanoid = customAlphabet("1234567890abcdefghijklmnopqrstuvwxyz", 24);
 import moment from "moment";
 
 const component = {
-  async removeExpiringInvites() {},
+  async removeExpiringInvites() {
+    try {
+      const durationDays = config.rules.INVITATION_DURATION;
+      const cutoff = moment().subtract(durationDays, "days").toDate();
+
+      // 1. Fetch all expired invites
+      const expiredInvites = await prisma.invite.findMany({
+        where: { createdAt: { lt: cutoff } },
+      });
+
+      // 2. Delete them in bulk
+      if (expiredInvites.length > 0) {
+        await prisma.invite.deleteMany({
+          where: { createdAt: { lt: cutoff } },
+        });
+      }
+
+      console.log(
+        `[Invites] Removed ${expiredInvites.length} invites older than ${cutoff.toISOString()}`,
+      );
+      // 3. Return the list of removed invites
+      return expiredInvites;
+    } catch (error) {
+      console.error("removeExpiringInvites error:", error);
+      throw error;
+    }
+  },
 
   async invite(form, adminUserId, workspaceId) {
     try {

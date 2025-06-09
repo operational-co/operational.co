@@ -10,6 +10,8 @@
 
     <Header v-if="isAuth"></Header>
 
+    <MobileFooter v-if="isAuth"></MobileFooter>
+
     <!-- <Sidebar v-if="isAuth"></Sidebar> -->
 
     <div class="c-app__body">
@@ -55,6 +57,7 @@
 import { ModalsContainer } from "vue-final-modal";
 import Glow from "@/components/app/glow.vue";
 import Header from "@/components/app/header.vue";
+import MobileFooter from "@/components/app/mobile-footer.vue";
 import Sidebar from "@/components/sidebar/index.vue";
 import ModalSetup from "@/components/app/modal-setup.vue";
 import ModalLogin from "@/components/app/modal-login.vue";
@@ -84,6 +87,7 @@ export default {
   components: {
     Glow,
     Header,
+    MobileFooter,
     Sidebar,
     ModalsContainer,
     ModalSetup,
@@ -664,6 +668,7 @@ body {
 
   @media screen and (max-width: 576px) {
     &__body {
+      height: calc(100% - 112px);
       padding-bottom: calc(64px + var(--margin-lg));
     }
   }
