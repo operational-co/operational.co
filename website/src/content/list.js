@@ -148,6 +148,10 @@ export const list = [
         name: "Best practices",
         slug: "best-practices",
       },
+      {
+        name: "Durability testing",
+        slug: "durability",
+      },
     ],
   },
   {

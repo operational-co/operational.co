@@ -1,0 +1,59 @@
+---
+title: Durability
+slug: durability
+description: Durability testing for self-hosted instances
+date: 2025-06-9
+---
+
+import Item from "@operational.co/components/card/index.vue";
+import Code from "@operational.co/components/code/index.vue";
+
+
+# Durability testing
+
+Operational has been tested successfully for upto 2 million events on a basic $5 VPS on hetzner.
+
+Here's how we conducted the test and the results we got.
+
+## Server type
+
+The server we took out for testing was a Hetzner CAX11 https://www.hetzner.com/cloud/
+
+This has 2 VCPUs, 4GB ram and 40gb ssd. We deployed Operational using the [VPS method](install-on-vps).
+
+Mysql was used as the event store(default with self-hosted)
+
+## Nature of the test
+
+We setup another server which would continously pump events to the test server. There were a template of 6 events, one of which was a Stripe based webhook.
+
+This test ran continously for 5 days and at the end, test server has accumulated more than 2 million events(2314636).
+
+This meant the test server receive 19,288 events per hours, or 321 events per minute.
+
+## Results
+
+My primary concern were read speeds.
+
+- When browsing the test server, there was no noticeable delay.
+- Category filters worked great.
+- New events would be added every few seconds, just as intended.
+- Scrolling would load events fine.
+- Search wasn't working(existing bug)
+
+Here are the queries I used:
+```sql
+SELECT COUNT(*) AS event_count
+FROM Events;
+```
+= 2314636
+
+```sql
+SELECT
+table_schema AS Database,
+SUM(data_length + index_length) / 1024 / 1024 AS Size (MB)
+FROM information_schema.tables
+WHERE table_schema = 'operational'
+GROUP BY table_schema;
+```
+= 3599.00000000 mb
