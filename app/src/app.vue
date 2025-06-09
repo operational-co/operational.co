@@ -668,7 +668,7 @@ body {
 
   @media screen and (max-width: 576px) {
     &__body {
-      height: calc(100% - 112px);
+      height: calc(100% - 100px); // 56 + 44 (footer + header)
       padding-bottom: calc(64px + var(--margin-lg));
     }
   }

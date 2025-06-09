@@ -15,6 +15,8 @@
         <router-link to="/playground"> Playground </router-link>
       </section>
 
+      <section class="c-app-header__name">Settings</section>
+
       <section>
         <a
           :class="['popup-menu-button', { active: menuActive === true }]"
@@ -164,7 +166,7 @@ export default {
     border-radius: var(--border-radius);
     font-family: var(--font-family-monospace);
     font-weight: 400;
-    font-size: var(--font-size-sm);
+    font-size: var(--font-size-xxs);
     line-height: 1;
   }
 
@@ -222,25 +224,11 @@ export default {
         height: 32px;
       }
 
-      // h1 {
-      //   display: inline-block;
-      //   padding: var(--margin);
-      //   font-size: var(--font-size-lg);
-      //   margin: 0;
-      //   color: var(--color-font);
-      //   transition: all var(--transition-time) linear;
-
-      //   &:hover,
-      //   &:active {
-      //     color: var(--color-primary-light);
-      //   }
-      // }
-
       span {
         display: inline-block;
-        padding: var(--margin-sm) var(--margin);
+        padding: var(--margin-sm);
         margin-left: var(--margin);
-        font-size: var(--font-size-xs);
+        font-size: var(--font-size-xxs);
         font-weight: 600;
         font-family: var(--font-family-monospace);
         line-height: 1;
@@ -298,6 +286,10 @@ export default {
     }
   }
 
+  &__name {
+    display: none;
+  }
+
   &__menu {
     display: flex;
     justify-content: center;
@@ -344,6 +336,9 @@ export default {
   }
 
   @media screen and (max-width: 940px) {
+    height: 40px;
+    //background-color: var(--color-bg-2);
+
     .c-avatar {
       width: 24px;
       height: 24px;
@@ -351,6 +346,23 @@ export default {
 
     .c-constrain__inner {
       padding: 0;
+    }
+
+    .logo {
+      img {
+        width: 26px;
+        height: 26px;
+      }
+    }
+
+    .popup-menu-button {
+      background-color: transparent;
+      font-size: var(--font-size-xs);
+
+      &:hover,
+      &:active {
+        background-color: transparent;
+      }
     }
 
     &__menu {

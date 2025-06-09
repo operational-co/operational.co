@@ -660,7 +660,7 @@ export default {
   }
 
   @media screen and (max-width: 940px) {
-    padding-top: var(--margin-lg);
+    //padding-top: var(--margin-lg);
 
     &__wrapper {
       &.date {

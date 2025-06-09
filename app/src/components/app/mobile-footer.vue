@@ -176,7 +176,7 @@ export default {
 .c-mobile-footer {
   display: none;
   width: 100%;
-  height: 56px;
+  height: 60px;
 
   &__testmode {
     display: inline-block;
