@@ -3,7 +3,7 @@
     <div class="c-popup-menu__top">
       <small v-if="user"> {{ user.email }} </small>
     </div>
-    <div class="c-popup-menu__middle" v-if="user.workspaces && user.workspaces.length > 1">
+    <div class="c-popup-menu__middle">
       <span> Projects </span>
       <a
         href="#"
@@ -11,6 +11,7 @@
         :key="workspace.id"
         @click.prevent="switchWorkspace(workspace)"
       >
+        <Avatar :workspace="workspace"></Avatar>
         <span>
           {{ workspace.name }}
         </span>
@@ -125,9 +126,12 @@
 import Popup from "@operational.co/components/ui/popup.vue";
 import { userApi } from "@/store/user.js";
 
+import Avatar from "@operational.co/components/ui/avatar.vue";
+
 export default {
   components: {
     Popup,
+    Avatar,
   },
 
   data: function () {
@@ -241,10 +245,15 @@ export default {
 
     > a {
       display: flex;
+      align-items: center;
       padding: var(--margin) var(--margin-lg);
       font-size: var(--font-size-sm);
       font-weight: 500;
       color: var(--color-font);
+
+      .c-avatar {
+        margin-right: var(--margin);
+      }
 
       &:hover,
       &:active,
