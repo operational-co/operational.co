@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@dicebear/core": "9.2.2",
+    "@dicebear/glass": "9.2.2",
     "@dicebear/thumbs": "9.2.2",
     "@floating-ui/dom": "1.6.9",
     "@mdx-js/rollup": "3.0.1",

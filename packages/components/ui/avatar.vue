@@ -8,10 +8,12 @@
 <script>
 import { createAvatar } from "@dicebear/core";
 import * as thumbs from "@dicebear/thumbs";
+import * as glass from "@dicebear/glass";
 
 export default {
   props: {
-    user: {}
+    user: {},
+    workspace: {}
   },
 
   data: function () {
@@ -33,14 +35,33 @@ export default {
   methods: {
     createAvatar: function () {
       // only create avatar is needed
+      let seed = null;
+
+      // avatar is already present, no need for svg
       if (this.user && this.user.avatar) {
         return;
       }
-      if (!this.user) {
+
+      let type = thumbs;
+
+      if (this.user && this.user.email) {
+        seed = this.user.email;
+      }
+
+      if (this.workspace && this.workspace.name) {
+        seed = this.workspace.name;
+        type = glass;
+      }
+
+      if (!seed) {
         return;
       }
-      let temp = createAvatar(thumbs, {
-        seed: this.user.email || ""
+
+      this.createSvg(seed, type);
+    },
+    createSvg: function (seed, type) {
+      let temp = createAvatar(type, {
+        seed: seed
       });
 
       let svg = temp.toString();

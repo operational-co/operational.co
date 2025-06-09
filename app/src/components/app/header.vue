@@ -23,7 +23,7 @@
           @click.prevent="onMenuOpen"
         >
           <span v-if="workspace"> {{ workspace.name }}</span>
-          <Avatar :user="user"> </Avatar>
+          <Avatar :workspace="workspace"> </Avatar>
         </a>
 
         <PopupMenu
@@ -375,9 +375,5 @@ export default {
       padding-bottom: var(--spacer);
     }
   }
-}
-
-.is-ios .c-app-header {
-  height: 76px;
 }
 </style>
