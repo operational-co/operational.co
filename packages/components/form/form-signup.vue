@@ -116,7 +116,6 @@ export default {
       }
       try {
         const res = await this.$store.user.signup(e);
-        console.log(res);
       } catch (err) {
         throw err;
       }

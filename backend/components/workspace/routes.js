@@ -119,8 +119,6 @@ const invite = async (req, res) => {
     });
   }
 
-  console.log(res.locals);
-
   try {
     const users = await component.invite(
       form,
@@ -132,6 +130,78 @@ const invite = async (req, res) => {
   } catch (err) {
     return res.status(400).send({
       message: err,
+    });
+  }
+};
+
+const removeUser = async (req, res) => {
+  const form = {
+    userId: req.body.userId,
+  };
+
+  try {
+    const users = await component.removeUser(
+      form,
+      res.locals.user.id,
+      res.locals.user.primaryWorkspace,
+    );
+
+    return res.status(201).send(users);
+  } catch (err) {
+    console.log(err);
+    return res.status(400).send({
+      message: err,
+    });
+  }
+};
+
+const checkInvite = async (req, res) => {
+  const form = {
+    inviteCode: req.body.inviteCode,
+  };
+
+  await new Promise((r) => setTimeout(r, 200));
+
+  try {
+    const user = await component.checkInvite(form);
+
+    if (user) {
+      return res.status(200).send(user);
+    } else {
+      return res.status(404).send({
+        message: "No user found with this invite code",
+      });
+    }
+  } catch (err) {
+    console.log(err);
+    // mask errors
+    return res.status(404).send({
+      message: "No user found with this invite code",
+    });
+  }
+};
+
+const acceptInvite = async (req, res) => {
+  const form = {
+    inviteCode: req.body.inviteCode,
+    firstName: req.body.firstName,
+    lastName: req.body.lastName,
+    password: req.body.password,
+  };
+
+  await new Promise((r) => setTimeout(r, 200));
+
+  try {
+    const data = await component.acceptInvite(form);
+
+    res.header("x-token", data.jwt);
+
+    return res.send(data.user);
+  } catch (err) {
+    console.log(err);
+    // mask errors
+    return res.status(404).send({
+      message: "No user found with this invite code",
     });
   }
 };
@@ -174,9 +244,39 @@ const inviteSchema = {
   },
 };
 
+const removeUserSchema = {
+  userId: {
+    type: "number",
+    convert: true,
+  },
+};
+
+const checkInviteSchema = {
+  inviteCode: {
+    type: "string",
+  },
+};
+
+const acceptInviteSchema = {
+  inviteCode: {
+    type: "string",
+  },
+  firstName: {
+    type: "string",
+  },
+  lastName: {
+    type: "string",
+  },
+  password: { type: "string", minLength: 8, maxLength: 50 },
+};
+
 router.post("/activate", middlewareSchema(activateSchema), activate);
 
-router.post("/invite", middlewareAuth, middlewareSchema(inviteSchema), invite);
+router.post("/check-invite", middlewareSchema(checkInviteSchema), checkInvite);
+
+router.post("/invite-user", middlewareAuth, middlewareSchema(inviteSchema), invite);
+router.post("/accept-invite", middlewareSchema(acceptInviteSchema), acceptInvite);
+router.post("/remove-user", middlewareAuth, middlewareSchema(removeUserSchema), removeUser);
 
 router.post("/", middlewareAuth, middlewareSchema(createSchema), create);
 

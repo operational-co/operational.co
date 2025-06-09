@@ -310,18 +310,22 @@ export const useUserStore = defineStore(config.name, {
       return data;
     },
 
-    signup: async function (form = {}) {
+    signup: async function (form = {}, pie = null) {
       var w = window.innerWidth;
       var h = window.innerHeight;
       let config = this.processEnvironment();
 
-      form.meta = {
-        ...config,
-      };
+      if (form) {
+        form.meta = {
+          ...config,
+        };
+      }
 
-      const pie = await api.signup(form).catch((err) => {
-        throw err;
-      });
+      if (!pie) {
+        pie = await api.signup(form).catch((err) => {
+          throw err;
+        });
+      }
 
       if (!pie) {
         return;
@@ -352,9 +356,11 @@ export const useUserStore = defineStore(config.name, {
       var h = window.innerHeight;
       let config = this.processEnvironment();
 
-      form.meta = {
-        ...config,
-      };
+      if (form) {
+        form.meta = {
+          ...config,
+        };
+      }
 
       const pie = await api.setup(form).catch((err) => {
         throw err;

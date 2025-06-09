@@ -56,7 +56,34 @@ const api = {
 
   inviteUser: async function (form) {
     try {
-      const res = await http.post("/workspace/invite", form);
+      const res = await http.post("/workspace/invite-user", form);
+      return res.data || null;
+    } catch (err) {
+      throw err;
+    }
+  },
+
+  removeUser: async function (form) {
+    try {
+      const res = await http.post("/workspace/remove-user", form);
+      return res.data || null;
+    } catch (err) {
+      throw err;
+    }
+  },
+
+  checkInvite: async function (form) {
+    try {
+      const res = await http.post("/workspace/check-invite", form);
+      return res.data || null;
+    } catch (err) {
+      throw err;
+    }
+  },
+
+  acceptInvite: async function (form) {
+    try {
+      const res = await http.post("/workspace/accept-invite", form);
       return res.data || null;
     } catch (err) {
       throw err;
@@ -133,8 +160,6 @@ export const useWorkspaceStore = defineStore(config.name, {
         throw "Something went wrong";
       }
 
-      this.resource = res;
-
       const app = useAppStore();
 
       if (res) {
@@ -142,7 +167,15 @@ export const useWorkspaceStore = defineStore(config.name, {
         // 	type: "success",
         // 	message: `Settings updated!`,
         // });
-        this.resource = res;
+        if (!res.users) {
+          let users = JSON.parse(JSON.stringify(this.resource.users || []));
+
+          this.resource = res;
+
+          this.resource.users = users;
+        } else {
+          this.resource = res;
+        }
       } else {
         return;
       }
@@ -266,7 +299,44 @@ export const useWorkspaceStore = defineStore(config.name, {
     },
 
     inviteUser: async function (e) {
-      await api.inviteUser(e);
+      try {
+        const users = await api.inviteUser(e);
+        this.resource.users = users;
+      } catch (err) {
+        console.log(err);
+        throw err;
+      }
+    },
+
+    removeUser: async function (e) {
+      try {
+        const users = await api.removeUser(e);
+        console.log(users);
+        this.resource.users = users;
+      } catch (err) {
+        console.log(err);
+        throw err;
+      }
+    },
+
+    checkInvite: async function (e) {
+      try {
+        const user = await api.checkInvite(e);
+        return user;
+      } catch (err) {
+        console.log(err);
+        throw err;
+      }
+    },
+
+    acceptInvite: async function (e) {
+      try {
+        const data = await api.acceptInvite(e);
+        return data;
+      } catch (err) {
+        console.log(err);
+        throw err;
+      }
     },
   },
 });

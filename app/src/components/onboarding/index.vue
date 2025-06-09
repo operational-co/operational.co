@@ -23,6 +23,8 @@ import Outro from "./outro.vue";
 import Setup from "./setup.vue";
 import Setup2 from "./setup2.vue";
 
+import Invitee from "./invitee.vue";
+
 export default {
   components: {
     Activation,
@@ -39,6 +41,8 @@ export default {
 
     Setup,
     Setup2,
+
+    Invitee,
   },
 
   data: function () {
@@ -59,6 +63,8 @@ export default {
       ],
 
       setupSetups: ["setup", "pwa", "setup2"],
+
+      inviteeSteps: ["invitee"],
     };
   },
 
@@ -69,6 +75,31 @@ export default {
     isSelfHosted: function () {
       const condition = this.$store.app.isSelfHosted;
       return condition;
+    },
+    workspace: function () {
+      return this.$store.workspace.resource;
+    },
+    users: function () {
+      if (!this.workspace) {
+        return [];
+      }
+
+      let users = this.workspace.users || [];
+
+      users.reverse();
+
+      return users;
+    },
+
+    // if the current user isn't a admin, assume they are a invitee
+    isInvitee: function () {
+      let user = this.user;
+
+      if (this.workspace && this.workspace.adminId !== this.user.id) {
+        return true;
+      }
+
+      return false;
     },
   },
 
@@ -89,6 +120,10 @@ export default {
       if (this.isSelfHosted) {
         steps = this.setupSetups;
       }
+      if (this.isInvitee) {
+        steps = this.inviteeSteps;
+      }
+
       let i = steps.indexOf(this.currentStep);
 
       if (i !== -1) {
@@ -116,6 +151,15 @@ export default {
     if (this.isSelfHosted) {
       steps = this.setupSetups;
     }
+
+    if (this.isInvitee) {
+      steps = this.inviteeSteps;
+      onboardingStep = "invitee";
+    }
+
+    console.log(this.isInvitee);
+
+    console.log(steps);
 
     // If user hasn't been activated, force them to finish their activation
     if (!this.user.activated) {

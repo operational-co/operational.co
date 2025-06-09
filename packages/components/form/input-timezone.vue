@@ -40,7 +40,7 @@ export default {
   components: {
     Field,
     InputText,
-    Popup,
+    Popup
   },
 
   data: function () {
@@ -49,34 +49,34 @@ export default {
       query: "",
       tz: timezones,
       selector: null,
-      popupActive: false,
+      popupActive: false
     };
   },
 
   props: {
     type: {
       type: String,
-      default: "text",
+      default: "text"
     },
     value: {
       type: String,
-      default: "",
+      default: ""
     },
     name: {
-      type: String,
+      type: String
     },
     label: {
-      type: String,
+      type: String
     },
     successMessage: {
       type: String,
-      default: "",
+      default: ""
     },
     placeholder: {
       type: String,
-      default: "",
+      default: ""
     },
-    handleChange: {},
+    handleChange: {}
   },
 
   watch: {
@@ -90,7 +90,7 @@ export default {
           }
         }, 10);
       }
-    },
+    }
   },
 
   computed: {
@@ -110,7 +110,7 @@ export default {
       let search = this.search(items, this.query);
 
       return search;
-    },
+    }
   },
 
   methods: {
@@ -130,10 +130,9 @@ export default {
       this.$emit("update:value", item.text);
     },
     search: function (list, query) {
-      console.log(list.length);
       const options = {
         includeScore: false,
-        keys: ["searchText"],
+        keys: ["searchText"]
         //threshold: 0.2,
         //findAllMatches: true,
         //distance: 20,
@@ -147,10 +146,8 @@ export default {
         result[i] = result[i].item;
       }
 
-      console.log(result);
-
       return result;
-    },
+    }
     // onChange: function (e) {
     //   if (this.handleChange) {
     //     this.handleChange(e);
@@ -162,7 +159,7 @@ export default {
 
   mounted: function () {
     this.selector = ".bzz";
-  },
+  }
 };
 </script>
 

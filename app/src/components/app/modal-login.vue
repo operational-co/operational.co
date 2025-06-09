@@ -8,6 +8,7 @@
         </article>
       </div>
 
+      <!-- Login -->
       <div class="m-login__body" v-if="currentTab === 'login'">
         <FormLogin></FormLogin>
         <section>
@@ -22,6 +23,7 @@
         </section>
       </div>
 
+      <!-- Signup -->
       <div class="m-login__body" v-if="currentTab === 'signup'">
         <FormSignup></FormSignup>
         <hr />
@@ -33,6 +35,7 @@
         </section>
       </div>
 
+      <!-- Reset password -->
       <div class="m-login__body" v-if="currentTab === 'resetpassword'">
         <FormResetPasswordRequest @onSubmit="onResetPasswordRequest"></FormResetPasswordRequest>
         <section>
@@ -41,6 +44,20 @@
             <a href="#" @click.prevent="currentTab = 'login'">Sign in now</a>
           </p>
         </section>
+      </div>
+
+      <!-- Invite -->
+      <div class="m-login__body" v-if="currentTab === 'invite'">
+        <div class="invite-box" v-if="inviteCode && !inviteData">
+          <strong> Checking invite code </strong>
+          <span class="c-spinner"></span>
+        </div>
+        <FormAcceptInvite
+          v-if="inviteData"
+          :inviteCode="inviteCode"
+          :inviteData="inviteData"
+          @onSubmit="currentTab = 'login'"
+        ></FormAcceptInvite>
       </div>
 
       <!-- <div class="m-login__footer">
@@ -57,6 +74,7 @@ import Constrain from "@operational.co/components/ui/constrain.vue";
 import Modal from "@operational.co/components/ui/modal.vue";
 import FormLogin from "@operational.co/components/form/form-login.vue";
 import FormSignup from "@operational.co/components/form/form-signup.vue";
+import FormAcceptInvite from "@operational.co/components/form/form-accept-invite.vue";
 import FormResetPasswordRequest from "@operational.co/components/form/form-reset-password-request.vue";
 import InputCode from "@operational.co/components/form/input-code.vue";
 
@@ -66,6 +84,7 @@ export default {
     Modal,
     FormLogin,
     FormSignup,
+    FormAcceptInvite,
     FormResetPasswordRequest,
     InputCode,
   },
@@ -74,6 +93,9 @@ export default {
     return {
       currentTab: "signup",
       code: "",
+
+      inviteCode: "",
+      inviteData: null,
     };
   },
 
@@ -81,6 +103,14 @@ export default {
     active: {
       type: Boolean,
       default: false,
+    },
+  },
+
+  watch: {
+    inviteCode: function () {
+      if (this.inviteCode) {
+        this.validateInviteCode();
+      }
     },
   },
 
@@ -101,17 +131,41 @@ export default {
   },
 
   methods: {
+    async validateInviteCode() {
+      let inviteCode = this.inviteCode;
+      try {
+        const data = await this.$store.workspace.checkInvite({
+          inviteCode: inviteCode,
+        });
+
+        console.log(data);
+
+        if (data) {
+          this.inviteData = data;
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    },
     onResetPasswordRequest: function () {},
   },
 
   mounted: function () {
     // resolve currentTab here
 
-    let route = this.$route;
+    const urlParams = new URLSearchParams(window.location.search);
 
-    if (route.query && "login" in route.query) {
+    if (urlParams.has("login")) {
       this.currentTab = "login";
-    } else {
+    }
+
+    if (urlParams.has("invite")) {
+      const inviteValue = urlParams.get("invite");
+
+      if (inviteValue.length > 16) {
+        this.inviteCode = inviteValue;
+        this.currentTab = "invite";
+      }
     }
 
     if (this.isSelfHosted) {
@@ -127,6 +181,17 @@ export default {
         }
       }, 100);
     }
+
+    // remove query params
+    let url = new URL(window.location.href);
+
+    if (!url.searchParams) {
+      return;
+    }
+
+    url.searchParams.delete("login");
+    url.searchParams.delete("invite");
+    window.history.replaceState({}, "", url);
   },
 };
 </script>
@@ -204,6 +269,17 @@ export default {
 
   .btn {
     width: 100%;
+  }
+  .invite-box {
+    padding: 1rem;
+    border-radius: 1rem;
+    background-color: var(--color-bg-3);
+    text-align: center;
+
+    strong {
+      display: block;
+      margin-bottom: 1rem;
+    }
   }
 
   @media screen and (max-width: 576px) {

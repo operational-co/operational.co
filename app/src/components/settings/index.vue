@@ -158,8 +158,8 @@
                 />
               </svg>
               <span> Project </span>
-              <div>
-                <Avatar :user="user"></Avatar>
+              <div class="avatar-container">
+                <Avatar v-for="user in users" :key="user.id" :user="user"></Avatar>
               </div>
             </router-link>
           </li>
@@ -291,6 +291,16 @@ export default {
     },
     user: function () {
       return this.$store.user.resource;
+    },
+    workspace: function () {
+      return this.$store.workspace.resource;
+    },
+    users: function () {
+      if (!this.workspace) {
+        return [];
+      }
+
+      return this.workspace.users.reverse() || [];
     },
     assetPath: function () {
       let baseUrl = this.baseApiUrl;
@@ -442,6 +452,18 @@ export default {
 
     .form-control {
       background-color: var(--color-bg-1);
+    }
+  }
+
+  .avatar-container {
+    display: flex;
+
+    .c-avatar {
+      margin-right: -0.5rem;
+
+      &:last-child {
+        margin-right: 0;
+      }
     }
   }
 

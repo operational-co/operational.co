@@ -9,7 +9,7 @@ import Form from "./index.vue";
 
 export default {
   components: {
-    Form,
+    Form
   },
 
   data: function () {
@@ -22,27 +22,27 @@ export default {
           validations: {
             required: {
               params: null,
-              message: "Email is required",
-            },
-          },
+              message: "Email is required"
+            }
+          }
         },
         firstName: {
           label: "First Name",
-          type: "InputText",
+          type: "InputText"
         },
         lastName: {
           label: "Last Name",
-          type: "InputText",
+          type: "InputText"
         },
         utcOffset: {
           label: "UTC Offset",
-          type: "InputText",
+          type: "InputText"
         },
         country: {
           label: "Country",
-          type: "InputText",
-        },
-      },
+          type: "InputText"
+        }
+      }
     };
   },
 
@@ -50,28 +50,27 @@ export default {
     initialValues: {
       default: function () {
         return {};
-      },
-    },
+      }
+    }
   },
 
   computed: {
     button: function () {
       return {
-        text: "Update",
+        text: "Update"
       };
-    },
+    }
   },
 
   methods: {
     async submissionFx(e) {
       try {
         const res = await this.$store.user.login(e);
-        console.log(res);
       } catch (err) {
         throw err;
       }
-    },
-  },
+    }
+  }
 };
 </script>
 

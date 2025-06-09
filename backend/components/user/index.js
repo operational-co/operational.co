@@ -205,6 +205,65 @@ const component = {
     }
   },
 
+  async acceptInvite(user, form) {
+    const password = form.password;
+
+    console.log(password);
+
+    try {
+      await User.acceptInvite(password, user.id);
+
+      const newUser = await User.getPie(user.id);
+
+      let temp = {
+        ...user,
+        workspaceId: user.primaryWorkspace,
+        workspace: user.primaryWorkspace,
+      };
+
+      // generate session
+      const session = await Session.generate(temp);
+
+      const jwt = generateJwt(session.sid);
+
+      const event = {
+        avatar: "😃",
+        name: `user accept invite`,
+        category: "user",
+        contextStart: true,
+        contextId: `user-accept-invite-${user.id}`,
+        type: "rows",
+        content: [
+          {
+            label: "ID",
+            content: user.id,
+          },
+          {
+            label: "Name",
+            content: newUser.firstName + " " + newUser.lastName,
+          },
+          {
+            label: "Email",
+            content: newUser.email,
+          },
+        ],
+      };
+
+      console.log(event);
+
+      await ops.events.ingest(event).catch((err) => {
+        console.log(err);
+      });
+
+      return {
+        jwt,
+        user: newUser,
+      };
+    } catch (err) {
+      throw err;
+    }
+  },
+
   // Sets code to activate the user and sends it off in a email
   async sendActivation(user) {
     // generate a 6 digit code

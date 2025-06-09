@@ -40,12 +40,9 @@ export default {
 
   methods: {
     async submissionFx(e) {
-      console.log(e);
-
       let res = null;
       try {
         res = await this.$store.user.resetPasswordRequest(e);
-        console.log(res);
       } catch (err) {
         throw err;
       }

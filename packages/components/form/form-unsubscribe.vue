@@ -64,7 +64,6 @@ export default {
 
   methods: {
     async submissionFx(e) {
-      console.log(e);
       try {
         const res = await this.$store.user.cancelSubscription(e);
       } catch (err) {

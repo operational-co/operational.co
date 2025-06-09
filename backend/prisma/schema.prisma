@@ -40,6 +40,8 @@ model User {
 
   pushes Push[] @relation("users")
 
+  invites Invite[] @relation("invite")
+
   // What workspace they are logged in right now. Has nothing to do with workspaceAdmin
   primaryWorkspace Int?
 
@@ -160,6 +162,8 @@ model Workspace {
 
   metrics Metric[] @relation("metrics")
 
+  invites Invite[] @relation("invite")
+
   actions Json?
 
   // store non-critical stuff here
@@ -196,6 +200,24 @@ model Workspace {
   createdAt     DateTime  @default(now())
 }
 
+model Invite {
+  id Int @id @default(autoincrement())
+
+  type String @default("project")
+
+  code String
+
+  user   User @relation("invite", fields: [userId], references: [id], onDelete: Cascade)
+  userId Int
+
+  workspace   Workspace @relation("invite", fields: [workspaceId], references: [id], onDelete: Cascade)
+  workspaceId Int
+
+  createdAt DateTime @default(now())
+
+  @@unique([workspaceId, userId]) // prevent dupes per user/workspace
+}
+
 // Tracks per month metric for workspaces
 model Metric {
   id Int @id @default(autoincrement())
@@ -214,7 +236,7 @@ model Metric {
 }
 
 model WorkspaceUser {
-  id          String    @id @default(cuid())
+  id          String    @id @default(cuid()) // why do we have cuid???
   role        Role      @default(MEMBER)
   createdAt   DateTime  @default(now())
   user        User      @relation("workspaces", fields: [userId], references: [id], onDelete: Cascade)

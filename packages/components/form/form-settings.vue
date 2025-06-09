@@ -58,7 +58,6 @@ export default {
     async submissionFx(e) {
       try {
         const res = await this.$store.user.update(e);
-        //console.log(res);
       } catch (err) {
         throw err;
       }

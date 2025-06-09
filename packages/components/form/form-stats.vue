@@ -87,7 +87,6 @@ export default {
 
   methods: {
     async submissionFx(e) {
-      console.log(e);
       const form = {
         meta: e
       };

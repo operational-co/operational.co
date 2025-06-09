@@ -1,7 +1,7 @@
 <template>
   <div class="c-settings-section c-settings-workspace">
     <DemoWrap>
-      <FormProject></FormProject>
+      <FormProject v-if="isAdmin(user.id)"></FormProject>
       <ManageUsers></ManageUsers>
     </DemoWrap>
   </div>
@@ -22,6 +22,9 @@ export default {
   },
 
   computed: {
+    user: function () {
+      return this.$store.user.resource;
+    },
     workspace: function () {
       return this.$store.workspace.resource;
     },
@@ -31,6 +34,18 @@ export default {
       }
 
       return this.workspace.users || [];
+    },
+  },
+
+  methods: {
+    isAdmin: function (userId) {
+      let workspace = this.workspace;
+
+      if (workspace.adminId === userId) {
+        return true;
+      }
+
+      return false;
     },
   },
 };

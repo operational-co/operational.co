@@ -70,6 +70,8 @@ class CronTab {
       new Cron("*/15 * * * *", this.options, Workspace.calculateUsedFreeEvents.bind(Workspace));
     }
 
+    new Cron("0 * * * *", this.options, Workspace.removeExpiringInvites.bind(Workspace));
+
     /**
      * Basic healthcheck
      */

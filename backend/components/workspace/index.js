@@ -1,4 +1,5 @@
 import WorkspaceModel from "./model.js";
+import User from "#components/user/index.js";
 import UserModel from "#components/user/model.js";
 import Workspace from "#components/workspace/model.js";
 import Events from "#components/events/index.js";
@@ -26,69 +27,250 @@ const nanoid = customAlphabet("1234567890abcdefghijklmnopqrstuvwxyz", 24);
 import moment from "moment";
 
 const component = {
+  async removeExpiringInvites() {},
+
   async invite(form, adminUserId, workspaceId) {
     try {
+      // 1. Grab admin user (for email “from”)
       const adminUser = await prisma.user.findUnique({
-        where: {
-          id: adminUserId,
-        },
+        where: { id: adminUserId },
       });
 
+      // 2. Generate invite code + link
       const code = nanoid();
       const link = `${config.appUrl}?invite=${code}`;
-      const user = await prisma.user.create({
-        data: {
-          firstName: form.firstName,
-          email: form.email,
-          status: "INVITED",
-          settings: {
-            inviteCode: code,
-          },
-        },
+
+      // 3. Try to find existing user by email
+      const existing = await prisma.user.findMany({
+        where: { email: form.email },
       });
-      const workspaceUser = await prisma.workspaceUser.create({
+
+      let user;
+      if (existing.length > 0) {
+        // 3a. Pick the first and mark INVITED
+        user = existing[0];
+        user = await prisma.user.update({
+          where: { id: user.id },
+          data: { status: "INVITED" },
+        });
+      } else {
+        // 3b. Create brand-new user
+        user = await prisma.user.create({
+          data: {
+            firstName: form.firstName,
+            email: form.email,
+            status: "INVITED",
+          },
+        });
+      }
+
+      // 4. Record the invitation in its own table
+      await prisma.invite.create({
         data: {
-          workspace: {
-            connect: {
-              id: workspaceId,
-            },
-          },
-          user: {
-            connect: {
-              id: user.id,
-            },
-          },
+          code,
+          user: { connect: { id: user.id } },
+          workspace: { connect: { id: workspaceId } },
         },
       });
 
-      console.log(user);
+      // 5. (Optional) Add them to the workspace immediately
+      await prisma.workspaceUser.create({
+        data: {
+          workspace: { connect: { id: workspaceId } },
+          user: { connect: { id: user.id } },
+        },
+      });
 
+      // 6. Send the actual email
       await Email.inviteUser(user, adminUser, link);
 
-      // then get all users of the workspace
+      // 6a. Also send the admin user a mail
+      await Email.informAdminAboutInvitee(adminUser, user);
+
+      // 7. Return the current members of the workspace
       const users = await prisma.$queryRawUnsafe(
         `
-        SELECT 
-            u.id,
-            u.firstName,
-            u.lastName,
-            u.email,
-            u.avatar
-        FROM 
+          SELECT
+            u.id, u.firstName, u.lastName, u.email, u.status, u.avatar
+          FROM
             WorkspaceUser wu
-        INNER JOIN 
+          JOIN
             User u ON wu.userId = u.id
-        WHERE 
+          WHERE
             wu.workspaceId = ?
-    `,
+        `,
         workspaceId,
       );
 
       return users;
     } catch (err) {
-      console.log(err);
+      console.error("invite error:", err);
       throw err;
     }
+  },
+
+  async checkInvite(form) {
+    try {
+      const { inviteCode } = form;
+
+      // Find the invite and include its related user
+      const invite = await prisma.invite.findFirst({
+        where: { code: inviteCode },
+        include: {
+          user: {
+            select: {
+              id: true,
+              email: true,
+              firstName: true,
+              avatar: true,
+            },
+          },
+          workspace: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
+        },
+      });
+
+      // If no invite, return null; otherwise return the user object
+      return invite ? { user: invite.user, workspace: invite.workspace } : null;
+    } catch (error) {
+      console.error("checkInvite error:", error);
+      throw error;
+    }
+  },
+
+  async acceptInvite(form) {
+    const { inviteCode, firstName, lastName, password } = form;
+
+    try {
+      // 1. Fetch the invite, including its user & workspace
+      const invite = await prisma.invite.findFirst({
+        where: { code: inviteCode },
+        include: {
+          user: true,
+          workspace: true,
+        },
+      });
+      if (!invite) {
+        throw new Error(`Invalid invite code`);
+      }
+
+      const { id: inviteId, user: invitedUser, workspace } = invite;
+
+      // 2. In a single transaction:
+      //    a) Update the user’s profile & status
+      //    b) Ensure the WorkspaceUser pivot exists (upsert)
+      //    c) Delete the consumed invite record
+      const [updatedUser] = await prisma.$transaction([
+        // a) mark them active and record their name
+        prisma.user.update({
+          where: { id: invitedUser.id },
+          data: {
+            firstName,
+            lastName,
+            status: "NORMAL",
+            activated: true,
+            primaryWorkspace: workspace.id,
+          },
+        }),
+        // b) create the workspace-user link if missing
+        prisma.workspaceUser.upsert({
+          where: {
+            userId_workspaceId: {
+              userId: invitedUser.id,
+              workspaceId: workspace.id,
+            },
+          },
+          create: {
+            user: { connect: { id: invitedUser.id } },
+            workspace: { connect: { id: workspace.id } },
+          },
+          update: {}, // nothing to change if it already exists
+        }),
+        // c) remove the invite so it can’t be reused
+        prisma.invite.delete({
+          where: { id: inviteId },
+        }),
+      ]);
+
+      const data = await User.acceptInvite(updatedUser, {
+        password: password,
+      }).catch((err) => {
+        console.log(err);
+      });
+
+      console.log(data);
+
+      // 3. Return the now-activated user (and you could also return workspace.id if needed)
+      return data;
+    } catch (error) {
+      console.error("acceptInvite error:", error);
+      throw error;
+    }
+  },
+
+  async removeUser(form, adminUserId, workspaceId) {
+    const userId = form.userId;
+
+    // 1. Ensure the target user exists
+    const userToBeDeleted = await prisma.user.findUnique({
+      where: { id: userId },
+    });
+    if (!userToBeDeleted) {
+      throw new Error(`User with id=${userId} not found`);
+    }
+
+    // 2. Load the workspace and verify permissions
+    const workspace = await prisma.workspace.findUnique({
+      where: { id: workspaceId },
+      select: { adminId: true },
+    });
+    if (!workspace) {
+      throw new Error(`Workspace with id=${workspaceId} not found`);
+    }
+    if (workspace.adminId !== adminUserId) {
+      throw new Error(`Only the workspace owner may remove users`);
+    }
+    if (workspace.adminId === userId) {
+      throw new Error(`Cannot remove the workspace owner`);
+    }
+
+    // 3. In one transaction, delete both the pivot and any invite
+    await prisma.$transaction([
+      prisma.workspaceUser.delete({
+        where: {
+          userId_workspaceId: { userId, workspaceId },
+        },
+      }),
+      prisma.invite.deleteMany({
+        where: { userId, workspaceId },
+      }),
+    ]);
+
+    // 4. Return the updated list of workspace members
+    const users = await prisma.$queryRawUnsafe(
+      `
+      SELECT 
+        u.id,
+        u.firstName,
+        u.lastName,
+        u.email,
+        u.status,
+        u.avatar
+      FROM 
+        WorkspaceUser wu
+      INNER JOIN 
+        User u ON wu.userId = u.id
+      WHERE 
+        wu.workspaceId = ?
+    `,
+      workspaceId,
+    );
+
+    return users;
   },
 
   async activate(form) {

@@ -39,7 +39,6 @@ export default {
 
   methods: {
     async submissionFx(e) {
-      console.log(e);
       if (!e.font) {
         return;
       }
@@ -49,7 +48,6 @@ export default {
 
       try {
         const res = await uploadFonts(form);
-        //console.log(res);
       } catch (err) {
         throw err;
       }

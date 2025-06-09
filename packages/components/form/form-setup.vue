@@ -113,7 +113,6 @@ export default {
     async submissionFx(e) {
       try {
         const res = await this.$store.user.setup(e);
-        console.log(res);
       } catch (err) {
         throw err;
       }

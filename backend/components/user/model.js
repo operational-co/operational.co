@@ -267,6 +267,7 @@ class User extends Model {
       'id', u2.id,
       'firstName', u2.firstName,
       'lastName', u2.lastName,
+      'status', u2.status,
       'email', u2.email,
       'avatar', u2.avatar
       )
@@ -311,6 +312,8 @@ class User extends Model {
     } catch (err) {
       console.log(err);
     }
+
+    //console.log(pie.workspace.users);
 
     return pie;
   }
@@ -434,6 +437,21 @@ class User extends Model {
     });
 
     return user;
+  }
+
+  async acceptInvite(password, userId) {
+    let hashedPassword = await hashPassword(password);
+
+    await this.client.update({
+      where: {
+        id: userId,
+      },
+      data: {
+        password: hashedPassword,
+      },
+    });
+
+    return userId;
   }
 
   async checkPassword(password, hash) {

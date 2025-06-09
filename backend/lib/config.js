@@ -81,6 +81,11 @@ const config = {
     take: 10,
   },
 
+  rules: {
+    // remove invitations after 7 days
+    INVITATION_DURATION: 7,
+  },
+
   resend: {
     TOKEN: process.env.RESEND,
   },

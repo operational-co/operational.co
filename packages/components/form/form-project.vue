@@ -41,10 +41,8 @@ export default {
 
   methods: {
     async submissionFx(e) {
-      console.log(e);
       try {
         const res = await this.$store.workspace.update(e);
-        //console.log(res);
         this.$store.app.sendNotification({
           message: "Profile settings updated"
         });

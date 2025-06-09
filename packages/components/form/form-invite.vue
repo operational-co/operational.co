@@ -69,6 +69,6 @@ export default {
 </script>
 
 <style lang="scss">
-.f-projectname {
+.f-invite {
 }
 </style>
