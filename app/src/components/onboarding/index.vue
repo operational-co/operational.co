@@ -95,7 +95,9 @@ export default {
     isInvitee: function () {
       let user = this.user;
 
-      if (this.workspace && this.workspace.adminId !== this.user.id) {
+      console.log(user, this.workspace);
+
+      if (this.workspace && this.workspace.adminId !== user.id) {
         return true;
       }
 
@@ -156,10 +158,6 @@ export default {
       steps = this.inviteeSteps;
       onboardingStep = "invitee";
     }
-
-    console.log(this.isInvitee);
-
-    console.log(steps);
 
     // If user hasn't been activated, force them to finish their activation
     if (!this.user.activated) {

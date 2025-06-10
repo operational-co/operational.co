@@ -153,7 +153,6 @@ export default {
     width: 24px !important;
     height: 24px;
     min-width: 24px !important;
-    border-radius: 99px;
     object-fit: cover;
     object-position: center center;
   }
@@ -249,7 +248,7 @@ export default {
       display: flex;
       justify-content: center;
       align-items: center;
-      border-radius: 99px;
+      border-radius: 12px;
       margin-right: 0;
       padding: var(--margin) var(--margin-lg);
       padding-right: var(--margin);

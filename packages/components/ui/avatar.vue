@@ -1,5 +1,5 @@
 <template>
-  <div class="c-avatar">
+  <div :class="['c-avatar', { workspace: isWorkspaceAvatar === true }]">
     <img v-if="user && user.avatar" class="c-avatar" :src="`${assetPath}/${user.avatar}`" />
     <span v-if="svg" v-html="svg"> </span>
   </div>
@@ -22,6 +22,12 @@ export default {
     };
   },
 
+  watch: {
+    workspace: function () {
+      this.createAvatar();
+    }
+  },
+
   computed: {
     baseApiUrl: function () {
       return this.$store.app.baseApiUrl;
@@ -29,6 +35,22 @@ export default {
     assetPath: function () {
       let baseUrl = this.baseApiUrl;
       return `${baseUrl}/uploads`;
+    },
+    isWorkspaceAvatar: function () {
+      // avatar is already present, no need for svg
+      if (this.user && this.user.avatar) {
+        return false;
+      }
+
+      if (this.user && this.user.email) {
+        return false;
+      }
+
+      if (this.workspace && this.workspace.name) {
+        return true;
+      }
+
+      return false;
     }
   },
 
@@ -83,5 +105,9 @@ export default {
   min-width: 32px;
   border-radius: 99px;
   overflow: hidden;
+
+  &.workspace {
+    border-radius: 0.5rem;
+  }
 }
 </style>

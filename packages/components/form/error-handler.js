@@ -1,5 +1,8 @@
 let validators = {
   maxLength: (value, params, message) => {
+    if (!value) {
+      return;
+    }
     if (value.length > params) {
       return message || `Input length should be less than ${params}`;
     }

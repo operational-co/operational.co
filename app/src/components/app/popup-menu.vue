@@ -177,6 +177,9 @@ export default {
       this.active = !this.active;
     },
     switchWorkspace: function (workspace) {
+      if (workspace.id === this.workspace.id) {
+        return;
+      }
       this.$store.app.setSwitchWorkspace();
       this.active = false;
       if (workspace.id === this.user.primaryWorkspace) {

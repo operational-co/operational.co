@@ -56,7 +56,7 @@
           v-if="inviteData"
           :inviteCode="inviteCode"
           :inviteData="inviteData"
-          @onSubmit="currentTab = 'login'"
+          @onSubmit="onInviteAccepted"
         ></FormAcceptInvite>
       </div>
 
@@ -138,14 +138,16 @@ export default {
           inviteCode: inviteCode,
         });
 
-        console.log(data);
-
         if (data) {
           this.inviteData = data;
         }
       } catch (err) {
         console.log(err);
       }
+    },
+    onInviteAccepted: function () {
+      console.log("INVITE ACCEPTED");
+      this.currentTab = "login";
     },
     onResetPasswordRequest: function () {},
   },

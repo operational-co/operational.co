@@ -75,6 +75,20 @@ const component = {
       if (existing.length > 0) {
         // 3a. Pick the first and mark INVITED
         user = existing[0];
+
+        const isAlreadyInWorkspace = await prisma.workspaceUser.findUnique({
+          where: {
+            userId_workspaceId: {
+              userId: user.id,
+              workspaceId,
+            },
+          },
+        });
+
+        if (isAlreadyInWorkspace) {
+          throw `User is already a member of this workspace.`;
+        }
+
         user = await prisma.user.update({
           where: { id: user.id },
           data: { status: "INVITED" },
