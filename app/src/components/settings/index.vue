@@ -300,7 +300,8 @@ export default {
         return [];
       }
 
-      return this.workspace.users.reverse() || [];
+      let users = this.workspace.users.slice().reverse();
+      return users.slice(0, 5);
     },
     assetPath: function () {
       let baseUrl = this.baseApiUrl;

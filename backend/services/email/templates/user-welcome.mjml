@@ -9,7 +9,7 @@
   <h3>API keys</h3>
   <p>
     Your API keys are located at
-    <a href="{{= it.context.APP_URL }}/profile">app.operational.co/profile</a>.
+    <a href="{{= it.context.APP_URL }}/profile">app.operational.co/settings</a>.
   </p>
   <h3>API Docs</h3>
   <p>API Docs are located at <a href="https://operational.co/api">operational.co/api</a>.</p>

@@ -15,7 +15,13 @@
         <span>
           {{ workspace.name }}
         </span>
-        <strong title="Current project" v-if="workspace.id === user.primaryWorkspace"> P </strong>
+        <strong
+          title="Current project"
+          v-if="workspace.id === user.primaryWorkspace"
+          v-tooltip="'This is your current project'"
+        >
+          P
+        </strong>
       </a>
       <a href="#" @click.prevent="createWorkspace">
         <span> Create new project </span>
