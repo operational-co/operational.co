@@ -4,10 +4,10 @@
       <!-- <Background></Background> -->
       <Constrain size="sm">
         <div class="text-center">
-          <h1>The open-source event tracker for your product</h1>
+          <h1>Monitor your product’s critical events as they happen</h1>
           <p>
-            Track what matters. Get notified instantly.<br />
-            Integrate in minutes, not hours.
+            Operational delivers instant alerts in a live timeline<br />
+            so you always know what’s going on.
           </p>
         </div>
         <article class="article-container article-text">
