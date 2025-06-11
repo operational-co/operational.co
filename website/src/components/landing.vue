@@ -309,7 +309,7 @@
 
     <div class="d-examples">
       <Constrain>
-        <h2>Cool things you can do with Operational</h2>
+        <h2>How can Operational help you?</h2>
         <div class="d-examples__grid">
           <article>
             <span>Get notified for waitlist signups</span>
