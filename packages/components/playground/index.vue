@@ -425,7 +425,7 @@ export default {
 
   &.app {
     border-radius: 0;
-    height: calc(100vh - 68px);
+    height: calc(100vh - 56px);
     margin-bottom: 0;
 
     .c-playground__main {

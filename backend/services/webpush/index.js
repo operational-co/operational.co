@@ -123,6 +123,7 @@ GROUP BY wu.userId, wu.notify;
 
       let message = {
         id: event.id,
+        workspaceId: event.workspaceId,
         message: event.searchable,
       };
 
