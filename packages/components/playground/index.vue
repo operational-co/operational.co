@@ -59,7 +59,6 @@
 import SidebarItem from "./item.vue";
 import examples from "./examples.js";
 import Footer from "./footer.vue";
-import Blurb from "./blurb.vue";
 import Callout from "./callout.vue";
 
 import generateNodejssdk from "./generate-nodejssdk.js";
@@ -78,7 +77,6 @@ import Fuse from "fuse.js";
 
 export default {
   components: {
-    Blurb,
     Callout,
     Footer,
     Code,
@@ -101,6 +99,7 @@ export default {
 
       context: {
         token: "",
+        test: false,
         notify: false,
         baseUrl: "https://api.operational.co"
       }

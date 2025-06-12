@@ -5,74 +5,66 @@ import prisma from "#lib/prisma.js";
 import config from "#lib/config.js";
 
 class Webpush {
-	push;
+  push;
 
-	constructor() {}
+  constructor() {}
 
-	async setup() {
-		if (
-			config.vapid.EMAIL &&
-			config.vapid.PUBLIC_KEY &&
-			config.vapid.PRIVATE_KEY
-		) {
-			webpush.setVapidDetails(
-				config.vapid.EMAIL,
-				config.vapid.PUBLIC_KEY,
-				config.vapid.PRIVATE_KEY,
-			);
+  async setup() {
+    if (config.vapid.EMAIL && config.vapid.PUBLIC_KEY && config.vapid.PRIVATE_KEY) {
+      webpush.setVapidDetails(
+        config.vapid.EMAIL,
+        config.vapid.PUBLIC_KEY,
+        config.vapid.PRIVATE_KEY,
+      );
 
-			this.push = webpush;
-		} else {
-			console.log(
-				"ERROR - Missing VAPID details. Please ensure config.vapid.EMAIL, config.vapid.PUBLIC_KEY, and config.vapid.PRIVATE_KEY are all set.",
-			);
+      this.push = webpush;
+    } else {
+      console.log(
+        "ERROR - Missing VAPID details. Please ensure config.vapid.EMAIL, config.vapid.PUBLIC_KEY, and config.vapid.PRIVATE_KEY are all set.",
+      );
 
-			this.push = null;
-		}
-	}
+      this.push = null;
+    }
+  }
 
-	async test() {
-		let status = "inactive";
-		let type = null;
-		let info = `Not set. Push notifications won't work`;
-		if (
-			config.vapid.EMAIL &&
-			config.vapid.PUBLIC_KEY &&
-			config.vapid.PRIVATE_KEY
-		) {
-			type = "vapid";
-			info = "";
-			status = "active";
-		}
+  async test() {
+    let status = "inactive";
+    let type = null;
+    let info = `Not set. Push notifications won't work`;
+    if (config.vapid.EMAIL && config.vapid.PUBLIC_KEY && config.vapid.PRIVATE_KEY) {
+      type = "vapid";
+      info = "";
+      status = "active";
+    }
 
-		return {
-			name: "webpush",
-			value: this.dbName,
-			status: status,
-			info: info,
-		};
-	}
+    return {
+      name: "webpush",
+      value: this.dbName,
+      status: status,
+      info: info,
+    };
+  }
 
-	getUniqueSubscriptions(subscriptions) {
-		const seenAuths = new Set();
-		return subscriptions.filter((sub) => {
-			if (!sub.keys || !sub.keys.auth) return false; // Skip if no auth key
-			if (seenAuths.has(sub.keys.auth)) return false; // Skip duplicates
-			seenAuths.add(sub.keys.auth);
-			return true; // Keep unique items
-		});
-	}
+  getUniqueSubscriptions(subscriptions) {
+    const seenAuths = new Set();
+    return subscriptions.filter((sub) => {
+      if (!sub.keys || !sub.keys.auth) return false; // Skip if no auth key
+      if (seenAuths.has(sub.keys.auth)) return false; // Skip duplicates
+      seenAuths.add(sub.keys.auth);
+      return true; // Keep unique items
+    });
+  }
 
-	async sendEventNotification(event) {
-		//console.log(event);
-		let notifiers = event._notifiers || [];
+  async sendEventNotification(event) {
+    //console.log(event);
+    let notifiers = event._notifiers || [];
 
-		if (notifiers.length === 0) {
-			return;
-		}
+    if (notifiers.length === 0) {
+      return;
+    }
 
-		// this can be optimized by caching
-		const sql = `
+    // this can be optimized by caching
+    const sql = `
 			SELECT 
     wu.userId,
     JSON_ARRAYAGG(p.pushSubscription) AS pushSubscriptions,
@@ -84,77 +76,84 @@ WHERE wu.userId IN (${notifiers.join(",")})
 GROUP BY wu.userId, wu.notify;
 		`;
 
-		const users = await prisma.$queryRawUnsafe(sql).catch((err) => {
-			console.log(err);
+    const users = await prisma.$queryRawUnsafe(sql).catch((err) => {
+      console.log(err);
 
-			return;
-		});
+      return;
+    });
 
-		if (!users) {
-			return;
-		}
+    if (!users) {
+      return;
+    }
 
-		for (let i = 0; i < users.length; i++) {
-			let user = users[i];
+    for (let i = 0; i < users.length; i++) {
+      let user = users[i];
 
-			if (!user.pushSubscriptions) {
-				continue;
-			}
+      if (!user.pushSubscriptions) {
+        continue;
+      }
 
-			if (!user.notify) {
-				continue;
-			}
+      if (!user.notify) {
+        continue;
+      }
 
-			if (user.notify == 0) {
-				continue;
-			}
+      if (user.notify == 0) {
+        continue;
+      }
 
-			user.pushSubscriptions = this.getUniqueSubscriptions(
-				user.pushSubscriptions,
-			);
+      let subs = user.pushSubscriptions || [];
 
-			let message = {
-				id: event.id,
-				message: event.searchable,
-			};
+      if (typeof subs === "string") {
+        try {
+          subs = JSON.parse(subs);
+        } catch (err) {
+          console.error("Invalid JSON for pushSubscriptions:", err);
+          subs = [];
+        }
+      }
 
-			message = JSON.stringify(message);
+      user.pushSubscriptions = this.getUniqueSubscriptions(subs);
 
-			for (let i = 0; i < user.pushSubscriptions.length; i++) {
-				const push = user.pushSubscriptions[i];
+      let message = {
+        id: event.id,
+        message: event.searchable,
+      };
 
-				await this.sendNotification(push.endpoint, push.keys, message).catch(
-					(err) => {},
-				);
-			}
-		}
-	}
+      message = JSON.stringify(message);
 
-	async sendNotification(endpoint, keys, message = "") {
-		const pushSubscription = {
-			endpoint,
-			keys,
-		};
+      for (let i = 0; i < user.pushSubscriptions.length; i++) {
+        const push = user.pushSubscriptions[i];
 
-		if (typeof message !== "string") {
-			message = JSON.stringify(message);
-		}
+        await this.sendNotification(push.endpoint, push.keys, message).catch((err) => {});
+      }
+    }
+  }
 
-		const options = {
-			TTL: 3600,
-		};
+  async sendNotification(endpoint, keys, message = "") {
+    const pushSubscription = {
+      endpoint,
+      keys,
+    };
 
-		if (!this.push) {
-			throw "Webpush not setup";
-		}
+    if (typeof message !== "string") {
+      message = JSON.stringify(message);
+    }
 
-		const res = await this.push
-			.sendNotification(pushSubscription, message, options)
-			.catch((err) => {
-				//console.log(err);
-				throw err;
-			});
-	}
+    const options = {
+      TTL: 3600,
+    };
+
+    if (!this.push) {
+      throw "Webpush not setup";
+    }
+
+    const res = await this.push
+      .sendNotification(pushSubscription, message, options)
+      .catch((err) => {
+        //console.log(err);
+        throw err;
+      });
+  }
 }
 
 export default new Webpush();
