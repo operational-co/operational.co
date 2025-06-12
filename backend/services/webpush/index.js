@@ -112,7 +112,14 @@ GROUP BY wu.userId, wu.notify;
         }
       }
 
-      user.pushSubscriptions = this.getUniqueSubscriptions(subs);
+      try {
+        user.pushSubscriptions = this.getUniqueSubscriptions(subs);
+      } catch (err) {
+        console.log(err);
+        console.log("--- ERROR ---");
+        console.log(subs);
+        user.pushSubscriptions = [];
+      }
 
       let message = {
         id: event.id,
