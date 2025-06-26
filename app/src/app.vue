@@ -571,7 +571,7 @@ export default {
     window.addEventListener("DOMContentLoaded", this.onDomContentLoaded);
     window.addEventListener("keydown", this.handleKeyDown);
     window.addEventListener("online", this.onOnline);
-    window.addEventListener("offline", this.onOffline);
+    //window.addEventListener("offline", this.onOffline);
   },
 
   beforeDestroy: function () {
@@ -580,7 +580,7 @@ export default {
     window.window.removeEventListener("DOMContentLoaded", this.onDomContentLoaded);
     window.removeEventListener("keydown", this.handleKeyDown);
     window.removeEventListener("online", this.onOnline);
-    window.removeEventListener("offline", this.onOffline);
+    //window.removeEventListener("offline", this.onOffline);
   },
 };
 </script>

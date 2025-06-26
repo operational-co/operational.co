@@ -9,6 +9,7 @@ import Storage from "#services/storage/index.js";
 
 import multer from "multer";
 import path from "path";
+import accessCheck from "#lib/access-check.js";
 import config from "#lib/config.js";
 
 const __dirname = path.resolve("");
@@ -36,6 +37,14 @@ const router = express.Router();
 const login = async (req, res) => {
   // see if user can login
 
+  const result = await accessCheck(req.body.email);
+
+  if (!result.allow) {
+    return res.status(400).send({
+      message: `Email is invalid or not allowed`,
+    });
+  }
+
   const form = {
     email: req.body.email,
     password: req.body.password,
@@ -44,8 +53,12 @@ const login = async (req, res) => {
 
   let data = null;
 
+  let options = {
+    bypass: result.bypass || false,
+  };
+
   try {
-    data = await component.login(form);
+    data = await component.login(form, options);
   } catch (err) {
     console.log(err);
     return res.status(401).send({

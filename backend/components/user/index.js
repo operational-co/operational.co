@@ -76,13 +76,13 @@ const component = {
     }
   },
 
-  async login(form = { email: "", password: "", userAgent: "" }) {
+  async login(form = { email: "", password: "", userAgent: "" }, options = {}) {
     let resource = {
       email: form.email,
       password: form.password,
     };
     try {
-      let user = await User.login(resource).catch((err) => {
+      let user = await User.login(resource, options.bypass || false).catch((err) => {
         throw err;
       });
 
