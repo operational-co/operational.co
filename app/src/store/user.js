@@ -34,9 +34,24 @@ const api = {
   login: async function (form = {}) {
     try {
       const res = await http.post("/user/login", form);
+
+      this.identifyUser(res.data);
+
       return res.data || null;
     } catch (err) {
       throw err;
+    }
+  },
+
+  identifyUser: function (user) {
+    if (window.posthog) {
+      posthog.identify(user.id, { email: user.email, name: `${user.firstName} ${user.lastName}` });
+    }
+  },
+
+  reset: function (user) {
+    if (window.posthog) {
+      posthog.reset();
     }
   },
 
@@ -54,6 +69,8 @@ const api = {
     try {
       const res = await http.post("/user/headless-login");
 
+      this.identifyUser(res.data);
+
       return res.data || null;
     } catch (err) {
       throw err;
@@ -65,6 +82,12 @@ const api = {
 
     try {
       const res = await http.post("/user/logout");
+
+      if (typeof $crisp !== "undefined") {
+        $crisp.push(["do", "chat:hide"]);
+      }
+
+      this.reset();
 
       return res.data || null;
     } catch (err) {
