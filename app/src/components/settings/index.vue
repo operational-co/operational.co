@@ -300,7 +300,10 @@ export default {
         return [];
       }
 
-      let users = this.workspace.users.slice().reverse();
+      let users = this.workspace.users || [];
+
+      users = users.slice().reverse();
+
       return users.slice(0, 5);
     },
     assetPath: function () {
