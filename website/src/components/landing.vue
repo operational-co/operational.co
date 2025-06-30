@@ -6,7 +6,7 @@
         <div class="text-center">
           <h1>Monitor your product’s critical events as they happen</h1>
           <p>
-            Operational delivers instant alerts in a live timeline<br />
+            Operational sends alerts in a live timeline<br />
             so you always know what’s going on.
           </p>
         </div>
@@ -90,6 +90,159 @@
         <Roller ref="roller" :item="rollerItem"></Roller>
       </Constrain>
     </div>
+
+    <!--
+    <div class="d-problem">
+      <Constrain size="sm">
+        <h2 class="text-center">When your product isn't operational</h2>
+        <div class="d-problem__inner">
+          <article>
+            <h4>Before Operational</h4>
+            <p>
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M8 8L16 16M16 8L8 16"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                />
+              </svg>
+              <span> Users signing up with throwaway emails </span>
+            </p>
+            <p>
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M8 8L16 16M16 8L8 16"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                />
+              </svg>
+              <span> No clue if cronjobs ran </span>
+            </p>
+            <p>
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M8 8L16 16M16 8L8 16"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                />
+              </svg>
+              <span> Billing events are visible from start to end </span>
+            </p>
+            <p>
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M8 8L16 16M16 8L8 16"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                />
+              </svg>
+              <span>Hard to track domain specific logs </span>
+            </p>
+            <strong> And so on </strong>
+          </article>
+          <article>
+            <h4>After Operational</h4>
+            <p>
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M8 8L16 16M16 8L8 16"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                />
+              </svg>
+              <span> Receive instant alerts for user signups </span>
+            </p>
+            <p>
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M8 8L16 16M16 8L8 16"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                />
+              </svg>
+              <span> Don't know if cronjobs ran </span>
+            </p>
+            <p>
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M8 8L16 16M16 8L8 16"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                />
+              </svg>
+              <span> Impossible to track billing events </span>
+            </p>
+            <p>
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M8 8L16 16M16 8L8 16"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                />
+              </svg>
+              <span>Hard to track domain specific logs </span>
+            </p>
+          </article>
+        </div>
+      </Constrain>
+    </div>
+    -->
 
     <!--
 
@@ -1204,6 +1357,39 @@ await ops.events.ingest({
           left: calc(50% - 1rem);
           transform: scale(0.6) translateX(-50%) rotate(130deg);
           opacity: 1;
+        }
+      }
+    }
+  }
+
+  .d-problem {
+    padding: 5rem 0;
+
+    &__inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+
+      article {
+        h4 {
+          text-align: center;
+        }
+        p {
+          display: flex;
+          font-size: var(--font-size-sm);
+          margin-bottom: 0.5rem;
+
+          svg {
+            min-width: 24px;
+            color: var(--color-danger);
+          }
+        }
+
+        &:nth-child(2) {
+          p {
+            svg {
+              color: var(--color-success);
+            }
+          }
         }
       }
     }
