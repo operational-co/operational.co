@@ -90,6 +90,10 @@ const config = {
     TOKEN: process.env.RESEND,
   },
 
+  loops: {
+    TOKEN: process.env.LOOPS,
+  },
+
   operational: {
     TOKEN: process.env.OPERATIONAL,
     BASEURL: process.env.OPERATIONAL_BASEURL,

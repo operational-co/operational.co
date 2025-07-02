@@ -8,6 +8,7 @@ import fs from "fs";
 import moment from "moment";
 import { customAlphabet } from "nanoid";
 import nodemailer from "nodemailer";
+import { LoopsClient, APIError } from "loops";
 
 const alphabet = "abcdefghijklmnopqrstuvwxyz"; // Your custom letters
 const generateId = customAlphabet(alphabet, 4); // Generate 4-character IDs

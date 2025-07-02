@@ -2,6 +2,7 @@ import express from "express";
 import schemaMiddleware from "#lib/schema-middleware.js";
 import component from "./index.js";
 import Ingestion from "#services/ingestion/index.js";
+import config from "#lib/config.js";
 
 // Create a new router instance
 const router = express.Router();
@@ -47,6 +48,12 @@ const ingest = async (req, res) => {
 
   const size = parseInt(len, 10);
 
+  let maxLen = 100000;
+
+  if (config.EVENT_STORE === "mysql") {
+    maxLen = 6000;
+  }
+
   //console.log(`REQUEST LENGTH: ${size}`);
 
   if (!authorization) {
@@ -66,8 +73,10 @@ const ingest = async (req, res) => {
   if (typeof temp === "string") {
     //console.log(temp.length);
 
-    if (temp.length >= 6000) {
-      return res.status(401).send(`content length is more than 6000 characters, trim the length`);
+    if (temp.length >= maxLen) {
+      return res
+        .status(401)
+        .send(`content length is more than ${maxLen} characters, trim the length`);
     }
   }
 
