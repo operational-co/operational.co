@@ -23,7 +23,7 @@
           P
         </strong>
       </a>
-      <a href="#" @click.prevent="createWorkspace">
+      <a href="#" @click.prevent="createWorkspace" v-if="!isDemo">
         <span> Create new project </span>
         <svg
           width="24"
@@ -154,6 +154,9 @@ export default {
   },
 
   computed: {
+    isDemo: function () {
+      return this.$store.workspace.isDemo;
+    },
     workspace: function () {
       return this.$store.workspace.resource;
     },
