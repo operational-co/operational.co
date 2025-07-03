@@ -10,8 +10,8 @@
             </template>
             <template #body>
               <p>
-                10,000 free events are one time only. Once you track 10,000 events, you will be asked to enter your
-                credit card details.
+                10,000 free events are one time only. Once you track 10,000 events, you will be
+                asked to enter your credit card details.
               </p>
             </template>
           </Accordion>
@@ -30,10 +30,12 @@
             </template>
             <template #body>
               <p>
-                If you don't enter your card details after your free events are up, you will be given 5 day as a grace
-                period to enter your card details.
+                If you don't enter your card details after your free events are up, you will be
+                given 5 day as a grace period to enter your card details.
               </p>
-              <p>If you still haven't entered your card details, your account will be deactivated.</p>
+              <p>
+                If you still haven't entered your card details, your account will be deactivated.
+              </p>
             </template>
           </Accordion>
           <Accordion>
@@ -42,8 +44,9 @@
             </template>
             <template #body>
               <p>
-                Billing happens on the 1st of every month. So if you enter your card details, you won't be charged right
-                away, you will be charged on the 1st of next month for the events accumulated for the previous month.
+                Billing happens on the 1st of every month. So if you enter your card details, you
+                won't be charged right away, you will be charged on the 1st of next month for the
+                events accumulated for the previous month.
               </p>
             </template>
           </Accordion>
@@ -52,11 +55,8 @@
               <h4>Can I self-host Operational / Is Operational open-source?</h4>
             </template>
             <template #body>
-              <p>Operational is planned to be open source in the near future.</p>
-              <p>
-                Right now, there is still a lot of work to be done, but once the code is stable, we will make our repo
-                open-source and add guides for self-hosting.
-              </p>
+              <p>Operational is open source.</p>
+              <p>Our selfhosting docs are <a href="/selfhosted/introduction">here.</a></p>
             </template>
           </Accordion>
           <Accordion>
@@ -65,7 +65,10 @@
             </template>
             <template #body>
               <p>Events are stored for at least 1 year.</p>
-              <p>Since Operational is a brand new product, we haven't decided timelines for longer term retention.</p>
+              <p>
+                Since Operational is a brand new product, we haven't decided timelines for longer
+                term retention.
+              </p>
             </template>
           </Accordion>
         </div>
@@ -83,8 +86,8 @@ export default {
   components: {
     Constrain,
     Subtitle,
-    Accordion
-  }
+    Accordion,
+  },
 };
 </script>
 

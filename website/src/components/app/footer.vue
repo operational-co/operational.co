@@ -143,16 +143,16 @@ export default {
       ],
       relatedLinks: [
         {
-          slug: "/vs-logsnag",
-          title: "VS Logsnag",
-        },
-        {
           slug: "/open-source",
           title: "Open Source",
         },
         {
           slug: "/articles",
           title: "Articles",
+        },
+        {
+          slug: "/vs-logsnag",
+          title: "VS Logsnag",
         },
       ],
     };

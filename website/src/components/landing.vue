@@ -91,10 +91,81 @@
       </Constrain>
     </div>
 
-    <!--
     <div class="d-problem">
       <Constrain size="sm">
-        <h2 class="text-center">When your product isn't operational</h2>
+        <h2 class="text-center">Houston we have a problem..</h2>
+        <p class="text-center">
+          Every day, hundreds of founders are sending notifications to themselves for critical
+          events.
+        </p>
+
+        <div class="d-problem__grid">
+          <span title="Telegram">
+            <img src="/images/index/problem-telegram.png" />
+          </span>
+          <span title="Email">
+            <img src="/images/index/problem-email.png" />
+          </span>
+          <span title="Slack">
+            <img src="/images/index/problem-slack.png" />
+          </span>
+          <span title="Discord">
+            <img src="/images/index/problem-discord.png" />
+          </span>
+        </div>
+        <p class="text-center">
+          They will send events for user signups, cronjobs, status updates, webhooks, etc<br />
+          - in other words, operational issues.
+        </p>
+        <p class="text-center">
+          Operational is built from the ground up to receive events for your product.
+        </p>
+
+        <!-- <ul>
+          <li>
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M7 13L10 16L17 8"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+            <strong> Purpose built for operationals </strong>
+            <p>
+              Forget about checking your slack workspace, email inboxes, etc. All your critical
+              events are in one place.
+            </p>
+          </li>
+          <li>
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M7 13L10 16L17 8"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+            <strong> Delightfully easy to use </strong>
+            <p>So good, you'll start tracking inch of your product.</p>
+          </li>
+        </ul> -->
+
+        <!--
         <div class="d-problem__inner">
           <article>
             <h4>Before Operational</h4>
@@ -240,9 +311,9 @@
             </p>
           </article>
         </div>
+        -->
       </Constrain>
     </div>
-    -->
 
     <!--
 
@@ -359,11 +430,13 @@
 
     <div class="d-explainer">
       <Constrain>
-        <h2 class="text-center">Track & respond to your product in realtime</h2>
+        <h2 class="text-center">Packed with powerful features</h2>
+
         <div class="d-explainer__inner left">
           <article>
             <h3>Critical events → phone. Immediately.</h3>
             <p>Receive push notifications on your mobile or in the webapp.</p>
+            <a href="/manual/pwa" class="btn btn-sm"> Learn more </a>
           </article>
           <section>
             <img alt="Operational.co push notifications" :src="`/images/index/feature1.jpg`" />
@@ -374,6 +447,7 @@
           <article>
             <h3>Run actions on events</h3>
             <p>Use Action Buttons to trigger webhooks within your product.</p>
+            <a href="/api/actions" class="btn btn-sm"> Learn more </a>
           </article>
           <section>
             <img alt="Operational.co Action buttons" :src="`/images/index/feature2.jpg`" />
@@ -384,9 +458,20 @@
           <article>
             <h3>Understand complex workflows</h3>
             <p>Chain events together to get a better understanding of your workflows.</p>
+            <a href="/api/contexts" class="btn btn-sm"> Learn more </a>
           </article>
           <section>
             <img alt="Operational.co contexts" :src="`/images/index/feature3.jpg`" />
+          </section>
+        </div>
+
+        <div class="d-explainer__inner right">
+          <article>
+            <h3>Log JSON with ease</h3>
+            <p>Track those pesky webhooks with ease.</p>
+          </article>
+          <section>
+            <img alt="Operational.co push notifications" :src="`/images/index/feature4.jpg`" />
           </section>
         </div>
       </Constrain>
@@ -1031,6 +1116,23 @@ await ops.events.ingest({
 
 <style lang="scss">
 .c-landing-intro {
+  @keyframes jiggle {
+    0% {
+      transform: rotate(-2deg) translateY(0);
+    }
+    25% {
+      transform: rotate(2deg) translateY(1px);
+    }
+    50% {
+      transform: rotate(-2deg) translateY(0);
+    }
+    75% {
+      transform: rotate(2deg) translateY(-1px);
+    }
+    100% {
+      transform: rotate(-2deg) translateY(0);
+    }
+  }
   .mark {
     width: 64px;
     height: 64px;
@@ -1365,6 +1467,49 @@ await ops.events.ingest({
   .d-problem {
     padding: 5rem 0;
 
+    &__grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr 1fr;
+      grid-column-gap: 0.25rem;
+      margin-top: 2rem;
+      margin-bottom: 3rem;
+
+      span {
+        position: relative;
+        display: inline-block;
+        height: 100px;
+        animation: jiggle 700ms infinite;
+        animation-timing-function: ease-in-out;
+
+        &:nth-child(1) {
+          animation-delay: 0.2s;
+        }
+        &:nth-child(odd) {
+          animation-delay: 0.1s;
+        }
+
+        img {
+          display: block;
+          border-radius: 0.5rem;
+          border: var(--color-warning) solid 3px;
+        }
+
+        &:after {
+          content: attr(title);
+          position: absolute;
+          bottom: -10px;
+          left: 50%;
+          padding: 2px 6px;
+          transform: translateX(-50%);
+          font-size: var(--font-size-xs);
+          font-weight: 600;
+          background-color: var(--color-warning);
+          border-radius: 12px;
+          line-height: 1;
+        }
+      }
+    }
+
     &__inner {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -1389,6 +1534,26 @@ await ops.events.ingest({
             svg {
               color: var(--color-success);
             }
+          }
+        }
+      }
+    }
+
+    @media screen and (max-width: 620px) {
+      &__grid {
+        grid-template-columns: repeat(2, 1fr); /* 2 columns */
+        grid-auto-rows: 50%;
+
+        span {
+          height: 100%;
+
+          &:nth-child(1) {
+            margin-top: -0.5rem;
+            z-index: 1;
+          }
+          &:nth-child(2) {
+            margin-top: -0.5rem;
+            z-index: 2;
           }
         }
       }

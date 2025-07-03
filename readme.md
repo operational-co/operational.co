@@ -15,42 +15,52 @@
 
 [Operational.co](https://operational.co) is a open-source Event tracking tool. Monitor signups, webhooks, cronjobs and more.
 
-Operational is a Open source alternative to Logsnag, another Event tracking tool in the same category.
+<p align="center">
+  <strong><a href="https://app.operational.co/?signinas=kevin">🔍 View Live Demo</a></strong> - See Operational in action with a demo account receiving test events.
+</p>
 
 ![Operational Event tracker](media/operational-screenshot.png?v=1)
 
-### Why use Operational?
+## ✨ Key Features
 
 - Get push notifications for critical events straight to your phone, or on the webapp
 - Monitor critical events
 - Trigger webhooks via action buttons
 - Understand complex events via contexts(events-in-events)
 - Usable on mobile as a progressive web app(can receive push notifications on mobile too)
-- Built for tech businesses
+- Built for tech products
 
-## How to use Operational?
+<hr>
 
-There are two ways to use Operational:
+## 🚀 Getting Started
 
-- Join the waitlist on [Discord](https://discord.gg/QmfGeMGM)
-- Self-host [Operational](https://operational.co/selfhosted)
+There are two ways to start using Operational:
 
-### Highlights
+| Option                                                             | Description                                   |
+| ------------------------------------------------------------------ | --------------------------------------------- |
+| **[Hosted Service](https://operational.co)**                       | Fastest way to get started                    |
+| **[Self-Hosting](https://operational.co/selfhosted/introduction)** | Deploy and manage Operational on your own VPS |
+
+📚 Explore our [documentation](https://operational.co/docs/start-here) to learn more about setup and usage.
+
+<hr>
+
+## 🪄 Highlights
 
 - Heaps of self-hosting options, from Render.com to docker images, with video guides. We want you to self-host!
 - Very few 3rd party dependencies. No need to install clickhouse in the open source version.
 - Feature packed. Send json, formatted json, bundle up logs in contexts, add action buttons, and more.
 - Easy to grok and tear apart - no useless dependencies, nor unnecessarily complex code.
 
-## Community
+## 🏡 Community
 
 We have a active [Discord](https://discord.gg/QmfGeMGM) community. We highly recommend jumping on our Discord server for updates, feedback and help.
 
-## Contributing to Operational
+## ⛏️ Contributing to Operational
 
 [How to contribute?](https://operational.co/other/contributing)
 
-## Technology
+## 👩‍🔬 Technology
 
 Operational has a dead-simple tech stack:
 
