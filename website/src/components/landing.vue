@@ -5,17 +5,11 @@
       <Constrain size="sm">
         <div class="text-center">
           <h1>Monitor your product’s critical events as they happen</h1>
-          <p>
+          <p class="article-text">
             Operational sends alerts in a live timeline<br />
             so you always know what’s going on.
           </p>
         </div>
-        <article class="article-container article-text">
-          <p>
-            Understand what’s happening in your product, find issues and respond to them in
-            realtime.
-          </p>
-        </article>
 
         <!-- <div class="mark">
 					<span></span>
@@ -1289,10 +1283,6 @@ await ops.events.ingest({
       }
     }
 
-    .article-container {
-      display: none;
-    }
-
     .script-container {
       margin-top: -1rem;
       margin-bottom: 2rem;
@@ -1354,10 +1344,6 @@ await ops.events.ingest({
           padding: 4px 6px;
           margin: 0 2px;
         }
-      }
-
-      .article-container {
-        display: block;
       }
 
       .item-container {
