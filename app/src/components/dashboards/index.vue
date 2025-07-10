@@ -3,25 +3,24 @@
     <Constrain>
       <div class="c-dashboards__header">
         <h3>Dashboard</h3>
-        <EditMode></EditMode>
+        <EditMode v-model="moving"></EditMode>
       </div>
     </Constrain>
     <div class="c-dashboard">
       <div class="grid-stack">
         <div
-          v-for="(w, i) in items"
+          v-for="(item, i) in computedItems"
           class="grid-stack-item grid-stack-item-content"
-          :data-id="w.id"
-          :gs-no-move="true"
-          :gs-x="w.x"
-          :gs-y="w.y"
-          :gs-w="w.w"
-          :gs-h="w.h"
-          :gs-id="w.id"
-          :id="w.id"
-          :key="w.id"
+          :data-id="item.id"
+          :gs-x="item.x"
+          :gs-y="item.y"
+          :gs-w="item.w"
+          :gs-h="item.h"
+          :gs-id="item.id"
+          :id="item.id"
+          :key="item.id"
         >
-          <Widget :type="w.type"></Widget>
+          <Widget :moving="moving" :widget="item.widget"></Widget>
         </div>
       </div>
     </div>
@@ -29,17 +28,12 @@
 </template>
 
 <script>
-import moment from "moment";
-
 import Constrain from "@operational.co/components/ui/constrain.vue";
-
 import Widget from "@operational.co/components/widget/index.vue";
-
 import { GridStack, GridStackEngine } from "gridstack";
+import EditMode from "./edit-mode.vue";
 
 import "gridstack/dist/gridstack.min.css";
-
-import EditMode from "./edit-mode.vue";
 
 export default {
   components: {
@@ -51,21 +45,94 @@ export default {
   data: function () {
     return {
       grid: null,
-      items: [
-        { id: 1, x: 0, y: 0, w: 1, type: "bar" },
-        { id: 2, x: 1, y: 0, w: 1 },
-        { id: 3, x: 0, y: 2, w: 1 },
+      moving: false,
+      widgets: [
+        {
+          id: 1,
+          type: "number",
+          data: {
+            title: "$577",
+            description: "Today",
+          },
+          meta: {
+            x: 0,
+            y: 0,
+            w: 1,
+            y: 1,
+          },
+        },
+        {
+          id: 1,
+          type: "number",
+          data: {
+            title: "56 signups",
+            description: "Today",
+          },
+          meta: {
+            x: 1,
+            y: 0,
+            w: 1,
+            y: 1,
+          },
+        },
+        {
+          id: 1,
+          type: "number",
+          data: {
+            title: "2 Posts",
+            description: "Today",
+          },
+          meta: {
+            x: 0,
+            y: 1,
+            w: 1,
+            y: 1,
+          },
+        },
       ],
       search: {},
     };
   },
 
+  watch: {
+    moving: {
+      immediate: true,
+      handler(val) {
+        if (this.grid) {
+          this.grid.setStatic(!val);
+        }
+      },
+    },
+  },
+
   computed: {
+    dataMove: function () {
+      if (this.moving) {
+        return "yes";
+      }
+      return false;
+    },
     // items: function () {
     //   return this.$store.reports.resources;
     // },
     computedItems: function () {
-      return this.items;
+      const widgets = this.widgets;
+      const items = [];
+
+      for (let i = 0; i < widgets.length; i++) {
+        const w = widgets[i];
+
+        items.push({
+          w: w.meta.w,
+          h: w.meta.h,
+          x: w.meta.x,
+          y: w.meta.y,
+          id: w.id,
+          widget: w,
+        });
+      }
+
+      return items;
     },
   },
 
@@ -97,7 +164,15 @@ export default {
       disableResize: true,
       cellHeight: height,
       cellHeightThrottle: 1000,
+      //staticGrid: !this.moving,
     });
+
+    this.grid.on("change", (event, items) => {
+      console.log("Grid changed:", items);
+      // Example output: [{x: 0, y: 0, w: 1, h: 1, id: 'some-id'}, ...]
+    });
+
+    this.grid.setStatic(!this.moving);
 
     // setInterval(() => {
     //   this.computeHeight();
@@ -120,8 +195,7 @@ export default {
 <style lang="scss">
 .c-dashboards {
   .c-dashboard {
-    max-width: 1200px;
-    padding: 0 var(--spacer);
+    max-width: 740px;
     margin: var(--spacer-sm) auto;
 
     border-radius: 20px;
@@ -166,6 +240,11 @@ export default {
 
   .grid-stack {
     width: 100%;
+    margin-left: var(--margin);
+    margin-right: var(--margin);
+    width: calc(100% - var(--margin) * 2);
+    // margin-left: calc(var(--margin-lg) * -1);
+    //margin-right: calc(var(--margin-lg) * -1);
   }
 
   .gs-2 > .grid-stack-item[gs-x="1"] {
@@ -186,11 +265,12 @@ export default {
     //padding: var(--margin);
     //background-color: #18bc9c;
     //padding: var(--spacer-lg);
-    border-radius: var(--border-radius);
     //cursor: grab;
   }
 
   .grid-stack-item {
+    padding: var(--margin);
+
     &.ui-draggable-dragging {
       .c-widget {
         box-shadow: rgb(0, 0, 0) 0px 8px 30px -10px;
@@ -206,7 +286,6 @@ export default {
       width: 100%;
 
       .grid-stack-item {
-        padding: 0;
       }
     }
   }

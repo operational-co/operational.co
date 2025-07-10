@@ -1,11 +1,12 @@
 <template>
-  <div class="c-widget">
+  <div :class="['c-widget', { moving: moving === true }]">
     <div class="c-widget__wrap">
-      <Header :subtitle="subtitle"></Header>
+      <!-- <Header :subtitle="subtitle"></Header>
 
       <div class="c-widget__inner">
-        <Chart :data="data" :type="type"></Chart>
-      </div>
+        <Chart :data="data" :type="widget.type"></Chart>
+      </div> -->
+      <Number :data="widget.data"></Number>
     </div>
   </div>
 </template>
@@ -13,18 +14,20 @@
 <script>
 import Chart from "@operational.co/components/chart/index.vue";
 import Header from "./header.vue";
+import Number from "./number.vue";
 
 export default {
   components: {
     Chart,
-    Header
+    Header,
+    Number
   },
 
   props: {
     widget: {},
-    type: {
-      type: String,
-      default: "line"
+    moving: {
+      type: Boolean,
+      default: false
     }
   },
 
@@ -35,6 +38,8 @@ export default {
       if (!widget) {
         return;
       }
+
+      return "nanana";
 
       let widgetCache = widget.widgetCache;
 
@@ -49,6 +54,7 @@ export default {
       return date;
     },
     data: function () {
+      return [];
       let widget = this.widget;
 
       if (!widget) {
@@ -81,23 +87,38 @@ export default {
 
 <style lang="scss">
 .c-widget {
-  position: relative;
-  padding: var(--margin-lg);
-  //height: 100%;
+  height: 100%;
 
   &__wrap {
-    background-color: var(--color-bg-2);
-    border-radius: var(--border-radius);
-    // box-shadow:
-    //   0 20px 25px -5px rgb(0 0 0 / 0.3),
-    //   0 8px 10px -6px rgb(0 0 0 / 0.1);
-
-    border-bottom: var(--color-bg-3) solid 1px;
+    height: 100%;
   }
 
   &__inner {
     padding: var(--margin-lg);
     padding-top: 0;
+  }
+
+  @keyframes jiggle {
+    0% {
+      transform: rotate(-2deg);
+    }
+    25% {
+      transform: rotate(2deg);
+    }
+    50% {
+      transform: rotate(-2deg);
+    }
+    75% {
+      transform: rotate(2deg);
+    }
+    100% {
+      transform: rotate(-2deg);
+    }
+  }
+
+  &.moving {
+    animation: jiggle 800ms infinite;
+    animation-timing-function: ease-in-out;
   }
 
   @media screen and (max-width: 576px) {

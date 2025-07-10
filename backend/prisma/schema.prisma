@@ -164,6 +164,8 @@ model Workspace {
 
   invites Invite[] @relation("invite")
 
+  dsahboards Dashboard[] @relation("dashboards")
+
   actions Json?
 
   // store non-critical stuff here
@@ -331,6 +333,15 @@ model Invoice {
   paymentIntentId String?
 
   createdAt DateTime @default(now())
+}
+
+model Dashboard {
+  id Int @id @default(autoincrement())
+
+  name String @default("Default")
+
+  workspace   Workspace? @relation("dashboards", fields: [workspaceId], references: [id])
+  workspaceId Int?
 }
 
 enum CouponStatus {

@@ -21,16 +21,39 @@
     placement="bottom-end"
   >
     <div class="c-category-button__dropdown">
-      <div class="c-category-button__dropdown__list" v-if="categories.length > 0">
-        <a
+      <div class="c-category-button__dropdown__list" v-if="computedCategories.length > 0">
+        <section
           :class="[{ active: category && cat.text === category.text }]"
-          href="#"
-          v-for="(cat, i) in categories"
+          v-for="(cat, i) in computedCategories"
           :key="i"
-          @click.prevent="filterCategory(cat)"
         >
-          {{ cat.text }}
-        </a>
+          <article v-if="cat.type === 'separator'">
+            <span>
+              {{ cat.text }}
+            </span>
+            <section
+              :class="[{ active: category && cat.text === category.text }]"
+              v-for="(cat, i) in cat.categories"
+              :key="i"
+            >
+              <a
+                :class="[{ active: category && cat.text === category.text }]"
+                href="#"
+                @click.prevent="filterCategory(cat)"
+              >
+                {{ cat.text }}
+              </a>
+            </section>
+          </article>
+          <a
+            v-else
+            :class="[{ active: category && cat.text === category.text }]"
+            href="#"
+            @click.prevent="filterCategory(cat)"
+          >
+            {{ cat.text }}
+          </a>
+        </section>
       </div>
       <div v-else class="c-category-button__dropdown__empty">
         <svg
@@ -66,6 +89,54 @@ import InputText from "@operational.co/components/form/input-text.vue";
 import Icon from "@operational.co/components/ui/icon.vue";
 import debounce from "lodash/debounce";
 import Popup from "@operational.co/components/ui/popup.vue";
+import { toRaw } from "vue";
+
+// Function to split the text and create the required structure
+function transformArray(arr) {
+  const result = [];
+
+  for (const item of arr) {
+    const { text, id } = item;
+    const dotIndex = text.indexOf(".");
+
+    if (dotIndex === -1) {
+      // no dot → top-level category
+      result.push({ id, type: "category", text });
+    } else {
+      // split into [group, subcategory]
+      const separator = text.slice(0, dotIndex);
+      const categoryText = text.slice(dotIndex + 1);
+
+      // find or create a separator group
+      let group = result.find((g) => g.type === "separator" && g.text === separator);
+      if (!group) {
+        group = { type: "separator", text: separator, categories: [] };
+        result.push(group);
+      }
+
+      // add to its categories
+      group.categories.push({
+        id,
+        type: "category",
+        text: categoryText,
+      });
+
+      console.log("---");
+    }
+  }
+
+  // sort the sub-categories inside each group
+  for (const g of result) {
+    if (g.type === "separator") {
+      g.categories.sort((a, b) => a.text.localeCompare(b.text));
+    }
+  }
+
+  // sort top-level entries (both lone categories and separator groups)
+  result.sort((a, b) => a.text.localeCompare(b.text));
+
+  return result;
+}
 
 export default {
   components: {
@@ -116,6 +187,18 @@ export default {
   watch: {},
 
   computed: {
+    computedCategories: function () {
+      let categories = toRaw(this.categories);
+
+      categories.push({
+        id: 46,
+        text: "cron.billing",
+      });
+
+      categories = transformArray(categories);
+
+      return categories;
+    },
     workspace: function () {
       return this.$store.workspace.resource;
     },
@@ -228,6 +311,18 @@ export default {
 
       &::-webkit-scrollbar-track {
         background: transparent;
+      }
+
+      article {
+        > span {
+          font-size: var(--font-size-sm);
+          font-weight: 500;
+          opacity: 0.8;
+        }
+
+        > section {
+          margin-left: 1rem;
+        }
       }
     }
 

@@ -166,7 +166,7 @@ export default {
 
           let endDate = moment(item.createdAt).format(format);
 
-          let str = `${startDate} → ${endDate}`;
+          let str = `Events on ${endDate}`; //`${startDate} → ${endDate}`;
 
           newItems.push({
             type: "date",

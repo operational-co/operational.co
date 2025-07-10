@@ -1,10 +1,10 @@
 <template>
-  <div :class="['c-dashboards-edit-mode', { active: testMode === true }]">
+  <div :class="['c-dashboards-edit-mode', { active: modelValue === true }]">
     <span> Edit mode </span>
     <label class="c-switch">
-      <input v-model="testMode" type="checkbox" checked />
+      <input v-model="localValue" type="checkbox" />
       <span class="c-switch__slider">
-        <span class="c-switch__toggle"> </span>
+        <span class="c-switch__toggle"></span>
       </span>
     </label>
   </div>
@@ -12,51 +12,31 @@
 
 <script>
 export default {
-  data: function () {
-    return {
-      testMode: false,
-    };
+  props: {
+    modelValue: {
+      type: Boolean,
+      default: false,
+    },
   },
 
-  watch: {
-    testMode: function () {
-      this.onTestMode(this.testMode);
+  computed: {
+    localValue: {
+      get() {
+        return this.modelValue;
+      },
+      set(value) {
+        this.$emit("update:modelValue", value);
+        this.onMoveMode(value);
+      },
     },
   },
 
   methods: {
-    async onTestMode(testMode) {
-      let condition = "off";
-      if (testMode) {
-        condition = "on";
-      }
-      this.$store.app.setTestMode(testMode);
-      this.$store.app.sendNotification(`Test mode is ${condition}`);
+    onMoveMode(value) {
+      const condition = value ? "on" : "off";
+      this.$store.app.setMoveMode(value);
+      this.$store.app.sendNotification(`Move mode is ${condition}`);
     },
-  },
-
-  created: function () {
-    this.testMode = this.$store.app.testMode;
   },
 };
 </script>
-
-<style lang="scss">
-.c-dashboards-edit-mode {
-  display: flex;
-  align-items: center;
-  padding-right: 0;
-
-  span {
-    font-size: var(--font-size-sm);
-    margin-right: var(--margin);
-    opacity: 0.8;
-  }
-
-  &.active {
-    span {
-      opacity: 1;
-    }
-  }
-}
-</style>
