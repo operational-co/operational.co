@@ -15,6 +15,8 @@
 
 [Operational.co](https://operational.co) is a open-source Event tracking tool. Monitor signups, webhooks, cronjobs and more.
 
+Currently [Swipekit Facebook ad library tool](https://swipekit.app/articles/facebook-ads-library) and [youtubedescriptionextractor](https://youtubedescriptionextractor.com/) are using this in production.
+
 <p align="center">
   <strong><a href="https://app.operational.co/?signinas=kevin">🔍 View Live Demo</a></strong> - See Operational in action with a demo account receiving test events.
 </p>
