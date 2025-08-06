@@ -135,7 +135,11 @@ export default {
       });
     },
     filterCategory: function (cat) {
-      this.$emit("onCategorySelected", cat.text);
+      if (cat.text === this.currentCategory) {
+        this.$emit("onCategorySelected", null);
+      } else {
+        this.$emit("onCategorySelected", cat.text);
+      }
     },
   },
 };

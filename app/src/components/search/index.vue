@@ -28,7 +28,7 @@
         </template>
         <template v-slot:post-input>
           <svg
-            v-if="text || currentCategory"
+            v-if="text || currentSelectedCategory"
             @click="onClear"
             width="24"
             height="24"
@@ -50,7 +50,7 @@
       <CategoryButton
         @onCategorySelected="onCategorySelected"
         :categories="categories"
-        :category="currentCategory"
+        :category="currentSelectedCategory"
       ></CategoryButton>
     </div>
 
@@ -128,6 +128,9 @@ export default {
   },
 
   computed: {
+    currentSelectedCategory: function () {
+      return this.$store.events.category;
+    },
     categories: function () {
       if (!this.workspace) {
         return [];
@@ -307,7 +310,7 @@ export default {
 
   &__dropdown {
     width: 100%;
-    height: 360px;
+    height: 300px;
     position: relative;
 
     &__list {
@@ -317,6 +320,7 @@ export default {
       width: 100%;
       height: 100%;
       overflow-y: auto;
+      padding: 0.5rem;
 
       &::-webkit-scrollbar {
         width: 10px;
@@ -342,6 +346,8 @@ export default {
       padding: var(--margin);
       color: var(--color-font);
       border-radius: var(--border-radius);
+      font-size: var(--font-size-sm);
+      line-height: 1.3;
 
       &:hover,
       &:active {
