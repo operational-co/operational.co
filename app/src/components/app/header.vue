@@ -149,14 +149,6 @@ export default {
   width: 100%;
   height: 56px;
 
-  .c-avatar {
-    width: 24px !important;
-    height: 24px;
-    min-width: 24px !important;
-    object-fit: cover;
-    object-position: center center;
-  }
-
   &__testmode {
     display: inline-block;
     padding: var(--margin) var(--margin-lg);
@@ -256,6 +248,14 @@ export default {
       color: var(--color-font);
       transition: all var(--transition-time-sm) linear;
       cursor: pointer;
+
+      .c-avatar {
+        width: 24px !important;
+        height: 24px;
+        min-width: 24px !important;
+        object-fit: cover;
+        object-position: center center;
+      }
 
       > span {
         display: inline-block;

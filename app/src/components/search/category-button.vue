@@ -3,7 +3,7 @@
     <span :class="[{ muted: !category }]">{{ category ? category.text : "Category" }}</span>
     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path
-        d="M20 9L12.7071 16.2929C12.3166 16.6834 11.6834 16.6834 11.2929 16.2929L4 9"
+        d="M8 10L11.4697 13.4697C11.7626 13.7626 12.2374 13.7626 12.5303 13.4697L16 10"
         stroke="currentColor"
         stroke-width="2"
         stroke-linecap="round"

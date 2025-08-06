@@ -1,7 +1,13 @@
 <template>
   <Popup :selector="selector" klass="c-popup-menu" @onClose="onClose" :active="active">
     <div class="c-popup-menu__top">
-      <small v-if="user"> {{ user.email }} </small>
+      <div class="c-popup-menu__user">
+        <Avatar :user="user"></Avatar>
+        <article>
+          <span v-if="user"> {{ user.email }} </span>
+          <small> {{ user.firstName }} {{ user.lastName }} </small>
+        </article>
+      </div>
     </div>
     <div class="c-popup-menu__middle">
       <span> Projects </span>
@@ -91,21 +97,6 @@
         </svg>
 
         <span> Docs </span>
-      </a>
-      <a href="https://discord.gg/BdTbsQhRzc" target="_blank">
-        <svg
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M19.6361 5.0228C18.1907 4.35756 16.6648 3.88561 15.0973 3.61902C14.8828 4.00447 14.6888 4.40105 14.5159 4.8071C12.8463 4.55418 11.1484 4.55418 9.47881 4.8071C9.30587 4.4011 9.1118 4.00452 8.8974 3.61902C7.32897 3.88786 5.80205 4.36093 4.35518 5.02628C1.48276 9.29851 0.70409 13.4646 1.09342 17.5716C2.77558 18.821 4.6584 19.7712 6.66003 20.3809C7.11074 19.7715 7.50956 19.1251 7.85226 18.4483C7.20135 18.2039 6.57311 17.9024 5.9748 17.5473C6.13227 17.4325 6.28627 17.3142 6.43508 17.1994C8.17601 18.0224 10.0761 18.4491 12 18.4491C13.9238 18.4491 15.8239 18.0224 17.5648 17.1994C17.7154 17.3229 17.8694 17.4412 18.0251 17.5473C17.4257 17.903 16.7963 18.2051 16.1442 18.4501C16.4865 19.1265 16.8853 19.7724 17.3364 20.3809C19.3398 19.7737 21.224 18.8239 22.9065 17.5734C23.3633 12.8106 22.1261 8.68273 19.6361 5.0228ZM8.34541 15.0459C7.26047 15.0459 6.36414 14.0561 6.36414 12.8384C6.36414 11.6208 7.22932 10.6223 8.34195 10.6223C9.45458 10.6223 10.344 11.6208 10.325 12.8384C10.3059 14.0561 9.45112 15.0459 8.34541 15.0459ZM15.6545 15.0459C14.5678 15.0459 13.675 14.0561 13.675 12.8384C13.675 11.6208 14.5401 10.6223 15.6545 10.6223C16.7689 10.6223 17.6514 11.6208 17.6323 12.8384C17.6133 14.0561 16.7602 15.0459 15.6545 15.0459Z"
-            fill="currentColor"
-          />
-        </svg>
-        <span> Discord </span>
       </a>
       <a href="#" @click.prevent="onLogout">
         <svg
@@ -233,6 +224,29 @@ export default {
     rgba(0, 0, 0, 0.1) 0px 16px 80px -8px;
   .c-arrow {
     color: var(--color-bg-3);
+  }
+
+  &__user {
+    display: grid;
+    grid-template-columns: 42px 1fr;
+
+    .c-avatar {
+      border-radius: 6px;
+    }
+
+    article {
+      span {
+        display: block;
+        font-size: var(--font-size-sm);
+        line-height: 1.3;
+      }
+      small {
+        display: block;
+        font-size: var(--font-size-xs);
+        line-height: 1.3;
+        opacity: 0.75;
+      }
+    }
   }
 
   &__top {

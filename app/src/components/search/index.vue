@@ -288,7 +288,14 @@ export default {
     left: auto;
     right: 8px;
 
+    opacity: 0.85;
+
     cursor: pointer;
+
+    &:hover,
+    &:active {
+      opacity: 1;
+    }
   }
 
   .c-popup {
@@ -443,6 +450,22 @@ export default {
 
     &__wrap {
       grid-template-columns: 1fr 140px;
+    }
+  }
+
+  @media screen and (min-width: 781px) {
+    &__wrap {
+      display: block;
+    }
+
+    .c-input-text {
+      border-top-right-radius: var(--input-radius);
+      border-bottom-right-radius: var(--input-radius);
+      overflow: hidden;
+    }
+
+    .c-category-button {
+      display: none;
     }
   }
 }

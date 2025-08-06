@@ -1,0 +1,185 @@
+<template>
+  <div class="c-events-sidebar">
+    <strong>Categories</strong>
+    <section
+      :class="[{ active: currentCategory && cat.text === currentCategory }]"
+      v-for="(cat, i) in computedCategories"
+      :key="i"
+    >
+      <article v-if="cat.type === 'separator'">
+        <span>
+          {{ cat.text }}
+        </span>
+        <section
+          :class="[{ active: currentCategory && cat.text === currentCategory }]"
+          v-for="(cat, i) in cat.categories"
+          :key="i"
+        >
+          <a
+            :class="[{ active: currentCategory && cat.text === currentCategory }]"
+            href="#"
+            @click.prevent="filterCategory(cat)"
+          >
+            {{ cat.text }}
+          </a>
+        </section>
+      </article>
+      <a
+        v-else
+        :class="[{ active: currentCategory && cat.text === currentCategory }]"
+        href="#"
+        @click.prevent="filterCategory(cat)"
+      >
+        {{ cat.text }}
+      </a>
+    </section>
+  </div>
+</template>
+
+<script>
+import { toRaw } from "vue";
+
+// Function to split the text and create the required structure
+function transformArray(arr) {
+  const result = [];
+
+  for (const item of arr) {
+    const { text, id } = item;
+    const dotIndex = text.indexOf(".");
+
+    if (dotIndex === -1) {
+      // no dot → top-level category
+      result.push({ id, type: "category", text });
+    } else {
+      // split into [group, subcategory]
+      const separator = text.slice(0, dotIndex);
+      const categoryText = text.slice(dotIndex + 1);
+
+      // find or create a separator group
+      let group = result.find((g) => g.type === "separator" && g.text === separator);
+      if (!group) {
+        group = { type: "separator", text: separator, categories: [] };
+        result.push(group);
+      }
+
+      // add to its categories
+      group.categories.push({
+        id,
+        type: "category",
+        text: categoryText,
+      });
+
+      console.log("---");
+    }
+  }
+
+  // sort the sub-categories inside each group
+  for (const g of result) {
+    if (g.type === "separator") {
+      g.categories.sort((a, b) => a.text.localeCompare(b.text));
+    }
+  }
+
+  // sort top-level entries (both lone categories and separator groups)
+  result.sort((a, b) => a.text.localeCompare(b.text));
+
+  return result;
+}
+
+export default {
+  data: function () {
+    return {
+      category: null,
+    };
+  },
+
+  computed: {
+    currentCategory: function () {
+      return this.$store.events.category;
+    },
+    computedCategories: function () {
+      let categories = toRaw(this.categories);
+
+      categories = this.uniqueById(categories);
+
+      //console.log(categories);
+
+      categories.push({
+        id: 46,
+        text: "cron.billing",
+      });
+
+      categories = transformArray(categories);
+
+      return categories;
+    },
+    categories: function () {
+      if (!this.workspace) {
+        return [];
+      }
+      let categories = this.workspace.categories || [];
+      return categories;
+    },
+    workspace: function () {
+      return this.$store.workspace.resource;
+    },
+  },
+
+  methods: {
+    uniqueById: function (arr) {
+      const seen = new Set();
+      return arr.filter((item) => {
+        if (seen.has(item.id)) return false;
+        seen.add(item.id);
+        return true;
+      });
+    },
+    filterCategory: function (cat) {
+      this.$emit("onCategorySelected", cat.text);
+    },
+  },
+};
+</script>
+
+<style lang="scss">
+.c-events-sidebar {
+  margin-top: 0.5rem;
+  padding-right: 1rem;
+
+  > strong {
+    display: block;
+    margin-bottom: calc(0.5rem + 2px);
+  }
+
+  a {
+    display: block;
+    padding: 0.4rem 0.6rem;
+    margin-bottom: 0.4rem;
+    background-color: var(--color-bg-2);
+    font-size: var(--font-size-xs);
+    color: var(--color-font-light);
+    line-height: 1.3;
+    border-radius: 0.5rem;
+
+    &:hover,
+    &:active {
+      background-color: var(--color-bg-4);
+    }
+
+    &.active {
+      background-color: var(--color-bg-4);
+      font-weight: 500;
+    }
+  }
+
+  article {
+    > section {
+      padding-left: 0.75rem;
+    }
+    > span {
+      font-size: var(--font-size-xs);
+      opacity: 0.8;
+    }
+  }
+}
+</style>

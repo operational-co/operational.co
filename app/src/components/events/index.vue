@@ -3,7 +3,7 @@
     <div :class="['ptr', { active: pullActive === true }]">
       <span>Refreshing page...</span>
     </div>
-    <Constrain>
+    <Constrain size="lg">
       <section class="c-events__header">
         <h3>Events</h3>
         <Toggle :listening="listening" @onToggle="onToggle"></Toggle>
@@ -16,43 +16,46 @@
         @onClear="onClear"
         @onCategorySelected="onCategorySelected"
       ></Search>
-      <main @click="onListClick">
-        <transition-group name="list" tag="div">
-          <div
-            :class="[
-              'c-events__wrapper',
-              { date: item && item.type === 'date' },
-              { log: item && item.type !== 'date' },
-            ]"
-            :data-id="item.id"
-            v-for="(item, i) in computedItems"
-            :key="item.id"
-          >
-            <Item
-              @onEventNameSearch="onEventNameSearch"
-              v-if="item && item.type !== 'date'"
-              :item="item"
-              @onConfirmAction="onConfirmAction"
+      <div class="c-events__inner">
+        <Sidebar @onCategorySelected="onCategorySelected"></Sidebar>
+        <main @click="onListClick">
+          <transition-group name="list" tag="div">
+            <div
+              :class="[
+                'c-events__wrapper',
+                { date: item && item.type === 'date' },
+                { log: item && item.type !== 'date' },
+              ]"
+              :data-id="item.id"
+              v-for="(item, i) in computedItems"
+              :key="item.id"
             >
-            </Item>
+              <Item
+                @onEventNameSearch="onEventNameSearch"
+                v-if="item && item.type !== 'date'"
+                :item="item"
+                @onConfirmAction="onConfirmAction"
+              >
+              </Item>
 
-            <div :class="['c-events__date']" v-if="item.type === 'date'">
-              <span>
-                {{ item.content }}
-              </span>
+              <div :class="['c-events__date']" v-if="item.type === 'date'">
+                <span>
+                  {{ item.content }}
+                </span>
+              </div>
             </div>
-          </div>
-        </transition-group>
-      </main>
-      <Bottom v-if="hasEnded && items.length > 0"></Bottom>
-      <Empty
-        :items="items"
-        :loaded="loaded"
-        :query="query"
-        :category="category"
-        :computedItems="computedItems"
-        @onClear="onClear"
-      ></Empty>
+          </transition-group>
+          <Bottom v-if="hasEnded && items.length > 0"></Bottom>
+          <Empty
+            :items="items"
+            :loaded="loaded"
+            :query="query"
+            :category="category"
+            :computedItems="computedItems"
+            @onClear="onClear"
+          ></Empty>
+        </main>
+      </div>
     </Constrain>
     <ModalConfirm
       :action="currentAction"
@@ -79,6 +82,7 @@ import Toggle from "./toggle.vue";
 import ModalView from "./modal-view.vue";
 import ModalConfirm from "./modal-confirm.vue";
 import TestMode from "./test-mode.vue";
+import Sidebar from "./sidebar.vue";
 
 export default {
   components: {
@@ -91,6 +95,7 @@ export default {
     ModalView,
     ModalConfirm,
     TestMode,
+    Sidebar,
   },
 
   data: function () {
@@ -223,6 +228,7 @@ export default {
       }
     },
     onCategorySelected: function (e) {
+      console.log(e);
       this.category = e;
       this.processQuery();
     },
@@ -594,6 +600,11 @@ export default {
   .c-constrain {
     &__inner {
       position: relative;
+
+      main {
+        min-width: 0;
+        overflow: auto;
+      }
     }
   }
 
@@ -634,12 +645,17 @@ export default {
     }
   }
 
+  &__inner {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+  }
+
   &__date {
     position: relative;
     font-size: var(--font-size-sm);
     display: block;
     padding: var(--margin);
-    text-align: center;
+    padding-left: 0;
     background-color: var(--color-bg-1);
 
     > span {
@@ -688,6 +704,16 @@ export default {
       > svg {
         display: none;
       }
+    }
+  }
+
+  @media screen and (max-width: 780px) {
+    &__inner {
+      display: block;
+    }
+
+    .c-events-sidebar {
+      display: none;
     }
   }
 }

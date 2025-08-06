@@ -95,7 +95,7 @@ const api = {
       },
     };
     try {
-      const res = await http.get("/events/latest", options);
+      const res = await http.get(`/events/${params.id}`, options);
       return res.data || [];
     } catch (err) {
       throw err;
