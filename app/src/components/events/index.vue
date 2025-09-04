@@ -9,16 +9,16 @@
         <Toggle :listening="listening" @onToggle="onToggle"></Toggle>
         <TestMode></TestMode>
       </section>
-      <Search
-        ref="search"
-        v-model:value="query"
-        v-model:archive="showArchive"
-        @onClear="onClear"
-        @onCategorySelected="onCategorySelected"
-      ></Search>
       <div class="c-events__inner">
         <Sidebar @onCategorySelected="onCategorySelected"></Sidebar>
         <main @click="onListClick">
+          <Search
+            ref="search"
+            v-model:value="query"
+            v-model:archive="showArchive"
+            @onClear="onClear"
+            @onCategorySelected="onCategorySelected"
+          ></Search>
           <transition-group name="list" tag="div">
             <div
               :class="[
@@ -385,6 +385,7 @@ export default {
       this.$store.app.setLoading(true);
       // final check to see that no events are pending
       const newEvents = await this.$store.events.setParams(params);
+
       this.$store.app.setLoading(false);
 
       if ((newEvents && newEvents.length === 0) || !newEvents) {
@@ -603,7 +604,7 @@ export default {
 
       main {
         min-width: 0;
-        overflow: auto;
+        overflow: hidden;
       }
     }
   }
@@ -647,7 +648,7 @@ export default {
 
   &__inner {
     display: grid;
-    grid-template-columns: 280px 1fr;
+    grid-template-columns: 240px 1fr;
   }
 
   &__date {

@@ -41,49 +41,7 @@ import { toRaw } from "vue";
 
 // Function to split the text and create the required structure
 function transformArray(arr) {
-  const result = [];
-
-  for (const item of arr) {
-    const { text, id } = item;
-    const dotIndex = text.indexOf(".");
-
-    if (dotIndex === -1) {
-      // no dot → top-level category
-      result.push({ id, type: "category", text });
-    } else {
-      // split into [group, subcategory]
-      const separator = text.slice(0, dotIndex);
-      const categoryText = text.slice(dotIndex + 1);
-
-      // find or create a separator group
-      let group = result.find((g) => g.type === "separator" && g.text === separator);
-      if (!group) {
-        group = { type: "separator", text: separator, categories: [] };
-        result.push(group);
-      }
-
-      // add to its categories
-      group.categories.push({
-        id,
-        type: "category",
-        text: categoryText,
-      });
-
-      console.log("---");
-    }
-  }
-
-  // sort the sub-categories inside each group
-  for (const g of result) {
-    if (g.type === "separator") {
-      g.categories.sort((a, b) => a.text.localeCompare(b.text));
-    }
-  }
-
-  // sort top-level entries (both lone categories and separator groups)
-  result.sort((a, b) => a.text.localeCompare(b.text));
-
-  return result;
+  return arr;
 }
 
 export default {

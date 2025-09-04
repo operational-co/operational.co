@@ -68,13 +68,27 @@ export default {
       type: String,
       default: ""
     },
-    options: {
-      type: Object,
-      default: () => {
-        return [];
-      }
-    },
     handleChange: {}
+  },
+
+  computed: {
+    options: function () {
+      let eventNames = this.workspace.eventNames || [];
+
+      let options = [];
+
+      for (let i = 0; i < eventNames.length; i++) {
+        options.push({
+          key: eventNames[i],
+          value: eventNames[i]
+        });
+      }
+
+      return options;
+    },
+    workspace: function () {
+      return this.$store.workspace.resource;
+    }
   },
 
   methods: {

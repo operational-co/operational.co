@@ -3,207 +3,114 @@
     <Constrain>
       <div class="c-dashboards__header">
         <h3>Dashboard</h3>
-        <EditMode v-model="moving"></EditMode>
+        <nav v-if="dashboard && dashboard.widgets && dashboard.widgets.length > 0">
+          <router-link to="/picker" class="btn btn-icon btn-sm">
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M12 7V12M12 12V17M12 12H7M12 12H17"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+              />
+            </svg>
+
+            <span>Add </span>
+          </router-link>
+          <button v-if="!moving" type="button" class="btn btn-icon btn-sm" @click="onEdit">
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M8.6447 5.54878L6.90046 5.14626C6.57358 5.07083 6.23089 5.16911 5.99368 5.40632L5.40632 5.99368C5.16911 6.23089 5.07083 6.57358 5.14626 6.90046L5.54878 8.6447C5.63978 9.03905 5.47717 9.44855 5.14043 9.67305L3.43326 10.8112C3.16258 10.9916 3 11.2954 3 11.6207V12.3793C3 12.7046 3.16259 13.0084 3.43326 13.1888L5.14043 14.327C5.47717 14.5514 5.63978 14.9609 5.54878 15.3553L5.14626 17.0995C5.07083 17.4264 5.16911 17.7691 5.40632 18.0063L5.99368 18.5937C6.23089 18.8309 6.57358 18.9292 6.90046 18.8537L8.6447 18.4512C9.03905 18.3602 9.44855 18.5228 9.67305 18.8596L10.8112 20.5667C10.9916 20.8374 11.2954 21 11.6207 21H12.3793C12.7046 21 13.0084 20.8374 13.1888 20.5667L14.327 18.8596C14.5514 18.5228 14.9609 18.3602 15.3553 18.4512L17.0995 18.8537C17.4264 18.9292 17.7691 18.8309 18.0063 18.5937L18.5937 18.0063C18.8309 17.7691 18.9292 17.4264 18.8537 17.0995L18.4512 15.3553C18.3602 14.9609 18.5228 14.5514 18.8596 14.327L20.5667 13.1888C20.8374 13.0084 21 12.7046 21 12.3793V11.6207C21 11.2954 20.8374 10.9916 20.5667 10.8112L18.8596 9.67305C18.5228 9.44855 18.3602 9.03905 18.4512 8.6447L18.8537 6.90046C18.9292 6.57358 18.8309 6.23089 18.5937 5.99368L18.0063 5.40632C17.7691 5.16911 17.4264 5.07083 17.0995 5.14626L15.3553 5.54878C14.9609 5.63978 14.5514 5.47717 14.327 5.14043L13.1888 3.43326C13.0084 3.16258 12.7046 3 12.3793 3H11.6207C11.2954 3 10.9916 3.16259 10.8112 3.43326L9.67305 5.14043C9.44855 5.47717 9.03905 5.63978 8.6447 5.54878Z"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M15 12C15 13.6569 13.6569 15 12 15C10.3431 15 9 13.6569 9 12C9 10.3431 10.3431 9 12 9C13.6569 9 15 10.3431 15 12Z"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linejoin="round"
+              />
+            </svg>
+
+            <span>Update </span>
+          </button>
+          <button v-if="moving" type="button" class="btn btn-sm btn-primary" @click="onStopEdit">
+            <span>Done </span>
+          </button>
+        </nav>
+      </div>
+      <div class="c-dashboards__spinner" v-if="!dashboard">
+        <span class="c-spinner"></span>
       </div>
     </Constrain>
-    <div class="c-dashboard">
-      <div class="grid-stack">
-        <div
-          v-for="(item, i) in computedItems"
-          class="grid-stack-item grid-stack-item-content"
-          :data-id="item.id"
-          :gs-x="item.x"
-          :gs-y="item.y"
-          :gs-w="item.w"
-          :gs-h="item.h"
-          :gs-id="item.id"
-          :id="item.id"
-          :key="item.id"
-        >
-          <Widget :moving="moving" :widget="item.widget"></Widget>
-        </div>
-      </div>
-    </div>
+    <Dashboard :dashboard="dashboard" v-if="dashboard"></Dashboard>
   </div>
 </template>
 
 <script>
 import Constrain from "@operational.co/components/ui/constrain.vue";
-import Widget from "@operational.co/components/widget/index.vue";
 import { GridStack, GridStackEngine } from "gridstack";
-import EditMode from "./edit-mode.vue";
 
 import "gridstack/dist/gridstack.min.css";
+
+import { dashboardsApi } from "@/store/dashboards.js";
+
+import Dashboard from "./dashboard.vue";
 
 export default {
   components: {
     Constrain,
-    Widget,
-    EditMode,
+    Dashboard,
   },
 
   data: function () {
     return {
-      grid: null,
-      moving: false,
-      widgets: [
-        {
-          id: 1,
-          type: "number",
-          data: {
-            title: "$577",
-            description: "Today",
-          },
-          meta: {
-            x: 0,
-            y: 0,
-            w: 1,
-            y: 1,
-          },
-        },
-        {
-          id: 1,
-          type: "number",
-          data: {
-            title: "56 signups",
-            description: "Today",
-          },
-          meta: {
-            x: 1,
-            y: 0,
-            w: 1,
-            y: 1,
-          },
-        },
-        {
-          id: 1,
-          type: "number",
-          data: {
-            title: "2 Posts",
-            description: "Today",
-          },
-          meta: {
-            x: 0,
-            y: 1,
-            w: 1,
-            y: 1,
-          },
-        },
-      ],
-      search: {},
+      dashboard: null,
     };
   },
 
-  watch: {
-    moving: {
-      immediate: true,
-      handler(val) {
-        if (this.grid) {
-          this.grid.setStatic(!val);
-        }
-      },
-    },
-  },
+  watch: {},
 
   computed: {
-    dataMove: function () {
-      if (this.moving) {
-        return "yes";
-      }
-      return false;
-    },
-    // items: function () {
-    //   return this.$store.reports.resources;
-    // },
-    computedItems: function () {
-      const widgets = this.widgets;
-      const items = [];
-
-      for (let i = 0; i < widgets.length; i++) {
-        const w = widgets[i];
-
-        items.push({
-          w: w.meta.w,
-          h: w.meta.h,
-          x: w.meta.x,
-          y: w.meta.y,
-          id: w.id,
-          widget: w,
-        });
-      }
-
-      return items;
+    moving: function () {
+      return this.$store.app.moveMode;
     },
   },
 
   methods: {
-    computeHeight: function () {
-      let oneWidget = this.$el.querySelector(".c-widget");
-
-      if (!oneWidget) {
-        return;
-      }
-
-      let height = oneWidget.offsetHeight;
-
-      if (!this.grid) {
-        return height;
-      }
-
-      this.grid.cellHeight(height);
+    onStopEdit: function () {
+      this.$store.app.setMoveMode(false);
+    },
+    onEdit: function () {
+      this.$store.app.setMoveMode(true);
     },
   },
 
-  mounted: function () {
-    const height = this.computeHeight();
-    this.grid = GridStack.init({
-      float: false,
-      minRow: 1,
-      maxRow: 3,
-      column: 2,
-      disableResize: true,
-      cellHeight: height,
-      cellHeightThrottle: 1000,
-      //staticGrid: !this.moving,
-    });
-
-    this.grid.on("change", (event, items) => {
-      console.log("Grid changed:", items);
-      // Example output: [{x: 0, y: 0, w: 1, h: 1, id: 'some-id'}, ...]
-    });
-
-    this.grid.setStatic(!this.moving);
-
-    // setInterval(() => {
-    //   this.computeHeight();
-    // }, 1000);
-
-    // this.$nextTick(() => {
-    //   this.computeHeight();
-    // });
-
-    // const items = [
-    //   { id: 1, x: 1, y: 1, h: 1 },
-    //   { id: 2, x: 2, y: 1, w: 1 },
-    // ];
-
-    // grid.load(items);
+  mounted: async function () {
+    const dashboard = await dashboardsApi.find();
+    this.dashboard = dashboard;
   },
 };
 </script>
 
 <style lang="scss">
 .c-dashboards {
-  .c-dashboard {
-    max-width: 740px;
-    margin: var(--spacer-sm) auto;
-
-    border-radius: 20px;
-  }
-
   &__header {
     position: relative;
     display: flex;
+    padding: 0.5rem 0;
     align-items: center;
 
     h3 {
@@ -220,6 +127,22 @@ export default {
       font-family: var(--font-family-monospace);
       font-size: var(--font-size-sm);
     }
+
+    nav {
+      margin-left: auto;
+
+      display: flex;
+      align-items: center;
+
+      button {
+        margin-left: var(--margin-sm);
+      }
+    }
+  }
+
+  &__spinner {
+    margin: 4rem auto;
+    text-align: center;
   }
 
   &__grid {
@@ -238,56 +161,8 @@ export default {
     }
   }
 
-  .grid-stack {
-    width: 100%;
-    margin-left: var(--margin);
-    margin-right: var(--margin);
-    width: calc(100% - var(--margin) * 2);
-    // margin-left: calc(var(--margin-lg) * -1);
-    //margin-right: calc(var(--margin-lg) * -1);
-  }
-
-  .gs-2 > .grid-stack-item[gs-x="1"] {
-    left: 0%;
-  }
-  .gs-2 > .grid-stack-item[gs-x="1"] {
-    left: 50%;
-  }
-
-  .gs-2 > .grid-stack-item {
-    width: 50%;
-  }
-  .gs-2 > .grid-stack-item[gs-w="2"] {
-    width: 100%;
-  }
-
-  .grid-stack-item-content {
-    //padding: var(--margin);
-    //background-color: #18bc9c;
-    //padding: var(--spacer-lg);
-    //cursor: grab;
-  }
-
-  .grid-stack-item {
-    padding: var(--margin);
-
-    &.ui-draggable-dragging {
-      .c-widget {
-        box-shadow: rgb(0, 0, 0) 0px 8px 30px -10px;
-      }
-    }
-  }
-
   @media screen and (max-width: 576px) {
     padding-top: var(--margin-lg);
-
-    .c-dashboard {
-      padding: 0;
-      width: 100%;
-
-      .grid-stack-item {
-      }
-    }
   }
 }
 </style>

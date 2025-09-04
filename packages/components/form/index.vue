@@ -32,7 +32,7 @@
           {{ buttonText }}
         </button>
         <div class="c-input c-form__errors" v-if="errors && errors.length > 0">
-          <span role="alert" v-for="(error, i) in errors" key="i">
+          <span role="alert" v-for="(error, i) in errors" :key="i">
             {{ error.message }}
           </span>
         </div>

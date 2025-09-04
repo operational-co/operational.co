@@ -23,6 +23,7 @@ import workspaceRoutes from "#components/workspace/routes.js";
 import websiteRoutes from "#components/website/routes.js";
 import metricRoutes from "#components/metric/routes.js";
 import invoiceRoutes from "#components/invoice/routes.js";
+import dashboardsRoutes from "#components/dashboards/routes.js";
 
 import User from "#components/user/index.js";
 import UserModel from "#components/user/model.js";
@@ -180,6 +181,8 @@ async function setupServer() {
   app.use("/metric", metricRoutes);
 
   app.use("/invoice", invoiceRoutes);
+
+  app.use("/dashboards", dashboardsRoutes);
 
   // Define the path to the uploads directory
   const uploadDir = path.join(__dirname, "public/uploads");

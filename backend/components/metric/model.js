@@ -1,9 +1,6 @@
 import prisma from "#lib/prisma.js";
 import Model from "#lib/class-model.js";
 
-import hashPassword from "#lib/hash-password.js";
-import comparePassword from "#lib/compare-password.js";
-
 class Metric extends Model {
   async findById(workspaceId) {
     const query = {

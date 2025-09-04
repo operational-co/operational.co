@@ -11,6 +11,7 @@ import { useReportsStore } from "./reports";
 import { useWorkspaceStore } from "./workspace";
 import { useMetricStore } from "./metric";
 import { useInvoicesStore } from "./invoices";
+import { useDashboardsStore } from "./dashboards";
 
 const STATIC_API_URL = import.meta.env.VITE_API_URL || undefined;
 const VITE_PUSH_SERVER_KEY = import.meta.env.VITE_PUSH_SERVER_KEY || undefined;
@@ -126,6 +127,8 @@ export const useAppStore = defineStore(config.name, {
 
       displayMode: "browser tab",
 
+      moveMode: false,
+
       isPwa: false,
 
       // service worker registration
@@ -203,14 +206,16 @@ export const useAppStore = defineStore(config.name, {
       const workspace = useWorkspaceStore();
       const metric = useMetricStore();
       const invoices = useInvoicesStore();
+      const dashboards = useDashboardsStore();
 
       let pie = await user.init();
-      await events.init();
-      await crm.init();
-      await reports.init();
-      await workspace.init();
-      await metric.init();
-      await invoices.init();
+      await events.init(pie);
+      await crm.init(pie);
+      await reports.init(pie);
+      await workspace.init(pie);
+      await metric.init(pie);
+      await invoices.init(pie);
+      await dashboards.init(pie);
 
       if (user.isAuth && pie) {
         await this.afterLogin(pie);
@@ -233,6 +238,7 @@ export const useAppStore = defineStore(config.name, {
       const workspace = useWorkspaceStore();
       const metric = useMetricStore();
       const invoices = useInvoicesStore();
+      const dashboards = useDashboardsStore();
 
       await metric.consumePie(pie);
       await workspace.consumePie(pie);
@@ -240,6 +246,7 @@ export const useAppStore = defineStore(config.name, {
       await crm.consumePie(pie);
       await reports.consumePie(pie);
       await invoices.consumePie(pie);
+      await dashboards.consumePie(pie);
     },
 
     async sendTestPushNotification() {
@@ -329,6 +336,10 @@ export const useAppStore = defineStore(config.name, {
 
     setOffline(condition) {
       this.offline = condition;
+    },
+
+    setMoveMode(condition) {
+      this.moveMode = condition;
     },
   },
 });

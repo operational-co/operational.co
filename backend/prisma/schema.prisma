@@ -342,6 +342,49 @@ model Dashboard {
 
   workspace   Workspace? @relation("dashboards", fields: [workspaceId], references: [id])
   workspaceId Int?
+
+  widgets Widget[]
+}
+
+enum WidgetType {
+  LINE
+  STAT
+}
+
+enum MetricType {
+  COUNT
+  SUM
+  AVG
+  MIN
+  MAX
+  UNIQ
+}
+
+enum GroupBy {
+  CATEGORY
+  NAME
+}
+
+model Widget {
+  id          Int       @id @default(autoincrement())
+  dashboard   Dashboard @relation(fields: [dashboardId], references: [id], onDelete: Cascade)
+  dashboardId Int
+
+  // how to render
+  type WidgetType
+
+  // position on the dashboard
+  x Int @default(0)
+  y Int @default(0)
+
+  // size of the widget
+  w Int @default(1)
+  h Int @default(1)
+
+  // blueprint of the widget's data collection and how it should look
+  schema Json?
+
+  @@index([dashboardId])
 }
 
 enum CouponStatus {

@@ -247,6 +247,16 @@ class User extends Model {
         FROM Category
         WHERE Category.workspaceId = Workspace.id
     	) AS workspace_categories,
+       (
+    SELECT JSON_ARRAYAGG(
+      JSON_OBJECT(
+        'id', D.id,
+        'name', D.name
+      )
+    )
+    FROM Dashboard D
+    WHERE D.workspaceId = Workspace.id
+  ) AS workspace_dashboards,
 		(
 	        SELECT JSON_OBJECT(
 	            'id', M.id,
@@ -359,6 +369,10 @@ class User extends Model {
 
     if (pie.workspace_users) {
       workspace.users = pie.workspace_users;
+    }
+
+    if (pie.workspace_dashboards) {
+      workspace.dashboards = pie.workspace_dashboards;
     }
 
     user.notify = !!user.notify;

@@ -19,6 +19,8 @@ import Server from "../components/settings/server.vue";
 
 import Settings from "../components/pages/settings.vue";
 
+import Picker from "../components/picker/index.vue";
+
 import Playground from "../components/pages/playground.vue";
 
 import Offline from "../components/pages/offline.vue";
@@ -29,113 +31,119 @@ import { useUserStore } from "@/store/user.js";
 import { useAppStore } from "@/store/app.js";
 
 const routes = [
-	{
-		path: "/",
-		name: "Home",
-		component: Home,
-	},
-	{
-		path: "/crm",
-		name: "Crm",
-		component: Crm,
-	},
-	{
-		path: "/dashboards",
-		name: "Dashboards",
-		component: Dashboards,
-	},
-	{
-		path: "/docs",
-		name: "Docs",
-		component: Docs,
-	},
+  {
+    path: "/",
+    name: "Home",
+    component: Home,
+  },
+  {
+    path: "/crm",
+    name: "Crm",
+    component: Crm,
+  },
+  {
+    path: "/dashboards",
+    name: "Dashboards",
+    component: Dashboards,
+  },
+  {
+    path: "/docs",
+    name: "Docs",
+    component: Docs,
+  },
 
-	{
-		path: "/settings",
-		name: "Settings",
-		component: Settings,
-		children: [
-			{
-				path: "notifications",
-				name: "Notifications",
-				component: Notifications,
-			},
-			{
-				path: "profile",
-				name: "Profile",
-				component: Profile,
-			},
-			{
-				path: "token",
-				name: "API Token",
-				component: Token,
-			},
-			{
-				path: "project",
-				name: "Project",
-				component: Project,
-			},
-			{
-				path: "billing",
-				name: "Billing",
-				component: Billing,
-			},
-			{
-				path: "invoices",
-				name: "Invoices",
-				component: Invoices,
-			},
-			{
-				path: "usage",
-				name: "Usage",
-				component: Usage,
-			},
-			{
-				path: "server",
-				name: "Server",
-				component: Server,
-			},
-		],
-	},
+  {
+    path: "/settings",
+    name: "Settings",
+    component: Settings,
+    children: [
+      {
+        path: "notifications",
+        name: "Notifications",
+        component: Notifications,
+      },
+      {
+        path: "profile",
+        name: "Profile",
+        component: Profile,
+      },
+      {
+        path: "token",
+        name: "API Token",
+        component: Token,
+      },
+      {
+        path: "project",
+        name: "Project",
+        component: Project,
+      },
+      {
+        path: "billing",
+        name: "Billing",
+        component: Billing,
+      },
+      {
+        path: "invoices",
+        name: "Invoices",
+        component: Invoices,
+      },
+      {
+        path: "usage",
+        name: "Usage",
+        component: Usage,
+      },
+      {
+        path: "server",
+        name: "Server",
+        component: Server,
+      },
+    ],
+  },
 
-	{
-		path: "/playground",
-		name: "Playground",
-		component: Playground,
-	},
+  {
+    path: "/picker",
+    name: "Picker",
+    component: Picker,
+  },
 
-	{
-		path: "/login",
-		name: "Login",
-		component: Login,
-	},
+  {
+    path: "/playground",
+    name: "Playground",
+    component: Playground,
+  },
 
-	{
-		path: "/signup",
-		name: "Signup",
-		component: Signup,
-	},
+  {
+    path: "/login",
+    name: "Login",
+    component: Login,
+  },
 
-	{
-		path: "/offline",
-		name: "Offline",
-		component: Offline,
-	},
+  {
+    path: "/signup",
+    name: "Signup",
+    component: Signup,
+  },
 
-	{
-		path: "/styleguide",
-		name: "Styleguide",
-		component: Styleguide,
-	},
+  {
+    path: "/offline",
+    name: "Offline",
+    component: Offline,
+  },
+
+  {
+    path: "/styleguide",
+    name: "Styleguide",
+    component: Styleguide,
+  },
 ];
 
 const router = createRouter({
-	history: createWebHistory(),
-	routes,
+  history: createWebHistory(),
+  routes,
 });
 
 router.beforeEach((to, from, next) => {
-	next();
+  next();
 });
 
 export default router;

@@ -362,6 +362,62 @@ ORDER BY total_size DESC;
       throw err;
     }
   },
+
+  async getStatData(spec, workspaceId) {
+    const ch = Clickhouse.getCh();
+
+    const days = spec.date === "7 days" ? 7 : spec.date === "30 days" ? 30 : 60;
+
+    // CH-friendly strings: "YYYY-MM-DD HH:mm:ss.SSS" (UTC)
+    const start = moment
+      .utc()
+      .startOf("day")
+      .subtract(days - 1, "days")
+      .format("YYYY-MM-DD HH:mm:ss.SSS");
+    const end = moment.utc().startOf("day").add(1, "day").format("YYYY-MM-DD HH:mm:ss.SSS");
+
+    // match against Events.name (event) or Events.category (category)
+    const field = spec.type === "category" ? "category" : "name";
+    const agg = (spec.aggregate || "TOTAL").toUpperCase();
+
+    const qp = {
+      title: String(spec.title || ""),
+      ws: Number(workspaceId),
+      start,
+      end,
+    };
+
+    if (agg === "TOTAL") {
+      const query = `
+      SELECT toUInt64(count()) AS value
+      FROM Events
+      WHERE ${field} = {title:String}
+        AND workspaceId = {ws:UInt32}
+        AND createdAt >= toDateTime64({start:String}, 3, 'UTC')
+        AND createdAt <  toDateTime64({end:String},   3, 'UTC')
+    `;
+      const res = await ch.query({ query, format: "JSON", query_params: qp });
+      const json = await res.json();
+      return Number(json.data?.[0]?.value ?? 0);
+    }
+
+    const fn = agg === "MAX" ? "max" : "avg";
+    const query = `
+    SELECT ifNull(${fn}(c), 0) AS value
+    FROM (
+      SELECT toDate(createdAt) AS d, count() AS c
+      FROM Events
+      WHERE ${field} = {title:String}
+        AND workspaceId = {ws:UInt32}
+        AND createdAt >= toDateTime64({start:String}, 3, 'UTC')
+        AND createdAt <  toDateTime64({end:String},   3, 'UTC')
+      GROUP BY d
+    )
+  `;
+    const res = await ch.query({ query, format: "JSON", query_params: qp });
+    const json = await res.json();
+    return Number(json.data?.[0]?.value ?? 0);
+  },
 };
 
 export default clickhouse;

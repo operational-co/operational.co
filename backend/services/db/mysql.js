@@ -454,6 +454,48 @@ WHERE workspaceId = ${params.workspaceId}
 
     return result;
   },
+
+  async getStatData(spec, workspaceId) {
+    const agg = (spec.aggregate || spec.aggregrate || "TOTAL").toUpperCase();
+    const days = spec.date === "7 days" ? 7 : spec.date === "30 days" ? 30 : 60;
+
+    // UTC window: last N days including today [start, end)
+    const start = moment
+      .utc()
+      .startOf("day")
+      .subtract(days - 1, "days")
+      .toDate();
+    const end = moment.utc().startOf("day").add(1, "day").toDate();
+
+    // WHERE clause (paramized)
+    let where = "createdAt >= ? AND createdAt < ? AND name = ?";
+    const params = [start, end, String(spec.title || "")];
+    if (workspaceId != null) {
+      where += " AND workspaceId = ?";
+      params.push(Number(workspaceId));
+    }
+
+    if (agg === "TOTAL") {
+      const sql = `SELECT COUNT(*) + 0 AS value FROM Events WHERE ${where}`;
+      const rows = await prisma.$queryRawUnsafe(sql, ...params);
+      return Number(rows?.[0]?.value || 0);
+    }
+
+    // MAX / AVERAGE over daily counts
+    const daily = `
+    SELECT DATE(createdAt) AS d, COUNT(*) AS c
+    FROM Events
+    WHERE ${where}
+    GROUP BY d
+  `;
+    const wrap =
+      agg === "MAX"
+        ? `SELECT MAX(c) + 0 AS value FROM (${daily}) t`
+        : `SELECT AVG(c) + 0 AS value FROM (${daily}) t`;
+
+    const rows = await prisma.$queryRawUnsafe(wrap, ...params);
+    return Number(rows?.[0]?.value || 0); // NULL -> 0
+  },
 };
 
 export default mysql;

@@ -164,9 +164,19 @@
   }
 
   &.btn-sm {
-    height: 32px;
-    padding: var(--margin-lg);
+    padding: 4px 8px;
+    height: 28px;
     font-size: var(--font-size-sm);
+
+    > svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    &.btn-icon {
+      gap: var(--margin-sm);
+      padding-left: 12px;
+    }
   }
 
   &:disabled {
@@ -312,7 +322,7 @@
   &:focus-visible,
   &:active {
     outline: none;
-    box-shadow: 0 0 0 3px var(--color-focus);
+    box-shadow: 0 0 0 2px var(--color-focus);
     border-color: var(--color-focus);
   }
 }
@@ -322,7 +332,7 @@ select.form-control {
 
   &:hover {
     outline: none;
-    box-shadow: 0 0 0 3px var(--color-focus);
+    box-shadow: 0 0 0 2px var(--color-focus);
     border-color: var(--color-focus);
   }
 }
