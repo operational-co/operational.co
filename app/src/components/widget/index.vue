@@ -77,7 +77,12 @@
           <!-- <span> Remove </span> -->
         </a>
       </div>
-      <Header v-if="widget && widget.type !== 'STAT'" :subtitle="subtitle"></Header>
+      <Header
+        v-if="widget && widget.type !== 'STAT'"
+        :title="subtitle"
+        :metric="`3,754`"
+        :subtitle="subtitle"
+      ></Header>
 
       <div class="c-widget__inner" v-if="widget && widget.type !== 'STAT'">
         <Chart :data="data" :type="widget.type"></Chart>
@@ -149,6 +154,14 @@ export default {
         return;
       }
 
+      let dataSelectors = widget.schema.dataSelectors;
+      if (dataSelectors) {
+        if (dataSelectors.length === 1) {
+          console.log(dataSelectors[0]);
+          return dataSelectors[0].text;
+        }
+      }
+
       return "nanana";
 
       let widgetCache = widget.widgetCache;
@@ -186,6 +199,9 @@ export default {
   height: 100%;
   background-color: var(--color-bg-2);
   border-radius: 8px;
+
+  --theme-color: hsl(var(--hue-p), 80%, 60%);
+  --theme-bg-color: hsl(var(--hue-p), 10%, 60%);
 
   &__wrap {
     position: relative;

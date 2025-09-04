@@ -177,9 +177,10 @@ export default {
         float: false,
         column: 4,
         columnOpts: {
+          layout: "none",
           breakpointForWindow: true,
           breakpoints: [
-            { w: 750, c: 1 },
+            { w: 750, c: 2 },
             { w: 10000, c: 4 },
           ],
         },
@@ -229,9 +230,10 @@ export default {
   }
 
   &__wrap {
+    position: relative;
+    overflow: hidden;
     padding: 4px;
     width: 100%;
-    //background-color: var(--color-bg-3);
     border-radius: 12px;
     width: 100%;
     transition: all var(--transition-time) linear;

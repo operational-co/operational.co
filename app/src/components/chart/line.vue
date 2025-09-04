@@ -424,9 +424,6 @@ export default {
   position: relative;
   height: 100%;
 
-  --theme-color: hsl(var(--hue-p), 80%, 60%);
-  --theme-bg-color: hsl(var(--hue-p), 10%, 60%);
-
   .hover-date-group {
     transition: opacity 0.2s ease-in-out;
   }
@@ -490,6 +487,7 @@ export default {
     padding: 4px 8px;
     background-color: var(--color-bg-3);
     border-radius: var(--border-radius-sm);
+    box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.2);
 
     font-family: var(--font-family);
     font-weight: 450;

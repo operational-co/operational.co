@@ -99,5 +99,13 @@ export default {
 
     font-size: var(--font-size-xl) !important;
   }
+
+  @media screen and (max-width: 576px) {
+    padding: 0.75rem;
+
+    > span {
+      font-size: var(--font-size-xxs);
+    }
+  }
 }
 </style>

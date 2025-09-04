@@ -1,7 +1,7 @@
 <template>
   <div class="c-widget-header">
-    <span class="c-widget-header__byline"> Monthly signups </span>
-    <h3 class="c-widget-header__title">3,255</h3>
+    <span class="c-widget-header__byline"> {{ title }} </span>
+    <h3 class="c-widget-header__title">{{ metric }}</h3>
     <span class="c-widget-header__subtitle" v-if="subtitle">
       {{ subtitle }}
     </span>
@@ -12,10 +12,12 @@
 <script>
 export default {
   props: {
+    title: {},
+    metric: {},
     subtitle: {
-      default: "10th Sep - 21st Sep"
-    }
-  }
+      default: "10th Sep - 21st Sep",
+    },
+  },
 };
 </script>
 
@@ -33,11 +35,48 @@ export default {
   }
 
   &__title {
-    margin-bottom: var(--margin-sm);
-    font-style: initial;
-    font-weight: 500;
-    font-size: var(--font-size-xl);
-    color: #6a67ce;
+    margin-top: 0.25rem;
+    font-size: var(--font-size-lg);
+    margin-bottom: 0.25rem;
+    font-feature-settings:
+      "case" 0,
+      "dlig" 0,
+      "frac" 0,
+      "dnom" 0,
+      "numr" 0,
+      "subs" 0,
+      "sups" 0,
+      "tnum",
+      "zero" 0,
+      "ss01",
+      "ss02" 0,
+      "ss03" 0,
+      "ss04",
+      "ss05" 0,
+      "ss06" 0,
+      "ss07" 0,
+      "ss08" 0,
+      "cv01" 0,
+      "cv02" 0,
+      "cv03" 0,
+      "cv04" 0,
+      "cv05" 0,
+      "cv06" 0,
+      "cv07" 0,
+      "cv08" 0,
+      "cv09" 0,
+      "cv10" 0,
+      "cv11" 0,
+      "cv12" 0,
+      "cv13" 0,
+      "cpsp" 0,
+      "c2sc" 0,
+      "salt" 0,
+      "aalt" 0,
+      "calt",
+      "ccmp",
+      "locl",
+      "kern";
   }
 
   &__subtitle {

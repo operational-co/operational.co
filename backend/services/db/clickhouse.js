@@ -499,8 +499,6 @@ ORDER BY total_size DESC;
       };
     });
 
-    console.log(results);
-
     return results;
   },
 };
