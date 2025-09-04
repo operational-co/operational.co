@@ -162,7 +162,13 @@ export default {
   }
 
   @media screen and (max-width: 576px) {
-    padding-top: var(--margin-lg);
+    &__header {
+      padding-top: 0;
+
+      nav {
+        margin-bottom: -4px;
+      }
+    }
   }
 }
 </style>

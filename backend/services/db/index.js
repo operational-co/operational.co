@@ -122,9 +122,15 @@ class Db {
     return stats;
   }
 
-  async getStatData(spec, workspaceId) {
+  async getStatData(schema, workspaceId) {
     const db = this.getDbInstance();
-    const stat = await db.getStatData(spec, workspaceId);
+    const stat = await db.getStatData(schema, workspaceId);
+    return stat;
+  }
+
+  async getLineData(schema, workspaceId) {
+    const db = this.getDbInstance();
+    const stat = await db.getLineData(schema, workspaceId);
     return stat;
   }
 }

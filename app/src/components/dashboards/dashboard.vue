@@ -1,5 +1,5 @@
 <template>
-  <div class="c-dashboard" v-if="dashboard">
+  <div :class="['c-dashboard', { moving: moving === true }]" v-if="dashboard">
     <div class="c-dashboard__wrap" v-if="widgets.length > 0">
       <div class="grid-stack">
         <div
@@ -172,7 +172,7 @@ export default {
     },
 
     setupGrid: function () {
-      const height = `170px`; //this.computeHeight();
+      const height = `177px`; //this.computeHeight();
       this.grid = GridStack.init({
         float: false,
         column: 4,
@@ -231,11 +231,10 @@ export default {
   &__wrap {
     padding: 4px;
     width: 100%;
-    margin-left: var(--margin);
-    margin-right: var(--margin);
-    background-color: var(--color-bg-3);
+    //background-color: var(--color-bg-3);
     border-radius: 12px;
-    width: calc(100% - var(--margin) * 2);
+    width: 100%;
+    transition: all var(--transition-time) linear;
   }
 
   &__grid {
@@ -296,10 +295,21 @@ export default {
     }
   }
 
+  &.moving {
+    .c-dashboard__wrap {
+      background-color: var(--color-bg-3);
+    }
+  }
+
   @media screen and (max-width: 576px) {
     padding-top: var(--margin-lg);
     padding: 0;
     width: 100%;
+    margin: 0 auto;
+
+    &__wrap {
+      border-radius: 0;
+    }
   }
 }
 </style>

@@ -128,7 +128,6 @@ export default {
       });
 
       datas = datas.map((d) => {
-        console.log(d);
         d.data = d.data.map((datum) => {
           datum.x = moment(datum.x).format("MMM Do");
           datum.label = `${datum.y} user signups`;
@@ -215,9 +214,12 @@ export default {
     transform: translateX(-50%);
     overflow: hidden;
 
-    display: none;
+    display: flex;
     justify-content: center;
     align-items: center;
+
+    opacity: 0;
+    pointer-events: none;
 
     a {
       min-width: 32px;
@@ -278,7 +280,8 @@ export default {
     backdrop-filter: blur(8px);
 
     .c-widget__popup {
-      display: flex;
+      opacity: 1;
+      pointer-events: initial;
     }
   }
 

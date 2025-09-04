@@ -363,10 +363,10 @@ ORDER BY total_size DESC;
     }
   },
 
-  async getStatData(spec, workspaceId) {
+  async getStatData(schema, workspaceId) {
     const ch = Clickhouse.getCh();
 
-    const days = spec.date === "7 days" ? 7 : spec.date === "30 days" ? 30 : 60;
+    const days = schema.date === "7 days" ? 7 : schema.date === "30 days" ? 30 : 60;
 
     // CH-friendly strings: "YYYY-MM-DD HH:mm:ss.SSS" (UTC)
     const start = moment
@@ -377,11 +377,11 @@ ORDER BY total_size DESC;
     const end = moment.utc().startOf("day").add(1, "day").format("YYYY-MM-DD HH:mm:ss.SSS");
 
     // match against Events.name (event) or Events.category (category)
-    const field = spec.type === "category" ? "category" : "name";
-    const agg = (spec.aggregate || "TOTAL").toUpperCase();
+    const field = schema.type === "category" ? "category" : "name";
+    const agg = (schema.aggregate || "TOTAL").toUpperCase();
 
     const qp = {
-      title: String(spec.title || ""),
+      title: String(schema.title || ""),
       ws: Number(workspaceId),
       start,
       end,
@@ -417,6 +417,91 @@ ORDER BY total_size DESC;
     const res = await ch.query({ query, format: "JSON", query_params: qp });
     const json = await res.json();
     return Number(json.data?.[0]?.value ?? 0);
+  },
+
+  async getLineData(schema, workspaceId) {
+    const ch = Clickhouse.getCh();
+
+    // 1) window (7|30|60 days) and ClickHouse-friendly bounds
+    const days = schema.date === "7 days" ? 7 : schema.date === "30 days" ? 30 : 60;
+    const startDT = moment
+      .utc()
+      .startOf("day")
+      .subtract(days - 1, "days");
+    const endDT = moment.utc().startOf("day").add(1, "day");
+    const start = startDT.format("YYYY-MM-DD HH:mm:ss.SSS");
+    const end = endDT.format("YYYY-MM-DD HH:mm:ss.SSS");
+
+    // Precompute ISO bucket labels (exactly N days)
+    const buckets = [];
+    for (let i = 0; i < days; i++) {
+      buckets.push(startDT.clone().add(i, "days").toISOString()); // "YYYY-MM-DDTHH:mm:ss.SSSZ"
+    }
+
+    const sels = Array.isArray(schema.dataSelectors) ? schema.dataSelectors : [];
+    let results = [];
+
+    for (let i = 0; i < sels.length; i++) {
+      const s = sels[i] || {};
+      const field = s.selector === "category" ? "category" : "name"; // "event" -> name
+      const paramName = "val" + i;
+
+      const qp = {
+        ws: Number(workspaceId),
+        start,
+        end,
+      };
+      qp[paramName] = String(s.text || "");
+
+      const whereSql =
+        "workspaceId = {ws:UInt32} " +
+        "AND createdAt >= toDateTime64({start:String}, 3, 'UTC') " +
+        "AND createdAt <  toDateTime64({end:String},   3, 'UTC') " +
+        `AND ${field} = {${paramName}:String}`;
+
+      // Return day buckets as ISO-8601 straight from ClickHouse
+      const query = `
+      SELECT
+        concat(formatDateTime(toStartOfDay(createdAt), '%FT%T', 'UTC'), '.000Z') AS x,
+        count() AS y
+      FROM Events
+      WHERE ${whereSql}
+      GROUP BY x
+      ORDER BY x
+    `;
+
+      const res = await ch.query({ query, format: "JSON", query_params: qp });
+      const json = await res.json();
+      const rows = Array.isArray(json.data) ? json.data : [];
+
+      // Map for quick lookup (x -> y)
+      const m = {};
+      for (let j = 0; j < rows.length; j++) {
+        const r = rows[j];
+        m[r.x] = parseInt(r.y, 10);
+      }
+
+      // Zero-fill to full window (use our prebuilt buckets)
+      const series = [];
+      for (let d = 0; d < buckets.length; d++) {
+        const x = buckets[d];
+        const y = m[x] != null ? m[x] : 0;
+        series.push({ x: x, y: y });
+      }
+
+      results.push(series);
+    }
+
+    // formatting results
+    results = results.map((res) => {
+      return {
+        data: res,
+      };
+    });
+
+    console.log(results);
+
+    return results;
   },
 };
 
