@@ -29,6 +29,9 @@ class Dashboard extends Model {
       if (w.type === "LINE") {
         data = await Db.getLineData(w.schema, dash.workspaceId);
       }
+      if (w.type === "ACTION") {
+        data = {};
+      }
       results.push({
         ...w,
         data,

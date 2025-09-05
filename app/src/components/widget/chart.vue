@@ -65,7 +65,6 @@ export default {
       let dataSelectors = widget.schema.dataSelectors;
       if (dataSelectors) {
         if (dataSelectors.length === 1) {
-          console.log(dataSelectors[0]);
           return dataSelectors[0].text;
         }
       }

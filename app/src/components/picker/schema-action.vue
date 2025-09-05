@@ -2,12 +2,18 @@
   <div class="c-picker-schema-action">
     <section>
       <article>
+        <InputText v-model:value="item.title" label="Title" placeholder="Widget title"></InputText>
         <InputText
           v-model:value="item.url"
           placeholder="https://api.xyz.com/webhook"
           label="Webhook url"
         ></InputText>
-        <InputSelect v-model:value="item.title" :options="titleOptions"></InputSelect>
+        <InputText
+          v-model:value="item.buttonText"
+          placeholder="Press me"
+          label="Button text"
+        ></InputText>
+        <InputSwitch v-model:value="item.external" label="Is link external?"></InputSwitch>
       </article>
     </section>
     <button type="button" class="btn btn-primary" @click="onSave">Save</button>
@@ -17,12 +23,14 @@
 <script>
 import InputText from "@operational.co/components/form/input-text.vue";
 import InputSelect from "@operational.co/components/form/input-select.vue";
+import InputSwitch from "@operational.co/components/form/input-switch.vue";
 import DataSelector from "./data-selector.vue";
 
 export default {
   components: {
     InputText,
     InputSelect,
+    InputSwitch,
     DataSelector,
   },
 
@@ -71,6 +79,8 @@ export default {
         url: "",
         type: "event",
         title: "User signups",
+        buttonText: "Press me",
+        external: false,
       },
 
       processing: false,
@@ -128,7 +138,7 @@ export default {
         schema: {
           ...this.item,
         },
-        type: "STAT",
+        type: "ACTION",
         w: 1,
         h: 1,
         dashboardId: this.dashboardId,
@@ -136,7 +146,7 @@ export default {
 
       try {
         await this.$store.dashboards.createWidget(form);
-        this.$store.app.sendNotification(`Line chart Widget added to dashboard!`);
+        this.$store.app.sendNotification(`Action widget added to dashboard!`);
         await new Promise((r) => setTimeout(r, 500));
         this.$router.push("/dashboards");
       } catch (err) {
@@ -161,9 +171,6 @@ export default {
   }
 
   article {
-    display: grid;
-    grid-template-columns: max-content max-content 1fr max-content max-content;
-    grid-column-gap: 0.5rem;
   }
 }
 </style>

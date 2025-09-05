@@ -114,7 +114,7 @@ export default {
 
       try {
         await this.$store.dashboards.createWidget(form);
-        this.$store.app.sendNotification(`Line chart Widget added to dashboard!`);
+        this.$store.app.sendNotification(`Line chart widget added to dashboard!`);
         await new Promise((r) => setTimeout(r, 500));
         this.$router.push("/dashboards");
       } catch (err) {

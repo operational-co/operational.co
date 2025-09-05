@@ -349,20 +349,7 @@ model Dashboard {
 enum WidgetType {
   LINE
   STAT
-}
-
-enum MetricType {
-  COUNT
-  SUM
-  AVG
-  MIN
-  MAX
-  UNIQ
-}
-
-enum GroupBy {
-  CATEGORY
-  NAME
+  ACTION
 }
 
 model Widget {

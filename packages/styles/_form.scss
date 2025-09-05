@@ -290,6 +290,12 @@
   display: inline-block;
   box-sizing: border-box;
   animation: rotation 1s linear infinite;
+
+  &.sm {
+    width: 12px;
+    height: 12px;
+    margin-left: -4px;
+  }
 }
 
 .form-label {

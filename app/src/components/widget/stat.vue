@@ -1,9 +1,11 @@
 <template>
   <div class="c-widget-stat">
     <span class="c-widget-stat__icon"> {{ schema.icon }} </span>
-    <h2>{{ widget.data }}</h2>
-    <strong>{{ schema.title }}</strong>
-    <span> Over the last {{ schema.date }} </span>
+    <article>
+      <h2>{{ formatNumberWithCommas(widget.data) }}</h2>
+      <strong>{{ schema.title }}</strong>
+      <span> Over the last {{ schema.date }} </span>
+    </article>
   </div>
 </template>
 
@@ -19,6 +21,19 @@ export default {
       return this.widget.schema;
     },
   },
+
+  methods: {
+    formatNumberWithCommas(value) {
+      // Ensure it's a number first
+      const number = typeof value === "number" ? value : parseInt(value, 10);
+
+      // If it's not a valid number, return the original value
+      if (isNaN(number)) return value;
+
+      // Format with commas
+      return number.toLocaleString("en-US");
+    },
+  },
 };
 </script>
 
@@ -28,6 +43,8 @@ export default {
   padding: 1rem;
   //background-color: hsl(var(--hue-red), 12%, 11%);
   border-radius: 1rem;
+  display: flex;
+  flex-direction: column;
 
   h2 {
     margin-top: 0.5rem;
@@ -78,14 +95,18 @@ export default {
     }
   }
 
-  > strong {
-    display: block;
-    font-weight: 500;
-  }
+  > article {
+    margin-top: auto;
 
-  > span {
-    font-size: var(--font-size-xs);
-    opacity: 0.8;
+    > strong {
+      display: block;
+      font-weight: 500;
+    }
+
+    > span {
+      font-size: var(--font-size-xs);
+      opacity: 0.8;
+    }
   }
 
   &__icon,

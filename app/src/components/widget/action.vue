@@ -1,13 +1,22 @@
 <template>
   <div class="c-widget-action">
     <h2>{{ schema.title }}</h2>
-    <span>{{ schema.subtitle }}</span>
-    <button class="btn btn-sm btn-primary">Run</button>
+    <!-- <span>{{ schema.subtitle }}</span> -->
+    <button @click.prevent="runAction" class="btn btn-sm btn-primary">
+      <span v-if="processing" class="c-spinner sm"></span>
+      <span>{{ schema.buttonText || "Run" }}</span>
+    </button>
   </div>
 </template>
 
 <script>
 export default {
+  data: function () {
+    return {
+      processing: false,
+    };
+  },
+
   props: {
     data: {},
     widget: {},
@@ -16,6 +25,16 @@ export default {
   computed: {
     schema: function () {
       return this.widget.schema;
+    },
+  },
+
+  methods: {
+    async runAction() {
+      if (this.processing) {
+        return;
+      }
+
+      this.processing = true;
     },
   },
 };

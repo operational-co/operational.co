@@ -109,22 +109,21 @@ export default {
       let widgets = toRaw(this.dashboard.widgets);
 
       widgets = widgets.map((widget) => {
-        console.log(widget);
         return widget;
       });
 
-      widgets.push({
-        id: 99,
-        x: 3,
-        y: 1,
-        w: 1,
-        h: 1,
-        type: "ACTION",
-        schema: {
-          title: "Generate GST",
-          subtitle: `You'll get a email at shash@swipekit.app`,
-        },
-      });
+      // widgets.push({
+      //   id: 99,
+      //   x: 3,
+      //   y: 1,
+      //   w: 1,
+      //   h: 1,
+      //   type: "ACTION",
+      //   schema: {
+      //     title: "Generate GST",
+      //     subtitle: `You'll get a email at shash@swipekit.app`,
+      //   },
+      // });
 
       return widgets;
     },
@@ -182,8 +181,6 @@ export default {
           y: widget.y,
         };
       });
-
-      console.log(widgets);
 
       await this.$store.dashboards.updateWidgets(this.dashboard.id, widgets);
     },

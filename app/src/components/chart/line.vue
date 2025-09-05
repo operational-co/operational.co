@@ -98,7 +98,7 @@ export default {
         clientLeft = rect.left;
       }
       if (rect) {
-        console.log(rect.width, this.popupX);
+        //console.log(rect.width, this.popupX);
       }
       let offsetY = 20;
       let offsetX = 40;
