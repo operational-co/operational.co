@@ -97,12 +97,23 @@ export default {
 
         clientLeft = rect.left;
       }
+      if (rect) {
+        console.log(rect.width, this.popupX);
+      }
       let offsetY = 20;
       let offsetX = 40;
+
+      // assume 200;
+      let popupWidth = 120;
+      let gap = 40;
 
       let top = this.popupY || 0;
       let left = this.popupX || 0;
       let right = "auto";
+
+      if (left + popupWidth - gap > popupWidth) {
+        left = this.popupX - popupWidth - gap;
+      }
 
       top = top + offsetY;
       left = left + offsetX;
@@ -494,8 +505,8 @@ export default {
     font-size: 12px;
 
     transition:
-      top 60ms linear,
-      left 60ms linear;
+      top 30ms linear,
+      left 30ms linear;
 
     opacity: 0;
 

@@ -1,6 +1,7 @@
 <template>
   <div class="c-picker">
     <Constrain>
+      <Breadcrumb></Breadcrumb>
       <h2>Add Widget</h2>
       <p>Widgets will show up in your dashboard. You can update them later on.</p>
 
@@ -53,6 +54,30 @@
             <p>Great for showcasing a single metric, eg no of users signed up.</p>
           </article>
         </a>
+        <a @click="onSelectChart('action')">
+          <svg
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M19 7C19 8.10457 15.866 9 12 9C8.13401 9 5 8.10457 5 7M19 7C19 5.89543 15.866 5 12 5C8.13401 5 5 5.89543 5 7M19 7V14C19 15.1046 15.866 16 12 16C8.13401 16 5 15.1046 5 14V7M5 14.1067C3.14864 14.6253 2 15.3479 2 16.1471C2 17.7251 6.47715 19.0043 12 19.0043C17.5228 19.0043 22 17.7251 22 16.1471C22 15.3479 20.8514 14.6253 19 14.1067"
+              stroke="currentColor"
+              stroke-width="1"
+              stroke-linecap="square"
+            />
+          </svg>
+
+          <article>
+            <strong> Action button </strong>
+            <p>
+              Use Action buttons to trigger webhooks on your server. For instance, you can pair it
+              up with a function on your server to generate and mail yourself a GST csv.
+            </p>
+          </article>
+        </a>
         <!-- <a @click="onSelectChart('events-list')">
           <strong> Event list </strong>
           <p>Simple list of top 5 or 10 most popular events</p>
@@ -60,12 +85,13 @@
       </div>
 
       <div class="c-picker__form" v-if="type">
-        <Preview></Preview>
+        <Header></Header>
         <h4>Configure {{ type }} chart</h4>
         <p>Stats shows simple metrics, eg x no of signups over last 7 days.</p>
         <p>Great for showcasing simple but specific stats.</p>
         <SchemaLine v-if="type === 'line'" :dashboardId="currentDashboard.id"></SchemaLine>
         <SchemaStat v-if="type === 'stat'" :dashboardId="currentDashboard.id"></SchemaStat>
+        <SchemaAction v-if="type === 'action'" :dashboardId="currentDashboard.id"></SchemaAction>
       </div>
 
       <!-- <article class="c-picker__summary" v-if="type">
@@ -82,7 +108,9 @@ import Constrain from "@operational.co/components/ui/constrain.vue";
 import DataSelector from "./data-selector.vue";
 import SchemaLine from "./schema-line.vue";
 import SchemaStat from "./schema-stat.vue";
-import Preview from "./preview.vue";
+import SchemaAction from "./schema-action.vue";
+import Header from "./header.vue";
+import Breadcrumb from "./breadcrumb.vue";
 
 export default {
   components: {
@@ -90,7 +118,9 @@ export default {
     DataSelector,
     SchemaLine,
     SchemaStat,
-    Preview,
+    SchemaAction,
+    Header,
+    Breadcrumb,
   },
 
   data: function () {
@@ -221,12 +251,15 @@ export default {
 
       svg {
         width: 48px;
+        min-width: 48px;
         height: 48px;
         margin-right: 0.5rem;
       }
 
       p {
         font-size: var(--font-size-sm);
+        line-height: 1.4;
+        opacity: 0.8;
         margin-block-end: 0;
       }
 

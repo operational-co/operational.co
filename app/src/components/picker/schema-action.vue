@@ -1,12 +1,13 @@
 <template>
-  <div class="c-picker-schema-stat">
+  <div class="c-picker-schema-action">
     <section>
       <article>
-        <InputText v-model:value="item.icon" placeholder="icon"></InputText>
-        <InputSelect v-model:value="item.type" :options="typeOptions"></InputSelect>
+        <InputText
+          v-model:value="item.url"
+          placeholder="https://api.xyz.com/webhook"
+          label="Webhook url"
+        ></InputText>
         <InputSelect v-model:value="item.title" :options="titleOptions"></InputSelect>
-        <InputSelect v-model:value="item.aggregrate" :options="aggregrateOptions"></InputSelect>
-        <InputSelect v-model:value="item.date" :options="dateOptions"></InputSelect>
       </article>
     </section>
     <button type="button" class="btn btn-primary" @click="onSave">Save</button>
@@ -67,11 +68,9 @@ export default {
       ],
 
       item: {
-        icon: "🏆",
+        url: "",
         type: "event",
         title: "User signups",
-        aggregate: "TOTAL",
-        date: "7 days",
       },
 
       processing: false,
@@ -153,7 +152,7 @@ export default {
 </script>
 
 <style lang="scss">
-.c-picker-schema-stat {
+.c-picker-schema-action {
   label {
     display: block;
     margin-bottom: 0.25rem;

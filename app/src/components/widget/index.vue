@@ -77,36 +77,31 @@
           <!-- <span> Remove </span> -->
         </a>
       </div>
-      <Header
-        v-if="widget && widget.type !== 'STAT'"
-        :title="subtitle"
-        :metric="`3,754`"
-        :subtitle="subtitle"
-      ></Header>
 
-      <div class="c-widget__inner" v-if="widget && widget.type !== 'STAT'">
-        <Chart :data="data" :type="widget.type"></Chart>
-      </div>
+      <Chart v-if="chartTypes.includes(widget.type)" :widget="widget"></Chart>
 
       <Stat v-if="widget && widget.type === 'STAT'" :widget="widget"></Stat>
+      <Action v-if="widget && widget.type === 'ACTION'" :widget="widget"></Action>
     </div>
   </div>
 </template>
 
 <script>
-import Chart from "@/components/chart/index.vue";
-import Header from "./header.vue";
+import Chart from "./chart.vue";
 import Stat from "./stat.vue";
-
-import { toRaw } from "vue";
-
-import moment from "moment";
+import Action from "./action.vue";
 
 export default {
   components: {
     Chart,
-    Header,
     Stat,
+    Action,
+  },
+
+  data: function () {
+    return {
+      chartTypes: ["LINE", "BAR"],
+    };
   },
 
   props: {
@@ -117,78 +112,9 @@ export default {
     },
   },
 
-  computed: {
-    // normalize data here
-    data: function () {
-      if (this.widget.type === "STAT") {
-        return;
-      }
-      let datas = toRaw(this.widget.data);
+  computed: {},
 
-      datas = datas.filter((d) => {
-        if (d.data) {
-          return true;
-        }
-        return false;
-      });
-
-      datas = datas.map((d) => {
-        d.data = d.data.map((datum) => {
-          datum.x = moment(datum.x).format("MMM Do");
-          datum.label = `${datum.y} user signups`;
-          return datum;
-        });
-        let obj = {
-          //color: "#777",
-          data: d.data,
-        };
-        return obj;
-      });
-
-      return datas;
-    },
-    subtitle: function () {
-      let widget = this.widget;
-
-      if (!widget) {
-        return;
-      }
-
-      let dataSelectors = widget.schema.dataSelectors;
-      if (dataSelectors) {
-        if (dataSelectors.length === 1) {
-          console.log(dataSelectors[0]);
-          return dataSelectors[0].text;
-        }
-      }
-
-      return "nanana";
-
-      let widgetCache = widget.widgetCache;
-
-      if (!widgetCache[0]) {
-        return "N/A";
-      }
-
-      let createdAt = widgetCache[0].createdAt;
-
-      let date = this.formatDate(createdAt);
-
-      return date;
-    },
-  },
-
-  methods: {
-    formatDate: function (isoDateString) {
-      const date = new Date(isoDateString);
-      const options = { month: "short" };
-      const month = new Intl.DateTimeFormat("en-US", options).format(date);
-      const day = date.getDate();
-      const suffix = day === 1 ? "st" : day === 2 ? "nd" : day === 3 ? "rd" : "th";
-
-      return `${day}${suffix} ${month}`;
-    },
-  },
+  methods: {},
 
   mounted: function () {},
 };
@@ -227,7 +153,6 @@ export default {
     top: -16px;
     left: 50%;
     border-radius: 8px;
-    transform: translateX(-50%);
     overflow: hidden;
 
     display: flex;
@@ -235,7 +160,10 @@ export default {
     align-items: center;
 
     opacity: 0;
+    transform: scale(0) translateX(-50%);
     pointer-events: none;
+
+    transition: all var(--transition-time) ease-in-out;
 
     a {
       min-width: 32px;
@@ -297,6 +225,7 @@ export default {
 
     .c-widget__popup {
       opacity: 1;
+      transform: scale(1) translateX(-50%);
       pointer-events: initial;
     }
   }

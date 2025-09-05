@@ -109,7 +109,21 @@ export default {
       let widgets = toRaw(this.dashboard.widgets);
 
       widgets = widgets.map((widget) => {
+        console.log(widget);
         return widget;
+      });
+
+      widgets.push({
+        id: 99,
+        x: 3,
+        y: 1,
+        w: 1,
+        h: 1,
+        type: "ACTION",
+        schema: {
+          title: "Generate GST",
+          subtitle: `You'll get a email at shash@swipekit.app`,
+        },
       });
 
       return widgets;
@@ -148,8 +162,8 @@ export default {
       this.grid.cellHeight(height);
     },
 
-    async onGridUpdate(e, widgets) {
-      //console.log(widgets);
+    async onGridUpdate(e) {
+      let widgets = this.grid.engine.nodes;
 
       let currentWidgets = this.widgets;
 
@@ -168,6 +182,9 @@ export default {
           y: widget.y,
         };
       });
+
+      console.log(widgets);
+
       await this.$store.dashboards.updateWidgets(this.dashboard.id, widgets);
     },
 
@@ -218,7 +235,7 @@ export default {
 .c-dashboard {
   max-width: 740px;
 
-  margin: var(--spacer-sm) auto;
+  margin: 0 auto;
 
   &__empty-state {
     text-align: center;
@@ -230,8 +247,6 @@ export default {
   }
 
   &__wrap {
-    position: relative;
-    overflow: hidden;
     padding: 4px;
     width: 100%;
     border-radius: 12px;

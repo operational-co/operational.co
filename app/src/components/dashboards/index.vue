@@ -107,6 +107,9 @@ export default {
 
 <style lang="scss">
 .c-dashboards {
+  position: relative;
+  overflow: hidden;
+
   &__header {
     position: relative;
     display: flex;
