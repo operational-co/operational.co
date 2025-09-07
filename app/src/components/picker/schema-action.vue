@@ -2,11 +2,21 @@
   <div class="c-picker-schema-action">
     <section>
       <article>
-        <InputText v-model:value="item.title" label="Title" placeholder="Widget title"></InputText>
+        <InputText
+          v-model:value="item.title"
+          label="Widget title"
+          placeholder="What is this widget about?"
+        ></InputText>
+        <InputText
+          v-model:value="item.description"
+          label="Widget description"
+          placeholder="Instructions about what the button will do"
+        ></InputText>
         <InputText
           v-model:value="item.url"
           placeholder="https://api.xyz.com/webhook"
-          label="Webhook url"
+          label="Webhook url*"
+          :required="true"
         ></InputText>
         <InputText
           v-model:value="item.buttonText"
@@ -16,7 +26,15 @@
         <InputSwitch v-model:value="item.external" label="Is link external?"></InputSwitch>
       </article>
     </section>
-    <button type="button" class="btn btn-primary" @click="onSave">Save</button>
+    <button type="button" class="btn btn-primary" @click="onSave">
+      <span class="c-spinner" v-if="processing"></span>
+      <span>Save </span>
+    </button>
+    <div class="c-input c-form__errors" v-if="errors && errors.length > 0">
+      <span role="alert" v-for="(error, i) in errors" :key="i">
+        {{ error }}
+      </span>
+    </div>
   </div>
 </template>
 
@@ -77,13 +95,15 @@ export default {
 
       item: {
         url: "",
-        type: "event",
-        title: "User signups",
+        title: "",
+        description: "",
         buttonText: "Press me",
         external: false,
       },
 
       processing: false,
+
+      errors: [],
     };
   },
 
@@ -128,10 +148,17 @@ export default {
   methods: {
     onSave: async function () {
       // validate here
+      if (!this.item.url) {
+        this.errors.push(`Webhook url is needed`);
+
+        return;
+      }
+
       if (this.processing) {
         return;
       }
 
+      this.errors = [];
       this.processing = true;
 
       const form = {

@@ -1,7 +1,7 @@
 <template>
   <div class="c-widget-action">
     <h2>{{ schema.title }}</h2>
-    <!-- <span>{{ schema.subtitle }}</span> -->
+    <span>{{ schema.description }}</span>
     <button @click.prevent="runAction" class="btn btn-sm btn-primary">
       <span v-if="processing" class="c-spinner sm"></span>
       <span>{{ schema.buttonText || "Run" }}</span>
@@ -50,7 +50,7 @@ export default {
   border-radius: 1rem;
 
   h2 {
-    margin-top: 0.5rem;
+    margin-top: 0rem;
     font-size: var(--font-size-md);
     margin-bottom: 0.25rem;
     font-feature-settings:
@@ -105,7 +105,7 @@ export default {
 
   > span {
     display: block;
-    line-height: 1.3;
+    line-height: 1.4;
     font-size: var(--font-size-xs);
     opacity: 0.8;
   }
