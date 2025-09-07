@@ -65,7 +65,7 @@ export default {
 
 <style lang="scss">
 .c-chart {
-  height: 200px;
+  height: 240px;
   width: 100%;
   //margin-bottom: var(--spacer);
   //padding-bottom: calc(var(--spacer) * 1);

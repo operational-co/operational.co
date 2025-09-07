@@ -38,10 +38,26 @@ const updateWidgets = async (req, res) => {
 };
 
 const createWidget = async (req, res) => {
-  console.log(req.body);
-
   try {
     const widget = await component.createWidget(req.body);
+    return res.send(widget);
+  } catch (err) {
+    console.log(err);
+    return res.status(400).send(err);
+  }
+};
+
+const deleteWidget = async (req, res) => {
+  let params = {
+    dashboardId: parseInt(req.params.id),
+    widgetId: parseInt(req.params.widgetId),
+    workspaceId: parseInt(res.locals.user.primaryWorkspace),
+  };
+
+  console.log(params);
+
+  try {
+    const widget = await component.deleteWidget(params);
     return res.send(widget);
   } catch (err) {
     console.log(err);
@@ -102,6 +118,8 @@ router.get("/", middlewareAuth, middlewareSchema(getSchema), get);
 router.put("/:id/widgets", middlewareAuth, middlewareSchema(updateWidgetsSchema), updateWidgets);
 
 router.post("/:id/widgets", middlewareAuth, middlewareSchema(createWidgetSchema), createWidget);
+
+router.delete("/:id/widgets/:widgetId", middlewareAuth, deleteWidget);
 
 // Export the router
 export default router;

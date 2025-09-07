@@ -28,30 +28,30 @@ export default {
 
   computed: {
     data: function () {
-      if (this.widget.type === "STAT") {
-        return;
-      }
-      let datas = toRaw(this.widget.data);
+      if (this.widget.type === "STAT") return;
 
-      datas = datas.filter((d) => {
-        if (d.data) {
-          return true;
-        }
-        return false;
-      });
+      const src = this.widget?.data || [];
 
-      datas = datas.map((d) => {
-        d.data = d.data.map((datum) => {
-          datum.x = moment(datum.x).format("MMM Do");
-          datum.label = `${datum.y} user signups`;
-          return datum;
+      const datas = src
+        .filter((d) => Array.isArray(d.data) && d.data.length)
+        .map((d) => {
+          let acc = 0;
+
+          const points = d.data.map((datum) => {
+            const baseY = Number(datum.y) || 0;
+            const isInc = String(d.aggregate || "").toUpperCase() === "INCREMENTAL";
+            const y = isInc ? (acc += baseY) : baseY;
+
+            return {
+              x: moment(datum.x).format("MMM Do"),
+              y,
+              // keep your existing label wording
+              label: `${y} user signups`,
+            };
+          });
+
+          return { data: points };
         });
-        let obj = {
-          //color: "#777",
-          data: d.data,
-        };
-        return obj;
-      });
 
       return datas;
     },

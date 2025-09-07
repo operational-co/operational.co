@@ -439,7 +439,7 @@ ORDER BY total_size DESC;
     }
 
     const sels = Array.isArray(schema.dataSelectors) ? schema.dataSelectors : [];
-    let results = [];
+    const results = [];
 
     for (let i = 0; i < sels.length; i++) {
       const s = sels[i] || {};
@@ -475,29 +475,31 @@ ORDER BY total_size DESC;
       const rows = Array.isArray(json.data) ? json.data : [];
 
       // Map for quick lookup (x -> y)
-      const m = {};
+      const map = Object.create(null);
       for (let j = 0; j < rows.length; j++) {
-        const r = rows[j];
-        m[r.x] = parseInt(r.y, 10);
+        map[rows[j].x] = Number(rows[j].y) || 0;
       }
 
-      // Zero-fill to full window (use our prebuilt buckets)
-      const series = [];
-      for (let d = 0; d < buckets.length; d++) {
-        const x = buckets[d];
-        const y = m[x] != null ? m[x] : 0;
-        series.push({ x: x, y: y });
-      }
+      // Zero-fill to full window
+      const series = buckets.map((x) => ({ x, y: map[x] ?? 0 }));
 
-      results.push(series);
+      // Optional: make incremental series cumulative
+      // if ((s.aggregate || "").toUpperCase() === "INCREMENTAL") {
+      //   let acc = 0;
+      //   for (const p of series) {
+      //     acc += p.y;
+      //     p.y = acc;
+      //   }
+      // }
+
+      // Attach the selector metadata to this result
+      results.push({
+        text: s.text ?? "",
+        selector: s.selector ?? "event",
+        aggregate: s.aggregate ?? "CUMULATIVE",
+        data: series,
+      });
     }
-
-    // formatting results
-    results = results.map((res) => {
-      return {
-        data: res,
-      };
-    });
 
     return results;
   },

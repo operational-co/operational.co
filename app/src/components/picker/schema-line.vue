@@ -1,6 +1,8 @@
 <template>
   <div class="c-picker-schema-line">
-    {{ dataSelectors }}
+    <!-- {{ dataSelectors }} -->
+    <InputText label="Widget title" placeholder="eg: New signups" v-model:value="title"></InputText>
+    <InputSelect label="Metric value" v-model:value="total" :options="metricOptions"></InputSelect>
     <DataSelector
       v-for="(dataSelector, i) in dataSelectors"
       :key="i"
@@ -26,22 +28,35 @@
 </template>
 
 <script>
+import InputSelect from "@operational.co/components/form/input-select.vue";
 import InputText from "@operational.co/components/form/input-text.vue";
 import DataSelector from "./data-selector.vue";
 
 export default {
   components: {
+    InputSelect,
     InputText,
     DataSelector,
   },
 
   data: function () {
     return {
+      title: "",
+      metric: "TOTAL",
       dataSelectors: [
         {
           selector: "event",
-          condition: "=",
           text: "",
+        },
+      ],
+      metricOptions: [
+        {
+          key: "TOTAL",
+          value: "TOTAL",
+        },
+        {
+          key: "AVERAGE",
+          value: "AVERAGE",
         },
       ],
       limit: 4,
@@ -104,6 +119,8 @@ export default {
 
       const form = {
         schema: {
+          title: this.title,
+          total: this.total,
           dataSelectors: this.dataSelectors,
         },
         type: "LINE",
@@ -126,7 +143,6 @@ export default {
     onAdd: function () {
       this.dataSelectors.push({
         selector: "event",
-        condition: "=",
         text: "",
       });
     },

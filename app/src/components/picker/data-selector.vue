@@ -1,12 +1,12 @@
 <template>
   <div class="c-data-selector">
-    <label v-if="labelText">
+    <label v-if="labelText" class="form-label">
       {{ labelText }}
     </label>
     <div class="c-data-selector__wrap">
       <InputSelect v-model:value="selector" :options="selectorOptions"></InputSelect>
-      <InputSelect v-model:value="condition" :options="conditionOptions"></InputSelect>
       <InputEvents v-model:value="text"></InputEvents>
+      <InputSelect v-model:value="aggregate" :options="aggregateOptions"></InputSelect>
       <div class="c-data-selector__actions">
         <a v-if="allowDelete" class="btn" @click="onDelete">
           <svg
@@ -58,6 +58,7 @@ export default {
   data: function () {
     return {
       selector: "event",
+
       selectorOptions: [
         {
           key: "event",
@@ -69,15 +70,15 @@ export default {
         },
       ],
 
-      condition: "=",
-      conditionOptions: [
+      aggregate: "CUMULATIVE",
+      aggregateOptions: [
         {
-          key: "=",
-          value: "=",
+          key: "CUMULATIVE",
+          value: "CUMULATIVE",
         },
         {
-          key: "!=",
-          value: "!=",
+          key: "INCREMENTAL",
+          value: "INCREMENTAL",
         },
       ],
 
@@ -126,7 +127,7 @@ export default {
     onUpdate: function () {
       let selector = {
         selector: this.selector,
-        condition: this.condition,
+        aggregate: this.aggregate,
         text: this.text,
         i: this.i,
       };
@@ -145,6 +146,10 @@ export default {
 <style lang="scss">
 .c-data-selector {
   margin-bottom: 0.5rem;
+  padding: 0.5rem;
+  padding-top: 0.75rem;
+  background-color: var(--color-bg-3);
+  border-radius: 0.75rem;
 
   > label {
     display: block;
@@ -155,7 +160,7 @@ export default {
 
   &__wrap {
     display: grid;
-    grid-template-columns: max-content max-content 1fr max-content;
+    grid-template-columns: max-content 1fr max-content max-content;
     grid-column-gap: 0.5rem;
   }
 

@@ -103,6 +103,33 @@ const component = {
     }
     return out;
   },
+
+  async deleteWidget(form) {
+    try {
+      // Ensure the widget exists and belongs to the same workspace via its dashboard
+      const existing = await prisma.widget.findFirst({
+        where: {
+          id: form.widgetId,
+          dashboardId: form.dashboardId,
+          dashboard: { workspaceId: form.workspaceId },
+        },
+        select: { id: true },
+      });
+
+      if (!existing) {
+        throw `Widget not found`;
+      }
+
+      const deleted = await prisma.widget.delete({
+        where: { id: existing.id },
+      });
+
+      return true;
+    } catch (err) {
+      console.log(err);
+      throw err;
+    }
+  },
 };
 
 export default component;

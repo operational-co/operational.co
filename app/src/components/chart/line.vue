@@ -494,7 +494,7 @@ export default {
     position: absolute;
     //top: 0;
     left: 0;
-    width: 120px;
+    width: 140px;
     padding: 4px 8px;
     background-color: var(--color-bg-3);
     border-radius: var(--border-radius-sm);

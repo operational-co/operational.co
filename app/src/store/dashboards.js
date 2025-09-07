@@ -39,6 +39,18 @@ const api = {
       throw err;
     }
   },
+
+  removeWidget: async function (form = {}) {
+    try {
+      const res = await http.delete(
+        `/dashboards/${form.dashboardId}/widgets/${form.widgetId}`,
+        form,
+      );
+      return res.data || true;
+    } catch (err) {
+      throw err;
+    }
+  },
 };
 
 const config = {
@@ -105,6 +117,15 @@ export const useDashboardsStore = defineStore(config.name, {
       try {
         const res = await api.createWidget(form);
         return res.data || [];
+      } catch (err) {
+        throw err;
+      }
+    },
+
+    async removeWidget(form) {
+      try {
+        const res = await api.removeWidget(form);
+        return res.data || true;
       } catch (err) {
         throw err;
       }

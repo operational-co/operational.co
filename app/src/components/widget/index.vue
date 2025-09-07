@@ -37,7 +37,7 @@
           </svg>
           <span> Move </span>
         </a>
-        <a href="#">
+        <!-- <a href="#">
           <svg
             width="24"
             height="24"
@@ -58,9 +58,9 @@
               stroke-linejoin="round"
             />
           </svg>
-          <!-- <span> Update </span> -->
-        </a>
-        <a href="#">
+          <span> Update </span>
+        </a> -->
+        <a href="#" @click="onRemove">
           <svg
             width="24"
             height="24"
@@ -78,10 +78,12 @@
         </a>
       </div>
 
-      <Chart v-if="chartTypes.includes(widget.type)" :widget="widget"></Chart>
+      <div class="c-widget__body">
+        <Chart v-if="chartTypes.includes(widget.type)" :widget="widget"></Chart>
 
-      <Stat v-if="widget && widget.type === 'STAT'" :widget="widget"></Stat>
-      <Action v-if="widget && widget.type === 'ACTION'" :widget="widget"></Action>
+        <Stat v-if="widget && widget.type === 'STAT'" :widget="widget"></Stat>
+        <Action v-if="widget && widget.type === 'ACTION'" :widget="widget"></Action>
+      </div>
     </div>
   </div>
 </template>
@@ -114,7 +116,11 @@ export default {
 
   computed: {},
 
-  methods: {},
+  methods: {
+    onRemove: function () {
+      this.$emit("onRemove");
+    },
+  },
 
   mounted: function () {},
 };
@@ -139,6 +145,11 @@ export default {
     padding-top: 0;
   }
 
+  &__body {
+    height: 100%;
+    transition: opacity var(--transition-time) linear;
+  }
+
   &__handle {
     cursor: grab;
   }
@@ -146,11 +157,11 @@ export default {
   &__popup {
     position: absolute;
     z-index: 9;
-    background-color: var(--color-bg-3);
+    background-color: var(--color-bg-4);
     box-shadow:
       lch(0 0 0 / 0.16) 0px 2px 6px -2px,
       lch(0 0 0 / 0.32) 0px 0px 1px;
-    top: -16px;
+    top: 16px;
     left: 50%;
     border-radius: 8px;
     overflow: hidden;
@@ -190,7 +201,7 @@ export default {
       }
 
       &:not(:last-child) {
-        border-right: var(--color-bg-4) solid 1px;
+        border-right: var(--color-bg-5) solid 1px;
       }
 
       &:hover,
@@ -227,6 +238,9 @@ export default {
       opacity: 1;
       transform: scale(1) translateX(-50%);
       pointer-events: initial;
+    }
+    .c-widget__body {
+      opacity: 0.4;
     }
   }
 

@@ -14,7 +14,7 @@
           :id="widget.id"
           :key="widget.id"
         >
-          <Widget :moving="moving" :widget="widget"></Widget>
+          <Widget :moving="moving" :widget="widget" @onRemove="onRemove(widget)"></Widget>
         </div>
       </div>
     </div>
@@ -66,22 +66,6 @@ export default {
   data: function () {
     return {
       grid: null,
-      // widgets: [
-      //   {
-      //     id: 1,
-      //     type: "number",
-      //     data: {
-      //       title: "$577",
-      //       description: "Today",
-      //     },
-      //     meta: {
-      //       x: 0,
-      //       y: 0,
-      //       w: 1,
-      //       y: 1,
-      //     },
-      //   },
-      // ],
     };
   },
 
@@ -106,26 +90,13 @@ export default {
 
   computed: {
     widgets: function () {
-      let widgets = toRaw(this.dashboard.widgets);
+      let widgets = this.dashboard.widgets;
 
       widgets = widgets.map((widget) => {
         return widget;
       });
 
-      // widgets.push({
-      //   id: 99,
-      //   x: 3,
-      //   y: 1,
-      //   w: 1,
-      //   h: 1,
-      //   type: "ACTION",
-      //   schema: {
-      //     title: "Generate GST",
-      //     subtitle: `You'll get a email at shash@swipekit.app`,
-      //   },
-      // });
-
-      return widgets;
+      return widgets.slice();
     },
     moving: function () {
       return this.$store.app.moveMode;
@@ -139,6 +110,18 @@ export default {
   },
 
   methods: {
+    onRemove: async function (widget) {
+      let form = {
+        widgetId: widget.id,
+        dashboardId: this.dashboard.id,
+      };
+      let widgets = this.dashboard.widgets;
+      const i = widgets.findIndex((w) => String(w.id) === String(widget.id));
+
+      this.dashboard.widgets.splice(i, 1);
+
+      const result = await this.$store.dashboards.removeWidget(form);
+    },
     onStopEdit: function () {
       this.$store.app.setMoveMode(false);
     },
