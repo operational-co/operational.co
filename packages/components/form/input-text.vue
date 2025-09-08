@@ -11,7 +11,6 @@
         @keydown.enter="onEnterKey"
         :value="value"
         :placeholder="placeholder"
-        :maxlength="max"
       />
       <slot name="post-input"></slot>
     </div>
@@ -26,6 +25,10 @@ export default {
     Field
   },
 
+  data: function () {
+    return {};
+  },
+
   props: {
     type: {
       type: String,
@@ -35,8 +38,12 @@ export default {
       type: String,
       default: ""
     },
-    name: String,
-    label: String,
+    name: {
+      type: String
+    },
+    label: {
+      type: String
+    },
     successMessage: {
       type: String,
       default: ""
@@ -45,32 +52,21 @@ export default {
       type: String,
       default: ""
     },
-    handleChange: {},
-    max: {
-      type: Number,
-      default: null
-    }
+    handleChange: {}
   },
 
   methods: {
-    onFocus(e) {
+    onFocus: function (e) {
       this.$emit("focus:event", e);
     },
-    onEnterKey(e) {
+    onEnterKey: function (e) {
       this.$emit("enter:event", e);
     },
-    onChange(e) {
-      let val = e.target.value;
-
-      // If max prop is set, truncate the value
-      if (this.max !== null) {
-        val = val.slice(0, this.max);
-      }
-
+    onChange: function (e) {
       if (this.handleChange) {
-        this.handleChange({ ...e, target: { ...e.target, value: val } });
+        this.handleChange(e);
       } else {
-        this.$emit("update:value", val);
+        this.$emit("update:value", e.target.value);
       }
     }
   }
