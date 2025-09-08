@@ -426,5 +426,7 @@ export default {
 
 .is-ios .c-mobile-footer {
   height: 76px;
+  align-items: flex-start;
+  padding-top: var(--margin-lg);
 }
 </style>
