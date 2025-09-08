@@ -1,7 +1,7 @@
 <template>
   <div class="c-widget-header">
     <span class="c-widget-header__byline"> {{ title }} </span>
-    <h3 class="c-widget-header__title">{{ metric }}</h3>
+    <h3 class="c-widget-header__title">{{ formatNumberWithCommas(metric) }}</h3>
     <!-- <span class="c-widget-header__subtitle" v-if="subtitle">
       {{ subtitle }}
     </span> -->
@@ -16,6 +16,19 @@ export default {
     metric: {},
     subtitle: {
       default: "10th Sep - 21st Sep",
+    },
+  },
+
+  methods: {
+    formatNumberWithCommas(value) {
+      // Ensure it's a number first
+      const number = typeof value === "number" ? value : parseInt(value, 10);
+
+      // If it's not a valid number, return the original value
+      if (isNaN(number)) return value;
+
+      // Format with commas
+      return number.toLocaleString("en-US");
     },
   },
 };

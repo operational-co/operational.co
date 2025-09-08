@@ -1,6 +1,6 @@
 <template>
   <div class="c-widget-chart">
-    <Header :title="subtitle" :metric="`3,754`" :subtitle="subtitle"></Header>
+    <Header :title="title" :metric="metric" :subtitle="subtitle"></Header>
 
     <div class="c-widget__inner">
       <Chart :data="data" :type="widget.type"></Chart>
@@ -27,6 +27,39 @@ export default {
   },
 
   computed: {
+    metric: function () {
+      if (this.widget.type === "STAT") return;
+
+      const schema = this.widget.schema || {};
+
+      let condition = schema.total || "TOTAL";
+
+      let value = 0;
+
+      if (condition === "TOTAL") {
+        let primaryData = this.widget.data[0];
+
+        let dataset = primaryData.data;
+
+        for (let i = 0; i < dataset.length; i++) {
+          const datum = dataset[i];
+
+          value += datum.y;
+        }
+      }
+
+      if (condition === "AVERAGE") {
+        let primaryData = this.widget.data[0];
+
+        let dataset = primaryData.data;
+
+        value = dataset.reduce((acc, obj) => acc + (obj.y || 0), 0);
+
+        value = value / dataset.length;
+      }
+
+      return value;
+    },
     data: function () {
       if (this.widget.type === "STAT") return;
 
@@ -54,6 +87,17 @@ export default {
         });
 
       return datas;
+    },
+    title: function () {
+      let widget = this.widget;
+
+      if (!widget) {
+        return;
+      }
+
+      let schema = widget.schema || {};
+
+      return schema.title;
     },
     subtitle: function () {
       let widget = this.widget;

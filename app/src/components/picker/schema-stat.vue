@@ -2,11 +2,28 @@
   <div class="c-picker-schema-stat">
     <section>
       <article>
-        <InputText v-model:value="item.icon" placeholder="icon"></InputText>
-        <InputSelect v-model:value="item.type" :options="typeOptions"></InputSelect>
-        <InputSelect v-model:value="item.title" :options="titleOptions"></InputSelect>
-        <InputSelect v-model:value="item.aggregrate" :options="aggregrateOptions"></InputSelect>
-        <InputSelect v-model:value="item.date" :options="dateOptions"></InputSelect>
+        <InputText
+          label="Icon"
+          :max="1"
+          v-model:value="item.icon"
+          placeholder="Enter a emoji"
+        ></InputText>
+        <InputSelect label="Type" v-model:value="item.type" :options="typeOptions"></InputSelect>
+        <InputSelect
+          label="Type selection"
+          v-model:value="item.title"
+          :options="titleOptions"
+        ></InputSelect>
+        <InputSelect
+          label="Aggregate"
+          v-model:value="item.aggregrate"
+          :options="aggregrateOptions"
+        ></InputSelect>
+        <InputSelect
+          label="Duration"
+          v-model:value="item.date"
+          :options="dateOptions"
+        ></InputSelect>
       </article>
     </section>
     <button type="button" class="btn btn-primary" @click="onSave">Save</button>

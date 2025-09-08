@@ -55,7 +55,7 @@
         <span class="c-spinner"></span>
       </div>
     </Constrain>
-    <Dashboard :dashboard="dashboard" v-if="dashboard"></Dashboard>
+    <Dashboard ref="dashboard" :dashboard="dashboard" v-if="dashboard"></Dashboard>
   </div>
 </template>
 
@@ -91,6 +91,7 @@ export default {
 
   methods: {
     onStopEdit: function () {
+      this.$refs.dashboard.onGridUpdate();
       this.$store.app.setMoveMode(false);
     },
     onEdit: function () {

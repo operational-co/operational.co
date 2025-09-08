@@ -165,7 +165,11 @@ export default {
         };
       });
 
-      await this.$store.dashboards.updateWidgets(this.dashboard.id, widgets);
+      console.log(widgets);
+
+      const condition = await this.$store.dashboards.updateWidgets(this.dashboard.id, widgets);
+
+      console.log(condition);
     },
 
     setupGrid: function () {
@@ -192,7 +196,7 @@ export default {
         //staticGrid: !this.moving,
       });
 
-      this.grid.on("change", this.onGridUpdate);
+      //this.grid.on("change", this.onGridUpdate);
 
       let widgets = this.widgets;
       let rowCount = Math.round(widgets.length / 2);
