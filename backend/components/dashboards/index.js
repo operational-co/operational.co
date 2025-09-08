@@ -128,6 +128,107 @@ const component = {
       throw err;
     }
   },
+
+  async runWidgetAction(form) {
+    // form = { dashboardId: 1, widgetId: 16, workspaceId: 1 }
+    const dashboardId = Number(form.dashboardId);
+    const widgetId = Number(form.widgetId);
+    const workspaceId = Number(form.workspaceId);
+
+    // 1) Make sure this widget belongs to the given workspace (and dashboard)
+    const widget = await prisma.widget.findFirst({
+      where: {
+        id: widgetId,
+        dashboard: { is: { id: dashboardId, workspaceId: workspaceId } },
+      },
+      select: {
+        id: true,
+        dashboardId: true,
+        schema: true,
+        dashboard: { select: { id: true, workspaceId: true } },
+      },
+    });
+
+    if (!widget) {
+      throw new Error("Widget not found for this workspace/dashboard");
+    }
+
+    // 2) Parse schema and read URL
+    let schema = widget.schema || {};
+    if (typeof schema === "string") {
+      try {
+        schema = JSON.parse(schema);
+      } catch (_) {
+        schema = {};
+      }
+    }
+
+    const url = typeof schema.url === "string" ? schema.url : null;
+    console.log("Widget action URL:", url);
+
+    let condition = await this.sendAction(widget, url);
+
+    if (condition === true) {
+      return true;
+    } else {
+      console.log(condition);
+      throw condition.message;
+    }
+  },
+
+  async sendAction(widget, url) {
+    let a = null;
+
+    let res = null;
+
+    let form = {
+      event: {},
+    };
+
+    let config = {
+      method: "post",
+      url: url,
+      data: form,
+      //signal: AbortSignal.timeout(2 * 60 * 1000),
+      timeout: 10000, // 10 seconds
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+
+    // then perform the action
+    try {
+      res = await axios(config);
+    } catch (err) {
+      console.log(err);
+      //console.log(url);
+      //console.log(err.response.data);
+
+      if (err && err.response && err.response.data) {
+        return {
+          error: true,
+          message: err.response.data,
+        };
+      }
+    }
+
+    let status = 400;
+
+    if (res && res.status) {
+      status = res.status;
+    }
+
+    let successStatuses = [200, 201];
+
+    if (!successStatuses.includes(status)) {
+      return {
+        error: true,
+        message: `Http status was ${status}`,
+      };
+    }
+
+    return true;
+  },
 };
 
 export default component;

@@ -65,6 +65,22 @@ const deleteWidget = async (req, res) => {
   }
 };
 
+const runWidgetAction = async (req, res) => {
+  let params = {
+    dashboardId: parseInt(req.params.id),
+    widgetId: parseInt(req.params.widgetId),
+    workspaceId: parseInt(res.locals.user.primaryWorkspace),
+  };
+
+  try {
+    const widget = await component.runWidgetAction(params);
+    return res.send(widget);
+  } catch (err) {
+    console.log(err);
+    return res.status(400).send(err);
+  }
+};
+
 const getSchema = {
   schema: {},
 };
@@ -120,6 +136,8 @@ router.put("/:id/widgets", middlewareAuth, middlewareSchema(updateWidgetsSchema)
 router.post("/:id/widgets", middlewareAuth, middlewareSchema(createWidgetSchema), createWidget);
 
 router.delete("/:id/widgets/:widgetId", middlewareAuth, deleteWidget);
+
+router.post("/:id/widgets/:widgetId/action", middlewareAuth, runWidgetAction);
 
 // Export the router
 export default router;

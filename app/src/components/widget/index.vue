@@ -82,7 +82,11 @@
         <Chart v-if="chartTypes.includes(widget.type)" :widget="widget"></Chart>
 
         <Stat v-if="widget && widget.type === 'STAT'" :widget="widget"></Stat>
-        <Action v-if="widget && widget.type === 'ACTION'" :widget="widget"></Action>
+        <Action
+          v-if="widget && widget.type === 'ACTION'"
+          :widget="widget"
+          :dashboardId="dashboardId"
+        ></Action>
       </div>
     </div>
   </div>
@@ -112,6 +116,7 @@ export default {
       type: Boolean,
       default: false,
     },
+    dashboardId: {},
   },
 
   computed: {},

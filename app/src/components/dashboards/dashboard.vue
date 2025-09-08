@@ -14,7 +14,12 @@
           :id="widget.id"
           :key="widget.id"
         >
-          <Widget :moving="moving" :widget="widget" @onRemove="onRemove(widget)"></Widget>
+          <Widget
+            :dashboardId="dashboard.id"
+            :moving="moving"
+            :widget="widget"
+            @onRemove="onRemove(widget)"
+          ></Widget>
         </div>
       </div>
     </div>

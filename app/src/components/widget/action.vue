@@ -20,6 +20,7 @@ export default {
   props: {
     data: {},
     widget: {},
+    dashboardId: {},
   },
 
   computed: {
@@ -35,6 +36,23 @@ export default {
       }
 
       this.processing = true;
+
+      let form = {
+        ...this.widget,
+
+        dashboardId: this.dashboardId,
+      };
+      try {
+        const condition = await this.$store.dashboards.doAction(form);
+
+        if (condition) {
+          this.$store.app.sendNotification(`Action ran successfully`);
+        }
+      } catch (err) {
+        console.log(err);
+      }
+
+      this.processing = false;
     },
   },
 };

@@ -51,6 +51,19 @@ const api = {
       throw err;
     }
   },
+
+  doAction: async function (form) {
+    try {
+      const res = await http.post(
+        `/dashboards/${form.dashboardId}/widgets/${form.id}/action`,
+        form,
+      );
+
+      return res.data || [];
+    } catch (err) {
+      throw err;
+    }
+  },
 };
 
 const config = {
@@ -129,6 +142,18 @@ export const useDashboardsStore = defineStore(config.name, {
       } catch (err) {
         throw err;
       }
+    },
+
+    doAction: async function (action) {
+      let res = await api.doAction(action, event).catch((err) => {
+        throw err;
+      });
+
+      if (!res) {
+        return false;
+      }
+
+      return true;
     },
   },
 });
