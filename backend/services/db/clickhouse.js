@@ -427,7 +427,6 @@ ORDER BY total_size DESC;
     if (schema.date === "1 year") {
       days = 365;
     }
-    console.log(days);
     const startDT = moment
       .utc()
       .startOf("day")

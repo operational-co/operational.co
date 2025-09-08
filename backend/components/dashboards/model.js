@@ -1,6 +1,9 @@
 import prisma from "#lib/prisma.js";
 import Model from "#lib/class-model.js";
 import Db from "#services/db/index.js";
+import NodeCache from "node-cache";
+
+const widgetCache = new NodeCache({ stdTTL: 60, checkperiod: 30, useClones: false, maxKeys: 1000 });
 
 class Dashboard extends Model {
   // Get one dashboard for a workspace (default/first)
@@ -12,32 +15,57 @@ class Dashboard extends Model {
   }
 
   // Fetch widgets for a dashboard and attach fresh data for each
-  async getWidgetsWithData({ dashboardId, start, end }) {
+  async getWidgetsWithData({ dashboardId }) {
     const dash = await prisma.dashboard.findUnique({
       where: { id: Number(dashboardId) },
       select: { id: true, workspaceId: true },
     });
     if (!dash) throw new Error("Dashboard not found");
 
-    const widgets = await this._rawWidgets(dashboardId); // raw read
+    const widgets = await this._rawWidgets(dashboardId);
     const results = [];
-    for (const w of widgets) {
-      let data = null;
-      if (w.type === "STAT") {
-        data = await Db.getStatData(w.schema, dash.workspaceId);
+
+    for (let i = 0; i < widgets.length; i++) {
+      const w = widgets[i];
+      // use widget's own schema.date as the range key (e.g., "7 days")
+      const rangeKey = w.schema && w.schema.date ? String(w.schema.date) : "default-range";
+      const cacheKey = this._cacheKey(w, dash.workspaceId, rangeKey);
+
+      let data = widgetCache.get(cacheKey);
+      if (data === undefined) {
+        if (w.type === "STAT") {
+          data = await Db.getStatData(w.schema, dash.workspaceId);
+        } else if (w.type === "LINE") {
+          data = await Db.getLineData(w.schema, dash.workspaceId);
+        } else if (w.type === "ACTION") {
+          data = {};
+        } else {
+          data = null;
+        }
+        widgetCache.set(cacheKey, data);
       }
-      if (w.type === "LINE") {
-        data = await Db.getLineData(w.schema, dash.workspaceId);
-      }
-      if (w.type === "ACTION") {
-        data = {};
-      }
-      results.push({
-        ...w,
-        data,
-      });
+
+      results.push({ ...w, data });
     }
+
     return { dashboardId: dash.id, widgets: results };
+  }
+
+  _cacheKey(widget, workspaceId, rangeKey) {
+    // include schema string to differentiate different selector sets
+    const schemaStr = JSON.stringify(widget.schema || {});
+    return [
+      "ws",
+      workspaceId,
+      "wid",
+      widget.id,
+      "type",
+      widget.type,
+      "range",
+      rangeKey,
+      "schema",
+      schemaStr,
+    ].join("|");
   }
 
   // ---- PRIVATE -------------------------------------------------------------

@@ -22,8 +22,6 @@ const component = {
     }
     const payload = await Dashboard.getWidgetsWithData({
       dashboardId: dash.id,
-      start: "2025-08-01",
-      end: "2025-08-27",
     });
 
     if (payload && payload.widgets) {
