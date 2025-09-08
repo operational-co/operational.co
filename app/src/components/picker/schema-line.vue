@@ -3,6 +3,7 @@
     <!-- {{ dataSelectors }} -->
     <InputText label="Widget title" placeholder="eg: New signups" v-model:value="title"></InputText>
     <InputSelect label="Metric value" v-model:value="total" :options="metricOptions"></InputSelect>
+    <InputSelect label="Duration" v-model:value="date" :options="dateOptions"></InputSelect>
     <DataSelector
       v-for="(dataSelector, i) in dataSelectors"
       :key="i"
@@ -43,6 +44,7 @@ export default {
     return {
       title: "",
       metric: "TOTAL",
+      date: "7 days",
       dataSelectors: [
         {
           selector: "event",
@@ -57,6 +59,24 @@ export default {
         {
           key: "AVERAGE",
           value: "AVERAGE",
+        },
+      ],
+      dateOptions: [
+        {
+          key: "7 days",
+          value: "7 days",
+        },
+        {
+          key: "30 days",
+          value: "30 days",
+        },
+        {
+          key: "60 days",
+          value: "60 days",
+        },
+        {
+          key: "1 year",
+          value: "1 year",
         },
       ],
       limit: 4,
@@ -121,6 +141,7 @@ export default {
         schema: {
           title: this.title,
           total: this.total,
+          date: this.date,
           dataSelectors: this.dataSelectors,
         },
         type: "LINE",

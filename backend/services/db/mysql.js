@@ -455,46 +455,133 @@ WHERE workspaceId = ${params.workspaceId}
     return result;
   },
 
-  async getStatData(spec, workspaceId) {
-    const agg = (spec.aggregate || spec.aggregrate || "TOTAL").toUpperCase();
-    const days = spec.date === "7 days" ? 7 : spec.date === "30 days" ? 30 : 60;
+  async getStatData(schema, workspaceId) {
+    const days = schema.date === "7 days" ? 7 : schema.date === "30 days" ? 30 : 60;
 
-    // UTC window: last N days including today [start, end)
-    const start = moment
+    // [start, end) in UTC
+    const startDT = moment
       .utc()
       .startOf("day")
-      .subtract(days - 1, "days")
-      .toDate();
-    const end = moment.utc().startOf("day").add(1, "day").toDate();
+      .subtract(days - 1, "days");
+    const endDT = moment.utc().startOf("day").add(1, "day");
 
-    // WHERE clause (paramized)
-    let where = "createdAt >= ? AND createdAt < ? AND name = ?";
-    const params = [start, end, String(spec.title || "")];
-    if (workspaceId != null) {
-      where += " AND workspaceId = ?";
-      params.push(Number(workspaceId));
-    }
+    const start = new Date(startDT.toISOString());
+    const end = new Date(endDT.toISOString());
+
+    // match by field
+    const field = schema.type === "category" ? "category" : "name";
+    const title = String(schema.title || "");
+    const agg = (schema.aggregate || "TOTAL").toUpperCase();
 
     if (agg === "TOTAL") {
-      const sql = `SELECT COUNT(*) + 0 AS value FROM Events WHERE ${where}`;
-      const rows = await prisma.$queryRawUnsafe(sql, ...params);
-      return Number(rows?.[0]?.value || 0);
+      const sql = `
+      SELECT COUNT(*) + 0 AS value
+      FROM \`Events\`
+      WHERE \`workspaceId\` = ?
+        AND \`${field}\` = ?
+        AND \`createdAt\` >= ?
+        AND \`createdAt\` <  ?
+    `;
+      const rows = await prisma.$queryRawUnsafe(sql, Number(workspaceId), title, start, end);
+      return Number(rows?.[0]?.value ?? 0);
     }
 
-    // MAX / AVERAGE over daily counts
-    const daily = `
-    SELECT DATE(createdAt) AS d, COUNT(*) AS c
-    FROM Events
-    WHERE ${where}
+    // MAX / AVERAGE over daily counts (only days that had events)
+    const inner = `
+    SELECT DATE(\`createdAt\`) AS d, COUNT(*) AS c
+    FROM \`Events\`
+    WHERE \`workspaceId\` = ?
+      AND \`${field}\` = ?
+      AND \`createdAt\` >= ?
+      AND \`createdAt\` <  ?
     GROUP BY d
   `;
     const wrap =
       agg === "MAX"
-        ? `SELECT MAX(c) + 0 AS value FROM (${daily}) t`
-        : `SELECT AVG(c) + 0 AS value FROM (${daily}) t`;
+        ? `SELECT IFNULL(MAX(c), 0) AS value FROM (${inner}) AS t`
+        : `SELECT IFNULL(AVG(c), 0) AS value FROM (${inner}) AS t`;
 
-    const rows = await prisma.$queryRawUnsafe(wrap, ...params);
-    return Number(rows?.[0]?.value || 0); // NULL -> 0
+    const rows = await prisma.$queryRawUnsafe(wrap, Number(workspaceId), title, start, end);
+    return Number(rows?.[0]?.value ?? 0);
+  },
+
+  async getLineData(schema, workspaceId) {
+    // 1) window (7|30|60|365 days)
+    let days = schema.date === "7 days" ? 7 : schema.date === "30 days" ? 30 : 60;
+    if (schema.date === "1 year") days = 365;
+
+    const startDT = moment
+      .utc()
+      .startOf("day")
+      .subtract(days - 1, "days");
+    const endDT = moment.utc().startOf("day").add(1, "day"); // [start, end)
+
+    // Precompute ISO buckets (exactly N days, UTC midnight)
+    const buckets = [];
+    for (let i = 0; i < days; i++) {
+      buckets.push(startDT.clone().add(i, "days").toISOString()); // "YYYY-MM-DDT00:00:00.000Z"
+    }
+
+    const sels = Array.isArray(schema.dataSelectors) ? schema.dataSelectors : [];
+    const results = [];
+
+    for (let i = 0; i < sels.length; i++) {
+      const s = sels[i] || {};
+      // whitelist field to avoid injection
+      const field = s.selector === "category" ? "category" : "name";
+      const value = String(s.text || "");
+
+      // MySQL daily counts in [start, end)
+      const sql = `
+      SELECT
+        DATE_FORMAT(createdAt, '%Y-%m-%d') AS d,
+        COUNT(*) + 0 AS c
+      FROM \`Events\`
+      WHERE \`workspaceId\` = ?
+        AND \`${field}\` = ?
+        AND \`createdAt\` >= ?
+        AND \`createdAt\` <  ?
+      GROUP BY d
+      ORDER BY d ASC
+    `;
+
+      // Use JS Dates so Prisma binds properly (UTC)
+      const rows = await prisma.$queryRawUnsafe(
+        sql,
+        Number(workspaceId),
+        value,
+        new Date(startDT.toISOString()),
+        new Date(endDT.toISOString()),
+      );
+
+      // Build a map d -> c, where d is "YYYY-MM-DD"
+      const map = Object.create(null);
+      for (let j = 0; j < rows.length; j++) {
+        const r = rows[j];
+        const dayKey = String(r.d); // "YYYY-MM-DD"
+        const count = Number(r.c) || 0;
+        map[dayKey] = count;
+      }
+
+      // Zero-fill to full window using our ISO buckets
+      const series = [];
+      for (let j = 0; j < buckets.length; j++) {
+        const iso = buckets[j]; // "YYYY-MM-DDT00:00:00.000Z"
+        const key = iso.slice(0, 10); // "YYYY-MM-DD"
+        const y = map[key] != null ? map[key] : 0;
+        series.push({ x: iso, y: y });
+      }
+
+      // Attach selector metadata (kept like your CH version)
+      results.push({
+        text: s.text ?? "",
+        selector: s.selector ?? "event",
+        aggregate: s.aggregate ?? "CUMULATIVE",
+        data: series,
+      });
+    }
+
+    return results; // [ { text, selector, aggregate, data:[{x,y}...] }, ... ]
   },
 };
 

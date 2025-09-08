@@ -423,7 +423,11 @@ ORDER BY total_size DESC;
     const ch = Clickhouse.getCh();
 
     // 1) window (7|30|60 days) and ClickHouse-friendly bounds
-    const days = schema.date === "7 days" ? 7 : schema.date === "30 days" ? 30 : 60;
+    let days = schema.date === "7 days" ? 7 : schema.date === "30 days" ? 30 : 60;
+    if (schema.date === "1 year") {
+      days = 365;
+    }
+    console.log(days);
     const startDT = moment
       .utc()
       .startOf("day")
@@ -482,15 +486,6 @@ ORDER BY total_size DESC;
 
       // Zero-fill to full window
       const series = buckets.map((x) => ({ x, y: map[x] ?? 0 }));
-
-      // Optional: make incremental series cumulative
-      // if ((s.aggregate || "").toUpperCase() === "INCREMENTAL") {
-      //   let acc = 0;
-      //   for (const p of series) {
-      //     acc += p.y;
-      //     p.y = acc;
-      //   }
-      // }
 
       // Attach the selector metadata to this result
       results.push({

@@ -6,7 +6,7 @@
       <p>Widgets will show up in your dashboard. You can update them later on.</p>
 
       <div class="c-picker__list" v-if="!type">
-        <h4>Select a chart</h4>
+        <h4>Select a widget type</h4>
         <a @click="onSelectChart('line')">
           <span>
             <svg
@@ -55,7 +55,7 @@
 
           <article>
             <strong> Stat </strong>
-            <p>Great for showcasing a single metric, eg no of users signed up.</p>
+            <p>Simple widget for showcasing a single metric, eg no of users signed up.</p>
           </article>
         </a>
         <a @click="onSelectChart('action')">
@@ -261,7 +261,11 @@ export default {
         min-width: 48px;
         height: 48px;
         padding: 0.25rem;
-        background: linear-gradient(0deg, rgba(26, 153, 156, 1) 0%, rgba(36, 201, 97, 1) 100%);
+        background: linear-gradient(
+          0deg,
+          hsl(var(--hue-p), 80%, 50%) 0%,
+          hsl(var(--hue-p), 60%, 60%) 100%
+        );
         border-radius: 0.4rem;
         margin-right: 0.5rem;
       }
