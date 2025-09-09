@@ -101,11 +101,20 @@ export default {
     > strong {
       display: block;
       font-weight: 500;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
     }
 
     > span {
       font-size: var(--font-size-xs);
       opacity: 0.8;
+
+      display: -webkit-box;
+      -webkit-line-clamp: 1;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
     }
   }
 

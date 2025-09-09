@@ -1,7 +1,7 @@
 <template>
   <div class="c-picker">
     <Constrain>
-      <!-- <Breadcrumb></Breadcrumb> -->
+      <Breadcrumb></Breadcrumb>
       <h2>Add Widget</h2>
       <p>Widgets will show up in your dashboard. You can update them later on.</p>
 

@@ -73,8 +73,6 @@
               fill="currentColor"
             />
           </svg>
-
-          <!-- <span> Remove </span> -->
         </a>
       </div>
 

@@ -4,7 +4,12 @@
       <div class="c-dashboards__header">
         <h3>Dashboard</h3>
         <nav v-if="dashboard && dashboard.widgets && dashboard.widgets.length > 0">
-          <router-link to="/picker" class="btn btn-icon btn-sm">
+          <a
+            href="#"
+            @click.prevent="showWidgetCreate = true"
+            to="/picker"
+            class="btn btn-icon btn-sm"
+          >
             <svg
               width="24"
               height="24"
@@ -21,7 +26,7 @@
             </svg>
 
             <span>Add </span>
-          </router-link>
+          </a>
           <button v-if="!moving" type="button" class="btn btn-icon btn-sm" @click="onEdit">
             <svg
               width="24"
@@ -56,6 +61,10 @@
       </div>
     </Constrain>
     <Dashboard ref="dashboard" :dashboard="dashboard" v-if="dashboard"></Dashboard>
+    <ModalWidgetCreate
+      :active="showWidgetCreate"
+      @onClose="showWidgetCreate = false"
+    ></ModalWidgetCreate>
   </div>
 </template>
 
@@ -68,16 +77,19 @@ import "gridstack/dist/gridstack.min.css";
 import { dashboardsApi } from "@/store/dashboards.js";
 
 import Dashboard from "./dashboard.vue";
+import ModalWidgetCreate from "./modal-widget-create.vue";
 
 export default {
   components: {
     Constrain,
     Dashboard,
+    ModalWidgetCreate,
   },
 
   data: function () {
     return {
       dashboard: null,
+      showWidgetCreate: false,
     };
   },
 
