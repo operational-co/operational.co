@@ -26,8 +26,8 @@
         <InputSwitch v-model:value="item.external" label="Is link external?"></InputSwitch>
       </article>
     </section>
-    <button type="button" class="btn btn-primary" @click="onSave">
-      <span class="c-spinner" v-if="processing"></span>
+    <button :disabled="processing" type="button" class="btn btn-primary" @click="onSave">
+      <span v-if="processing" class="c-spinner"></span>
       <span>Save </span>
     </button>
     <div class="c-input c-form__errors" v-if="errors && errors.length > 0">

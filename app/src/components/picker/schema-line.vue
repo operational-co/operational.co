@@ -2,7 +2,7 @@
   <div class="c-picker-schema-line">
     <!-- {{ dataSelectors }} -->
     <InputText label="Widget title" placeholder="eg: New signups" v-model:value="title"></InputText>
-    <InputSelect label="Metric value" v-model:value="total" :options="metricOptions"></InputSelect>
+    <InputSelect label="Metric value" v-model:value="metric" :options="metricOptions"></InputSelect>
     <InputSelect label="Duration" v-model:value="date" :options="dateOptions"></InputSelect>
     <DataSelector
       v-for="(dataSelector, i) in dataSelectors"
@@ -16,7 +16,7 @@
       @delete="onDelete(i)"
       @update="onUpdate"
     ></DataSelector>
-    <button type="button" class="btn btn-primary" @click="onSave">
+    <button :disabled="processing" type="button" class="btn btn-primary" @click="onSave">
       <span v-if="processing" class="c-spinner"></span>
       <span>Save </span>
     </button>
@@ -140,7 +140,7 @@ export default {
       const form = {
         schema: {
           title: this.title,
-          total: this.total,
+          metric: this.metric,
           date: this.date,
           dataSelectors: this.dataSelectors,
         },

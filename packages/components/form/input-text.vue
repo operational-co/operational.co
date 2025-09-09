@@ -11,6 +11,7 @@
         @keydown.enter="onEnterKey"
         :value="value"
         :placeholder="placeholder"
+        :maxlength="maxlength"
       />
       <slot name="post-input"></slot>
     </div>
@@ -52,7 +53,12 @@ export default {
       type: String,
       default: ""
     },
-    handleChange: {}
+    handleChange: {},
+
+    maxlength: {
+      type: Number,
+      default: -1
+    }
   },
 
   methods: {

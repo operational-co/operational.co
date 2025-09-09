@@ -152,25 +152,13 @@ export default {
     async onGridUpdate(e) {
       let widgets = this.grid.engine.nodes;
 
-      let currentWidgets = this.widgets;
-
-      widgets = widgets.map((widget) => {
-        let index = widget._id;
-        let currentWidget = currentWidgets[index];
-        widget.id = currentWidget.id;
-
-        return widget;
-      });
-
       widgets = widgets.map((widget) => {
         return {
-          id: widget.id,
+          id: parseInt(widget.id),
           x: widget.x,
           y: widget.y,
         };
       });
-
-      console.log(widgets);
 
       const condition = await this.$store.dashboards.updateWidgets(this.dashboard.id, widgets);
 

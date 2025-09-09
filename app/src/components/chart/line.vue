@@ -1,10 +1,7 @@
 <template>
   <div class="c-chart-line">
     <div :class="['c-chart-line__popup', { active: popupActive === true }]" :style="popupStyle">
-      <article v-if="popupActive">
-        <span>{{ computedPopupDatumX }}</span>
-        <!-- <span>{{ popupDatum.y }}</span> -->
-      </article>
+      <article v-if="popupActive" v-html="computedPopupHtml"></article>
     </div>
     <div class="c-chart-line__chart" ref="svg"></div>
   </div>
@@ -71,7 +68,7 @@ export default {
   },
 
   computed: {
-    computedPopupDatumX: function () {
+    computedPopupHtml: function () {
       let popupDataPoints = this.popupDataPoints;
       if (!popupDataPoints) {
         return null;
@@ -81,13 +78,18 @@ export default {
         return null;
       }
 
-      const datum = popupDataPoints[0];
+      let str = ``;
 
-      try {
-        return datum.label || datum.x;
-      } catch (err) {
-        return "N/A";
+      for (let i = 0; i < popupDataPoints.length; i++) {
+        const datum = popupDataPoints[i];
+        str += `<section data-id="${i}">
+        <span>
+        ${datum.label}
+        </span>
+        </section>`;
       }
+
+      return str;
     },
     popupStyle: function () {
       let clientLeft = -1;
@@ -223,12 +225,16 @@ export default {
       // Solid lines
       for (let ds = 0; ds < this.datasets.length; ds++) {
         let dataset = this.datasets[ds];
+        let defaultColor = `var(--theme-color)`;
+        if (ds > 0) {
+          defaultColor = `var(--theme-color-muted)`;
+        }
         svg
           .append("path")
           .datum(dataset.data)
           .attr("class", "line")
           .attr("d", line)
-          .attr("stroke", dataset.color || "var(--theme-color)");
+          .attr("stroke", dataset.color || defaultColor);
       }
 
       // Dashed bridge over single null gaps
@@ -512,6 +518,74 @@ export default {
 
     &.active {
       opacity: 1;
+    }
+
+    section {
+      position: relative;
+      font-feature-settings:
+        "case" 0,
+        "dlig" 0,
+        "frac" 0,
+        "dnom" 0,
+        "numr" 0,
+        "subs" 0,
+        "sups" 0,
+        "tnum",
+        "zero" 0,
+        "ss01",
+        "ss02" 0,
+        "ss03" 0,
+        "ss04",
+        "ss05" 0,
+        "ss06" 0,
+        "ss07" 0,
+        "ss08" 0,
+        "cv01" 0,
+        "cv02" 0,
+        "cv03" 0,
+        "cv04" 0,
+        "cv05" 0,
+        "cv06" 0,
+        "cv07" 0,
+        "cv08" 0,
+        "cv09" 0,
+        "cv10" 0,
+        "cv11" 0,
+        "cv12" 0,
+        "cv13" 0,
+        "cpsp" 0,
+        "c2sc" 0,
+        "salt" 0,
+        "aalt" 0,
+        "calt",
+        "ccmp",
+        "locl",
+        "kern";
+
+      &:before {
+        content: "";
+        position: absolute;
+        top: 8px;
+        left: 0;
+        width: 8px;
+        height: 8px;
+        border-radius: 99px;
+        background-color: var(--theme-color);
+      }
+
+      span {
+        display: block;
+        margin-left: 12px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      &[data-id="1"] {
+        &:before {
+          background-color: var(--theme-color-muted);
+        }
+      }
     }
   }
 

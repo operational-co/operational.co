@@ -79,7 +79,7 @@ export default {
               x: moment(datum.x).format("MMM Do"),
               y,
               // keep your existing label wording
-              label: `${y} user signups`,
+              label: `${y} ${d.text}`,
             };
           });
 

@@ -7,6 +7,7 @@
           :max="1"
           v-model:value="item.icon"
           placeholder="Enter a emoji"
+          :maxlength="1"
         ></InputText>
         <InputSelect label="Type" v-model:value="item.type" :options="typeOptions"></InputSelect>
         <InputSelect
@@ -26,7 +27,10 @@
         ></InputSelect>
       </article>
     </section>
-    <button type="button" class="btn btn-primary" @click="onSave">Save</button>
+    <button :disabled="processing" type="button" class="btn btn-primary" @click="onSave">
+      <span v-if="processing" class="c-spinner"></span>
+      <span>Save </span>
+    </button>
   </div>
 </template>
 

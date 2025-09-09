@@ -138,6 +138,7 @@ export default {
   border-radius: 8px;
 
   --theme-color: hsl(var(--hue-p), 80%, 60%);
+  --theme-color-muted: hsl(var(--hue-p), 10%, 50%);
   --theme-bg-color: hsl(var(--hue-p), 10%, 60%);
 
   &__wrap {
