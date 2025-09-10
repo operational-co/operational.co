@@ -91,7 +91,7 @@
       </div>
 
       <div class="c-picker__form" v-if="type">
-        <Header></Header>
+        <!-- <Header></Header> -->
         <h4>Configure {{ type }} chart</h4>
         <p>Stats shows simple metrics, eg x no of signups over last 7 days.</p>
         <p>Great for showcasing simple but specific stats.</p>
@@ -299,6 +299,10 @@ export default {
     p {
       margin-block-end: 0;
     }
+  }
+
+  &__form {
+    margin-bottom: 6rem;
   }
 }
 </style>

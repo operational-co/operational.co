@@ -1,5 +1,6 @@
 <template>
   <div class="c-picker-schema-stat">
+    <Header :schema="schema" type="STAT"></Header>
     <section>
       <article>
         <InputText
@@ -7,7 +8,7 @@
           :max="1"
           v-model:value="item.icon"
           placeholder="Enter a emoji"
-          :maxlength="1"
+          :maxlength="2"
         ></InputText>
         <InputSelect label="Type" v-model:value="item.type" :options="typeOptions"></InputSelect>
         <InputSelect
@@ -38,12 +39,14 @@
 import InputText from "@operational.co/components/form/input-text.vue";
 import InputSelect from "@operational.co/components/form/input-select.vue";
 import DataSelector from "./data-selector.vue";
+import Header from "./header.vue";
 
 export default {
   components: {
     InputText,
     InputSelect,
     DataSelector,
+    Header,
   },
 
   data: function () {
@@ -104,6 +107,13 @@ export default {
   },
 
   computed: {
+    schema: function () {
+      let schema = {
+        ...this.item,
+      };
+
+      return schema;
+    },
     titleOptions: function () {
       let options = [];
       if (this.item.type === "event") {

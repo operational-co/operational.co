@@ -1,5 +1,6 @@
 <template>
   <div class="c-picker-schema-action">
+    <Header :schema="schema" type="ACTION"></Header>
     <section>
       <article>
         <InputText
@@ -43,6 +44,7 @@ import InputText from "@operational.co/components/form/input-text.vue";
 import InputSelect from "@operational.co/components/form/input-select.vue";
 import InputSwitch from "@operational.co/components/form/input-switch.vue";
 import DataSelector from "./data-selector.vue";
+import Header from "./header.vue";
 
 export default {
   components: {
@@ -50,6 +52,7 @@ export default {
     InputSelect,
     InputSwitch,
     DataSelector,
+    Header,
   },
 
   data: function () {
@@ -112,6 +115,13 @@ export default {
   },
 
   computed: {
+    schema: function () {
+      let schema = {
+        ...this.item,
+      };
+
+      return schema;
+    },
     titleOptions: function () {
       let options = [];
       if (this.item.type === "event") {

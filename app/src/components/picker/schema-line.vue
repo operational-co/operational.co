@@ -1,6 +1,6 @@
 <template>
   <div class="c-picker-schema-line">
-    <!-- {{ dataSelectors }} -->
+    <Header :schema="schema" type="LINE"></Header>
     <InputText label="Widget title" placeholder="eg: New signups" v-model:value="title"></InputText>
     <InputSelect label="Metric value" v-model:value="metric" :options="metricOptions"></InputSelect>
     <InputSelect label="Duration" v-model:value="date" :options="dateOptions"></InputSelect>
@@ -32,12 +32,14 @@
 import InputSelect from "@operational.co/components/form/input-select.vue";
 import InputText from "@operational.co/components/form/input-text.vue";
 import DataSelector from "./data-selector.vue";
+import Header from "./header.vue";
 
 export default {
   components: {
     InputSelect,
     InputText,
     DataSelector,
+    Header,
   },
 
   data: function () {
@@ -90,6 +92,16 @@ export default {
   },
 
   computed: {
+    schema: function () {
+      let schema = {
+        title: this.title,
+        metric: this.metric,
+        date: this.date,
+        dataSelectors: this.dataSelectors,
+      };
+
+      return schema;
+    },
     workspace: function () {
       return this.$store.workspace.resource;
     },

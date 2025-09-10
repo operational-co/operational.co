@@ -97,9 +97,11 @@ export default {
 
   > article {
     margin-top: auto;
+    display: block;
 
     > strong {
       display: block;
+      line-height: 1.4;
       font-weight: 500;
       display: -webkit-box;
       -webkit-line-clamp: 2;

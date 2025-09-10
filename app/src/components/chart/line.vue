@@ -67,6 +67,15 @@ export default {
     },
   },
 
+  watch: {
+    datasets: {
+      deep: true, // important to detect changes inside array of objects
+      handler() {
+        this.updateChart();
+      },
+    },
+  },
+
   computed: {
     computedPopupHtml: function () {
       let popupDataPoints = this.popupDataPoints;
@@ -136,6 +145,16 @@ export default {
   },
 
   methods: {
+    updateChart() {
+      // Remove old chart
+      d3.select(this.$refs.svg).selectAll("*").remove();
+
+      // Ensure width/height is correct
+      this.calculateDims();
+
+      // Render chart again
+      this.render();
+    },
     calculateDims: function () {
       let el = this.$el;
       let width = el.offsetWidth;
@@ -406,9 +425,7 @@ export default {
       }
     },
     handleResize: function () {
-      d3.select(this.$refs.svg).selectAll("*").remove(); // clear old chart
-      this.calculateDims();
-      this.render();
+      this.updateChart();
     },
     debounce: function (func, delay) {
       let timeout;

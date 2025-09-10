@@ -119,12 +119,32 @@ export default {
 
   &.full-edge {
     .vfm__content {
+      padding: 0;
       width: 100%;
       top: 128px;
       height: calc(100% - 128px);
+      position: absolute;
+      overflow-y: auto;
       background-color: var(--color-bg-1);
       border-radius: 0;
       border-top: var(--color-bg-3) solid 1px;
+
+      &::-webkit-scrollbar {
+        width: 10px;
+      }
+
+      &::-webkit-scrollbar-thumb {
+        background: hsl(var(--hue-p), 6%, 18%);
+        border-radius: 0;
+      }
+
+      &::-webkit-scrollbar-thumb:hover {
+        background: hsl(var(--hue-p), 6%, 18%);
+      }
+
+      &::-webkit-scrollbar-track {
+        background: transparent;
+      }
     }
     .c-modal-close {
       display: none;
@@ -173,24 +193,6 @@ export default {
         width: 100%;
         top: 80px;
         height: calc(100% - 80px);
-        overflow-y: auto;
-
-        &::-webkit-scrollbar {
-          width: 10px;
-        }
-
-        &::-webkit-scrollbar-thumb {
-          background: hsl(var(--hue-p), 6%, 18%);
-          border-radius: 0;
-        }
-
-        &::-webkit-scrollbar-thumb:hover {
-          background: hsl(var(--hue-p), 6%, 18%);
-        }
-
-        &::-webkit-scrollbar-track {
-          background: transparent;
-        }
       }
     }
   }

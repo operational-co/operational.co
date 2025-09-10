@@ -8,7 +8,7 @@
         yourself a GST csv.
       </p>
     </header>
-    <Preview></Preview>
+    <Preview :schema="schema" :type="type"></Preview>
   </div>
 </template>
 
@@ -17,6 +17,11 @@ import Preview from "./preview.vue";
 export default {
   components: {
     Preview,
+  },
+
+  props: {
+    schema: {},
+    type: {},
   },
 };
 </script>
