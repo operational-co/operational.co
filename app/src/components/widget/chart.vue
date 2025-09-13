@@ -3,7 +3,8 @@
     <Header :title="title" :metric="metric" :subtitle="subtitle"></Header>
 
     <div class="c-widget__inner">
-      <Chart :data="data" :type="widget.type"></Chart>
+      <Chart v-if="data" :data="data" :type="widget.type"></Chart>
+      <span v-else> No data </span>
     </div>
   </div>
 </template>
@@ -28,6 +29,12 @@ export default {
 
   computed: {
     metric: function () {
+      if (!this.widget.data) {
+        return;
+      }
+      if (this.widget.data.length === 0) {
+        return;
+      }
       if (this.widget.type === "STAT") return;
 
       const schema = this.widget.schema || {};
@@ -61,6 +68,12 @@ export default {
       return value;
     },
     data: function () {
+      if (!this.widget.data) {
+        return;
+      }
+      if (this.widget.data.length === 0) {
+        return;
+      }
       if (this.widget.type === "STAT") return;
 
       const src = this.widget?.data || [];

@@ -36,8 +36,6 @@ const component = {
       data: widget,
     });
 
-    console.log(widget);
-
     return widget;
   },
 

@@ -97,9 +97,12 @@ export default {
     widgets: function () {
       let widgets = this.dashboard.widgets;
 
-      widgets = widgets.map((widget) => {
-        return widget;
-      });
+      // widgets = widgets.map((widget) => {
+      //   if (widget.type === "LINE") {
+      //     widget.w = 4;
+      //   }
+      //   return widget;
+      // });
 
       return widgets.slice();
     },

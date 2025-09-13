@@ -98,6 +98,8 @@ const ingest = async (req, res) => {
   }
 };
 
+const dashboardWidgetPush = async function (req, res) {};
+
 const identifySchema = {
   schema: {
     userId: { type: "string" },
@@ -152,6 +154,17 @@ const ingestSchema = {
     },
     contextType: {
       type: "boolean",
+    },
+  },
+};
+
+const dashboardWidgetSchema = {
+  schema: {
+    widget: {
+      type: "object",
+    },
+    data: {
+      type: "any",
     },
   },
 };
@@ -211,6 +224,12 @@ router.post("/identify", schemaMiddleware(identifySchema), identify);
 
 router.post(`/log`, preSchemaValidation, schemaMiddleware(ingestSchema), ingest);
 router.post(`/ingest`, schemaMiddleware(ingestSchema), ingest);
+
+router.post(
+  `/dashboards/:dashboardId/widgets/:widgetId`,
+  schemaMiddleware(dashboardWidgetSchema),
+  dashboardWidgetPush,
+);
 
 // Export the router
 export default router;

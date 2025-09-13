@@ -1,12 +1,17 @@
 <template>
   <div class="c-picker-header">
     <header>
-      <h3>Action button</h3>
-      <p>Use Action buttons to trigger webhooks on your server.</p>
-      <p>
-        For instance, you can pair it up with a function on your server to generate and mail
-        yourself a GST csv.
-      </p>
+      <template v-if="type === 'ACTION'">
+        <h3>Action button</h3>
+        <p>Use Action buttons to trigger webhooks on your server.</p>
+        <p>
+          For instance, you can pair it up with a function on your server to generate and mail
+          yourself a GST csv.
+        </p>
+      </template>
+      <template v-if="type === 'LINE'">
+        <h3>Line chart</h3>
+      </template>
     </header>
     <Preview :schema="schema" :type="type"></Preview>
   </div>
@@ -31,6 +36,7 @@ export default {
   display: grid;
   grid-template-columns: 1fr 1fr;
   align-items: center;
+  margin-bottom: 1rem;
 
   header {
     padding-right: 1rem;

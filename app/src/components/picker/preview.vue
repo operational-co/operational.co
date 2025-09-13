@@ -86,8 +86,8 @@ export default {
 
 <style lang="scss">
 .c-picker-preview {
-  width: 300px;
-  height: 300px;
+  width: 340px;
+  height: 340px;
   background-color: var(--color-bg-4);
   border-radius: 1rem;
   display: flex;
@@ -101,7 +101,7 @@ export default {
 
   &.lg {
     .c-widget {
-      width: 300px;
+      width: 340px;
       height: 340px;
     }
   }

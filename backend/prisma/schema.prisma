@@ -164,7 +164,7 @@ model Workspace {
 
   invites Invite[] @relation("invite")
 
-  dsahboards Dashboard[] @relation("dashboards")
+  dashboards Dashboard[] @relation("dashboards")
 
   actions Json?
 
@@ -352,6 +352,11 @@ enum WidgetType {
   ACTION
 }
 
+enum SourceType {
+  EVENTS
+  PUSH
+}
+
 model Widget {
   id          Int       @id @default(autoincrement())
   dashboard   Dashboard @relation(fields: [dashboardId], references: [id], onDelete: Cascade)
@@ -359,6 +364,10 @@ model Widget {
 
   // how to render
   type WidgetType
+
+  source SourceType @default(EVENTS)
+
+  points WidgetPoint[] @relation("points")
 
   // position on the dashboard
   x Int @default(0)
@@ -371,7 +380,20 @@ model Widget {
   // blueprint of the widget's data collection and how it should look
   schema Json?
 
+  createdAt DateTime? @default(now())
+
   @@index([dashboardId])
+}
+
+model WidgetPoint {
+  id Int @id @default(autoincrement())
+
+  widget   Widget @relation("points", fields: [widgetId], references: [id], onDelete: Cascade)
+  widgetId Int
+
+  data Json?
+
+  createdAt DateTime @default(now())
 }
 
 enum CouponStatus {

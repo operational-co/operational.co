@@ -65,6 +65,7 @@
       :active="showWidgetCreate"
       @onClose="showWidgetCreate = false"
     ></ModalWidgetCreate>
+    <ModalEditWidget></ModalEditWidget>
   </div>
 </template>
 
@@ -78,12 +79,14 @@ import { dashboardsApi } from "@/store/dashboards.js";
 
 import Dashboard from "./dashboard.vue";
 import ModalWidgetCreate from "./modal-widget-create.vue";
+import ModalEditWidget from "./modal-edit-widget.vue";
 
 export default {
   components: {
     Constrain,
     Dashboard,
     ModalWidgetCreate,
+    ModalEditWidget,
   },
 
   data: function () {

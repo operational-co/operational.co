@@ -97,7 +97,7 @@ export default {
 
   > article {
     margin-top: auto;
-    display: block;
+    display: block !important;
 
     > strong {
       display: block;

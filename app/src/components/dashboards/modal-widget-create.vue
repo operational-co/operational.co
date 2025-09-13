@@ -1,6 +1,6 @@
 <template>
   <Modal type="full-edge" klass="m-widget-create" :active="active" @onClose="onClose">
-    <Picker></Picker>
+    <Picker @onClose="onClose"></Picker>
   </Modal>
 </template>
 

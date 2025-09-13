@@ -1,6 +1,6 @@
 <template>
   <Modal klass="m-edit-widget" :active="active" @onClose="onClose" :closeable="closeable">
-    <h2>Create new project</h2>
+    <h2>Edit Widget</h2>
   </Modal>
 </template>
 
@@ -21,28 +21,34 @@ export default {
   data: function () {
     return {
       code: "",
-      closeable: false,
+      closeable: true,
       activated: false,
       error: false,
+      active: false,
     };
   },
 
-  props: {
-    active: {
-      type: Boolean,
-      default: false,
+  watch: {
+    editId: function () {
+      if (this.editId) {
+        this.active = true;
+      } else {
+        this.active = false;
+      }
     },
   },
 
-  watch: {},
-
   computed: {
+    editId: function () {
+      return this.$store.dashboards.editId;
+    },
     switchWorkspace: function () {},
   },
 
   methods: {
     onClose: function () {
-      this.$emit("onClose");
+      console.log("cock");
+      this.$store.dashboards.setEdit(false);
     },
   },
 

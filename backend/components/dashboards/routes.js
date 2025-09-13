@@ -54,8 +54,6 @@ const deleteWidget = async (req, res) => {
     workspaceId: parseInt(res.locals.user.primaryWorkspace),
   };
 
-  console.log(params);
-
   try {
     const widget = await component.deleteWidget(params);
     return res.send(widget);
@@ -121,6 +119,10 @@ const createWidgetSchema = {
     },
     schema: {
       type: "object",
+    },
+    source: {
+      type: "string",
+      default: "EVENTS",
     },
     dashboardId: {
       type: "number",

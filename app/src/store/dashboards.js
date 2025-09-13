@@ -34,7 +34,7 @@ const api = {
   createWidget: async function (form = {}) {
     try {
       const res = await http.post(`/dashboards/${form.dashboardId}/widgets`, form);
-      return res.data || [];
+      return res.data || null;
     } catch (err) {
       throw err;
     }
@@ -90,6 +90,8 @@ export const useDashboardsStore = defineStore(config.name, {
 
       latestLock: false,
 
+      editId: null,
+
       // a fully realized dashboard with widgets and data
       currentDashboard: null,
     };
@@ -129,7 +131,7 @@ export const useDashboardsStore = defineStore(config.name, {
     async createWidget(form) {
       try {
         const res = await api.createWidget(form);
-        return res.data || [];
+        return res || null;
       } catch (err) {
         throw err;
       }
@@ -154,6 +156,10 @@ export const useDashboardsStore = defineStore(config.name, {
       }
 
       return true;
+    },
+
+    setEdit: function (editId) {
+      this.editId = editId;
     },
   },
 });
