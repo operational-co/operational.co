@@ -1,6 +1,6 @@
 <template>
   <Modal klass="m-edit-widget" :active="active" @onClose="onClose" :closeable="closeable">
-    <h2>Edit Widget</h2>
+    <EditWidget></EditWidget>
   </Modal>
 </template>
 
@@ -11,11 +11,14 @@ import FormCreateWorkspace from "@operational.co/components/form/form-create-wor
 
 import { workspaceApi } from "@/store/workspace.js";
 
+import EditWidget from "./edit-widget.vue";
+
 export default {
   components: {
     Modal,
     Docs,
     FormCreateWorkspace,
+    EditWidget,
   },
 
   data: function () {
@@ -42,12 +45,10 @@ export default {
     editId: function () {
       return this.$store.dashboards.editId;
     },
-    switchWorkspace: function () {},
   },
 
   methods: {
     onClose: function () {
-      console.log("cock");
       this.$store.dashboards.setEdit(false);
     },
   },
@@ -57,9 +58,10 @@ export default {
 </script>
 
 <style lang="scss">
-.m-create-workspace {
+.m-edit-widget {
   .vfm__content {
     padding: var(--spacer-sm);
+    width: 900px;
   }
 
   h2 {

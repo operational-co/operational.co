@@ -1,30 +1,40 @@
 <template>
   <div class="c-picker-schema-line">
+    <main>
+      <InputText
+        label="Widget title"
+        placeholder="eg: New signups"
+        v-model:value="title"
+      ></InputText>
+      <InputSelect
+        label="Metric value"
+        v-model:value="metric"
+        :options="metricOptions"
+      ></InputSelect>
+      <InputSelect label="Duration" v-model:value="date" :options="dateOptions"></InputSelect>
+      <DataSelector
+        v-for="(dataSelector, i) in dataSelectors"
+        :key="i"
+        :i="i"
+        :dataSelector="dataSelector"
+        :allowAdd="allowAdd(dataSelector, i)"
+        :allowDelete="allowDelete(dataSelector, i)"
+        :labelText="`Dataset ${i + 1}`"
+        @add="onAdd"
+        @delete="onDelete(i)"
+        @update="onUpdate"
+      ></DataSelector>
+      <button :disabled="processing" type="button" class="btn btn-primary" @click="onSave">
+        <span v-if="processing" class="c-spinner"></span>
+        <span>Update </span>
+      </button>
+      <div class="c-input c-form__errors" v-if="errors && errors.length > 0">
+        <span role="alert" v-for="(error, i) in errors" :key="i">
+          {{ error }}
+        </span>
+      </div>
+    </main>
     <Header :schema="schema" type="LINE"></Header>
-    <InputText label="Widget title" placeholder="eg: New signups" v-model:value="title"></InputText>
-    <InputSelect label="Metric value" v-model:value="metric" :options="metricOptions"></InputSelect>
-    <InputSelect label="Duration" v-model:value="date" :options="dateOptions"></InputSelect>
-    <DataSelector
-      v-for="(dataSelector, i) in dataSelectors"
-      :key="i"
-      :i="i"
-      :dataSelector="dataSelector"
-      :allowAdd="allowAdd(dataSelector, i)"
-      :allowDelete="allowDelete(dataSelector, i)"
-      :labelText="`Dataset ${i + 1}`"
-      @add="onAdd"
-      @delete="onDelete(i)"
-      @update="onUpdate"
-    ></DataSelector>
-    <button :disabled="processing" type="button" class="btn btn-primary" @click="onSave">
-      <span v-if="processing" class="c-spinner"></span>
-      <span>Save </span>
-    </button>
-    <div class="c-input c-form__errors" v-if="errors && errors.length > 0">
-      <span role="alert" v-for="(error, i) in errors" :key="i">
-        {{ error }}
-      </span>
-    </div>
   </div>
 </template>
 
@@ -88,7 +98,7 @@ export default {
   },
 
   props: {
-    dashboardId: {},
+    widgetId: {},
   },
 
   computed: {
@@ -159,12 +169,14 @@ export default {
         type: "LINE",
         w: 2,
         h: 2,
-        dashboardId: this.dashboardId,
+        widgetId: this.widgetId,
       };
 
+      console.log(form);
+
       try {
-        await this.$store.dashboards.createWidget(form);
-        this.$store.app.sendNotification(`Line chart widget added to dashboard!`);
+        await this.$store.dashboards.updateWidget(form);
+        this.$store.app.sendNotification(`Widget updated`);
         await new Promise((r) => setTimeout(r, 500));
         this.$router.push("/dashboards");
       } catch (err) {
@@ -193,4 +205,13 @@ export default {
 };
 </script>
 
-<style lang="scss"></style>
+<style lang="scss">
+.c-picker-schema-line {
+  display: grid;
+  grid-template-columns: 1fr 340px;
+
+  main {
+    padding-right: 1rem;
+  }
+}
+</style>

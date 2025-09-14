@@ -31,6 +31,15 @@ const api = {
     }
   },
 
+  updateWidget: async function (form = {}) {
+    try {
+      const res = await http.post(`/dashboards/update-widget/${form.widgetId}`, form);
+      return res.data || null;
+    } catch (err) {
+      throw err;
+    }
+  },
+
   createWidget: async function (form = {}) {
     try {
       const res = await http.post(`/dashboards/${form.dashboardId}/widgets`, form);
@@ -156,6 +165,15 @@ export const useDashboardsStore = defineStore(config.name, {
       }
 
       return true;
+    },
+
+    updateWidget: async function (form) {
+      try {
+        const res = await api.updateWidget(form);
+        return res || null;
+      } catch (err) {
+        throw err;
+      }
     },
 
     setEdit: function (editId) {

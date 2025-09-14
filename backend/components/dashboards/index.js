@@ -67,6 +67,25 @@ const component = {
     return { updated: toUpdate.length };
   },
 
+  async updateWidget(payload) {
+    console.log(payload);
+    const update = {
+      schema: payload.schema || {},
+    };
+    const widget = await prisma.widget.update({
+      where: {
+        id: payload.widgetId,
+      },
+      data: {
+        ...update,
+      },
+    });
+
+    console.log(widget);
+
+    return widget;
+  },
+
   async _assertDashboardAccess(workspaceId, dashboardId) {
     const dash = await prisma.dashboard.findFirst({
       where: { id: dashboardId, workspaceId: workspaceId },

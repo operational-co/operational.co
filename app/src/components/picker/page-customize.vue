@@ -44,11 +44,11 @@ export default {
       widthOptions: [
         {
           key: "2",
-          value: "2",
+          value: "2 tiles",
         },
         {
           key: "4",
-          value: "4",
+          value: "4 tiles",
         },
       ],
 

@@ -1,11 +1,11 @@
 <template>
   <div class="c-picker-breadcrumb">
     <router-link to="/dashboards">
-      <span> Create Widget </span>
+      <span> Select widget </span>
     </router-link>
 
     <router-link to="/picker">
-      <span> Customize </span>
+      <span> Setup widget </span>
     </router-link>
   </div>
 </template>

@@ -79,6 +79,21 @@ const runWidgetAction = async (req, res) => {
   }
 };
 
+const updateWidget = async (req, res) => {
+  let params = {
+    ...req.body,
+    widgetId: parseInt(req.params.widgetId),
+  };
+
+  try {
+    const widget = await component.updateWidget(params);
+    return res.send(widget);
+  } catch (err) {
+    console.log(err);
+    return res.status(400).send(err);
+  }
+};
+
 const getSchema = {
   schema: {},
 };
@@ -130,6 +145,21 @@ const createWidgetSchema = {
     },
   },
 };
+
+const updateWidgetSchema = {
+  schema: {
+    schema: {
+      type: "object",
+    },
+  },
+};
+
+router.post(
+  "/update-widget/:widgetId",
+  middlewareAuth,
+  middlewareSchema(updateWidgetSchema),
+  updateWidget,
+);
 
 router.get("/", middlewareAuth, middlewareSchema(getSchema), get);
 

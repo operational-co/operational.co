@@ -37,7 +37,7 @@
           </svg>
           <span> Move </span>
         </a>
-        <!-- <a href="#">
+        <a href="#" @click="onUpdate">
           <svg
             width="24"
             height="24"
@@ -59,7 +59,7 @@
             />
           </svg>
           <span> Update </span>
-        </a> -->
+        </a>
         <a href="#" @click="onRemove">
           <svg
             width="24"
@@ -120,6 +120,9 @@ export default {
   computed: {},
 
   methods: {
+    onUpdate: function () {
+      this.$store.dashboards.setEdit(this.widget.id);
+    },
     onRemove: function () {
       this.$emit("onRemove");
     },
