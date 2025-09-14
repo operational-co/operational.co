@@ -1,38 +1,40 @@
 <template>
   <div class="c-events-sidebar">
-    <strong>Categories</strong>
-    <section
-      :class="[{ active: currentCategory && cat.text === currentCategory }]"
-      v-for="(cat, i) in computedCategories"
-      :key="i"
-    >
-      <article v-if="cat.type === 'separator'">
-        <span>
-          {{ cat.text }}
-        </span>
-        <section
-          :class="[{ active: currentCategory && cat.text === currentCategory }]"
-          v-for="(cat, i) in cat.categories"
-          :key="i"
-        >
-          <a
-            :class="[{ active: currentCategory && cat.text === currentCategory }]"
-            href="#"
-            @click.prevent="filterCategory(cat)"
-          >
-            {{ cat.text }}
-          </a>
-        </section>
-      </article>
-      <a
-        v-else
+    <main>
+      <strong>Categories</strong>
+      <section
         :class="[{ active: currentCategory && cat.text === currentCategory }]"
-        href="#"
-        @click.prevent="filterCategory(cat)"
+        v-for="(cat, i) in computedCategories"
+        :key="i"
       >
-        {{ cat.text }}
-      </a>
-    </section>
+        <article v-if="cat.type === 'separator'">
+          <span>
+            {{ cat.text }}
+          </span>
+          <section
+            :class="[{ active: currentCategory && cat.text === currentCategory }]"
+            v-for="(cat, i) in cat.categories"
+            :key="i"
+          >
+            <a
+              :class="[{ active: currentCategory && cat.text === currentCategory }]"
+              href="#"
+              @click.prevent="filterCategory(cat)"
+            >
+              {{ cat.text }}
+            </a>
+          </section>
+        </article>
+        <a
+          v-else
+          :class="[{ active: currentCategory && cat.text === currentCategory }]"
+          href="#"
+          @click.prevent="filterCategory(cat)"
+        >
+          {{ cat.text }}
+        </a>
+      </section>
+    </main>
   </div>
 </template>
 
@@ -106,11 +108,17 @@ export default {
 <style lang="scss">
 .c-events-sidebar {
   margin-top: 0.5rem;
-  padding-right: 1rem;
+  padding-right: calc(var(--margin) * 2);
 
-  > strong {
-    display: block;
-    margin-bottom: calc(0.5rem + 2px);
+  main {
+    background-color: var(--color-bg-2);
+    border-radius: 8px;
+    padding: 0.5rem;
+
+    > strong {
+      display: block;
+      margin-bottom: 0.5rem;
+    }
   }
 
   a {

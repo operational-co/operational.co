@@ -3,7 +3,7 @@
     <div :class="['ptr', { active: pullActive === true }]">
       <span>Refreshing page...</span>
     </div>
-    <Constrain size="lg">
+    <Constrain size="xx">
       <section class="c-events__header">
         <h3>Events</h3>
         <Toggle :listening="listening" @onToggle="onToggle"></Toggle>

@@ -215,7 +215,7 @@ export default {
 
 <style lang="scss">
 .c-search {
-  padding-top: var(--margin-lg);
+  padding-top: 0.5rem;
   width: 100%;
   position: relative;
   top: 0;
