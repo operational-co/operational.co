@@ -99,6 +99,7 @@ export default {
 
   props: {
     widgetId: {},
+    currentWidget: {},
   },
 
   computed: {
@@ -201,6 +202,16 @@ export default {
       delete newObj.i;
       this.dataSelectors.splice(data.i, 1, newObj);
     },
+  },
+
+  mounted: function () {
+    if (this.currentWidget) {
+      let schema = this.currentWidget.schema;
+      this.title = schema.title;
+      this.metric = schema.metric;
+      this.date = schema.date;
+      this.dataSelectors = schema.dataSelectors;
+    }
   },
 };
 </script>

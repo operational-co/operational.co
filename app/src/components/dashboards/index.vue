@@ -115,7 +115,7 @@ export default {
   },
 
   mounted: async function () {
-    const dashboard = await dashboardsApi.find();
+    const dashboard = await this.$store.dashboards.getCurrentDashboard(); //dashboardsApi.find();
     this.dashboard = dashboard;
   },
 };

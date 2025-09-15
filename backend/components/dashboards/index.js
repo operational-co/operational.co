@@ -67,7 +67,7 @@ const component = {
     return { updated: toUpdate.length };
   },
 
-  async updateWidget(payload) {
+  async updateWidget(payload, workspaceId) {
     console.log(payload);
     const update = {
       schema: payload.schema || {},
@@ -81,7 +81,10 @@ const component = {
       },
     });
 
-    console.log(widget);
+    // refresh widget data
+    const data = await Dashboard.getSingleWidgetData(widget, workspaceId);
+
+    widget.data = data;
 
     return widget;
   },

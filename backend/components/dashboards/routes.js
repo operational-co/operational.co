@@ -85,8 +85,10 @@ const updateWidget = async (req, res) => {
     widgetId: parseInt(req.params.widgetId),
   };
 
+  const workspaceId = parseInt(res.locals.user.primaryWorkspace);
+
   try {
-    const widget = await component.updateWidget(params);
+    const widget = await component.updateWidget(params, workspaceId);
     return res.send(widget);
   } catch (err) {
     console.log(err);

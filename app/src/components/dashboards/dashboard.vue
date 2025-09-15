@@ -164,8 +164,6 @@ export default {
       });
 
       const condition = await this.$store.dashboards.updateWidgets(this.dashboard.id, widgets);
-
-      console.log(condition);
     },
 
     setupGrid: function () {

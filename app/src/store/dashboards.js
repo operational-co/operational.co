@@ -169,8 +169,29 @@ export const useDashboardsStore = defineStore(config.name, {
 
     updateWidget: async function (form) {
       try {
-        const res = await api.updateWidget(form);
-        return res || null;
+        const widget = await api.updateWidget(form);
+        console.log(widget);
+        // also update currentdashboard
+
+        let dashboard = this.currentDashboard;
+        if (!dashboard) {
+          return widget;
+        }
+
+        if (dashboard.id === widget.dashboardId) {
+          for (let i = 0; i < dashboard.widgets.length; i++) {
+            if (dashboard.widgets[i].id === widget.id) {
+              dashboard.widgets[i] = {
+                ...widget,
+              };
+            }
+          }
+          this.currentDashboard = {
+            ...dashboard,
+          };
+        }
+
+        return widget || null;
       } catch (err) {
         throw err;
       }
@@ -178,6 +199,16 @@ export const useDashboardsStore = defineStore(config.name, {
 
     setEdit: function (editId) {
       this.editId = editId;
+    },
+
+    getCurrentDashboard: async function () {
+      const dashboard = await api.find();
+
+      if (dashboard) {
+        this.currentDashboard = dashboard;
+      }
+
+      return dashboard;
     },
   },
 });

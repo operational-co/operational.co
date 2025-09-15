@@ -27,28 +27,35 @@ class Dashboard extends Model {
 
     for (let i = 0; i < widgets.length; i++) {
       const w = widgets[i];
-      // use widget's own schema.date as the range key (e.g., "7 days")
-      const rangeKey = w.schema && w.schema.date ? String(w.schema.date) : "default-range";
-      const cacheKey = this._cacheKey(w, dash.workspaceId, rangeKey);
 
-      let data = widgetCache.get(cacheKey);
-      if (data === undefined) {
-        if (w.type === "STAT") {
-          data = await Db.getStatData(w.schema, dash.workspaceId);
-        } else if (w.type === "LINE") {
-          data = await Db.getLineData(w.schema, dash.workspaceId);
-        } else if (w.type === "ACTION") {
-          data = {};
-        } else {
-          data = null;
-        }
-        widgetCache.set(cacheKey, data);
-      }
+      const data = await this.getSingleWidgetData(w, dash.workspaceId);
 
       results.push({ ...w, data });
     }
 
     return { dashboardId: dash.id, widgets: results };
+  }
+
+  async getSingleWidgetData(w, workspaceId) {
+    // use widget's own schema.date as the range key (e.g., "7 days")
+    const rangeKey = w.schema && w.schema.date ? String(w.schema.date) : "default-range";
+    const cacheKey = this._cacheKey(w, workspaceId, rangeKey);
+
+    let data = widgetCache.get(cacheKey);
+    if (data === undefined) {
+      if (w.type === "STAT") {
+        data = await Db.getStatData(w.schema, workspaceId);
+      } else if (w.type === "LINE") {
+        data = await Db.getLineData(w.schema, workspaceId);
+      } else if (w.type === "ACTION") {
+        data = {};
+      } else {
+        data = null;
+      }
+      widgetCache.set(cacheKey, data);
+    }
+
+    return data;
   }
 
   _cacheKey(widget, workspaceId, rangeKey) {

@@ -73,7 +73,11 @@
               fill="currentColor"
             />
           </svg>
+          <span> Remove </span>
         </a>
+        <article>
+          <span> Last updated: 22nd July 11:40pm </span>
+        </article>
       </div>
 
       <div class="c-widget__body">
@@ -142,11 +146,6 @@ export default {
   --theme-color-muted: hsl(var(--hue-p), 10%, 50%);
   --theme-bg-color: hsl(var(--hue-p), 10%, 60%);
 
-  &__wrap {
-    position: relative;
-    height: 100%;
-  }
-
   &__inner {
     padding: var(--margin-lg);
     padding-top: 0;
@@ -155,6 +154,11 @@ export default {
   &__body {
     height: 100%;
     transition: opacity var(--transition-time) linear;
+  }
+
+  &__wrap {
+    position: relative;
+    height: 100%;
   }
 
   &__handle {
@@ -170,12 +174,13 @@ export default {
       lch(0 0 0 / 0.32) 0px 0px 1px;
     top: 16px;
     left: 50%;
+    width: 140px;
     border-radius: 8px;
     overflow: hidden;
 
     display: flex;
+    flex-direction: column;
     justify-content: center;
-    align-items: center;
 
     opacity: 0;
     transform: scale(0) translateX(-50%);
@@ -187,10 +192,13 @@ export default {
       min-width: 32px;
       padding: 6px 4px;
       display: inline-flex;
-      justify-content: center;
       align-items: center;
       color: var(--color-font);
       user-select: none;
+
+      &:first-child {
+        justify-content: center;
+      }
 
       > svg {
         width: 20px;
@@ -208,13 +216,21 @@ export default {
       }
 
       &:not(:last-child) {
-        border-right: var(--color-bg-5) solid 1px;
+        border-bottom: var(--color-bg-5) solid 1px;
       }
 
       &:hover,
       &:active {
         background-color: var(--color-bg-5);
       }
+    }
+
+    article {
+      padding: 0.25rem;
+      font-weight: 450;
+      font-size: var(--font-size-xxs);
+      line-height: 1.3;
+      opacity: 0.85;
     }
   }
 
