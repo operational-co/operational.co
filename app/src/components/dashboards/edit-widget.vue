@@ -2,23 +2,24 @@
   <div class="c-dashboards-edit-widget">
     <h3>Edit widget</h3>
     <template v-if="editId && currentWidget">
-      <!-- <Webhook></Webhook> -->
-      {{ currentWidget.type }}
-      <SchemaLine
-        v-if="currentWidget.type === 'LINE'"
-        :currentWidget="currentWidget"
-        :widgetId="editId"
-      ></SchemaLine>
-      <SchemaStat
-        v-if="currentWidget.type === 'STAT'"
-        :currentWidget="currentWidget"
-        :widgetId="editId"
-      ></SchemaStat>
-      <SchemaAction
-        v-if="currentWidget.type === 'ACTION'"
-        :currentWidget="currentWidget"
-        :widgetId="editId"
-      ></SchemaAction>
+      <Webhook v-if="currentWidget.source && currentWidget.source === 'PUSH'"></Webhook>
+      <template v-if="currentWidget.source && currentWidget.source === 'EVENTS'">
+        <SchemaLine
+          v-if="currentWidget.type === 'LINE'"
+          :currentWidget="currentWidget"
+          :widgetId="editId"
+        ></SchemaLine>
+        <SchemaStat
+          v-if="currentWidget.type === 'STAT'"
+          :currentWidget="currentWidget"
+          :widgetId="editId"
+        ></SchemaStat>
+        <SchemaAction
+          v-if="currentWidget.type === 'ACTION'"
+          :currentWidget="currentWidget"
+          :widgetId="editId"
+        ></SchemaAction>
+      </template>
     </template>
   </div>
 </template>
@@ -70,5 +71,9 @@ export default {
 <style lang="scss">
 .c-dashboards-edit-widget {
   padding: 1.5rem;
+
+  @media screen and (max-width: 576px) {
+    padding: 0;
+  }
 }
 </style>

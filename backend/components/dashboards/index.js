@@ -68,7 +68,6 @@ const component = {
   },
 
   async updateWidget(payload, workspaceId) {
-    console.log(payload);
     const update = {
       schema: payload.schema || {},
     };

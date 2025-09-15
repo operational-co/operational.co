@@ -76,6 +76,8 @@ export default {
       }
       if (this.widget.type === "STAT") return;
 
+      const aggregate = this.widget.schema.aggregate || "CUMULATIVE";
+
       const src = this.widget?.data || [];
 
       const datas = src
@@ -83,9 +85,11 @@ export default {
         .map((d) => {
           let acc = 0;
 
+          const isInc = aggregate === "INCREMENTAL";
+
           const points = d.data.map((datum) => {
             const baseY = Number(datum.y) || 0;
-            const isInc = String(d.aggregate || "").toUpperCase() === "INCREMENTAL";
+
             const y = isInc ? (acc += baseY) : baseY;
 
             return {

@@ -12,6 +12,11 @@
         :options="metricOptions"
       ></InputSelect>
       <InputSelect label="Duration" v-model:value="date" :options="dateOptions"></InputSelect>
+      <InputSelect
+        label="Chart aggregate by"
+        v-model:value="aggregate"
+        :options="aggregateOptions"
+      ></InputSelect>
       <DataSelector
         v-for="(dataSelector, i) in dataSelectors"
         :key="i"
@@ -57,6 +62,7 @@ export default {
       title: "",
       metric: "TOTAL",
       date: "7 days",
+      aggregate: "CUMULATIVE",
       dataSelectors: [
         {
           selector: "event",
@@ -91,6 +97,16 @@ export default {
           value: "1 year",
         },
       ],
+      aggregateOptions: [
+        {
+          key: "CUMULATIVE",
+          value: "CUMULATIVE",
+        },
+        {
+          key: "INCREMENTAL",
+          value: "INCREMENTAL",
+        },
+      ],
       limit: 4,
       errors: [],
       processing: false,
@@ -108,6 +124,7 @@ export default {
         title: this.title,
         metric: this.metric,
         date: this.date,
+        aggregate: this.aggregate,
         dataSelectors: this.dataSelectors,
       };
 
@@ -162,10 +179,7 @@ export default {
 
       const form = {
         schema: {
-          title: this.title,
-          metric: this.metric,
-          date: this.date,
-          dataSelectors: this.dataSelectors,
+          ...this.schema,
         },
         type: "LINE",
         w: 2,
@@ -202,7 +216,7 @@ export default {
     },
   },
 
-  mounted: function () {
+  created: function () {
     if (this.currentWidget) {
       let schema = this.currentWidget.schema;
       this.title = schema.title;
@@ -221,6 +235,18 @@ export default {
 
   main {
     padding-right: 1rem;
+  }
+
+  @media screen and (max-width: 576px) {
+    display: block;
+
+    main {
+      padding-right: 0;
+    }
+
+    .c-picker-header {
+      display: none;
+    }
   }
 }
 </style>

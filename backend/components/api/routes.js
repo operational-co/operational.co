@@ -3,6 +3,7 @@ import schemaMiddleware from "#lib/schema-middleware.js";
 import component from "./index.js";
 import Ingestion from "#services/ingestion/index.js";
 import config from "#lib/config.js";
+import prisma from "#lib/prisma.js";
 
 // Create a new router instance
 const router = express.Router();
@@ -98,7 +99,36 @@ const ingest = async (req, res) => {
   }
 };
 
-const dashboardWidgetPush = async function (req, res) {};
+const dashboardWidgetPush = async function (req, res) {
+  try {
+    const widgetId = Number(req.params.widgetId);
+    if (!Number.isInteger(widgetId) || widgetId <= 0) {
+      return res.status(400).json({ error: "Invalid widgetId" });
+    }
+
+    // Verify the widget exists
+    const widget = await prisma.widget.findUnique({
+      where: { id: widgetId },
+      select: { id: true },
+    });
+    if (!widget) {
+      return res.status(404).json({ error: "Widget not found" });
+    }
+
+    // Persist the point
+    const point = await prisma.widgetPoint.create({
+      data: {
+        widgetId,
+        // Save whatever JSON the client sent as the point's data
+        data: req.body ?? {},
+      },
+    });
+
+    return res.status(201).json({ ok: true, data: point });
+  } catch (err) {
+    next(err);
+  }
+};
 
 const identifySchema = {
   schema: {
@@ -225,11 +255,7 @@ router.post("/identify", schemaMiddleware(identifySchema), identify);
 router.post(`/log`, preSchemaValidation, schemaMiddleware(ingestSchema), ingest);
 router.post(`/ingest`, schemaMiddleware(ingestSchema), ingest);
 
-router.post(
-  `/dashboards/:dashboardId/widgets/:widgetId`,
-  schemaMiddleware(dashboardWidgetSchema),
-  dashboardWidgetPush,
-);
+router.post(`/widgets/:widgetId`, schemaMiddleware(dashboardWidgetSchema), dashboardWidgetPush);
 
 // Export the router
 export default router;

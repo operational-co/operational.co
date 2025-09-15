@@ -213,5 +213,17 @@ export default {
   main {
     padding-right: 1rem;
   }
+
+  @media screen and (max-width: 576px) {
+    display: block;
+
+    main {
+      padding-right: 0;
+    }
+
+    .c-picker-header {
+      display: none;
+    }
+  }
 }
 </style>

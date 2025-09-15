@@ -62,10 +62,37 @@ export default {
   .vfm__content {
     padding: var(--spacer-sm);
     width: 900px;
+    height: 100%;
+    overflow-y: auto;
+
+    &::-webkit-scrollbar {
+      width: 10px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: hsl(var(--hue-p), 6%, 18%);
+      border-radius: 0;
+    }
+
+    &::-webkit-scrollbar-thumb:hover {
+      background: hsl(var(--hue-p), 6%, 18%);
+    }
+
+    &::-webkit-scrollbar-track {
+      background: transparent;
+    }
   }
 
   h2 {
     display: block;
+  }
+
+  @media screen and (max-width: 576px) {
+    padding: 0;
+    .vfm__content {
+      width: 100%;
+      border-radius: 0;
+    }
   }
 }
 </style>

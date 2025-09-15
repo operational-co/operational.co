@@ -6,7 +6,6 @@
     <div class="c-data-selector__wrap">
       <InputSelect v-model:value="selector" :options="selectorOptions"></InputSelect>
       <InputEvents v-model:value="text"></InputEvents>
-      <InputSelect v-model:value="aggregate" :options="aggregateOptions"></InputSelect>
       <div class="c-data-selector__actions">
         <a v-if="allowDelete" class="btn" @click="onDelete">
           <svg
@@ -70,18 +69,6 @@ export default {
         },
       ],
 
-      aggregate: "CUMULATIVE",
-      aggregateOptions: [
-        {
-          key: "CUMULATIVE",
-          value: "CUMULATIVE",
-        },
-        {
-          key: "INCREMENTAL",
-          value: "INCREMENTAL",
-        },
-      ],
-
       text: "",
     };
   },
@@ -127,7 +114,6 @@ export default {
     onUpdate: function () {
       let selector = {
         selector: this.selector,
-        aggregate: this.aggregate,
         text: this.text,
         i: this.i,
       };
@@ -135,7 +121,8 @@ export default {
     },
   },
 
-  mounted: function () {
+  created: function () {
+    console.log(this.dataSelector);
     this.selector = this.dataSelector.selector;
     this.condition = this.dataSelector.condition;
     this.text = this.dataSelector.text;

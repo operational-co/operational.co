@@ -119,6 +119,7 @@ export default {
           ...currentWidgetType.schema,
         },
         type: this.type,
+        source: this.source,
         w: parseInt(this.width),
         h: 2,
         dashboardId: this.dashboardId,

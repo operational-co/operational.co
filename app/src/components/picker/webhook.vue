@@ -1,13 +1,22 @@
 <template>
   <div class="c-picker-webhook">
-    <h3>Send your server's data</h3>
+    <p>
+      <strong>Send your server's data to us!</strong>
+    </p>
     <p>Here's how it works:</p>
-    <p>We ping your server at {{ webhook }}</p>
-    <p>You return data in a certain format.</p>
-    <p>If it works, we'll cache the data and ping your server every {{ duration }}</p>
+    <p>You push widget data at {{ webhook }}</p>
+    <p>You return data in a specific format.</p>
+    <p>If it works, we'll cache the data and show it inside the widget.</p>
     <strong> Quick start: </strong>
-    <p>Paste this code in your server:</p>
+    <p>Paste this code inside your server:</p>
     <Code :text="codeText"></Code>
+    <p>If you get a 201 status back, it worked!</p>
+    <p>
+      For complete docs, visit
+      <a href="https://operational.co/api/dashboard-introduction"
+        >operational.co/api/dashboard-introduction</a
+      >
+    </p>
   </div>
 </template>
 
@@ -25,16 +34,55 @@ export default {
 
   data: function () {
     return {
-      codeText: `
-      async function() {
-      }
-      `,
+      codeText: `import axios from "axios";
+
+const url = "https://api.operational.co/api/v1/widgets/28";
+
+const payload = {
+  title: "10,477",
+  subtitle: "Total user signups",
+  data: [
+    {
+      data: [
+        {
+          x: '2025-09-15T06:40:35+00:00',
+          y: 5,
+          label: '5 User signups today',
+        },
+      ],
+    },
+  ],
+};
+
+const res = await axios.post(url, payload, {
+  headers: {
+    "Content-Type": "application/json",
+    Authorization: "Bearer 123",
+  },
+});
+
+console.log('Status:', res.status)`,
+      data: {
+        title: "10,477",
+        subtitle: "Total user signups",
+        data: [
+          {
+            data: [
+              {
+                x: `2025-09-15T06:40:35+00:00`,
+                y: 5,
+                label: `5 User signups today`,
+              },
+            ],
+          },
+        ],
+      },
     };
   },
 
   computed: {
     webhook: function () {
-      return `https://api.swipekit.app/api`;
+      return `https://api.operational.co/`;
     },
     duration: function () {
       return `10 minutes`;

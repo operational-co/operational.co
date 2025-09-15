@@ -82,7 +82,7 @@ class Dashboard extends Model {
     // NOTE: `selectors` comes back as string in some drivers—parse safely below
 
     const rows = await prisma.$queryRawUnsafe(
-      "SELECT `id`, `type`,  `x`, `y`, `w`, `h`, `schema` FROM `Widget` WHERE `dashboardId` = ? ORDER BY `id` ASC",
+      "SELECT `id`, `type`,  `x`, `y`, `w`, `h`, `schema`, `source` FROM `Widget` WHERE `dashboardId` = ? ORDER BY `id` ASC",
       Number(dashboardId),
     );
 
@@ -94,6 +94,7 @@ class Dashboard extends Model {
       w: r.w,
       h: r.h,
       schema: r.schema,
+      source: r.source,
     }));
   }
 }
