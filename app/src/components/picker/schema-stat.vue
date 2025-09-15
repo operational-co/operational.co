@@ -1,37 +1,39 @@
 <template>
   <div class="c-picker-schema-stat">
+    <main>
+      <section>
+        <article>
+          <InputText
+            label="Icon"
+            :max="1"
+            v-model:value="item.icon"
+            placeholder="Enter a emoji"
+            :maxlength="2"
+          ></InputText>
+          <InputSelect label="Type" v-model:value="item.type" :options="typeOptions"></InputSelect>
+          <InputSelect
+            label="Type selection"
+            v-model:value="item.title"
+            :options="titleOptions"
+          ></InputSelect>
+          <InputSelect
+            label="Aggregate"
+            v-model:value="item.aggregrate"
+            :options="aggregrateOptions"
+          ></InputSelect>
+          <InputSelect
+            label="Duration"
+            v-model:value="item.date"
+            :options="dateOptions"
+          ></InputSelect>
+        </article>
+      </section>
+      <button :disabled="processing" type="button" class="btn btn-primary" @click="onSave">
+        <span v-if="processing" class="c-spinner"></span>
+        <span>Save </span>
+      </button>
+    </main>
     <Header :schema="schema" type="STAT"></Header>
-    <section>
-      <article>
-        <InputText
-          label="Icon"
-          :max="1"
-          v-model:value="item.icon"
-          placeholder="Enter a emoji"
-          :maxlength="2"
-        ></InputText>
-        <InputSelect label="Type" v-model:value="item.type" :options="typeOptions"></InputSelect>
-        <InputSelect
-          label="Type selection"
-          v-model:value="item.title"
-          :options="titleOptions"
-        ></InputSelect>
-        <InputSelect
-          label="Aggregate"
-          v-model:value="item.aggregrate"
-          :options="aggregrateOptions"
-        ></InputSelect>
-        <InputSelect
-          label="Duration"
-          v-model:value="item.date"
-          :options="dateOptions"
-        ></InputSelect>
-      </article>
-    </section>
-    <button :disabled="processing" type="button" class="btn btn-primary" @click="onSave">
-      <span v-if="processing" class="c-spinner"></span>
-      <span>Save </span>
-    </button>
   </div>
 </template>
 
@@ -103,7 +105,8 @@ export default {
   },
 
   props: {
-    dashboardId: {},
+    widgetId: {},
+    currentWidget: {},
   },
 
   computed: {
@@ -163,12 +166,12 @@ export default {
         type: "STAT",
         w: 1,
         h: 1,
-        dashboardId: this.dashboardId,
+        widgetId: this.widgetId,
       };
 
       try {
-        await this.$store.dashboards.createWidget(form);
-        this.$store.app.sendNotification(`Stat widget added to dashboard!`);
+        await this.$store.dashboards.updateWidget(form);
+        this.$store.app.sendNotification(`Widget updated`);
         await new Promise((r) => setTimeout(r, 500));
         this.$router.push("/dashboards");
       } catch (err) {
@@ -179,12 +182,21 @@ export default {
     },
   },
 
-  created: function () {},
+  mounted: function () {
+    if (this.currentWidget) {
+      this.item = {
+        ...this.currentWidget.schema,
+      };
+    }
+  },
 };
 </script>
 
 <style lang="scss">
 .c-picker-schema-stat {
+  display: grid;
+  grid-template-columns: 1fr 340px;
+
   label {
     display: block;
     margin-bottom: 0.25rem;
@@ -194,8 +206,12 @@ export default {
 
   article {
     display: grid;
-    grid-template-columns: max-content max-content 1fr max-content max-content;
+    grid-template-columns: max-content max-content 1fr;
     grid-column-gap: 0.5rem;
+  }
+
+  main {
+    padding-right: 1rem;
   }
 }
 </style>

@@ -173,8 +173,6 @@ export default {
         widgetId: this.widgetId,
       };
 
-      console.log(form);
-
       try {
         await this.$store.dashboards.updateWidget(form);
         this.$store.app.sendNotification(`Widget updated`);

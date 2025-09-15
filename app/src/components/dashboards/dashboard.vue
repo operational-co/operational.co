@@ -19,6 +19,7 @@
             :moving="moving"
             :widget="widget"
             @onRemove="onRemove(widget)"
+            @onStopEdit="onStopEdit"
           ></Widget>
         </div>
       </div>
@@ -118,6 +119,9 @@ export default {
   },
 
   methods: {
+    onStopEdit: function () {
+      this.$emit("onStopEdit");
+    },
     onRemove: async function (widget) {
       let form = {
         widgetId: widget.id,

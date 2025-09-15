@@ -60,7 +60,12 @@
         <span class="c-spinner"></span>
       </div>
     </Constrain>
-    <Dashboard ref="dashboard" :dashboard="dashboard" v-if="dashboard"></Dashboard>
+    <Dashboard
+      ref="dashboard"
+      :dashboard="dashboard"
+      v-if="dashboard"
+      @onStopEdit="onStopEdit"
+    ></Dashboard>
     <ModalWidgetCreate
       :active="showWidgetCreate"
       @onClose="showWidgetCreate = false"

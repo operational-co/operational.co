@@ -170,7 +170,6 @@ export const useDashboardsStore = defineStore(config.name, {
     updateWidget: async function (form) {
       try {
         const widget = await api.updateWidget(form);
-        console.log(widget);
         // also update currentdashboard
 
         let dashboard = this.currentDashboard;

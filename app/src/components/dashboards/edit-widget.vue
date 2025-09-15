@@ -1,10 +1,23 @@
 <template>
   <div class="c-dashboards-edit-widget">
     <h3>Edit widget</h3>
-    {{ currentWidget }}
     <template v-if="editId">
       <!-- <Webhook></Webhook> -->
-      <SchemaLine :currentWidget="currentWidget" :widgetId="editId"></SchemaLine>
+      <SchemaLine
+        v-if="currentWidget.type === 'LINE'"
+        :currentWidget="currentWidget"
+        :widgetId="editId"
+      ></SchemaLine>
+      <SchemaStat
+        v-if="currentWidget.type === 'STAT'"
+        :currentWidget="currentWidget"
+        :widgetId="editId"
+      ></SchemaStat>
+      <SchemaAction
+        v-if="currentWidget.type === 'ACTION'"
+        :currentWidget="currentWidget"
+        :widgetId="editId"
+      ></SchemaAction>
     </template>
   </div>
 </template>
@@ -12,11 +25,15 @@
 <script>
 import Webhook from "@/components/picker/webhook.vue";
 import SchemaLine from "@/components/picker/schema-line.vue";
+import SchemaStat from "@/components/picker/schema-stat.vue";
+import SchemaAction from "@/components/picker/schema-action.vue";
 
 export default {
   components: {
     Webhook,
     SchemaLine,
+    SchemaStat,
+    SchemaAction,
   },
 
   computed: {

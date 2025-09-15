@@ -1,41 +1,43 @@
 <template>
   <div class="c-picker-schema-action">
+    <main>
+      <section>
+        <article>
+          <InputText
+            v-model:value="item.title"
+            label="Widget title"
+            placeholder="What is this widget about?"
+          ></InputText>
+          <InputText
+            v-model:value="item.description"
+            label="Widget description"
+            placeholder="Instructions about what the button will do"
+          ></InputText>
+          <InputText
+            v-model:value="item.url"
+            placeholder="https://api.xyz.com/webhook"
+            label="Webhook url*"
+            :required="true"
+          ></InputText>
+          <InputText
+            v-model:value="item.buttonText"
+            placeholder="Press me"
+            label="Button text"
+          ></InputText>
+          <InputSwitch v-model:value="item.external" label="Is link external?"></InputSwitch>
+        </article>
+      </section>
+      <button :disabled="processing" type="button" class="btn btn-primary" @click="onSave">
+        <span v-if="processing" class="c-spinner"></span>
+        <span>Save </span>
+      </button>
+      <div class="c-input c-form__errors" v-if="errors && errors.length > 0">
+        <span role="alert" v-for="(error, i) in errors" :key="i">
+          {{ error }}
+        </span>
+      </div>
+    </main>
     <Header :schema="schema" type="ACTION"></Header>
-    <section>
-      <article>
-        <InputText
-          v-model:value="item.title"
-          label="Widget title"
-          placeholder="What is this widget about?"
-        ></InputText>
-        <InputText
-          v-model:value="item.description"
-          label="Widget description"
-          placeholder="Instructions about what the button will do"
-        ></InputText>
-        <InputText
-          v-model:value="item.url"
-          placeholder="https://api.xyz.com/webhook"
-          label="Webhook url*"
-          :required="true"
-        ></InputText>
-        <InputText
-          v-model:value="item.buttonText"
-          placeholder="Press me"
-          label="Button text"
-        ></InputText>
-        <InputSwitch v-model:value="item.external" label="Is link external?"></InputSwitch>
-      </article>
-    </section>
-    <button :disabled="processing" type="button" class="btn btn-primary" @click="onSave">
-      <span v-if="processing" class="c-spinner"></span>
-      <span>Save </span>
-    </button>
-    <div class="c-input c-form__errors" v-if="errors && errors.length > 0">
-      <span role="alert" v-for="(error, i) in errors" :key="i">
-        {{ error }}
-      </span>
-    </div>
   </div>
 </template>
 
@@ -111,7 +113,8 @@ export default {
   },
 
   props: {
-    dashboardId: {},
+    widgetId: {},
+    currentWidget: {},
   },
 
   computed: {
@@ -178,12 +181,12 @@ export default {
         type: "ACTION",
         w: 1,
         h: 1,
-        dashboardId: this.dashboardId,
+        widgetId: this.widgetId,
       };
 
       try {
-        await this.$store.dashboards.createWidget(form);
-        this.$store.app.sendNotification(`Action widget added to dashboard!`);
+        await this.$store.dashboards.updateWidget(form);
+        this.$store.app.sendNotification(`Widget updated`);
         await new Promise((r) => setTimeout(r, 500));
         this.$router.push("/dashboards");
       } catch (err) {
@@ -194,12 +197,21 @@ export default {
     },
   },
 
-  created: function () {},
+  mounted: function () {
+    if (this.currentWidget) {
+      this.item = {
+        ...this.currentWidget.schema,
+      };
+    }
+  },
 };
 </script>
 
 <style lang="scss">
 .c-picker-schema-action {
+  display: grid;
+  grid-template-columns: 1fr 340px;
+
   label {
     display: block;
     margin-bottom: 0.25rem;
@@ -207,7 +219,8 @@ export default {
     font-size: var(--font-size-sm);
   }
 
-  article {
+  main {
+    padding-right: 1rem;
   }
 }
 </style>

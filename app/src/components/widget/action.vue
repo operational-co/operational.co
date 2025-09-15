@@ -50,6 +50,18 @@ export default {
         }
       } catch (err) {
         console.log(err);
+        if (!err.success) {
+          if (err.error.message) {
+            this.$store.app.sendNotification({
+              message: err.error.message,
+              timer: 5000,
+            });
+          } else {
+            this.$store.app.sendNotification({
+              message: `Action had a error`,
+            });
+          }
+        }
       }
 
       this.processing = false;

@@ -75,9 +75,9 @@
           </svg>
           <span> Remove </span>
         </a>
-        <article>
+        <!-- <article>
           <span> Last updated: 22nd July 11:40pm </span>
-        </article>
+        </article> -->
       </div>
 
       <div class="c-widget__body">
@@ -126,6 +126,7 @@ export default {
   methods: {
     onUpdate: function () {
       this.$store.dashboards.setEdit(this.widget.id);
+      this.$emit("onStopEdit");
     },
     onRemove: function () {
       this.$emit("onRemove");
