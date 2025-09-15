@@ -139,8 +139,11 @@ export const useDashboardsStore = defineStore(config.name, {
 
     async createWidget(form) {
       try {
-        const res = await api.createWidget(form);
-        return res || null;
+        const widget = await api.createWidget(form);
+        if (widget && this.currentDashboard && this.currentDashboard.widgets) {
+          this.currentDashboard.widgets.push(widget);
+        }
+        return widget || null;
       } catch (err) {
         throw err;
       }

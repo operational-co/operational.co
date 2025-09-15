@@ -1,8 +1,9 @@
 <template>
   <div class="c-dashboards-edit-widget">
     <h3>Edit widget</h3>
-    <template v-if="editId">
+    <template v-if="editId && currentWidget">
       <!-- <Webhook></Webhook> -->
+      {{ currentWidget.type }}
       <SchemaLine
         v-if="currentWidget.type === 'LINE'"
         :currentWidget="currentWidget"

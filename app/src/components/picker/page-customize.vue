@@ -6,6 +6,10 @@
       <InputSelect label="Widget width" v-model:value="width" :options="widthOptions"></InputSelect>
     </template>
 
+    <template v-if="type === 'STAT'">
+      <InputSelect label="Data source" v-model:value="source" :options="dataSources"></InputSelect>
+    </template>
+
     <button :disabled="processing" type="button" class="btn btn-primary" @click="onSave">
       <span v-if="processing" class="c-spinner"></span>
       <span>Save </span>
@@ -114,11 +118,16 @@ export default {
         schema: {
           ...currentWidgetType.schema,
         },
-        type: "LINE",
+        type: this.type,
         w: parseInt(this.width),
         h: 2,
         dashboardId: this.dashboardId,
       };
+
+      if (this.type === "STAT" || this.type === "ACTION") {
+        form.w = 1;
+        form.h = 1;
+      }
 
       try {
         const widget = await this.$store.dashboards.createWidget(form);
