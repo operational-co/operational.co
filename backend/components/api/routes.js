@@ -100,34 +100,65 @@ const ingest = async (req, res) => {
   }
 };
 
-const dashboardWidgetPush = async function (req, res) {
+const dashboardWidgetPush = async function (req, res, next) {
   try {
+    // 1) Must have an authenticated user from your auth middleware
+    const authUser = res.locals.user;
+    if (!authUser?.id) {
+      return res.status(401).json({ error: "Unauthorized" });
+    }
+
+    // 2) Validate widgetId
     const widgetId = Number(req.params.widgetId);
     if (!Number.isInteger(widgetId) || widgetId <= 0) {
       return res.status(400).json({ error: "Invalid widgetId" });
     }
 
-    // Verify the widget exists
+    // 3) Load widget + its dashboard.workspaceId
     const widget = await prisma.widget.findUnique({
       where: { id: widgetId },
-      select: { id: true },
+      select: {
+        id: true,
+        dashboard: { select: { id: true, workspaceId: true } },
+      },
     });
     if (!widget) {
       return res.status(404).json({ error: "Widget not found" });
     }
+    const workspaceId = widget.dashboard?.workspaceId;
 
-    // Persist the point
+    // (Optional hardening) If API key is tied to a workspace, enforce it matches
+    if (req.keyInfo?.workspaceId && req.keyInfo.workspaceId !== workspaceId) {
+      return res.status(403).json({ error: "Forbidden" });
+    }
+
+    // 4) Ensure the user belongs to this workspace
+    // Uses the composite unique on @@unique([userId, workspaceId])
+    const membership = await prisma.workspaceUser.findUnique({
+      where: {
+        userId_workspaceId: {
+          userId: authUser.id,
+          workspaceId,
+        },
+      },
+      select: { id: true },
+    });
+    if (!membership) {
+      return res.status(403).json({ error: "Forbidden" });
+    }
+
+    // 5) Create the point
     const point = await prisma.widgetPoint.create({
       data: {
         widgetId,
-        // Save whatever JSON the client sent as the point's data
         data: req.body ?? {},
       },
     });
 
     return res.status(201).json({ ok: true, data: point });
   } catch (err) {
-    next(err);
+    console.error("[dashboardWidgetPush]", err);
+    return next(err);
   }
 };
 
