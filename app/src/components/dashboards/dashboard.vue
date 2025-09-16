@@ -1,7 +1,7 @@
 <template>
   <div :class="['c-dashboard', { moving: moving === true }]" v-if="dashboard">
     <div class="c-dashboard__wrap" v-if="widgets.length > 0">
-      <div class="grid-stack">
+      <div class="grid-stack" :key="gridKey">
         <div
           v-for="widget in widgets"
           class="grid-stack-item grid-stack-item-content"
@@ -72,6 +72,7 @@ export default {
   data: function () {
     return {
       grid: null,
+      gridKey: 0,
     };
   },
 
@@ -89,6 +90,8 @@ export default {
             row: rowCount,
           });
         }
+
+        this.resetGrid();
       },
       immediate: true,
     },
@@ -97,13 +100,6 @@ export default {
   computed: {
     widgets: function () {
       let widgets = this.dashboard.widgets;
-
-      // widgets = widgets.map((widget) => {
-      //   if (widget.type === "LINE") {
-      //     widget.w = 4;
-      //   }
-      //   return widget;
-      // });
 
       return widgets.slice();
     },
@@ -119,6 +115,16 @@ export default {
   },
 
   methods: {
+    resetGrid() {
+      try {
+        if (this.grid) this.grid.destroy(false); // clean listeners/attrs
+      } catch (e) {
+        // ignore
+      }
+      this.grid = null;
+      this.gridKey += 1; // force Vue to recreate the .grid-stack DOM
+      this.$nextTick(() => this.setupGrid()); // re-init after remount
+    },
     onStopEdit: function () {
       this.$emit("onStopEdit");
     },

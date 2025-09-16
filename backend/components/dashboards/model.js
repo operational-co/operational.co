@@ -43,16 +43,10 @@ class Dashboard extends Model {
 
     let data = widgetCache.get(cacheKey);
     if (data === undefined) {
-      if (w.type === "STAT") {
-        data = await Db.getStatData(w.schema, workspaceId);
-      } else if (w.type === "LINE") {
-        data = await Db.getLineData(w.schema, workspaceId);
-      } else if (w.type === "ACTION") {
-        data = {};
-      } else {
-        data = null;
+      data = await this.getWidgetData(w, workspaceId);
+      if (data) {
+        widgetCache.set(cacheKey, data);
       }
-      widgetCache.set(cacheKey, data);
     }
 
     return data;
@@ -96,6 +90,39 @@ class Dashboard extends Model {
       schema: r.schema,
       source: r.source,
     }));
+  }
+
+  async getWidgetData(widget, workspaceId) {
+    let data = null;
+
+    let source = widget.source;
+    let type = widget.type;
+    let schema = widget.schema;
+
+    if (source === "PUSH") {
+      const latestPoint = await prisma.widgetPoint.findFirst({
+        where: { widgetId: widget.id },
+        orderBy: [
+          { createdAt: "desc" }, // primary sort: newest first
+          { id: "desc" }, // tie-breaker
+        ],
+        select: { id: true, data: true, createdAt: true },
+      });
+
+      data = latestPoint ? (latestPoint.data ?? null) : null;
+    } else if (source === "EVENTS") {
+      if (type === "STAT") {
+        data = await Db.getStatData(schema, workspaceId);
+      } else if (type === "LINE") {
+        data = await Db.getLineData(schema, workspaceId);
+      } else if (type === "ACTION") {
+        data = {};
+      } else {
+        data = null;
+      }
+    }
+
+    return data;
   }
 }
 

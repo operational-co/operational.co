@@ -222,7 +222,16 @@ export default {
       this.title = schema.title;
       this.metric = schema.metric;
       this.date = schema.date;
-      this.dataSelectors = schema.dataSelectors;
+      if (schema.dataSelectors && schema.dataSelectors.length > 0) {
+        this.dataSelectors = schema.dataSelectors;
+      } else {
+        this.dataSelectors = [
+          {
+            selector: "event",
+            text: "",
+          },
+        ];
+      }
     }
   },
 };

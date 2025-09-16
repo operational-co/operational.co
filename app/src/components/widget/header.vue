@@ -1,11 +1,7 @@
 <template>
   <div class="c-widget-header">
-    <span class="c-widget-header__byline"> {{ title }} </span>
-    <h3 class="c-widget-header__title">{{ formatNumberWithCommas(metric) }}</h3>
-    <!-- <span class="c-widget-header__subtitle" v-if="subtitle">
-      {{ subtitle }}
-    </span> -->
-    <div class="c-widget-header__menu"></div>
+    <span class="c-widget-header__byline"> {{ subtitle }} </span>
+    <h3 class="c-widget-header__title">{{ title }}</h3>
   </div>
 </template>
 
@@ -13,9 +9,8 @@
 export default {
   props: {
     title: {},
-    metric: {},
     subtitle: {
-      default: "10th Sep - 21st Sep",
+      default: "",
     },
   },
 

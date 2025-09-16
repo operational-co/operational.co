@@ -1,6 +1,6 @@
 <template>
   <div class="c-widget-chart">
-    <Header :title="title" :metric="metric" :subtitle="subtitle"></Header>
+    <Header :title="title" :subtitle="subtitle"></Header>
 
     <div class="c-widget__inner">
       <Chart v-if="data" :data="data" :type="widget.type"></Chart>
@@ -28,20 +28,25 @@ export default {
   },
 
   computed: {
-    metric: function () {
+    title: function () {
       if (!this.widget.data) {
         return;
       }
+
+      if (this.widget.type === "STAT") return;
+
+      const source = this.widget.source;
+      const schema = this.widget.schema || {};
+      let condition = schema.total || "TOTAL";
+      let value = 0;
+
+      if (source === "PUSH") {
+        return this.widget.data.title || "";
+      }
+
       if (this.widget.data.length === 0) {
         return;
       }
-      if (this.widget.type === "STAT") return;
-
-      const schema = this.widget.schema || {};
-
-      let condition = schema.total || "TOTAL";
-
-      let value = 0;
 
       if (condition === "TOTAL") {
         let primaryData = this.widget.data[0];
@@ -76,9 +81,18 @@ export default {
       }
       if (this.widget.type === "STAT") return;
 
+      const source = this.widget.source;
+
       const aggregate = this.widget.schema.aggregate || "CUMULATIVE";
 
-      const src = this.widget?.data || [];
+      let src = [];
+
+      if (source === "EVENTS") {
+        src = this.widget?.data || [];
+      }
+      if (source === "PUSH") {
+        src = this.widget.data.datasets || [];
+      }
 
       const datas = src
         .filter((d) => Array.isArray(d.data) && d.data.length)
@@ -88,15 +102,21 @@ export default {
           const isInc = aggregate === "INCREMENTAL";
 
           const points = d.data.map((datum) => {
+            let label = datum.label;
+
             const baseY = Number(datum.y) || 0;
 
             const y = isInc ? (acc += baseY) : baseY;
+
+            if (!label) {
+              label = `${y} ${d.text}`;
+            }
 
             return {
               x: moment(datum.x).format("MMM Do"),
               y,
               // keep your existing label wording
-              label: `${y} ${d.text}`,
+              label: label,
             };
           });
 
@@ -105,22 +125,15 @@ export default {
 
       return datas;
     },
-    title: function () {
+    subtitle: function () {
       let widget = this.widget;
 
       if (!widget) {
         return;
       }
 
-      let schema = widget.schema || {};
-
-      return schema.title;
-    },
-    subtitle: function () {
-      let widget = this.widget;
-
-      if (!widget) {
-        return;
+      if (widget.source === "PUSH") {
+        return widget.data.subtitle || {};
       }
 
       let dataSelectors = widget.schema.dataSelectors;
@@ -130,7 +143,20 @@ export default {
         }
       }
 
-      return "tbc";
+      return "";
+    },
+  },
+
+  methods: {
+    formatNumberWithCommas(value) {
+      // Ensure it's a number first
+      const number = typeof value === "number" ? value : parseInt(value, 10);
+
+      // If it's not a valid number, return the original value
+      if (isNaN(number)) return value;
+
+      // Format with commas
+      return number.toLocaleString("en-US");
     },
   },
 };

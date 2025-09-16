@@ -122,7 +122,6 @@ export default {
   },
 
   created: function () {
-    console.log(this.dataSelector);
     this.selector = this.dataSelector.selector;
     this.condition = this.dataSelector.condition;
     this.text = this.dataSelector.text;

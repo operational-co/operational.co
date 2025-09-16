@@ -1,5 +1,6 @@
 import express from "express";
 import schemaMiddleware from "#lib/schema-middleware.js";
+import apikeyMiddleware from "#components/middleware/apikey.js";
 import component from "./index.js";
 import Ingestion from "#services/ingestion/index.js";
 import config from "#lib/config.js";
@@ -255,7 +256,12 @@ router.post("/identify", schemaMiddleware(identifySchema), identify);
 router.post(`/log`, preSchemaValidation, schemaMiddleware(ingestSchema), ingest);
 router.post(`/ingest`, schemaMiddleware(ingestSchema), ingest);
 
-router.post(`/widgets/:widgetId`, schemaMiddleware(dashboardWidgetSchema), dashboardWidgetPush);
+router.post(
+  `/widgets/:widgetId`,
+  apikeyMiddleware,
+  schemaMiddleware(dashboardWidgetSchema),
+  dashboardWidgetPush,
+);
 
 // Export the router
 export default router;
