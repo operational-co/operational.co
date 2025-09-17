@@ -187,11 +187,10 @@ const component = {
 
     let condition = await this.sendAction(widget, url);
 
-    if (condition === true) {
-      return true;
+    if (condition && condition.error === false) {
+      return condition;
     } else {
-      console.log(condition);
-      throw condition.message;
+      throw condition;
     }
   },
 
@@ -219,12 +218,13 @@ const component = {
     try {
       res = await axios(config);
     } catch (err) {
-      console.log(err);
+      console.log(err.status);
       //console.log(url);
       //console.log(err.response.data);
 
       if (err && err.response && err.response.data) {
         return {
+          code: err.response.status,
           error: true,
           message: err.response.data,
         };
@@ -237,16 +237,19 @@ const component = {
       status = res.status;
     }
 
-    let successStatuses = [200, 201];
-
-    if (!successStatuses.includes(status)) {
+    if (status >= 200 && status <= 299) {
       return {
+        code: res.status,
+        error: false,
+        message: res.data,
+      };
+    } else {
+      return {
+        code: res.status,
         error: true,
         message: `Http status was ${status}`,
       };
     }
-
-    return true;
   },
 };
 

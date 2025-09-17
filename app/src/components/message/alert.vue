@@ -15,10 +15,21 @@
         fill="currentColor"
       />
     </svg>
-
-    <p>{{ message.message }}</p>
+    <template v-if="message.html">
+      <article v-html="message.html"></article>
+    </template>
+    <template v-else>
+      <p>{{ message.message }}</p>
+    </template>
     <div class="c-glitter" ref="glitter">
-      <svg width="68" height="74" viewBox="0 0 68 74" fill="none" xmlns="http://www.w3.org/2000/svg" b>
+      <svg
+        width="68"
+        height="74"
+        viewBox="0 0 68 74"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+        b
+      >
         <path
           fill-rule="evenodd"
           clip-rule="evenodd"
@@ -115,7 +126,9 @@ export default {
   width: 100%;
   background-color: var(--color-bg-5);
   text-align: center;
-  box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  box-shadow:
+    0 10px 15px -3px rgb(0 0 0 / 0.1),
+    0 4px 6px -4px rgb(0 0 0 / 0.1);
   border-radius: 10px;
   margin-bottom: 8px;
   padding: 8px;
@@ -140,6 +153,7 @@ export default {
   &:hover,
   &:active {
     box-shadow: 0 0 0 2px var(--g2);
+    background-color: var(--color-bg-6);
   }
 
   .c-glitter {
@@ -154,6 +168,17 @@ export default {
     svg {
       width: 100%;
       height: 100%;
+    }
+  }
+
+  article {
+    text-align: left;
+    font-size: var(--font-size-sm);
+
+    p {
+      &:last-child {
+        margin-bottom: 0;
+      }
     }
   }
 }

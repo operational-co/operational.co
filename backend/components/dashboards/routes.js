@@ -74,7 +74,6 @@ const runWidgetAction = async (req, res) => {
     const widget = await component.runWidgetAction(params);
     return res.send(widget);
   } catch (err) {
-    console.log(err);
     return res.status(400).send(err);
   }
 };

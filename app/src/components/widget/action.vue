@@ -49,18 +49,22 @@ export default {
           this.$store.app.sendNotification(`Action ran successfully`);
         }
       } catch (err) {
-        console.log(err);
-        if (!err.success) {
-          if (err.error.message) {
-            this.$store.app.sendNotification({
-              message: err.error.message,
-              timer: 5000,
-            });
-          } else {
-            this.$store.app.sendNotification({
-              message: `Action had a error`,
-            });
-          }
+        if (err.message) {
+          let html = `<strong>Action didn't run successfully</strong>
+          <p>
+            Status: ${err.code}</p>
+            <p>
+            Message: ${err.message.error.message}
+            </p>`;
+          this.$store.app.sendNotification({
+            message: "tbc",
+            html,
+            timer: 10000,
+          });
+        } else {
+          this.$store.app.sendNotification({
+            message: `Action had a error`,
+          });
         }
       }
 
