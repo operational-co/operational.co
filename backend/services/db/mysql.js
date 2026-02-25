@@ -4,6 +4,14 @@ import moment from "moment";
 import config from "#lib/config.js";
 
 const mysql = {
+  escapeSqlValue(value = "") {
+    return String(value).replace(/\\/g, "\\\\").replace(/'/g, "''");
+  },
+
+  escapeLikeValue(value = "") {
+    return this.escapeSqlValue(value).replace(/%/g, "\\%").replace(/_/g, "\\_");
+  },
+
   async cleanParams(params) {
     let skip = params.skip || 0;
     let take = params.take || 20;
@@ -108,12 +116,16 @@ const mysql = {
     }
 
     if (params.query && typeof params.query === "string") {
-      let q = params.query.toLowerCase();
-      where.push(`b.searchable LIKE '%${params.query}`);
+      const q = params.query.toLowerCase().trim();
+      if (q) {
+        const escapedQuery = this.escapeLikeValue(q);
+        where.push(`LOWER(COALESCE(b.searchable, '')) LIKE '%${escapedQuery}%' ESCAPE '\\\\'`);
+      }
     }
 
     if (params.category) {
-      where.push(`category = '${params.category}'`);
+      const escapedCategory = this.escapeSqlValue(params.category);
+      where.push(`category = '${escapedCategory}'`);
     }
 
     if (params.cursor) {
@@ -195,12 +207,16 @@ const mysql = {
     }
 
     if (params.query && typeof params.query === "string") {
-      let q = params.query.toLowerCase();
-      where.push(`b.searchable LIKE '%${params.query}`);
+      const q = params.query.toLowerCase().trim();
+      if (q) {
+        const escapedQuery = this.escapeLikeValue(q);
+        where.push(`LOWER(COALESCE(b.searchable, '')) LIKE '%${escapedQuery}%' ESCAPE '\\\\'`);
+      }
     }
 
     if (params.category) {
-      where.push(`category = '${params.category}'`);
+      const escapedCategory = this.escapeSqlValue(params.category);
+      where.push(`category = '${escapedCategory}'`);
     }
 
     if (params.cursor) {

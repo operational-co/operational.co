@@ -52,7 +52,8 @@ function buildFallbackMarkdown(spec) {
     return "# API\n\nNo operations found.\n";
   }
 
-  const sampleRequest = operation.requestBody?.content?.["application/json"]?.examples?.basic?.value;
+  const sampleRequest =
+    operation.requestBody?.content?.["application/json"]?.examples?.basic?.value;
   const jsonSample = sampleRequest ? JSON.stringify(sampleRequest, null, 2) : "{}";
 
   const codeSamples = Array.isArray(operation["x-codeSamples"]) ? operation["x-codeSamples"] : [];
@@ -104,7 +105,7 @@ export function buildApiV1LogOpenApi(req) {
     openapi: "3.1.0",
     info: {
       title: "Operational Events API",
-      version: "1.0.0",
+      version: "1.0.1",
       description:
         "OpenAPI spec for the production event ingestion endpoint used by @operational.co/sdk.\n\nLLM markdown: /llms.txt",
     },
@@ -182,7 +183,7 @@ export function buildApiV1LogOpenApi(req) {
             },
           },
           responses: {
-            "201": {
+            201: {
               description: "Event created",
               content: {
                 "text/plain": {
@@ -190,7 +191,7 @@ export function buildApiV1LogOpenApi(req) {
                 },
               },
             },
-            "400": {
+            400: {
               description: "Invalid payload",
               content: {
                 "text/plain": {
@@ -198,7 +199,7 @@ export function buildApiV1LogOpenApi(req) {
                 },
               },
             },
-            "401": {
+            401: {
               description: "Authorization failed",
               content: {
                 "text/plain": {
