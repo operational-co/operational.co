@@ -35,6 +35,7 @@ import MetricComponent from "#components/metric/index.js";
 import Website from "#components/website/index.js";
 
 import loggerMiddleware from "#components/middleware/logger.js";
+import { buildApiV1LogLlmsMarkdown } from "#components/api/openapi.js";
 
 import express from "express";
 import path from "path";
@@ -183,6 +184,17 @@ async function setupServer() {
   app.use("/invoice", invoiceRoutes);
 
   app.use("/dashboards", dashboardsRoutes);
+
+  if (!config.SELFHOSTED) {
+    const llms = async (req, res) => {
+      const markdown = await buildApiV1LogLlmsMarkdown(req);
+      res.setHeader("Content-Type", "text/plain; charset=utf-8");
+      return res.status(200).send(markdown);
+    };
+
+    app.get("/llms.txt", llms);
+    app.get("/llm.txt", (req, res) => res.redirect(308, "/llms.txt"));
+  }
 
   // Define the path to the uploads directory
   const uploadDir = path.join(__dirname, "public/uploads");

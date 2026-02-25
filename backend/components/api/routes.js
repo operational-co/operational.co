@@ -5,7 +5,7 @@ import component from "./index.js";
 import Ingestion from "#services/ingestion/index.js";
 import config from "#lib/config.js";
 import prisma from "#lib/prisma.js";
-import { buildApiV1LogOpenApi } from "./openapi.js";
+import { buildApiV1LogLlmsMarkdown, buildApiV1LogOpenApi } from "./openapi.js";
 
 // Create a new router instance
 const router = express.Router();
@@ -287,6 +287,12 @@ const openapi = async (req, res) => {
   return res.status(200).json(spec);
 };
 
+const llms = async (req, res) => {
+  const markdown = await buildApiV1LogLlmsMarkdown(req);
+  res.setHeader("Content-Type", "text/plain; charset=utf-8");
+  return res.status(200).send(markdown);
+};
+
 // Middleware for the /api routes
 router.post("/identify", schemaMiddleware(identifySchema), identify);
 
@@ -303,6 +309,8 @@ router.post(
 // Only expose OpenAPI in hosted/commercial mode.
 if (!config.SELFHOSTED) {
   router.get("/openapi.json", openapi);
+  router.get("/llms.txt", llms);
+  router.get("/llm.txt", (req, res) => res.redirect(308, "/api/v1/llms.txt"));
 }
 
 // Export the router

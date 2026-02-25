@@ -12,6 +12,91 @@ function buildServerUrl(req) {
   return `${protocol}://${host}`;
 }
 
+let scalarMarkdownDisabled = false;
+
+export async function buildApiV1LogLlmsMarkdown(req) {
+  const spec = buildApiV1LogOpenApi(req);
+  let generated = "";
+  if (!scalarMarkdownDisabled) {
+    try {
+      const { createMarkdownFromOpenApi } = await import("@scalar/openapi-to-markdown");
+      generated = await createMarkdownFromOpenApi(spec);
+    } catch (err) {
+      scalarMarkdownDisabled = true;
+      console.log("[llms] scalar markdown generation failed; switching to fallback renderer");
+      console.log(err);
+    }
+  }
+
+  if (!generated) {
+    generated = buildFallbackMarkdown(spec);
+  }
+
+  const lines = [
+    "# Operational API (LLMs)",
+    "",
+    "This file is generated from the OpenAPI definition for Operational's API.",
+    "",
+    `OpenAPI JSON: ${buildServerUrl(req)}/api/v1/openapi.json`,
+    "",
+    generated.trim(),
+    "",
+  ];
+
+  return lines.join("\n");
+}
+
+function buildFallbackMarkdown(spec) {
+  const operation = spec?.paths?.["/api/v1/log"]?.post;
+  if (!operation) {
+    return "# API\n\nNo operations found.\n";
+  }
+
+  const sampleRequest = operation.requestBody?.content?.["application/json"]?.examples?.basic?.value;
+  const jsonSample = sampleRequest ? JSON.stringify(sampleRequest, null, 2) : "{}";
+
+  const codeSamples = Array.isArray(operation["x-codeSamples"]) ? operation["x-codeSamples"] : [];
+  const codeBlocks = codeSamples
+    .map((sample) => {
+      const lang = sample.lang?.toLowerCase() === "shell" ? "bash" : "javascript";
+      return `### ${sample.label || sample.lang}\n\n\`\`\`${lang}\n${sample.source || ""}\n\`\`\`\n`;
+    })
+    .join("\n");
+
+  return [
+    `# ${spec.info?.title || "API"}`,
+    "",
+    spec.info?.description || "",
+    "",
+    "## Authentication",
+    "",
+    "Use a bearer API key in the Authorization header.",
+    "",
+    "## Endpoint",
+    "",
+    "### POST /api/v1/log",
+    "",
+    operation.description || "",
+    "",
+    "### Request Body (application/json)",
+    "",
+    "```json",
+    jsonSample,
+    "```",
+    "",
+    "### Responses",
+    "",
+    "- 201: Event created",
+    "- 400: Invalid payload",
+    "- 401: Authorization failed",
+    "",
+    "## Code Samples",
+    "",
+    codeBlocks.trim(),
+    "",
+  ].join("\n");
+}
+
 export function buildApiV1LogOpenApi(req) {
   const serverUrl = buildServerUrl(req);
 
@@ -21,7 +106,7 @@ export function buildApiV1LogOpenApi(req) {
       title: "Operational Events API",
       version: "1.0.0",
       description:
-        "OpenAPI spec for the production event ingestion endpoint used by @operational.co/sdk.",
+        "OpenAPI spec for the production event ingestion endpoint used by @operational.co/sdk.\n\nLLM markdown: /llms.txt",
     },
     servers: [
       {
