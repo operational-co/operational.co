@@ -132,7 +132,7 @@ export default {
         return;
       }
 
-      if (widget.source === "PUSH") {
+      if (widget.source === "PUSH" && widget.data) {
         return widget.data.subtitle || {};
       }
 

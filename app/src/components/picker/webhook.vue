@@ -34,7 +34,27 @@ export default {
 
   data: function () {
     return {
-      codeText: `import axios from "axios";
+      data: {
+        title: "10,477",
+        subtitle: "Total user signups",
+        data: [
+          {
+            data: [
+              {
+                x: `2025-09-15T06:40:35+00:00`,
+                y: 5,
+                label: `5 User signups today`,
+              },
+            ],
+          },
+        ],
+      },
+    };
+  },
+
+  computed: {
+    codeText: function () {
+      return `import axios from "axios";
 
 const url = "https://api.operational.co/api/v1/widgets/28";
 
@@ -57,35 +77,33 @@ const payload = {
 const res = await axios.post(url, payload, {
   headers: {
     "Content-Type": "application/json",
-    Authorization: "Bearer 123",
+    Authorization: "Bearer ${this.apikey}",
   },
 });
 
-console.log('Status:', res.status)`,
-      data: {
-        title: "10,477",
-        subtitle: "Total user signups",
-        data: [
-          {
-            data: [
-              {
-                x: `2025-09-15T06:40:35+00:00`,
-                y: 5,
-                label: `5 User signups today`,
-              },
-            ],
-          },
-        ],
-      },
-    };
-  },
-
-  computed: {
+console.log('Status:', res.status)`;
+    },
     webhook: function () {
       return `https://api.operational.co/`;
     },
     duration: function () {
       return `10 minutes`;
+    },
+    workspace: function () {
+      return this.$store.workspace.resource;
+    },
+    apikey: function () {
+      let workspace = this.workspace;
+      if (!workspace) {
+        return "";
+      }
+
+      let apikeys = workspace.keys;
+      if (!apikeys) {
+        return "";
+      }
+      let key = apikeys[0].key;
+      return key;
     },
   },
 };

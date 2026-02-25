@@ -5,6 +5,7 @@ import component from "./index.js";
 import Ingestion from "#services/ingestion/index.js";
 import config from "#lib/config.js";
 import prisma from "#lib/prisma.js";
+import { buildApiV1LogOpenApi } from "./openapi.js";
 
 // Create a new router instance
 const router = express.Router();
@@ -281,6 +282,11 @@ function preSchemaValidation(req, res, next) {
   }
 }
 
+const openapi = async (req, res) => {
+  const spec = buildApiV1LogOpenApi(req);
+  return res.status(200).json(spec);
+};
+
 // Middleware for the /api routes
 router.post("/identify", schemaMiddleware(identifySchema), identify);
 
@@ -293,6 +299,11 @@ router.post(
   schemaMiddleware(dashboardWidgetSchema),
   dashboardWidgetPush,
 );
+
+// Only expose OpenAPI in hosted/commercial mode.
+if (!config.SELFHOSTED) {
+  router.get("/openapi.json", openapi);
+}
 
 // Export the router
 export default router;

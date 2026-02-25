@@ -26,15 +26,15 @@ import Card from "@operational.co/components/card/index.vue";
 
 export default {
   components: {
-    Card
+    Card,
   },
 
   props: {
     item: {
       type: Object,
       default: null,
-      animation: null
-    }
+      animation: null,
+    },
   },
 
   watch: {
@@ -42,8 +42,8 @@ export default {
       handler: function () {
         this.startTimer();
       },
-      immediate: true
-    }
+      immediate: true,
+    },
   },
 
   methods: {
@@ -78,14 +78,14 @@ export default {
       setTimeout(() => {
         this.close();
       }, this.item.timer);
-    }
+    },
   },
 
   mounted: function () {
     if (this.item.status === "success") {
       this.animate();
     }
-  }
+  },
 };
 </script>
 
