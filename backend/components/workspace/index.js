@@ -313,6 +313,213 @@ const component = {
     return users;
   },
 
+  // depreciated, remove this later
+  async removeByName(userId, workspaceName) {
+    // Normalize and validate inputs up front.
+    const normalizedUserId = Number(userId);
+    const keepName = typeof workspaceName === "string" ? workspaceName.trim() : "";
+
+    if (!Number.isInteger(normalizedUserId) || normalizedUserId <= 0) {
+      throw new Error("Valid userId is required");
+    }
+
+    if (!keepName) {
+      throw new Error("Workspace name is required");
+    }
+
+    return prisma.$transaction(async (tx) => {
+      // Load user and all workspace memberships in one transaction.
+      const user = await tx.user.findUnique({
+        where: {
+          id: normalizedUserId,
+        },
+        select: {
+          id: true,
+          primaryWorkspace: true,
+        },
+      });
+
+      if (!user) {
+        throw new Error(`User with id=${normalizedUserId} not found`);
+      }
+
+      const memberships = await tx.workspaceUser.findMany({
+        where: {
+          userId: normalizedUserId,
+        },
+        select: {
+          workspaceId: true,
+          workspace: {
+            select: {
+              id: true,
+              name: true,
+              adminId: true,
+            },
+          },
+        },
+      });
+
+      if (memberships.length === 0) {
+        throw new Error(`No workspaces found for user id=${normalizedUserId}`);
+      }
+
+      // Resolve the single workspace we must keep by name.
+      const keepMatches = memberships.filter((entry) => entry.workspace.name === keepName);
+
+      if (keepMatches.length === 0) {
+        throw new Error(`Workspace "${keepName}" is not linked to user id=${normalizedUserId}`);
+      }
+
+      if (keepMatches.length > 1) {
+        throw new Error(
+          `Multiple workspaces named "${keepName}" are linked to user id=${normalizedUserId}`,
+        );
+      }
+
+      const keepWorkspace = keepMatches[0].workspace;
+      const membershipsToRemove = memberships.filter(
+        (entry) => entry.workspaceId !== keepWorkspace.id,
+      );
+
+      // Nothing to clean up: just ensure primaryWorkspace points at the kept workspace.
+      if (membershipsToRemove.length === 0) {
+        if (user.primaryWorkspace !== keepWorkspace.id) {
+          await tx.user.update({
+            where: {
+              id: normalizedUserId,
+            },
+            data: {
+              primaryWorkspace: keepWorkspace.id,
+            },
+          });
+        }
+
+        return {
+          userId: normalizedUserId,
+          keptWorkspaceId: keepWorkspace.id,
+          keptWorkspaceName: keepWorkspace.name,
+          deletedWorkspaces: 0,
+          unlinkedWorkspaces: 0,
+          updatedPrimaryWorkspaceUsers: user.primaryWorkspace !== keepWorkspace.id ? 1 : 0,
+        };
+      }
+
+      const ownedWorkspaceIds = [
+        ...new Set(
+          membershipsToRemove
+            .filter((entry) => entry.workspace.adminId === normalizedUserId)
+            .map((entry) => entry.workspaceId),
+        ),
+      ];
+
+      const unlinkedWorkspaceIds = [
+        ...new Set(
+          membershipsToRemove
+            .filter((entry) => entry.workspace.adminId !== normalizedUserId)
+            .map((entry) => entry.workspaceId),
+        ),
+      ];
+
+      let updatedPrimaryWorkspaceUsers = 0;
+      if (ownedWorkspaceIds.length > 0) {
+        // For workspaces this user owns, move affected users' primary workspace before delete.
+        const ownedWorkspaceUsers = await tx.workspaceUser.findMany({
+          where: {
+            workspaceId: {
+              in: ownedWorkspaceIds,
+            },
+          },
+          select: {
+            userId: true,
+          },
+        });
+
+        const affectedUserIds = [...new Set(ownedWorkspaceUsers.map((entry) => entry.userId))];
+
+        for (const affectedUserId of affectedUserIds) {
+          const alternativeMembership = await tx.workspaceUser.findFirst({
+            where: {
+              userId: affectedUserId,
+              workspaceId: {
+                notIn: ownedWorkspaceIds,
+              },
+            },
+            select: {
+              workspaceId: true,
+            },
+            orderBy: {
+              createdAt: "desc",
+            },
+          });
+
+          const updateResult = await tx.user.updateMany({
+            where: {
+              id: affectedUserId,
+              primaryWorkspace: {
+                in: ownedWorkspaceIds,
+              },
+            },
+            data: {
+              primaryWorkspace: alternativeMembership?.workspaceId ?? null,
+            },
+          });
+
+          updatedPrimaryWorkspaceUsers += updateResult.count;
+        }
+      }
+
+      if (unlinkedWorkspaceIds.length > 0) {
+        // For workspaces this user does not own, only remove this user's membership link.
+        await tx.workspaceUser.deleteMany({
+          where: {
+            userId: normalizedUserId,
+            workspaceId: {
+              in: unlinkedWorkspaceIds,
+            },
+          },
+        });
+      }
+
+      let deletedWorkspaces = 0;
+      if (ownedWorkspaceIds.length > 0) {
+        // Delete only workspaces owned by this user.
+        const deletionResult = await tx.workspace.deleteMany({
+          where: {
+            id: {
+              in: ownedWorkspaceIds,
+            },
+          },
+        });
+
+        deletedWorkspaces = deletionResult.count;
+      }
+
+      const wasPrimaryWorkspaceRemoved = membershipsToRemove.some(
+        (entry) => entry.workspaceId === user.primaryWorkspace,
+      );
+      // Always leave the target user on the kept workspace.
+      if (wasPrimaryWorkspaceRemoved || user.primaryWorkspace !== keepWorkspace.id) {
+        await tx.user.update({
+          where: {
+            id: normalizedUserId,
+          },
+          data: {
+            primaryWorkspace: keepWorkspace.id,
+          },
+        });
+      }
+
+      return {
+        userId: normalizedUserId,
+        keptWorkspaceId: keepWorkspace.id,
+        keptWorkspaceName: keepWorkspace.name,
+        deletedWorkspaces,
+        unlinkedWorkspaces: unlinkedWorkspaceIds.length,
+        updatedPrimaryWorkspaceUsers,
+      };
+    });
+  },
+
   async activate(form) {
     let code = form.code;
     let users = await UserModel.client.findMany({

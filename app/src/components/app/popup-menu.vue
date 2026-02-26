@@ -29,7 +29,7 @@
           P
         </strong>
       </a>
-      <a href="#" @click.prevent="createWorkspace" v-if="!isDemo">
+      <a href="#" @click.prevent="createWorkspace" v-if="canCreateWorkspace">
         <span> Create new project </span>
         <svg
           width="24"
@@ -145,6 +145,9 @@ export default {
   },
 
   computed: {
+    canCreateWorkspace: function () {
+      return !this.$store.workspace.isDemo;
+    },
     isDemo: function () {
       return this.$store.workspace.isDemo;
     },
@@ -195,6 +198,9 @@ export default {
         });
     },
     createWorkspace: function () {
+      if (!this.canCreateWorkspace) {
+        return;
+      }
       this.$store.app.setCreateWorkspace(true);
     },
     humanizeNumber: function (number) {
