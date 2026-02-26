@@ -6,7 +6,6 @@
 import Text from "./text.vue";
 import Spacer from "./spacer.vue";
 import Divider from "./divider.vue";
-import Map from "./map.vue";
 import Json from "./json.vue";
 //import Chart from "./chart.vue";
 import Image from "./image.vue";
@@ -19,7 +18,6 @@ export default {
     Text,
     Spacer,
     Divider,
-    Map,
     Json,
     //Chart,
     Image,
@@ -50,10 +48,6 @@ export default {
 
       if (type === "divider") {
         return "Divider";
-      }
-
-      if (type === "map") {
-        return "Map";
       }
 
       if (type === "json") {

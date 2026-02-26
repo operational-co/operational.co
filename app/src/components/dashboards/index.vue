@@ -52,7 +52,7 @@
             <span>Update </span>
           </button>
           <button v-if="moving" type="button" class="btn btn-sm btn-primary" @click="onStopEdit">
-            <span>Done </span>
+            <span>{{ doneCtaLabel }} </span>
           </button>
         </nav>
       </div>
@@ -64,6 +64,7 @@
       ref="dashboard"
       :dashboard="dashboard"
       v-if="dashboard"
+      @onGridChanged="onGridChanged"
       @onStopEdit="onStopEdit"
     ></Dashboard>
     <ModalWidgetCreate
@@ -98,6 +99,7 @@ export default {
     return {
       dashboard: null,
       showWidgetCreate: false,
+      gridChanged: false,
     };
   },
 
@@ -107,15 +109,42 @@ export default {
     moving: function () {
       return this.$store.app.moveMode;
     },
+    doneCtaLabel: function () {
+      if (this.gridChanged) {
+        return "Save changes";
+      }
+      return "Done";
+    },
   },
 
   methods: {
     onStopEdit: function () {
-      this.$refs.dashboard.onGridUpdate();
+      const shouldSave = this.gridChanged && this.$refs.dashboard;
+
       this.$store.app.setMoveMode(false);
+      this.gridChanged = false;
+
+      if (shouldSave) {
+        this.$store.app.sendNotification({
+          type: "success",
+          message: "Changes saved",
+        });
+
+        this.$refs.dashboard.onGridUpdate().catch((err) => {
+          console.error(err);
+          this.$store.app.sendNotification({
+            type: "error",
+            message: "Failed to save dashboard layout",
+          });
+        });
+      }
     },
     onEdit: function () {
+      this.gridChanged = false;
       this.$store.app.setMoveMode(true);
+    },
+    onGridChanged: function () {
+      this.gridChanged = true;
     },
   },
 

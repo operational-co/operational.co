@@ -22,7 +22,6 @@
     "@rollup/plugin-babel": "6.0.4",
     "@speed-highlight/core": "1.2.6",
     "@stripe/stripe-js": "3.5.0",
-    "@turf/turf": "6.5.0",
     "@vue/babel-plugin-jsx": "1.2.2",
     "@yaireo/tagify": "4.27.0",
     "axios": "1.6.2",

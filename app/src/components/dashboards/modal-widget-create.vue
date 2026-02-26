@@ -1,6 +1,6 @@
 <template>
   <Modal type="full-edge" klass="m-widget-create" :active="active" @onClose="onClose">
-    <Picker @onClose="onClose"></Picker>
+    <Picker :excludedWidgetTypes="['LINE']" @onClose="onClose"></Picker>
   </Modal>
 </template>
 

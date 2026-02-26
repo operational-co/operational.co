@@ -9,6 +9,7 @@
             :is="currentPageComponent"
             :type="type"
             :dashboardId="currentDashboard.id"
+            :excludedWidgetTypes="excludedWidgetTypesSafe"
             @onSelect="onSelect"
             @onClose="onClose"
             key="currentPage"
@@ -58,6 +59,15 @@ export default {
     };
   },
 
+  props: {
+    excludedWidgetTypes: {
+      type: Array,
+      default: function () {
+        return [];
+      },
+    },
+  },
+
   watch: {
     type: function () {
       if (this.type) {
@@ -67,6 +77,14 @@ export default {
   },
 
   computed: {
+    excludedWidgetTypesSafe: function () {
+      if (!Array.isArray(this.excludedWidgetTypes)) {
+        return [];
+      }
+      return this.excludedWidgetTypes
+        .map((type) => String(type || "").toUpperCase())
+        .filter((type) => type.length > 0);
+    },
     currentPageComponent() {
       return this.pages[this.currentPageIndex];
     },
@@ -124,6 +142,10 @@ export default {
 
   methods: {
     onSelect: function (type) {
+      const normalizedType = String(type || "").toUpperCase();
+      if (this.excludedWidgetTypesSafe.includes(normalizedType)) {
+        return;
+      }
       this.type = type;
     },
     onSave: function () {

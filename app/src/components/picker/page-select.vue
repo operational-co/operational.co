@@ -16,9 +16,25 @@
 import widgets from "./widgets.js";
 
 export default {
+  props: {
+    excludedWidgetTypes: {
+      type: Array,
+      default: function () {
+        return [];
+      },
+    },
+  },
+
   computed: {
     widgetTypes: function () {
-      return widgets;
+      const excluded = new Set(
+        (this.excludedWidgetTypes || []).map((type) => String(type || "").toUpperCase()),
+      );
+
+      return widgets.filter((widget) => {
+        const type = String(widget.type || "").toUpperCase();
+        return !excluded.has(type);
+      });
     },
   },
 

@@ -175,6 +175,13 @@ export default {
 
       const condition = await this.$store.dashboards.updateWidgets(this.dashboard.id, widgets);
     },
+    onGridChange: function () {
+      if (!this.moving) {
+        return;
+      }
+
+      this.$emit("onGridChanged");
+    },
 
     setupGrid: function () {
       const height = `177px`; //this.computeHeight();
@@ -200,7 +207,7 @@ export default {
         //staticGrid: !this.moving,
       });
 
-      //this.grid.on("change", this.onGridUpdate);
+      this.grid.on("change", this.onGridChange);
 
       let widgets = this.widgets;
       let rowCount = Math.round(widgets.length / 2);
