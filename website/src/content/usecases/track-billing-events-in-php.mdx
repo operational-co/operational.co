@@ -52,7 +52,7 @@ $payload = [
   'content' => 'Invoice #12345 paid successfully by John Doe for $49.99'
 ];
 
-$ops->events->ingest($payload);
+$ops->events->log($payload);
 ```
 
 This code sends a billing success event to Operational with details on invoice number, payer, and amount.

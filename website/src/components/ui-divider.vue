@@ -18,7 +18,7 @@ export default {
 
 <style lang="scss">
 .c-ui-divider {
-  padding: var(--spacer-lg) 0;
+  padding: 3rem 0;
 
   &__inner {
     background-color: var(--color-bg-4);

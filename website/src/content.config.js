@@ -14,6 +14,15 @@ const docs = defineCollection({
   }),
 });
 
+const docsnew = defineCollection({
+  loader: glob({ pattern: "*.mdx", base: "./../backend/src/content/docs-new" }),
+  schema: z.object({
+    title: z.string(),
+    slug: z.string(),
+    description: z.string().optional(),
+  }),
+});
+
 const api = defineCollection({
   loader: glob({ pattern: "*.mdx", base: "./src/content/api" }),
   schema: z.object({
@@ -77,4 +86,13 @@ const usecases = defineCollection({
 });
 
 // 2. Export your collections
-export const collections = { docs, api, manual, selfhosted, integrations, pages, usecases };
+export const collections = {
+  docs,
+  docsnew,
+  api,
+  manual,
+  selfhosted,
+  integrations,
+  pages,
+  usecases,
+};

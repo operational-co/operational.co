@@ -33,11 +33,11 @@ export default {
 <style lang="scss">
 .c-app-test-mode {
   position: absolute;
-  top: var(--margin);
-  right: var(--margin);
+  top: 0.375rem;
+  right: 0.375rem;
   width: auto;
   height: auto;
-  padding: var(--margin-sm) var(--margin-lg);
+  padding: 0.25rem 0.75rem;
   font-size: var(--font-size-xs);
   font-weight: 700;
   text-transform: uppercase;
@@ -68,7 +68,7 @@ export default {
 
   @media screen and (max-width: 576px) {
     top: 18px;
-    right: var(--margin-lg);
+    right: 0.75rem;
   }
 }
 </style>

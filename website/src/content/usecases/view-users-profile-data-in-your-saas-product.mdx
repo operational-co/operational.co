@@ -54,7 +54,7 @@ const payload = {
   content: "Alice Johnson viewed her profile page"
 }
 
-await ops.events.ingest(payload)
+await ops.events.log(payload)
 ```
 
 This code records a profile view event with a user name and timestamp.

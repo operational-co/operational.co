@@ -100,7 +100,7 @@ export default {
   margin: 0;
   margin-bottom: 1rem;
   background-color: var(--color-bg-2);
-  padding: var(--margin-lg);
+  padding: 0.75rem;
   border-radius: var(--border-radius);
   background-color: rgba(0, 0, 0, 0.15);
   box-shadow:
@@ -127,13 +127,13 @@ export default {
 
   > button {
     position: absolute;
-    top: var(--margin);
-    right: var(--margin);
+    top: 0.375rem;
+    right: 0.375rem;
 
     opacity: 0;
 
     &.btn.btn-sm {
-      padding: var(--margin);
+      padding: 0.375rem;
     }
 
     &.active {
@@ -170,7 +170,7 @@ export default {
   .c-copy {
     position: absolute;
     top: 11px;
-    right: var(--margin);
+    right: 0.375rem;
   }
 }
 </style>

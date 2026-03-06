@@ -10,6 +10,56 @@ export const list = [
     baseSlug: "docs",
   },
   {
+    name: "Guided setup",
+    slug: "docs-new",
+    children: [
+      {
+        name: "Introduction",
+        slug: "introduction",
+      },
+      {
+        name: "Create project and API key",
+        slug: "create-project-and-api-key",
+      },
+      {
+        name: "Manage projects and teammates",
+        slug: "manage-projects-and-teammates",
+      },
+      {
+        name: "Send your first event",
+        slug: "send-your-first-event",
+      },
+      {
+        name: "Structured events",
+        slug: "structured-events",
+      },
+      {
+        name: "Add actions",
+        slug: "add-actions",
+      },
+      {
+        name: "Group events with contexts",
+        slug: "group-events-with-contexts",
+      },
+      {
+        name: "Categories and search",
+        slug: "categories-and-search",
+      },
+      {
+        name: "View events in your project",
+        slug: "view-events-in-your-project",
+      },
+      {
+        name: "Setup PWA on phone",
+        slug: "setup-pwa-on-phone",
+      },
+      {
+        name: "Log limits and errors",
+        slug: "log-limits-and-errors",
+      },
+    ],
+  },
+  {
     name: "The Manual",
     slug: "manual",
     children: [

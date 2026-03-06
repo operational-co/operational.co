@@ -48,7 +48,7 @@ const payload = {
   content: "Customer John Smith cancelled their subscription, id 123."
 }
 
-await ops.events.ingest(payload)
+await ops.events.log(payload)
 ```
 
 This code sends an event to Operational whenever a subscription is cancelled.
@@ -57,6 +57,6 @@ This code sends an event to Operational whenever a subscription is cancelled.
 
 Tracking cancelled subscriptions lets you find out why users leave.
 
-Operational makes it easy by handling event ingestion and storage.
+Operational makes it easy by handling event logging and storage.
 
 Learn more at https://operational.co and try examples in the playground at https://operational.co/playground

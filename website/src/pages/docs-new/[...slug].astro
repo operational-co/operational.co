@@ -1,0 +1,39 @@
+---
+// @ts-nocheck
+import BaseLayout from "@/layouts/base.astro";
+import { list, getItems } from "@/content/list.js";
+import Prevnext from "@operational.co/components/ui/prevnext.vue";
+import PageApi from "@/components/page-api.vue";
+import { getCollection, getEntry, render } from "astro:content";
+
+const baseSlug = "docsnew";
+
+const post = await getEntry(baseSlug, Astro.params.slug);
+const { Content } = await render(post);
+
+const { listItem, prevListItem, nextListItem } = getItems(list, `docs-new/${Astro.params.slug}`);
+if (!listItem) {
+  return;
+}
+
+export const getStaticPaths = async function () {
+  const posts = await getCollection("docsnew");
+
+  return posts.map((post) => {
+    return {
+      params: {
+        slug: post.data.slug,
+      },
+    };
+  });
+};
+---
+
+<BaseLayout>
+  <PageApi client:load pathname={Astro.url.pathname}>
+    <div class="c-page">
+      <Content />
+      <Prevnext prev={prevListItem} next={nextListItem} />
+    </div>
+  </PageApi>
+</BaseLayout>

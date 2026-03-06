@@ -143,7 +143,7 @@ export default {
   height: 100%;
   background-color: var(--color-bg-3);
   backdrop-filter: blur(8px);
-  border-radius: calc(var(--margin) + var(--border-radius));
+  border-radius: calc(0.375rem + var(--border-radius));
   border-top-right-radius: 0;
   border-bottom-right-radius: 0;
   padding: 0.5rem;
@@ -200,7 +200,7 @@ export default {
     }
 
     // &.advanced {
-    //   padding: var(--margin);
+    //   padding: 0.375rem;
     //   border-radius: var(--border-radius);
     //   margin-top: 1rem;
     //   background-color: var(--color-bg-4);

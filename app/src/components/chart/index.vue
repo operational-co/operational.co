@@ -67,8 +67,8 @@ export default {
 .c-chart {
   height: 240px;
   width: 100%;
-  //margin-bottom: var(--spacer);
-  //padding-bottom: calc(var(--spacer) * 1);
+  //margin-bottom: 2rem;
+  //padding-bottom: calc(2rem * 1);
   --hue: var(--hue-p);
 
   --chart-color: hsl(var(--hue), 70%, 53%);

@@ -102,7 +102,7 @@ export default {
   left: calc(50% - 150px);
   width: 300px;
 
-  padding: var(--margin-lg) 0;
+  padding: 0.75rem 0;
 
   pointer-events: none;
 
@@ -138,7 +138,7 @@ export default {
   @media screen and (max-width: 576px) {
     left: 0;
     width: 100%;
-    padding: var(--margin-lg);
+    padding: 0.75rem;
   }
 }
 </style>

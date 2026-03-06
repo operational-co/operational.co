@@ -343,7 +343,7 @@ export default {
 
     a {
       display: block;
-      padding: var(--margin);
+      padding: 0.375rem;
       color: var(--color-font);
       border-radius: var(--border-radius);
       font-size: var(--font-size-sm);
@@ -359,17 +359,17 @@ export default {
   &__categories {
     position: relative;
     display: flex;
-    padding-top: var(--margin);
+    padding-top: 0.375rem;
     width: 100%;
     overflow: hidden; /* Prevent overflow of the gradient */
 
     &:after {
       content: "";
       position: absolute;
-      top: var(--margin);
+      top: 0.375rem;
       right: -1px;
       width: 50px;
-      height: calc(100% - var(--margin));
+      height: calc(100% - 0.375rem);
       background: linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, var(--color-bg-1) 80%);
 
       pointer-events: none;
@@ -381,7 +381,7 @@ export default {
       position: relative;
       display: flex;
       width: 100%;
-      padding-bottom: var(--margin-sm);
+      padding-bottom: 0.25rem;
       overflow-x: auto; /* Enable horizontal scrolling for the inner content */
 
       &::-webkit-scrollbar {
@@ -411,8 +411,8 @@ export default {
       display: inline-flex;
       min-height: 32px;
       align-items: center;
-      margin-right: var(--margin);
-      padding: var(--margin) var(--margin-lg);
+      margin-right: 0.375rem;
+      padding: 0.375rem 0.75rem;
       border-radius: var(--border-radius-full);
       background-color: var(--color-bg-3);
       color: var(--color-font);

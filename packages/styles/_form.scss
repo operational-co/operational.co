@@ -3,7 +3,7 @@
   display: inline-flex;
   height: 38px;
   line-height: 24px;
-  padding: 7px var(--spacer-sm);
+  padding: 7px 1rem;
   justify-content: center;
   align-items: center;
   background-color: var(--color-bg-4);
@@ -27,7 +27,7 @@
     0 0 0 1px rgba(0, 0, 0, 0.15);
 
   > .c-spinner {
-    margin-right: var(--margin);
+    margin-right: 0.375rem;
   }
 
   > p {
@@ -50,10 +50,10 @@
   }
 
   &.btn-icon {
-    gap: var(--margin);
+    gap: 0.375rem;
 
     > svg {
-      margin-left: calc(var(--margin) * -1);
+      margin-left: calc(0.375rem * -1);
     }
   }
 
@@ -160,7 +160,7 @@
 
   &.btn-lg {
     height: 44px;
-    padding: var(--spacer-sm);
+    padding: 1rem;
   }
 
   &.btn-sm {
@@ -174,7 +174,7 @@
     }
 
     &.btn-icon {
-      gap: var(--margin-sm);
+      gap: 0.25rem;
       padding-left: 12px;
     }
   }
@@ -187,7 +187,7 @@
 
   &.btn-fancy {
     height: initial;
-    //padding: var(--margin-lg) var(--spacer);
+    //padding: 0.75rem 2rem;
     border-radius: 99px;
     border: none;
     box-shadow:
@@ -201,7 +201,7 @@
       rgba(0, 0, 0, 0.16) 0px -6px 12px -4px inset;
 
     svg {
-      margin-left: var(--margin-lg);
+      margin-left: 0.75rem;
       margin-right: -6px;
     }
 

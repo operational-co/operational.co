@@ -44,7 +44,7 @@ const payload = {
   content: "Server Alpha is below 10% disk space"
 }
 
-await ops.events.ingest(payload)
+await ops.events.log(payload)
 ```
 
 This code checks your disk usage and sends an event to Operational when space gets low.

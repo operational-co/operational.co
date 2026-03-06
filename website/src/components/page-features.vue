@@ -85,9 +85,9 @@ export default {
 	&__grid {
 		display: grid;
 		grid-auto-flow: column;
-		grid-gap: var(--spacer-sm);
+		grid-gap: 1rem;
 		min-width: fit-content;
-		padding-top: var(--spacer);
+		padding-top: 2rem;
 	}
 
 	&__card {

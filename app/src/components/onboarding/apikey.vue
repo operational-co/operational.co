@@ -53,7 +53,7 @@ export default {
 		justify-content: space-between;
 		align-items: center;
 		background-color: var(--color-bg-3);
-		padding: var(--margin);
+		padding: 0.375rem;
 		border-radius: var(--border-radius);
 
 		code {

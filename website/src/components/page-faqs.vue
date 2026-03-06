@@ -96,8 +96,8 @@ export default {
   &__inner {
     display: grid;
     grid-template-columns: 0.75fr 1.25fr;
-    grid-column-gap: var(--spacer-sm);
-    padding: var(--spacer-lg) 0;
+    grid-column-gap: 1rem;
+    padding: 3rem 0;
   }
 }
 </style>

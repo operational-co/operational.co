@@ -57,7 +57,7 @@ export default {
 	border: 1px solid var(--color-translucent);
 	background-color: var(--color-bg-2);
 	border-radius: 12px;
-	margin-bottom: var(--spacer-sm);
+	margin-bottom: 1rem;
 	text-decoration: none !important;
 	color: var(--color-font);
 	cursor: pointer;
@@ -69,8 +69,8 @@ export default {
 
 	&__title {
 		position: relative;
-		padding: var(--spacer-sm);
-		padding-right: var(--spacer-lg);
+		padding: 1rem;
+		padding-right: 3rem;
 		user-select: none;
 		font-weight: 500;
 
@@ -89,7 +89,7 @@ export default {
 	}
 
 	&__body {
-		padding: 0 var(--spacer-sm);
+		padding: 0 1rem;
 		overflow: hidden;
 	}
 

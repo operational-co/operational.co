@@ -473,7 +473,7 @@ export default {
     }
 
     .c-spinner {
-      margin-left: var(--margin);
+      margin-left: 0.375rem;
     }
   }
 
@@ -485,7 +485,7 @@ export default {
 
   &__label {
     display: inline-block;
-    margin-right: var(--margin);
+    margin-right: 0.375rem;
 
     color: hsl(var(--hue-green), 70%, 55%);
 
@@ -499,7 +499,7 @@ export default {
   }
 
   &__status {
-    margin-top: var(--margin);
+    margin-top: 0.375rem;
     display: flex;
     align-items: flex-start;
 
@@ -533,8 +533,8 @@ export default {
   }
 
   section {
-    margin-bottom: var(--margin-lg);
-    padding: var(--margin-lg);
+    margin-bottom: 0.75rem;
+    padding: 0.75rem;
     background-color: var(--color-bg-2);
     border-radius: var(--border-radius);
 
@@ -547,12 +547,12 @@ export default {
       > svg {
         min-width: 18px;
         margin-top: 6px;
-        margin-right: var(--margin);
+        margin-right: 0.375rem;
       }
     }
 
     .btn {
-      margin-top: var(--margin);
+      margin-top: 0.375rem;
     }
 
     &:last-of-type {

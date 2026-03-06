@@ -28,8 +28,8 @@ export default {
 
   &__inner {
     height: 100%;
-    padding-left: var(--margin-lg);
-    padding-right: var(--margin-lg);
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
   }
 
   &.xs {
@@ -51,7 +51,7 @@ export default {
   &.sidebar {
     display: grid;
     grid-template-columns: 240px 1fr;
-    grid-column-gap: var(--spacer-sm);
+    grid-column-gap: 1rem;
     //max-width: 1300px;
   }
 
@@ -78,7 +78,7 @@ export default {
       .c-constrain__sidebar {
         margin-bottom: 2rem;
 
-        padding: var(--margin-lg);
+        padding: 0.75rem;
         background-color: var(--color-bg-3);
         border-radius: var(--border-radius);
       }

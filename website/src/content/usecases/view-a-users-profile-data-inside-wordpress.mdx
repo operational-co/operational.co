@@ -46,7 +46,7 @@ $payload = [
   'content' => 'User John Smith viewed profile of user with ID 123'
 ];
 
-$ops->events()->ingest($payload);
+$ops->events()->log($payload);
 ```
 
 This code sends an event to Operational whenever a user views another user’s profile.

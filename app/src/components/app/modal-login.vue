@@ -231,8 +231,8 @@ export default {
 
     span {
       display: inline-block;
-      padding: var(--margin);
-      margin-left: var(--margin);
+      padding: 0.375rem;
+      margin-left: 0.375rem;
       margin-bottom: 1rem;
       font-size: var(--font-size-sm);
       font-weight: 500;
@@ -252,7 +252,7 @@ export default {
   }
 
   .c-form {
-    margin-bottom: var(--margin-lg);
+    margin-bottom: 0.75rem;
   }
 
   h1 {

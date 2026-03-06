@@ -44,10 +44,10 @@ $payload = [
   'content' => 'Order #12345 placed by John Smith'
 ];
 
-$ops->events->ingest($payload);
+$ops->events->log($payload);
 ```
 
-This example shows how to ingest a new order event into Operational when WooCommerce sends a push notification.
+This example shows how to log a new order event into Operational when WooCommerce sends a push notification.
 
 ### Conclusion
 

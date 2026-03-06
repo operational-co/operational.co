@@ -38,7 +38,7 @@ export default {
 <style lang="scss">
 .c-ui-heading {
   &__subtitle {
-    padding: var(--spacer-sm) 0;
+    padding: 1rem 0;
     display: block;
     text-align: center;
     font-weight: 600;

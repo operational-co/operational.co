@@ -44,7 +44,7 @@ const payload = {
   content: "User Jane Doe signed up"
 };
 
-await ops.events.ingest(payload);
+await ops.events.log(payload);
 ```
 
 This code initializes the Operational client, creates a payload for a signup event, and sends it to your project. You can see the event in your Operational dashboard.

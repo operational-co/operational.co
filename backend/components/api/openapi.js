@@ -107,7 +107,7 @@ export function buildApiV1LogOpenApi(req) {
       title: "Operational Events API",
       version: "1.0.1",
       description:
-        "OpenAPI spec for the production event ingestion endpoint used by @operational.co/sdk.\n\nLLM markdown: /llms.txt",
+        "OpenAPI spec for the production event logging endpoint used by @operational.co/sdk.\n\nLLM markdown: /llms.txt",
     },
     servers: [
       {
@@ -119,10 +119,10 @@ export function buildApiV1LogOpenApi(req) {
       "/api/v1/log": {
         post: {
           tags: ["Events"],
-          summary: "Ingest event",
+          summary: "Log event",
           description:
-            "Create an event in Operational. This is the endpoint used by the SDK's ops.events.ingest().",
-          operationId: "ingestEvent",
+            "Create an event in Operational.",
+          operationId: "logEvent",
           security: [{ bearerAuth: [] }],
           requestBody: {
             required: true,
@@ -136,8 +136,8 @@ export function buildApiV1LogOpenApi(req) {
                     name: { type: "string", description: "Event title." },
                     type: {
                       type: "string",
-                      enum: ["text", "rows", "json", "image", "map", "cards"],
-                      description: "Rendering mode for content. `cards` is normalized to `rows`.",
+                      enum: ["text", "rows", "json", "image", "map"],
+                      description: "Rendering mode for content.",
                     },
                     content: {
                       oneOf: [{ type: "string" }, { type: "object" }, { type: "array" }],
@@ -220,7 +220,7 @@ export function buildApiV1LogOpenApi(req) {
                 '  baseUrl: "https://api.your-domain.com",',
                 "});",
                 "",
-                "await ops.events.ingest({",
+                "await ops.events.log({",
                 '  name: "user signed up",',
                 '  avatar: ":)",',
                 "});",

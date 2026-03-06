@@ -67,17 +67,17 @@ export default {
     align-items: center;
     user-select: none;
     cursor: pointer;
-    padding: var(--margin-lg) 0;
+    padding: 0.75rem 0;
 
     span {
       display: inline-block;
-      margin-left: var(--margin);
+      margin-left: 0.375rem;
       opacity: 0.75;
     }
 
     svg {
       position: absolute;
-      top: var(--margin-lg);
+      top: 0.75rem;
       right: 0;
       opacity: 0.65;
     }
@@ -91,8 +91,8 @@ export default {
 
   &__body {
     display: none;
-    padding-top: var(--margin);
-    padding-bottom: var(--margin-lg);
+    padding-top: 0.375rem;
+    padding-bottom: 0.75rem;
     font-size: var(--font-size-sm);
   }
 

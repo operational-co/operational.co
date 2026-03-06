@@ -28,7 +28,7 @@ This keeps your revenue data accurate and gives insight into why users leave.
 
 ### What is Operational and how it works for cancellations
 
-Operational is an open-source event tracking tool that ingests and displays your events in real time.
+Operational is an open-source event tracking tool that logs and displays your events in real time.
 
 You can send cancellation events from your JavaScript app and view them on the dashboard.
 
@@ -66,7 +66,7 @@ async function reportCancellation(userId, userName, plan) {
     content: `User ${userName} cancelled subscription for ${plan}`
   }
 
-  await ops.events.ingest(payload)
+  await ops.events.log(payload)
 }
 
 // Example usage
@@ -80,7 +80,7 @@ This code imports the Operational SDK, creates a client with your API key, and s
 
 Operational makes it easy to track subscription cancellations in your JavaScript app.
 
-It saves you time by handling event ingestion, storage, and real-time updates.
+It saves you time by handling event logging, storage, and real-time updates.
 
 Learn more at https://operational.co or try out the code snippets in the playground:
 

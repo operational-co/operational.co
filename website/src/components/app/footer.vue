@@ -189,8 +189,8 @@ export default {
 
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
-    grid-column-gap: var(--margin-lg);
-    padding: 0 var(--margin-lg);
+    grid-column-gap: 0.75rem;
+    padding: 0 0.75rem;
   }
 
   &__left {
@@ -232,7 +232,7 @@ export default {
 
   .muted {
     display: inline-block;
-    margin-right: var(--margin);
+    margin-right: 0.375rem;
     font-size: var(--font-size-sm);
     color: var(--color-font);
     opacity: 0.8;
@@ -300,8 +300,8 @@ export default {
 
     span {
       display: inline-block;
-      padding: var(--margin);
-      margin-left: var(--margin);
+      padding: 0.375rem;
+      margin-left: 0.375rem;
       font-size: var(--font-size-sm);
       font-weight: 500;
       font-family: var(--font-family-monospace);
@@ -315,12 +315,12 @@ export default {
       content: "Beta";
       display: inline-block;
       line-height: 1;
-      margin-left: var(--margin);
+      margin-left: 0.375rem;
       font-family: var(--font-family-monospace);
       font-size: var(--font-size-sm);
       font-weight: 500;
       background-color: var(--color-bg-3);
-      padding: var(--margin-sm) var(--margin);
+      padding: 0.25rem 0.375rem;
       border-radius: var(--border-radius-sm);
       color: var(--color-font);
     }
@@ -353,11 +353,11 @@ export default {
     ul {
       li {
         margin-left: 0;
-        margin-right: var(--margin);
+        margin-right: 0.375rem;
       }
 
       a {
-        padding: var(--margin-sm) 0;
+        padding: 0.25rem 0;
       }
     }
   }

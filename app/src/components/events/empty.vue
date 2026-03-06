@@ -242,8 +242,8 @@ export default {
   margin-top: 1rem;
 
   &__inner {
-    margin-top: var(--spacer-sm);
-    padding: var(--spacer);
+    margin-top: 1rem;
+    padding: 2rem;
 
     background-color: var(--color-bg-2);
     border-radius: var(--border-radius-lg);
@@ -254,7 +254,7 @@ export default {
   }
 
   &__loader {
-    padding: var(--spacer) var(--spacer-lg);
+    padding: 2rem 3rem;
   }
 
   .c-accordion {
@@ -299,7 +299,7 @@ export default {
 
     display: grid;
     grid-template-columns: 48px 1fr;
-    grid-column-gap: var(--margin-lg);
+    grid-column-gap: 0.75rem;
     align-items: center;
 
     img {
@@ -321,13 +321,13 @@ export default {
     width: 100%;
 
     &__loader {
-      padding: var(--margin) var(--margin-lg);
+      padding: 0.375rem 0.75rem;
     }
 
     &__inner {
       width: 100%;
       overflow-x: hidden;
-      padding: var(--margin-lg);
+      padding: 0.75rem;
     }
   }
 }

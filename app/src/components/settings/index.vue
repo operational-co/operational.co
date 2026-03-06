@@ -341,8 +341,8 @@ export default {
 
   &-section {
     background-color: var(--color-bg-2);
-    padding: var(--margin-lg);
-    border-radius: var(--margin-lg);
+    padding: 0.75rem;
+    border-radius: 0.75rem;
 
     .form-control {
       background-color: var(--color-bg-1);
@@ -355,7 +355,7 @@ export default {
     a {
       display: inline-flex;
       align-items: center;
-      margin-right: var(--margin);
+      margin-right: 0.375rem;
       color: var(--color-font);
       flex-wrap: nowrap;
       transition: all var(--transition-time) ease;
@@ -399,10 +399,10 @@ export default {
       a {
         display: grid;
         grid-template-columns: 24px 1fr;
-        grid-column-gap: var(--margin-lg);
+        grid-column-gap: 0.75rem;
         background-color: var(--color-bg-2);
         border-bottom: var(--color-bg-3) solid 1px;
-        padding: var(--margin-lg);
+        padding: 0.75rem;
         color: var(--color-font);
         transition: all var(--transition-time-sm) linear;
 
@@ -417,15 +417,15 @@ export default {
 
       &:first-child {
         a {
-          border-top-left-radius: var(--margin-lg);
-          border-top-right-radius: var(--margin-lg);
+          border-top-left-radius: 0.75rem;
+          border-top-right-radius: 0.75rem;
         }
       }
 
       &:last-child {
         a {
-          border-bottom-left-radius: var(--margin-lg);
-          border-bottom-right-radius: var(--margin-lg);
+          border-bottom-left-radius: 0.75rem;
+          border-bottom-right-radius: 0.75rem;
 
           border-bottom: none;
         }
@@ -451,8 +451,8 @@ export default {
   > section,
   .c-constrain__inner > section {
     background-color: var(--color-bg-2);
-    padding: var(--margin-lg);
-    border-radius: var(--margin-lg);
+    padding: 0.75rem;
+    border-radius: 0.75rem;
 
     .form-control {
       background-color: var(--color-bg-1);
@@ -472,7 +472,7 @@ export default {
   }
 
   @media screen and (max-width: 940px) {
-    //padding-top: var(--margin-lg);
+    //padding-top: 0.75rem;
   }
 }
 </style>

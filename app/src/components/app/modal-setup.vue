@@ -362,7 +362,7 @@ export default {
 		width: 300px;
 		//background-color: rgba(0, 0, 0, 0.1);
 		//backdrop-filter: blur(4px);
-		//padding: var(--spacer);
+		//padding: 2rem;
 		//border-radius: 30px;
 	}
 
@@ -372,7 +372,7 @@ export default {
 
 	.error {
 		margin: 1rem 0;
-		padding: var(--margin-lg);
+		padding: 0.75rem;
 		background-color: hsla(var(--hue-red), 0%, 16%, 0.75);
 		backdrop-filter: blur(4px);
 		border-radius: var(--border-radius);

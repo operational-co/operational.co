@@ -43,7 +43,7 @@ navigator.serviceWorker.addEventListener("push", event => {
   // Sample data structure: { message: "Hello from John Doe" }
   const data = event.data.json();
 
-  ops.events.ingest({
+  ops.events.log({
     name: "Push notification received",
     avatar: "🔔",
     content: `New message: ${data.message}`

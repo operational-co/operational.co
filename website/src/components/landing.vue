@@ -1195,7 +1195,7 @@ await ops.events.ingest({
         font-family: var(--font-family-monospace);
         font-size: var(--font-size-sm);
         display: inline-block;
-        padding: var(--margin);
+        padding: 0.375rem;
         background-color: var(--color-bg-3);
         line-height: 1;
         border-radius: var(--border-radius);
@@ -1228,9 +1228,9 @@ await ops.events.ingest({
 
       > span {
         display: inline-block;
-        padding: var(--margin) var(--margin-lg);
+        padding: 0.375rem 0.75rem;
         color: var(--color-font);
-        margin: 0 var(--margin-sm);
+        margin: 0 0.25rem;
         font-weight: 500;
         font-size: var(--font-size-sm);
         line-height: 1;
@@ -1278,7 +1278,7 @@ await ops.events.ingest({
       margin-bottom: 2rem;
 
       a {
-        margin: 0 var(--margin);
+        margin: 0 0.375rem;
         min-width: 183px;
       }
     }
@@ -1562,7 +1562,7 @@ await ops.events.ingest({
     }
 
     article {
-      padding: var(--spacer);
+      padding: 2rem;
 
       p {
         &:last-child {
@@ -1584,7 +1584,7 @@ await ops.events.ingest({
         svg {
           color: var(--color-success);
           min-width: 24px;
-          margin-right: var(--margin);
+          margin-right: 0.375rem;
         }
 
         span {
@@ -1631,20 +1631,20 @@ await ops.events.ingest({
       padding: 3rem 0;
 
       &__inner {
-        padding: var(--spacer-sm);
-        padding-top: var(--spacer);
+        padding: 1rem;
+        padding-top: 2rem;
         display: block;
       }
 
       article {
         padding: 0;
-        padding-bottom: var(--spacer);
+        padding-bottom: 2rem;
       }
 
       section {
-        margin-left: calc(var(--spacer-sm) * -1);
-        margin-bottom: calc(var(--spacer-sm) * -1);
-        width: calc(100% + var(--spacer-sm) * 2);
+        margin-left: calc(1rem * -1);
+        margin-bottom: calc(1rem * -1);
+        width: calc(100% + 1rem * 2);
         img {
           border-top: var(--color-translucent) solid 1px;
           border-left: none !important;
@@ -1674,7 +1674,7 @@ await ops.events.ingest({
       padding: 1rem 0;
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
-      grid-column-gap: var(--margin-lg);
+      grid-column-gap: 0.75rem;
 
       > article {
         //transform: rotate(-3deg);
@@ -1760,7 +1760,7 @@ await ops.events.ingest({
         display: grid;
         grid-template-columns: var(--img-width) 1fr;
         grid-template-rows: auto auto;
-        grid-column-gap: var(--margin-lg);
+        grid-column-gap: 0.75rem;
         align-items: center;
         width: 100%;
         justify-items: start;
@@ -1818,7 +1818,7 @@ await ops.events.ingest({
       bottom: 0;
       left: 50%;
       transform: translateX(-50%);
-      padding-bottom: var(--margin);
+      padding-bottom: 0.375rem;
 
       span {
         display: inline-block;

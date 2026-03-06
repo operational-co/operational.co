@@ -144,7 +144,7 @@ export default {
 
 <style lang="scss">
 .c-card-contexts {
-  //padding-top: var(--margin-lg);
+  //padding-top: 0.75rem;
 
   &__collapse {
     display: flex;
@@ -157,7 +157,7 @@ export default {
     }
 
     > svg {
-      margin-left: var(--margin);
+      margin-left: 0.375rem;
       transform: rotate(0deg);
     }
 
@@ -175,7 +175,7 @@ export default {
 
   &__footer {
     opacity: 0.75;
-    padding-top: var(--margin);
+    padding-top: 0.375rem;
     font-size: var(--font-size-sm);
   }
 
@@ -185,8 +185,8 @@ export default {
       display: flex;
       flex-direction: column;
       justify-content: center;
-      padding: var(--margin);
-      padding-left: calc(var(--margin-lg) + 20px);
+      padding: 0.375rem;
+      padding-left: calc(0.75rem + 20px);
       padding-top: 0;
       font-size: var(--font-size-sm);
 
@@ -215,8 +215,8 @@ export default {
   }
 
   @media screen and (max-width: 576px) {
-    margin-left: calc(var(--margin-lg) * -1 + 38px * -1);
-    width: calc(100% + var(--margin-lg) + 38px);
+    margin-left: calc(0.75rem * -1 + 38px * -1);
+    width: calc(100% + 0.75rem + 38px);
     padding-left: 15px;
 
     &__item {

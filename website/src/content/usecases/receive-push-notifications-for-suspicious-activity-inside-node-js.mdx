@@ -43,7 +43,7 @@ const payload1 = {
   avatar: "🚨",
   content: "User John Smith failed to login 5 times"
 }
-await ops.events.ingest(payload1)
+await ops.events.log(payload1)
 
 // Example 2: Login from unusual location
 const payload2 = {
@@ -51,7 +51,7 @@ const payload2 = {
   avatar: "🚨",
   content: "User John Smith logged in from 8.8.8.8, a new location"
 }
-await ops.events.ingest(payload2)
+await ops.events.log(payload2)
 
 // Example 3: Multiple password reset requests
 const payload3 = {
@@ -59,14 +59,14 @@ const payload3 = {
   avatar: "🚨",
   content: "User John Smith requested password reset 3 times within 5 minutes"
 }
-await ops.events.ingest(payload3)
+await ops.events.log(payload3)
 ```
 
 These examples show how to send different suspicious activity events with Operational.
 
 ### Conclusion
 
-Operational saves time by handling event ingestion and notifications.
+Operational saves time by handling event logging and notifications.
 You can focus on your code while getting real-time push alerts.
 Learn more at https://operational.co  
 Play with snippets in the playground: https://operational.co/playground

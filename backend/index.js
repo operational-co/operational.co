@@ -100,7 +100,7 @@ async function setupServer() {
         allowAll = true;
       }
     }
-    const allowedPaths = ["/api/v1/ingest", "/api/v1/log"];
+    const allowedPaths = ["/api/v1/log"];
 
     const origin = req.headers.origin;
 

@@ -37,7 +37,7 @@ export default {
 <style lang="scss">
 .c-page-waitlist {
   position: relative;
-  padding: calc(var(--spacer-lg) * 5) 0;
+  padding: calc(3rem * 5) 0;
   text-align: center;
 
   &:after {
@@ -54,7 +54,7 @@ export default {
   }
 
   article {
-    padding: 0 var(--margin-lg);
+    padding: 0 0.75rem;
     position: relative;
     z-index: 1;
     font-size: var(--font-size-lg);
@@ -90,11 +90,11 @@ export default {
   }
 
   @media screen and (max-width: 800px) {
-    //padding: calc(var(--spacer-lg) * 3) 0;
+    //padding: calc(3rem * 3) 0;
   }
 
   @media screen and (max-width: 576px) {
-    //padding: calc(var(--spacer-lg) * 1) 0;
+    //padding: calc(3rem * 1) 0;
 
     h3 {
       line-height: 1.4;

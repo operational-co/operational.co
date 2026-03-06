@@ -49,7 +49,7 @@ const payloadAdd = {
   avatar: '🛒',
   content: 'User John Smith added product ID 123 to cart'
 }
-await ops.events.ingest(payloadAdd)
+await ops.events.log(payloadAdd)
 
 // Example 2: remove from cart
 const payloadRemove = {
@@ -57,7 +57,7 @@ const payloadRemove = {
   avatar: '🛒',
   content: 'User John Smith removed product ID 123 from cart'
 }
-await ops.events.ingest(payloadRemove)
+await ops.events.log(payloadRemove)
 
 // Example 3: checkout initiated
 const payloadCheckout = {
@@ -65,7 +65,7 @@ const payloadCheckout = {
   avatar: '💳',
   content: 'User John Smith started checkout for order 456'
 }
-await ops.events.ingest(payloadCheckout)
+await ops.events.log(payloadCheckout)
 
 // Example 4: purchase completed
 const payloadPurchase = {
@@ -73,7 +73,7 @@ const payloadPurchase = {
   avatar: '✅',
   content: 'User John Smith completed order 456'
 }
-await ops.events.ingest(payloadPurchase)
+await ops.events.log(payloadPurchase)
 ```
 
 The code above shows how to track common cart events

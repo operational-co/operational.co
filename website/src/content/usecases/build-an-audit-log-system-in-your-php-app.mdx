@@ -54,7 +54,7 @@ $payload = [
     'content' => 'User John Smith updated their profile'
 ];
 
-$ops->events->ingest($payload);
+$ops->events->log($payload);
 ```
 
 ```php
@@ -71,7 +71,7 @@ $payload = [
     ]
 ];
 
-$ops->events->ingest($payload);
+$ops->events->log($payload);
 ```
 
 ```php
@@ -88,7 +88,7 @@ $payload = [
     ]
 ];
 
-$ops->events->ingest($payload);
+$ops->events->log($payload);
 ```
 
 These examples show how to send different audit events from your PHP app to Operational.

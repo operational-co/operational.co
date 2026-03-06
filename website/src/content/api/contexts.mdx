@@ -43,7 +43,7 @@ let e = {
   contextStart : true // context start is only true for the first contextual event
 };
 
-await ops.events.ingest(e);
+await ops.events.log(e);
 
 // later on
 e = {
@@ -52,7 +52,7 @@ e = {
   content : "343543 job failed"
 };
 
-await ops.events.ingest(e);
+await ops.events.log(e);
 
 // some time later
 e = {
@@ -61,7 +61,7 @@ e = {
   contextId : "183542 job passed"
 };
 
-await ops.events.ingest(e);
+await ops.events.log(e);
 
 ```
 

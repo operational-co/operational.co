@@ -29,7 +29,7 @@ export default {
 
   a {
     display: inline-block;
-    padding: var(--margin-sm) var(--margin);
+    padding: 0.25rem 0.375rem;
     border-radius: var(--border-radius);
 
     &:hover,

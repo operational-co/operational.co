@@ -87,7 +87,7 @@ export default {
 			position: relative;
 			display: inline-block;
 			font-weight: 500;
-			padding: var(--margin) var(--margin-lg);
+			padding: 0.375rem 0.75rem;
 
 			&:after {
 			}

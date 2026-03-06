@@ -60,7 +60,7 @@ if (used > 80) {
     content: `Server disk space at ${used}% usage`
   }
 
-  await ops.events.ingest(payload)
+  await ops.events.log(payload)
 }
 ```
 

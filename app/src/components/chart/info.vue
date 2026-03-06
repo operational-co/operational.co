@@ -34,7 +34,7 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding-bottom: var(--spacer-sm);
+  padding-bottom: 1rem;
 
   h3 {
     margin-bottom: 0;

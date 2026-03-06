@@ -39,11 +39,11 @@ export default {
 
 <style lang="scss">
 .c-prevnext {
-  margin-top: var(--spacer);
+  margin-top: 2rem;
   display: grid;
   grid-template-columns: max-content max-content;
   justify-content: space-between;
-  grid-column-gap: var(--spacer);
+  grid-column-gap: 2rem;
 
   &__item {
     display: inline-flex;
@@ -53,23 +53,23 @@ export default {
     transition: all var(--transition-time) ease;
 
     &.btn {
-      padding: var(--margin-lg) var(--spacer-sm);
+      padding: 0.75rem 1rem;
       padding-left: 8px;
     }
 
     svg {
-      margin-right: var(--margin);
+      margin-right: 0.375rem;
     }
 
     &.next {
       &.btn {
-        padding-left: var(--spacer-sm);
+        padding-left: 1rem;
         padding-right: 8px;
       }
 
       svg {
         margin-right: 0;
-        margin-left: var(--margin);
+        margin-left: 0.375rem;
       }
     }
 

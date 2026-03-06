@@ -111,7 +111,7 @@ export default {
   height: calc(256px + 64px);
   overflow-y: hidden;
 
-  padding: var(--margin-lg) var(--spacer);
+  padding: 0.75rem 2rem;
 
   pointer-events: none;
 
@@ -148,7 +148,7 @@ export default {
     height: calc(200px + 64px);
     left: 0;
     width: 100%;
-    padding: var(--margin-lg);
+    padding: 0.75rem;
   }
 }
 </style>

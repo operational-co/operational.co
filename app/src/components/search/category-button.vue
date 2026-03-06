@@ -251,7 +251,7 @@ export default {
       width: 100%;
       height: 100%;
       overflow-y: auto;
-      padding: var(--margin);
+      padding: 0.375rem;
 
       &::-webkit-scrollbar {
         width: 10px;
@@ -286,7 +286,7 @@ export default {
 
     a {
       display: block;
-      padding: var(--margin);
+      padding: 0.375rem;
       color: var(--color-font);
       border-radius: var(--border-radius);
 

@@ -112,7 +112,7 @@ export default {
   .form-control-wrap {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr;
-    grid-column-gap: var(--margin);
+    grid-column-gap: 0.375rem;
 
     .form-control {
       text-align: center;

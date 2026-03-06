@@ -41,7 +41,7 @@ const payload = {
   content: "John Smith added product 1234 to cart"
 };
 
-await ops.events.ingest(payload);
+await ops.events.log(payload);
 ```
 
 ```javascript
@@ -52,7 +52,7 @@ const removePayload = {
   content: "John Smith removed product 1234 from cart"
 };
 
-await ops.events.ingest(removePayload);
+await ops.events.log(removePayload);
 ```
 
 ```javascript
@@ -63,7 +63,7 @@ const checkoutPayload = {
   content: "John Smith started checkout for order 5678"
 };
 
-await ops.events.ingest(checkoutPayload);
+await ops.events.log(checkoutPayload);
 ```
 
 These examples show how to track add, remove, and checkout events using Operational's SDK.

@@ -82,7 +82,7 @@ export default {
       top: -24px;
       left: 50%;
       transform: translateX(-50%);
-      padding: var(--margin-sm) var(--margin);
+      padding: 0.25rem 0.375rem;
       content: attr(data-title);
 
       font-size: var(--font-size-xs);
@@ -113,7 +113,7 @@ export default {
 
   @media screen and (max-width: 576px) {
     > div {
-      padding: 0 var(--margin-sm);
+      padding: 0 0.25rem;
     }
   }
 }

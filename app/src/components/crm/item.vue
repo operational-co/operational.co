@@ -36,8 +36,8 @@ export default {
 
 <style lang="scss">
 .c-crm-item {
-  margin-bottom: var(--margin);
-  padding: var(--margin-lg);
+  margin-bottom: 0.375rem;
+  padding: 0.75rem;
   border-radius: var(--border-radius);
   font-size: var(--font-size-sm);
   background-color: var(--color-bg-4);

@@ -106,8 +106,8 @@ export default {
 .c-card-header {
   display: grid;
   grid-template-columns: max-content 1fr max-content;
-  grid-column-gap: var(--margin-lg);
-  padding: var(--margin-lg);
+  grid-column-gap: 0.75rem;
+  padding: 0.75rem;
   user-select: none;
 
   &.expandable {
@@ -245,7 +245,7 @@ export default {
     font-size: var(--font-size-sm);
     padding: 4px;
     margin-left: -4px;
-    grid-column-gap: var(--margin);
+    grid-column-gap: 0.375rem;
     align-items: center;
 
     .c-card-header__image {

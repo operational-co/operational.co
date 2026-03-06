@@ -1,0 +1,59 @@
+---
+title: Log Limits And Errors
+slug: log-limits-and-errors
+description: Understand common errors and payload limits before launch.
+---
+
+import Item from "@operational.co/components/card/index.vue";
+
+# Log limits and errors
+
+Use this page as a quick pre-launch check.
+
+## Request basics
+
+1. Send `Authorization: Bearer <API_KEY>`.
+2. Send JSON to `POST /api/v1/log`.
+3. Include at least one of `name` or `content`.
+
+## Common responses
+
+1. `201`: event accepted.
+2. `400`: payload or validation issue.
+3. `401`: bearer token missing or invalid.
+
+## Common issues
+
+1. Invalid `type` value.
+2. `content` is too large.
+3. Action fields are missing (`url`, `buttonText`, or `key`).
+
+## Size limits
+
+1. JSON parser limit: `100kb`.
+2. Plain text parser limit: `10kb`.
+3. On MySQL event storage, string `content` max is `6000` characters.
+4. Otherwise server-side content check allows up to `100000` characters.
+
+## Test mode
+
+Use `test: true` if you want to test safely without mixing with normal feed views.
+
+```js
+await ops.events.log({
+  name: "checkout webhook replay",
+  avatar: "🧪",
+  test: true,
+  content: "Replay run for webhook evt_123",
+});
+```
+
+<Item client:only="vue"
+  item={{
+    name: "checkout webhook replay",
+    avatar: "🧪",
+    createdAt: "2026-02-28",
+    test: true,
+    content: "Replay run for webhook evt_123"
+  }}
+></Item>

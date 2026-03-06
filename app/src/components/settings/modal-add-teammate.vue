@@ -67,13 +67,13 @@ export default {
 <style lang="scss">
 .m-add-teammate {
   .vfm__content {
-    padding: var(--spacer-sm);
+    padding: 1rem;
     width: 500px;
   }
 
   h3 {
     user-select: none;
-    width: calc(100% - var(--spacer-lg));
+    width: calc(100% - 3rem);
   }
 
   h2 {

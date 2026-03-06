@@ -59,13 +59,13 @@ export default {
 	.vfm__content {
 		display: flex;
 		align-items: center;
-		padding: var(--spacer-sm);
+		padding: 1rem;
 	}
 
 	h3 {
 		display: inline-block;
 		margin: 0;
-		margin-left: var(--margin);
+		margin-left: 0.375rem;
 	}
 }
 </style>

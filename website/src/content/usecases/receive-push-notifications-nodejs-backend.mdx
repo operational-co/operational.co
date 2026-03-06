@@ -47,7 +47,7 @@ const payload = {
   content: "Sent push notification to user John Smith"
 }
 
-await ops.events.ingest(payload)
+await ops.events.log(payload)
 ```
 
 This code tracks when your backend sends a push notification.

@@ -50,7 +50,7 @@ export default {
     display: block;
     max-width: 100%;
     height: auto;
-    margin-top: var(--margin-sm);
+    margin-top: 0.25rem;
     border-radius: var(--border-radius);
   }
 }

@@ -52,7 +52,7 @@ $payload = [
   'content' => 'John Smith updated their profile information',
 ];
 
-$response = $ops->events->ingest($payload);
+$response = $ops->events->log($payload);
 ```
 
 This example sends an event to Operational when a user updates their profile. The event name is `user_profile_updated` and it includes a simple message.

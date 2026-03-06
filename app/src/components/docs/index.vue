@@ -113,10 +113,10 @@ export default {
 	&__menu {
 		display: grid;
 		grid-template-columns: 1fr 1fr;
-		padding: var(--margin);
+		padding: 0.375rem;
 
 		&__item {
-			padding: var(--margin);
+			padding: 0.375rem;
 			border-radius: var(--border-radius);
 			text-decoration: none !important;
 		}
@@ -142,7 +142,7 @@ export default {
 				a {
 					position: relative;
 					display: inline-block;
-					padding: var(--margin) var(--margin-lg);
+					padding: 0.375rem 0.75rem;
 					font-weight: 500;
 					font-size: var(--font-size-sm);
 					color: var(--color-font);
@@ -179,7 +179,7 @@ export default {
 	}
 
 	@media screen and (max-width: 940px) {
-		padding-top: var(--margin-lg);
+		padding-top: 0.75rem;
 	}
 }
 </style>

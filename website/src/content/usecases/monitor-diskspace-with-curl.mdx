@@ -19,7 +19,7 @@ Using cURL to send alerts lets you automate notifications when space is low.
 
 ### How Operational helps with disk space monitoring
 
-Operational provides a simple API to ingest events from any tool or script.
+Operational provides a simple API to log events from any tool or script.
 You can send disk space alerts directly to your operational dashboard.
 
 ![](https://operational.co/images/misc/ops-usage.jpg)
@@ -34,7 +34,7 @@ You can send disk space alerts directly to your operational dashboard.
 ### Example: Sending disk space alerts with cURL
 
 ```bash
-curl -X POST https://api.operational.co/api/v1/ingest -H "Authorization: Bearer YOUR_API_KEY" -H "Content-Type: application/json" --data '{
+curl -X POST https://api.operational.co/api/v1/log -H "Authorization: Bearer YOUR_API_KEY" -H "Content-Type: application/json" --data '{
   "name": "Low disk space",
   "avatar": "💽",
   "content": "Disk space is below threshold on server1: only 5% remaining"
@@ -62,7 +62,7 @@ USAGE=$(df -h "$CHECK_PATH" | awk 'NR==2 {print $5}' | sed 's/%//')
 
 # If usage is 90% or more, disk space is less than 10%
 if [ "$USAGE" -ge $((100 - THRESHOLD)) ]; then
-  curl -X POST https://api.operational.co/api/v1/ingest \
+  curl -X POST https://api.operational.co/api/v1/log \
     -H "Authorization: Bearer $API_KEY" \
     -H "Content-Type: application/json" \
     --data "{

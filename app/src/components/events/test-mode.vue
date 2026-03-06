@@ -51,7 +51,7 @@ export default {
   span {
     &:first-child {
       font-size: var(--font-size-sm);
-      margin-right: var(--margin);
+      margin-right: 0.375rem;
       opacity: 0.8;
     }
   }

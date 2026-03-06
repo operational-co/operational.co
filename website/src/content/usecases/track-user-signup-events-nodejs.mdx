@@ -42,7 +42,7 @@ const payload = {
   content: "New user John Smith signed up"
 }
 
-await ops.events.ingest(payload)
+await ops.events.log(payload)
 ```
 
 This snippet records a signup event each time a user called John Smith completes registration.

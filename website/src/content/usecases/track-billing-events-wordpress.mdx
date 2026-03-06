@@ -49,7 +49,7 @@ $payload = [
   'content' => 'Order #1234 was successfully billed for John Smith'
 ];
 
-$ops->events->ingest($payload);
+$ops->events->log($payload);
 ```
 
 This code initializes the Operational client and sends a billing_success event with order details.

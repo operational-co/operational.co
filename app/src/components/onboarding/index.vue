@@ -237,7 +237,7 @@ export default {
     //transform: translateX(-50%);
     height: auto !important;
     min-height: initial !important;
-    padding: var(--spacer);
+    padding: 2rem;
     padding-top: 0;
 
     display: flex;

@@ -1,0 +1,39 @@
+---
+title: Categories And Search
+slug: categories-and-search
+description: Keep your event feed clean with categories and search.
+---
+
+import Item from "@operational.co/components/card/index.vue";
+
+# Categories and search
+
+Use `category` to group similar events.
+This keeps your project feed easy to scan.
+
+```js
+await ops.events.log({
+  name: "invoice overdue",
+  avatar: "📬",
+  category: "billing",
+  content: "Invoice inv_8901 is 5 days overdue",
+});
+```
+
+<Item client:only="vue"
+  item={{
+    name: "invoice overdue",
+    avatar: "📬",
+    createdAt: "2026-02-28",
+    category: "billing",
+    content: "Invoice inv_8901 is 5 days overdue"
+  }}
+></Item>
+
+Operational shows common categories for each project and lets you filter by them.
+
+Good category habits:
+
+1. Keep names short (`billing`, `error`, `security`).
+2. Use `name` for the event action, and `category` for the group.
+3. Keep category length under 24 characters.

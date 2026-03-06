@@ -48,7 +48,7 @@ export default {
 	display: block;
 	border: 1px solid var(--color-translucent);
 	border-radius: 12px;
-	margin-bottom: var(--spacer-sm);
+	margin-bottom: 1rem;
 	text-decoration: none !important;
 	color: var(--color-font);
 	cursor: pointer;
@@ -59,7 +59,7 @@ export default {
 	}
 
 	&__title {
-		padding: var(--spacer-sm);
+		padding: 1rem;
 		user-select: none;
 
 		h2,
@@ -70,7 +70,7 @@ export default {
 	}
 
 	&__body {
-		padding: 0 var(--spacer-sm);
+		padding: 0 1rem;
 		overflow: hidden;
 	}
 }

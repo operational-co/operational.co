@@ -170,9 +170,9 @@ export default {
     grid-template-columns: 48px 1fr;
 
     input {
-      width: calc(100% - var(--margin-lg));
+      width: calc(100% - 0.75rem);
       height: 100%;
-      margin-left: var(--margin-lg);
+      margin-left: 0.75rem;
     }
   }
 

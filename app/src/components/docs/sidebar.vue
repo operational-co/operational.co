@@ -67,7 +67,7 @@ export default {
       transition: all 60ms linear;
 
       > span {
-        padding-left: var(--margin);
+        padding-left: 0.375rem;
       }
 
       &:hover,

@@ -49,7 +49,7 @@ const payload = {
   content: `The DB_URL environment variable is ${dbUrl}`
 }
 
-await ops.events.ingest(payload)
+await ops.events.log(payload)
 ```
 
 This snippet logs an event when you read the DB_URL environment variable.

@@ -85,7 +85,7 @@ export default {
 <style lang="scss">
 .c-crm {
   margin: 0 auto;
-  padding: var(--spacer-sm) 0;
+  padding: 1rem 0;
 
   &__list {
     padding-top: 8px;

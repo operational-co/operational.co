@@ -188,12 +188,12 @@ export default {
     }
 
     .btn {
-      margin-left: var(--margin-lg);
+      margin-left: 0.75rem;
     }
   }
 
   &__header {
-    padding: var(--margin) 0;
+    padding: 0.375rem 0;
     display: grid;
     grid-template-columns: 48px 1fr 1fr 80px 100px;
     align-items: center;
@@ -205,7 +205,7 @@ export default {
   }
 
   &__item {
-    padding: var(--margin) 0;
+    padding: 0.375rem 0;
     display: grid;
     grid-template-columns: 48px 1fr 1fr 80px 100px;
     align-items: center;
@@ -228,13 +228,13 @@ export default {
 
     .admin-badge {
       color: var(--color-primary-light);
-      margin-right: var(--margin);
+      margin-right: 0.375rem;
     }
 
     .label {
       display: inline-flex;
       justify-content: center;
-      padding: 0 var(--margin);
+      padding: 0 0.375rem;
       border-radius: var(--border-radius);
       text-align: center;
       font-family: var(--font-family-monospace);

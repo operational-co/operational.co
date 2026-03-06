@@ -39,7 +39,7 @@ export default {
 
   > a {
     display: block;
-    padding: var(--spacer-sm);
+    padding: 1rem;
     color: var(--color-font);
     border-radius: var(--border-radius-lg);
     transition: all var(--transition-time) ease-out;
@@ -50,7 +50,7 @@ export default {
     background: linear-gradient(rgba(35, 35, 38, 0.6) 0.01%, rgba(46, 46, 52, 0.5) 100%),
       linear-gradient(rgba(35, 35, 38, 0.2) 0.01%, rgba(46, 46, 52, 0.2) 100%);
     border-radius: var(--border-radius-xl);
-    padding: var(--spacer);
+    padding: 2rem;
     overflow: hidden;
 
     &:hover,
@@ -67,7 +67,7 @@ export default {
     object-fit: cover;
     border-radius: var(--border-radius);
 
-    margin-bottom: var(--spacer-sm);
+    margin-bottom: 1rem;
   }
 
   article {
@@ -98,7 +98,7 @@ export default {
     }
 
     a {
-      padding: var(--margin-lg);
+      padding: 0.75rem;
     }
 
     &.compact {

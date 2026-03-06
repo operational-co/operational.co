@@ -47,7 +47,7 @@ const payload = {
   content: "Subscription plan upgraded to Pro for $49/month"
 };
 
-await ops.events.ingest(payload);
+await ops.events.log(payload);
 ```
 
 This snippet logs a billing_success event with details about the subscription event.

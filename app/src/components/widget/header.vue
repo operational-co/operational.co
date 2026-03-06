@@ -32,14 +32,14 @@ export default {
 <style lang="scss">
 .c-widget-header {
   position: relative;
-  padding: var(--spacer-sm);
+  padding: 1rem;
   //background-color: red;
 
   &__byline {
     display: block;
     font-weight: 500;
     font-size: var(--font-size-sm);
-    margin-bottom: var(--margin-sm);
+    margin-bottom: 0.25rem;
   }
 
   &__title {
@@ -94,7 +94,7 @@ export default {
   }
 
   @media screen and (max-width: 576px) {
-    padding: var(--margin-lg);
+    padding: 0.75rem;
     padding-bottom: 0;
 
     &__byline {

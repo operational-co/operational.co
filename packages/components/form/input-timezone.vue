@@ -189,7 +189,7 @@ export default {
 
     > span {
       display: block;
-      padding: var(--margin);
+      padding: 0.375rem;
       border-radius: var(--border-radius);
       user-select: none;
       cursor: pointer;

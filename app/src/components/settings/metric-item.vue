@@ -67,7 +67,7 @@ export default {
 
 <style lang="scss">
 .c-metric-item {
-  padding: var(--margin-lg);
+  padding: 0.75rem;
   background-color: var(--color-bg-3);
   border-radius: var(--border-radius);
 

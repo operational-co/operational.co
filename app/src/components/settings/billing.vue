@@ -262,11 +262,11 @@ export default {
 .c-profile-billing {
   section {
     background-color: var(--color-bg-3);
-    padding: var(--spacer);
+    padding: 2rem;
     border-radius: var(--border-radius-lg);
 
     &:not(:last-of-type) {
-      margin-bottom: var(--spacer);
+      margin-bottom: 2rem;
     }
 
     article {
@@ -277,7 +277,7 @@ export default {
       display: grid;
       grid-template-columns: 32px 1fr;
       align-items: center;
-      padding: var(--margin);
+      padding: 0.375rem;
       background-color: var(--color-bg-3);
       border-radius: var(--border-radius);
       text-decoration: none;
@@ -304,7 +304,7 @@ export default {
   }
 
   #payment-element {
-    margin-bottom: var(--margin-lg);
+    margin-bottom: 0.75rem;
   }
 
   .back-button {
@@ -331,7 +331,7 @@ export default {
 
   @media screen and (max-width: 576px) {
     section {
-      padding: var(--spacer-sm);
+      padding: 1rem;
     }
   }
 }

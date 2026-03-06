@@ -48,7 +48,7 @@ export default {
 .c-copy {
   &.btn {
     height: initial;
-    padding: var(--margin-sm) var(--margin);
+    padding: 0.25rem 0.375rem;
     font-size: var(--font-size-sm);
     line-height: 1.2;
   }

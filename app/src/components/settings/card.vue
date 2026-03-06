@@ -52,9 +52,9 @@ export default {
 
     display: grid;
     grid-template-columns: min-content max-content 1fr;
-    grid-column-gap: var(--margin);
+    grid-column-gap: 0.375rem;
     align-items: center;
-    padding: var(--spacer-sm);
+    padding: 1rem;
   }
 
   &__actions {
@@ -64,7 +64,7 @@ export default {
   header {
     span {
       display: inline-block;
-      padding: var(--margin) var(--margin-lg);
+      padding: 0.375rem 0.75rem;
       font-size: var(--font-size-sm);
       border-radius: var(--border-radius);
       background-color: rgba(0, 0, 0, 0.1);

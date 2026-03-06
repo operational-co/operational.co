@@ -1,0 +1,40 @@
+---
+title: Create Project And API Key
+slug: create-project-and-api-key
+description: Finish onboarding, create a project, and connect your backend.
+---
+
+import Item from "@operational.co/components/card/index.vue";
+
+# Create project and API key
+
+After signup, onboarding asks you to create your first project.
+You also get a project API key.
+
+A good setup for most teams:
+
+1. One project for production.
+2. One project for staging.
+3. Store API keys in environment variables.
+4. Invite teammates only to projects they need.
+
+Initialize the SDK in your backend:
+
+```js
+import Operational from "@operational.co/sdk";
+
+const ops = new Operational(process.env.OPERATIONAL_API_KEY, {
+  // Optional for self-hosted or custom domains
+  // baseUrl: "https://api.your-domain.com",
+});
+```
+
+<Item client:only="vue"
+  item={{
+    name: "api key configured",
+    avatar: "🔐",
+    createdAt: "2026-02-28",
+    category: "setup",
+    content: "Operational SDK initialized for project production"
+  }}
+></Item>

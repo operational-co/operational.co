@@ -48,7 +48,7 @@ export default {};
 <style lang="scss">
 .c-faq {
   border-radius: 5px;
-  padding: var(--spacer-sm);
+  padding: 1rem;
   background-color: var(--color-bg-3);
   border: 1px solid rgba(255, 255, 255, 0.07);
 }

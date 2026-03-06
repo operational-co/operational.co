@@ -43,11 +43,11 @@ export default {
 <style lang="scss">
 .m-widget-create {
   .vfm__content {
-    padding: var(--spacer-sm);
+    padding: 1rem;
   }
 
   h3 {
-    width: calc(100% - var(--spacer-lg));
+    width: calc(100% - 3rem);
   }
 }
 </style>

@@ -27,7 +27,7 @@
           </svg>
           <span>Events</span>
         </router-link>
-        <router-link to="/dashboards">
+        <!-- <router-link to="/dashboards">
           <svg
             width="24"
             height="24"
@@ -54,8 +54,8 @@
           </svg>
 
           <span>Dashboards</span>
-        </router-link>
-        <!-- <router-link to="/settings"> <span>Settings</span> </router-link> -->
+        </router-link> -->
+        <router-link to="/settings"> <span>Settings</span> </router-link>
         <router-link to="/playground">
           <svg
             width="24"
@@ -213,8 +213,8 @@ export default {
 
   &__testmode {
     display: inline-block;
-    padding: var(--margin) var(--margin-lg);
-    margin-left: var(--margin-lg);
+    padding: 0.375rem 0.75rem;
+    margin-left: 0.75rem;
     background-color: var(--color-bg-3);
     border-radius: var(--border-radius);
     font-family: var(--font-family-monospace);
@@ -230,7 +230,7 @@ export default {
     z-index: 1;
 
     > section {
-      padding: var(--margin) var(--margin-lg);
+      padding: 0.375rem 0.75rem;
 
       &:first-child {
         position: absolute;
@@ -279,8 +279,8 @@ export default {
 
       span {
         display: inline-block;
-        padding: var(--margin-sm);
-        margin-left: var(--margin);
+        padding: 0.25rem;
+        margin-left: 0.375rem;
         font-size: var(--font-size-xxs);
         font-weight: 600;
         font-family: var(--font-family-monospace);
@@ -304,8 +304,8 @@ export default {
       align-items: center;
       border-radius: 12px;
       margin-right: 0;
-      padding: var(--margin) var(--margin-lg);
-      padding-right: var(--margin);
+      padding: 0.375rem 0.75rem;
+      padding-right: 0.375rem;
       background-color: var(--color-bg-3);
       color: var(--color-font);
       transition: all var(--transition-time-sm) linear;
@@ -321,7 +321,7 @@ export default {
 
       > span {
         display: inline-block;
-        margin-right: var(--margin);
+        margin-right: 0.375rem;
         font-weight: 500;
         pointer-events: none;
         overflow: hidden;
@@ -361,9 +361,9 @@ export default {
       position: relative;
       display: inline-flex;
       align-items: center;
-      margin: 0 var(--margin);
-      padding: var(--margin);
-      padding-right: var(--margin-lg);
+      margin: 0 0.375rem;
+      padding: 0.375rem;
+      padding-right: 0.75rem;
       color: var(--color-font);
       transition: var(--transition);
       font-weight: 500;
@@ -439,7 +439,7 @@ export default {
 
   @supports (-webkit-touch-callout: none) {
     &__mobile {
-      padding-bottom: var(--spacer);
+      padding-bottom: 2rem;
     }
   }
 }

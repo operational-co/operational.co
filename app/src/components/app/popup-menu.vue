@@ -256,7 +256,7 @@ export default {
   }
 
   &__top {
-    padding: var(--margin-lg);
+    padding: 0.75rem;
     > small {
       display: block;
     }
@@ -264,7 +264,7 @@ export default {
 
   &__middle {
     background-color: var(--color-bg-2);
-    padding-bottom: var(--margin-sm);
+    padding-bottom: 0.25rem;
     border-top: var(--color-bg-4) solid 1px;
     border-bottom: var(--color-bg-4) solid 1px;
 
@@ -272,19 +272,19 @@ export default {
       font-weight: 500;
       font-size: var(--font-size-xs);
       opacity: 0.8;
-      padding: var(--margin) var(--margin-lg);
+      padding: 0.375rem 0.75rem;
     }
 
     > a {
       display: flex;
       align-items: center;
-      padding: var(--margin) var(--margin-lg);
+      padding: 0.375rem 0.75rem;
       font-size: var(--font-size-sm);
       font-weight: 500;
       color: var(--color-font);
 
       .c-avatar {
-        margin-right: var(--margin);
+        margin-right: 0.375rem;
       }
 
       &:hover,
@@ -312,7 +312,7 @@ export default {
         height: 22px;
         margin-left: auto;
         text-align: center;
-        padding: var(--margin-sm);
+        padding: 0.25rem;
         font-size: var(--font-size-xs);
         background-color: var(--color-bg-4);
         border-radius: var(--border-radius-sm);
@@ -321,7 +321,7 @@ export default {
   }
 
   &__bottom {
-    padding: var(--margin);
+    padding: 0.375rem;
     //background-color: rgba(0, 0, 0, 0.2);
 
     a {
@@ -330,8 +330,8 @@ export default {
       display: grid;
       align-items: center;
       grid-template-columns: 24px 1fr;
-      grid-column-gap: var(--margin);
-      padding: var(--margin);
+      grid-column-gap: 0.375rem;
+      padding: 0.375rem;
       color: var(--color-font);
       border-radius: var(--border-radius-sm);
       user-select: none;
@@ -348,9 +348,9 @@ export default {
   }
 
   &__usage {
-    padding: var(--margin);
+    padding: 0.375rem;
     background-color: var(--color-bg-4);
-    margin-bottom: var(--margin);
+    margin-bottom: 0.375rem;
     border-radius: var(--border-radius);
     h3 {
       font-size: var(--font-size-lg);

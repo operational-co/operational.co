@@ -33,10 +33,10 @@ Every time you make a request, you will get one of these status codes back.
 
 Unlike traditional logs, ops has a fairly diverse API footprint - you can send a lot of crazy stuff.
 
-This means there's a very likely possibility you might send a request that won't make it past our parsers. Don't worry, we try to ingest the event data whenever possible.
+This means there's a very likely possibility you might send a request that won't make it past our parsers. Don't worry, we try to log the event data whenever possible.
 
 - userId field is meant to be a string. If you send a number, we'll simply convert it to a string on our end.
 - If the name field inside a event is too long, it will simply be truncated.
-- Events cannot be more than 100kb big. If they are, we will try to figure out if the event's type was json and if it was, it will be truncated. If the truncated event is under 100kb, ops will ingest the event.
+- Events cannot be more than 100kb big. If they are, we will try to figure out if the event's type was json and if it was, it will be truncated. If the truncated event is under 100kb, ops will log the event.
 
-In these scenarios, we'll add warnings under the event letting you know that the event was modified so it could be ingested.
+In these scenarios, we'll add warnings under the event letting you know that the event was modified so it could be logged.

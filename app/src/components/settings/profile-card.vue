@@ -124,7 +124,7 @@ export default {
 <style lang="scss">
 .c-settings-profile-card {
   background-color: var(--color-bg-2);
-  border-radius: var(--margin-lg);
+  border-radius: 0.75rem;
   margin-bottom: 1rem;
 
   --img-width: 48px;
@@ -132,8 +132,8 @@ export default {
   header {
     display: grid;
     grid-template-columns: var(--img-width) 1fr;
-    grid-column-gap: var(--margin-lg);
-    padding: var(--margin-lg);
+    grid-column-gap: 0.75rem;
+    padding: 0.75rem;
     border-bottom: var(--color-bg-3) solid 1px;
 
     .c-avatar {
@@ -151,11 +151,11 @@ export default {
   }
 
   footer {
-    padding: var(--margin-lg);
+    padding: 0.75rem;
     display: grid;
     grid-template-columns: 1fr 1fr;
-    grid-column-gap: var(--margin-lg);
-    grid-row-gap: var(--margin-lg);
+    grid-column-gap: 0.75rem;
+    grid-row-gap: 0.75rem;
 
     .c-code {
       margin-bottom: 0;
@@ -164,7 +164,7 @@ export default {
     section {
       > span {
         display: inline-block;
-        padding: var(--margin) 0;
+        padding: 0.375rem 0;
       }
     }
 

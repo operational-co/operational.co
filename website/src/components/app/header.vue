@@ -124,7 +124,7 @@ export default {
 
     h1 {
       display: inline-block;
-      padding: var(--margin);
+      padding: 0.375rem;
       font-size: var(--font-size-lg);
       margin: 0;
       color: var(--color-font);
@@ -138,8 +138,8 @@ export default {
 
     span {
       display: inline-block;
-      padding: var(--margin);
-      margin-left: var(--margin);
+      padding: 0.375rem;
+      margin-left: 0.375rem;
       font-size: var(--font-size-sm);
       font-weight: 500;
       font-family: var(--font-family-monospace);
@@ -157,7 +157,7 @@ export default {
       font-size: var(--font-size-sm);
       font-weight: 500;
       background-color: var(--color-bg-3);
-      padding: var(--margin-sm) var(--margin);
+      padding: 0.25rem 0.375rem;
       border-radius: var(--border-radius-sm);
       color: var(--color-font);
     }
@@ -166,16 +166,16 @@ export default {
   &__inner {
     .c-constrain {
       &__inner {
-        padding: var(--spacer-sm) 0;
+        padding: 1rem 0;
         display: flex;
         align-items: center;
       }
     }
 
     .btn {
-      margin-left: var(--margin-lg);
+      margin-left: 0.75rem;
       &.btn-sm {
-        padding: var(--margin) var(--margin-lg);
+        padding: 0.375rem 0.75rem;
       }
     }
   }
@@ -204,7 +204,7 @@ export default {
       touch-action: manipulation;
       user-select: none;
       color: var(--color-font);
-      padding: var(--margin-lg);
+      padding: 0.75rem;
       cursor: pointer;
     }
   }
@@ -227,7 +227,7 @@ export default {
       display: block;
       background-color: var(--color-bg-2);
       font-weight: 500;
-      padding: var(--margin-lg);
+      padding: 0.75rem;
       touch-action: manipulation;
 
       &:hover,

@@ -42,7 +42,7 @@ export default {
 
   &__tab {
     display: inline-block;
-    padding: var(--margin) var(--margin-lg);
+    padding: 0.375rem 0.75rem;
     user-select: none;
     cursor: pointer;
 

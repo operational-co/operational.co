@@ -149,8 +149,8 @@ export default {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    padding: var(--margin-lg);
-    padding-left: calc(var(--margin-lg) + 46px);
+    padding: 0.75rem;
+    padding-left: calc(0.75rem + 46px);
     padding-top: 0;
     margin-top: -2px; // Height saving measures
 

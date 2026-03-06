@@ -60,14 +60,14 @@ const payload = {
   content: "User John Smith cancelled subscription plan Pro"
 }
 
-await ops.events.ingest(payload)
+await ops.events.log(payload)
 ```
 
 This example sends an event when a user cancels their Pro subscription. You can view these events in your Operational dashboard.
 
 ### Conclusion
 
-Operational saves you time by handling event ingestion and visualization.
+Operational saves you time by handling event logging and visualization.
 
 You can focus on reducing churn instead of building custom tracking.
 

@@ -53,12 +53,12 @@ const suspiciousEvent = {
   content: "Multiple failed login attempts from IP 203.0.113.45"
 };
 
-await ops.events.ingest(suspiciousEvent);
+await ops.events.log(suspiciousEvent);
 ```
 This example sends an alert when several failed logins occur in a short time.
 
 ```javascript
-await ops.events.ingest({
+await ops.events.log({
   name: "Unusual data export",
   avatar: "📤",
   content: "User Jane Doe exported 500 records"
@@ -67,7 +67,7 @@ await ops.events.ingest({
 This sends a notification when a large data export happens.
 
 ```javascript
-await ops.events.ingest({
+await ops.events.log({
   name: "New device login",
   avatar: "🔑",
   content: "User John Smith logged in from new device"
@@ -76,7 +76,7 @@ await ops.events.ingest({
 This tracks logins from unfamiliar devices.
 
 ```javascript
-await ops.events.ingest({
+await ops.events.log({
   name: "Admin page access",
   avatar: "🔒",
   content: "User admin@example.com accessed admin settings"

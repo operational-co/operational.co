@@ -180,7 +180,7 @@ export default {
   }
 
   @media screen and (max-width: 576px) {
-    padding: 0 var(--margin-lg);
+    padding: 0 0.75rem;
 
     &.full {
       padding: 0;

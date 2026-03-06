@@ -126,14 +126,14 @@ export default {
 .c-onboarding-event {
 	.c-spinner {
 		margin-left: 2px;
-		margin-right: var(--margin);
+		margin-right: 0.375rem;
 		margin-bottom: -2px;
 		border-color: var(--color-primary);
 		border-bottom-color: transparent;
 	}
 
 	.c-card {
-		margin-bottom: var(--spacer-sm);
+		margin-bottom: 1rem;
 	}
 }
 </style>

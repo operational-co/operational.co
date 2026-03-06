@@ -41,12 +41,12 @@ export default {
 
 <style lang="scss">
 .p-index {
-  padding-bottom: var(--spacer);
+  padding-bottom: 2rem;
 
   .c-articles {
     &__grid {
-      margin-left: calc(var(--margin-lg) * -1);
-      width: calc(100% + var(--margin-lg) * 2);
+      margin-left: calc(0.75rem * -1);
+      width: calc(100% + 0.75rem * 2);
       display: grid;
       grid-column-gap: 1rem;
       grid-row-gap: 1rem;
@@ -55,7 +55,7 @@ export default {
   }
 
   &__inner {
-    padding: 0 var(--margin-lg);
+    padding: 0 0.75rem;
   }
 
   @media screen and (max-width: 520px) {

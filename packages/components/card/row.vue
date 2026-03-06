@@ -117,7 +117,7 @@ export default {
 .card-row {
   display: grid;
   grid-auto-flow: row;
-  gap: var(--margin);
+  gap: 0.375rem;
 
   &__item {
     min-width: 0;

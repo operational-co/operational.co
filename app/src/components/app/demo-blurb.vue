@@ -101,7 +101,7 @@ export default {
   left: 1rem;
 
   &__inner {
-    padding: var(--margin-lg);
+    padding: 0.75rem;
     font-size: var(--font-size-sm);
 
     width: 290px;

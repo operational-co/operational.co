@@ -95,14 +95,14 @@ export default {
   justify-content: center;
   align-items: center;
   width: 100%;
-  padding-top: var(--spacer-sm);
+  padding-top: 1rem;
 
   blockquote {
     flex-grow: 0;
     display: block;
     max-width: 400px;
     margin: 2rem auto;
-    padding: var(--margin-lg);
+    padding: 0.75rem;
     background-color: var(--color-bg-4);
     border-radius: var(--border-radius);
     text-align: center;
@@ -130,7 +130,7 @@ export default {
     // }
 
     header {
-      padding: var(--spacer-sm) var(--spacer) 0 var(--spacer);
+      padding: 1rem 2rem 0 2rem;
       text-align: center;
 
       span {
@@ -142,7 +142,7 @@ export default {
     }
 
     section {
-      padding: var(--spacer);
+      padding: 2rem;
       padding-top: 0;
 
       h5 {
@@ -164,10 +164,10 @@ export default {
   @media screen and (max-width: 576px) {
     &__card {
       header {
-        padding: var(--spacer) var(--margin-lg) 0 var(--margin-lg);
+        padding: 2rem 0.75rem 0 0.75rem;
       }
       section {
-        padding: var(--margin-lg);
+        padding: 0.75rem;
       }
     }
   }

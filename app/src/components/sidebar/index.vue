@@ -86,10 +86,10 @@ export default {
   top: 0;
   right: calc(50% + 354px + 30px);
   width: 240px;
-  padding: var(--spacer-sm) 0;
+  padding: 1rem 0;
 
   &__divider {
-    margin: var(--margin);
+    margin: 0.375rem;
     height: 2px;
     background-color: var(--color-bg-3);
   }
@@ -99,7 +99,7 @@ export default {
     font-weight: 500;
     font-stretch: italic;
     margin-bottom: 0;
-    //padding: var(--margin-lg) 0;
+    //padding: 0.75rem 0;
   }
 
   nav {
@@ -116,7 +116,7 @@ export default {
       transition: all 60ms linear;
 
       > span {
-        padding-left: var(--margin-sm);
+        padding-left: 0.25rem;
       }
 
       &:hover,

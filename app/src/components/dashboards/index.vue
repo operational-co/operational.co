@@ -188,7 +188,7 @@ export default {
       align-items: center;
 
       button {
-        margin-left: var(--margin-sm);
+        margin-left: 0.25rem;
       }
     }
   }

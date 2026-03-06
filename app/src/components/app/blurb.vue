@@ -77,7 +77,7 @@ export default {
 		rgba(0, 0, 0, 0.04) 0px 1px 4px -1px;
 
 	&__inner {
-		padding: var(--margin-lg);
+		padding: 0.75rem;
 		font-size: var(--font-size-sm);
 	}
 

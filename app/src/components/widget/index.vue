@@ -148,7 +148,7 @@ export default {
   --theme-bg-color: hsl(var(--hue-p), 10%, 60%);
 
   &__inner {
-    padding: var(--margin-lg);
+    padding: 0.75rem;
     padding-top: 0;
   }
 
@@ -269,10 +269,10 @@ export default {
   }
 
   @media screen and (max-width: 576px) {
-    //margin-top: var(--margin-lg);
+    //margin-top: 0.75rem;
 
     &__inner {
-      padding: 0 var(--margin-lg);
+      padding: 0 0.75rem;
       //padding: 0;
       //overflow-x: auto;
 

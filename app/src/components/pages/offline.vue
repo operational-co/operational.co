@@ -29,7 +29,7 @@ export default {
 	justify-content: center;
 	align-items: center;
 	article {
-		padding: 0 var(--margin-lg);
+		padding: 0 0.75rem;
 		text-align: center;
 	}
 }

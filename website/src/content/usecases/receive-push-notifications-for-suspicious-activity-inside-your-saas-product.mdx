@@ -52,7 +52,7 @@ const payload = {
   content: "User John Smith logged in from a new device in Moscow"
 };
 
-await ops.events.ingest(payload);
+await ops.events.log(payload);
 ```
 
 This example sends an event when a suspicious login occurs.

@@ -100,13 +100,13 @@ if (!route.query) {
 <style lang="scss">
 .m-activation {
   .vfm__content {
-    padding: var(--spacer-sm);
+    padding: 1rem;
     text-align:center;
   }
 
   h3 {
     user-select:none;
-    width: calc(100% - var(--spacer-lg));
+    width: calc(100% - 3rem);
   }
 }
 </style>

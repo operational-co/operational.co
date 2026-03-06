@@ -49,21 +49,21 @@ import Operational from "@operational.co/sdk";
 const ops = new Operational(process.env.OPERATIONAL_API_KEY);
 
 // Track job start
-await ops.events.ingest({
+await ops.events.log({
   name: "cronjob started",
   avatar: "⏱️",
   content: "Daily report job started by system"
 });
 
 // Track job success
-await ops.events.ingest({
+await ops.events.log({
   name: "cronjob successful",
   avatar: "✅",
   content: "Daily report job completed in 120 seconds"
 });
 
 // Track job failure
-await ops.events.ingest({
+await ops.events.log({
   name: "cronjob failed",
   avatar: "❌",
   content: "Daily report job failed due to timeout"

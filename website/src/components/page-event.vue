@@ -275,13 +275,13 @@ export default {
 
 <style lang="scss">
 .p-event {
-  padding-bottom: var(--spacer);
+  padding-bottom: 2rem;
 
   &__inner {
-    padding: 0 var(--margin-lg);
+    padding: 0 0.75rem;
 
     > article {
-      margin: var(--spacer) 0;
+      margin: 2rem 0;
     }
   }
 
@@ -291,7 +291,7 @@ export default {
 
   h2,
   h3 {
-    margin-top: var(--spacer);
+    margin-top: 2rem;
   }
 
   @media screen and (max-width: 520px) {

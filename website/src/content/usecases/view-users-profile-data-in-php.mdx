@@ -58,7 +58,7 @@ $payload = [
     'content' => 'User John Smith viewed profile of Jane Doe'
 ];
 
-$ops->events->ingest($payload);
+$ops->events->log($payload);
 ```
 
 This example sends a "Profile Viewed" event to Operational whenever someone views a user's profile. You can view it in your dashboard.

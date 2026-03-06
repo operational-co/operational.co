@@ -59,7 +59,7 @@ export default {
 <style lang="scss">
 .m-create-workspace {
 	.vfm__content {
-		padding: var(--spacer-sm);
+		padding: 1rem;
 	}
 
 	h2 {

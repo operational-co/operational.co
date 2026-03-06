@@ -51,13 +51,13 @@ export default {
 <style lang="scss">
 .c-events-categories {
 	position: absolute;
-	top: calc(32px + var(--margin-lg));
+	top: calc(32px + 0.75rem);
 	left: 100%;
 	width: 200px;
 
 	a {
 		display: block;
-		padding: var(--margin-lg) var(--margin-lg);
+		padding: 0.75rem 0.75rem;
 		background-color: var(--color-bg-2);
 		border-radius: var(--input-radius);
 		color: var(--color-font-light);
@@ -65,7 +65,7 @@ export default {
 		line-height: 1;
 
 		&:not(:last-child) {
-			margin-bottom: var(--margin);
+			margin-bottom: 0.375rem;
 		}
 
 		&:hover {

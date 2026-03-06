@@ -261,10 +261,10 @@ export default {
       border-radius: 0.5rem;
       margin: 0;
       position: absolute;
-      top: var(--margin);
-      left: var(--margin);
-      right: var(--margin);
-      bottom: var(--margin);
+      top: 0.375rem;
+      left: 0.375rem;
+      right: 0.375rem;
+      bottom: 0.375rem;
       width: auto;
       z-index: 0 !important;
       text-align: center;
@@ -298,7 +298,7 @@ export default {
   }
 
   .grid-stack-item {
-    padding: var(--margin);
+    padding: 0.375rem;
 
     &.ui-draggable-dragging {
       .c-widget {
@@ -314,7 +314,7 @@ export default {
   }
 
   @media screen and (max-width: 576px) {
-    padding-top: var(--margin-lg);
+    padding-top: 0.75rem;
     padding: 0;
     width: 100%;
     margin: 0 auto;

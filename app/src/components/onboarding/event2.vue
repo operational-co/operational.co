@@ -141,7 +141,7 @@ export default {
 	}
 
 	.c-card {
-		margin-bottom:var(--spacer-sm);
+		margin-bottom:1rem;
 	}
 }
 </style>

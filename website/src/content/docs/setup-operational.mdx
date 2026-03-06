@@ -46,7 +46,7 @@ const headers = {
   "Content-Type": "application/json"
 };
 
-const response = await fetch(`${baseUrl}/api/v1/ingest`, {
+const response = await fetch(`${baseUrl}/api/v1/log`, {
   method: "POST",
   headers: headers,
   body: JSON.stringify(event)

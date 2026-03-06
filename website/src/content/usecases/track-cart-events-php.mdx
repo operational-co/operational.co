@@ -51,21 +51,21 @@ use Operational\Operational;
 $ops = new Operational('YOUR_API_KEY');
 
 // User adds an item to cart
-$ops->events->ingest([
+$ops->events->log([
   'name'   => 'add_to_cart',
   'avatar' => '🛒',
   'content'=> 'User John Smith added product ID 123 to cart'
 ]);
 
 // User removes an item from cart
-$ops->events->ingest([
+$ops->events->log([
   'name'   => 'remove_from_cart',
   'avatar' => '🗑️',
   'content'=> 'User John Smith removed product ID 123 from cart'
 ]);
 
 // User completes checkout
-$ops->events->ingest([
+$ops->events->log([
   'name'   => 'checkout',
   'avatar' => '✅',
   'content'=> 'User John Smith completed purchase of order 456'

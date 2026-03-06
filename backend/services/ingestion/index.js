@@ -132,10 +132,6 @@ class Ingestion {
       payload.type = "text";
     }
 
-    if (payload.type === "cards") {
-      payload.type = "rows";
-    }
-
     if (!types.includes(payload.type)) {
       throw `type field must include one of the following: ${types.join(
         ",",

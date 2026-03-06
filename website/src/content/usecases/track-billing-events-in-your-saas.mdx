@@ -39,21 +39,21 @@ import Operational from "@operational.co/sdk";
 const ops = new Operational("API_KEY");
 
 // Billing success event
-await ops.events.ingest({
+await ops.events.log({
   name: "billing_success",
   avatar: "💳",
   content: "Subscription billed for $20 for John Smith"
 });
 
 // Billing failure event
-await ops.events.ingest({
+await ops.events.log({
   name: "billing_failure",
   avatar: "💳",
   content: "Payment failed for $15 for Jane Doe"
 });
 
 // Subscription upgrade event
-await ops.events.ingest({
+await ops.events.log({
   name: "subscription_upgrade",
   avatar: "💳",
   content: "User John Smith upgraded to Pro plan"

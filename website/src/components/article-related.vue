@@ -95,7 +95,7 @@ export default {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: var(--margin-lg) 0;
+      padding: 0.75rem 0;
       color: var(--color-font);
       font-weight: 500;
 

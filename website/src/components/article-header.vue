@@ -161,7 +161,7 @@ export default {
 
 <style lang="scss">
 .c-article-header {
-  padding: var(--spacer) 0;
+  padding: 2rem 0;
   position: relative;
   overflow-x: hidden;
 
@@ -172,7 +172,7 @@ export default {
     max-width: 200px;
     height: auto;
     margin: 0 auto;
-    margin-bottom: var(--spacer);
+    margin-bottom: 2rem;
     border-radius: var(--border-radius-lg);
   }
 

@@ -43,7 +43,7 @@ export default {
 		> span {
 			display: block;
 			margin: 0.5rem 0;
-			padding: var(--margin-lg);
+			padding: 0.75rem;
 			border-radius: var(--border-radius);
 			color: hsl(var(--hue-orange), 95%, 58%);
 			background-color: hsl(var(--hue-orange), 10%, 18%);

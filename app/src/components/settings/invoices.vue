@@ -70,12 +70,12 @@ export default {
 .c-profile-invoices {
   h4 {
     .c-spinner {
-      margin-left: var(--margin);
+      margin-left: 0.375rem;
     }
   }
 
   &__header {
-    padding: var(--margin) 0;
+    padding: 0.375rem 0;
     display: grid;
     grid-template-columns: 100px 140px 140px 100px 1fr 1fr;
     align-items: center;
@@ -87,7 +87,7 @@ export default {
   }
 
   &__item {
-    padding: var(--margin) 0;
+    padding: 0.375rem 0;
     display: grid;
     grid-template-columns: 100px 140px 140px 100px 1fr 1fr;
     align-items: center;

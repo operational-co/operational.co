@@ -25,7 +25,7 @@ export default {
 
 <style lang="scss">
 .c-settings-usage-item {
-	padding: var(--margin) 0;
+	padding: 0.375rem 0;
 
 	> span {
 		display: block;

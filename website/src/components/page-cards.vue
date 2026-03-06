@@ -147,7 +147,7 @@ export default {
     background: linear-gradient(0deg, rgba(35, 35, 38, 0.6) 0.01%, rgba(46, 46, 52, 0.5) 100%),
       linear-gradient(0deg, rgba(35, 35, 38, 0.2) 0.01%, rgba(46, 46, 52, 0.2) 100%);
     border-radius: var(--border-radius-xl);
-    padding: var(--spacer);
+    padding: 2rem;
     overflow: hidden;
 
     svg {
@@ -166,7 +166,7 @@ export default {
     }
 
     &__card {
-      padding: var(--spacer-sm);
+      padding: 1rem;
     }
   }
 }

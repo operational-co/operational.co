@@ -44,7 +44,7 @@ const payload = {
   content: "User John Smith viewed their profile"
 };
 
-await ops.events.ingest(payload);
+await ops.events.log(payload);
 ```
 
 This code sends a "view_profile" event to Operational. You can see it in your dashboard.

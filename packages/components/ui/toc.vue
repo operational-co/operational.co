@@ -136,12 +136,12 @@ export default {
 <style lang="scss">
 .c-toc {
   position: sticky;
-  top: var(--spacer);
+  top: 2rem;
 
   &__item {
     position: relative;
     display: block;
-    padding: var(--margin-sm) var(--margin-lg);
+    padding: 0.25rem 0.75rem;
     color: var(--color-font);
     font-weight: 500;
     font-size: var(--font-size-sm);
@@ -250,7 +250,7 @@ export default {
     }
 
     .spacer {
-      padding: var(--margin) 0;
+      padding: 0.375rem 0;
     }
 
     main {

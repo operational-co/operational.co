@@ -54,7 +54,7 @@ const payload = {
   content: 'User John Smith created an account'
 }
 
-await ops.events.ingest(payload)
+await ops.events.log(payload)
 ```
 
 ```javascript
@@ -67,7 +67,7 @@ const payload = {
   content: 'User Jane Doe updated email from jane@old.com to jane@new.com'
 }
 
-await ops.events.ingest(payload)
+await ops.events.log(payload)
 ```
 
 ```javascript
@@ -80,7 +80,7 @@ const payload = {
   content: 'Admin Mark changed role of user Alice to moderator'
 }
 
-await ops.events.ingest(payload)
+await ops.events.log(payload)
 ```
 
 ```javascript
@@ -93,7 +93,7 @@ const payload = {
   content: 'User Bob deleted report Q2_financials.pdf'
 }
 
-await ops.events.ingest(payload)
+await ops.events.log(payload)
 ```
 
 Each snippet shows how to send a different audit event to Operational.

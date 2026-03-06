@@ -615,11 +615,11 @@ export default {
       position: sticky;
       z-index: 1;
       top: 0;
-      padding-bottom: var(--margin);
+      padding-bottom: 0.375rem;
     }
 
     &.log {
-      padding-bottom: var(--margin);
+      padding-bottom: 0.375rem;
     }
 
     &.flash-highlight {
@@ -655,7 +655,7 @@ export default {
     position: relative;
     font-size: var(--font-size-sm);
     display: block;
-    padding: var(--margin);
+    padding: 0.375rem;
     padding-left: 0;
     background-color: var(--color-bg-1);
 
@@ -677,14 +677,14 @@ export default {
   }
 
   @media screen and (max-width: 940px) {
-    //padding-top: var(--margin-lg);
+    //padding-top: 0.75rem;
 
     &__wrapper {
       &.date {
-        padding-bottom: var(--margin-sm);
+        padding-bottom: 0.25rem;
       }
       &.log {
-        padding-bottom: var(--margin-sm);
+        padding-bottom: 0.25rem;
       }
     }
 
@@ -694,7 +694,7 @@ export default {
     &__date {
       font-size: var(--font-size-xs);
       > span {
-        padding: var(--margin);
+        padding: 0.375rem;
       }
       &:after {
         display: none;

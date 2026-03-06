@@ -45,7 +45,7 @@ $payload = [
 ];
 
 // Send the event to Operational
-$ops->events->ingest($payload);
+$ops->events->log($payload);
 ```
 
 This code captures a new user signup and sends it to Operational.

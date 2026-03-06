@@ -249,7 +249,7 @@ export default {
 
       .btn {
         &:not(:first-child) {
-          margin-left: var(--margin);
+          margin-left: 0.375rem;
         }
       }
     }
@@ -260,10 +260,10 @@ export default {
     grid-template-columns: 64px 1fr;
     border: var(--color-bg-5) solid 2px;
     border-radius: var(--border-radius);
-    padding: var(--margin-lg);
+    padding: 0.75rem;
 
     &:not(:last-child) {
-      margin-bottom: var(--margin-lg);
+      margin-bottom: 0.75rem;
     }
 
     > section {
@@ -312,12 +312,12 @@ export default {
   }
 
   &__footer {
-    padding: var(--margin-lg);
+    padding: 0.75rem;
     display: flex;
     justify-content: center;
 
     .c-spinner {
-      margin-right: var(--margin);
+      margin-right: 0.375rem;
     }
   }
 

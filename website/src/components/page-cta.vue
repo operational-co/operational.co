@@ -28,8 +28,8 @@ export default {
 	&__inner {
 		display: grid;
 		grid-template-columns: 1.5fr 0.5fr;
-		grid-column-gap: var(--spacer);
-		padding: var(--spacer-lg) 0;
+		grid-column-gap: 2rem;
+		padding: 3rem 0;
 
 		h2 {
 			margin: 0;

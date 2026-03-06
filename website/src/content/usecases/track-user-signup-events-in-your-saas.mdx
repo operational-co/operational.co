@@ -42,7 +42,7 @@ const eventPayload = {
   content: "User Alicia Johnson signed up with email alicia@example.com"
 };
 
-await ops.events.ingest(eventPayload);
+await ops.events.log(eventPayload);
 ```
 
 This code initializes the Operational client and sends a signup event with a user name and email.

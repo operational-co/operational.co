@@ -45,7 +45,7 @@ const payload = {
   content: "Alice Johnson updated their profile"
 };
 
-await ops.events.ingest(payload);
+await ops.events.log(payload);
 ```
 
 This code sends an event to Operational whenever a user updates their profile. You can use it to trigger push notifications.

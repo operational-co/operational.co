@@ -138,7 +138,7 @@ export default {
 
 <style lang="scss">
 .p-articles-slug {
-  padding: var(--spacer) 0;
+  padding: 2rem 0;
   padding-top: 0;
   position: relative;
   overflow-x: hidden;
@@ -161,7 +161,7 @@ export default {
     }
 
     img {
-      margin-top: var(--margin);
+      margin-top: 0.375rem;
       border-radius: var(--border-radius);
     }
 
@@ -183,7 +183,7 @@ export default {
     }
 
     .c-card {
-      margin-bottom: var(--margin-lg);
+      margin-bottom: 0.75rem;
       max-width: 600px;
     }
 
@@ -194,14 +194,14 @@ export default {
     > code {
       display: block;
       line-height: 1.2;
-      padding: var(--margin);
+      padding: 0.375rem;
       border-radius: var(--border-radius-sm);
       font-size: var(--font-size-sm);
       background-color: var(--color-bg-2) !important;
     }
 
     &__info {
-      margin-bottom: var(--spacer-sm);
+      margin-bottom: 1rem;
       text-align: center;
       opacity: 0.75;
     }
@@ -213,7 +213,7 @@ export default {
       h1,
       h2,
       h3 {
-        padding-top: var(--margin);
+        padding-top: 0.375rem;
       }
     }
 
@@ -258,14 +258,14 @@ export default {
     }
 
     p {
-      margin-top: var(--margin);
+      margin-top: 0.375rem;
       font-style: italic;
       opacity: 0.7;
     }
   }
 
   blockquote {
-    margin: var(--spacer) 0;
+    margin: 2rem 0;
     font-size: var(--font-size-lg);
     opacity: 0.8;
     font-style: italic;

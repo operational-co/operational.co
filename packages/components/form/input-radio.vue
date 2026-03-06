@@ -133,7 +133,7 @@ export default {
   &__item {
     display: flex;
     align-items: center;
-    padding: var(--margin-lg);
+    padding: 0.75rem;
     cursor: pointer;
     user-select: none;
     border-radius: var(--border-radius);
@@ -158,7 +158,7 @@ export default {
       svg {
         min-width: 24px;
         opacity: 0.5;
-        margin-right: var(--margin);
+        margin-right: 0.375rem;
       }
     }
 

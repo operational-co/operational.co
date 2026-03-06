@@ -137,8 +137,8 @@ export default {
 
     .c-copy {
       position: absolute;
-      top: var(--margin);
-      right: var(--margin);
+      top: 0.375rem;
+      right: 0.375rem;
     }
   }
 
@@ -148,7 +148,7 @@ export default {
 
     &.btn {
       height: auto;
-      padding: var(--margin-sm);
+      padding: 0.25rem;
       border-top-left-radius: 0;
       border-top-right-radius: 0;
     }
@@ -164,8 +164,8 @@ export default {
 
   label {
     display: block;
-    margin-top: var(--margin-sm);
-    margin-bottom: var(--margin-sm);
+    margin-top: 0.25rem;
+    margin-bottom: 0.25rem;
     font-size: var(--font-size-xs);
     opacity: 0.8;
     line-height: 1.2;

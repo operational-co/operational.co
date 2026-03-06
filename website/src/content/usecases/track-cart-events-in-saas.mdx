@@ -13,7 +13,7 @@ Tracking cart events helps you understand how users interact with your product. 
 
 ### What is Operational and tracking events
 
-Operational is an open source event tracking tool for any product. It uses a single API to ingest events from your SaaS. You can use it to log cart events and view them in real time.
+Operational is an open source event tracking tool for any product. It uses a single API to log events from your SaaS. You can use it to log cart events and view them in real time.
 
 ![Operational in action](https://operational.co/images/misc/ops-usage.jpg)
 
@@ -38,7 +38,7 @@ const addItemPayload = {
   content: "jane.doe@example.com added 'Wireless Mouse' (ID: 456) to cart"
 };
 
-await ops.events.ingest(addItemPayload);
+await ops.events.log(addItemPayload);
 
 // Remove item from cart
 const removeItemPayload = {
@@ -47,7 +47,7 @@ const removeItemPayload = {
   content: "jane.doe@example.com removed 'Wireless Mouse' (ID: 456) from cart"
 };
 
-await ops.events.ingest(removeItemPayload);
+await ops.events.log(removeItemPayload);
 
 // Checkout started
 const checkoutPayload = {
@@ -56,7 +56,7 @@ const checkoutPayload = {
   content: "jane.doe@example.com started checkout with 3 items"
 };
 
-await ops.events.ingest(checkoutPayload);
+await ops.events.log(checkoutPayload);
 ```
 
 The code above shows how to track adding items, removing items, and starting checkout events in your SaaS.

@@ -43,7 +43,7 @@ const ops = new Operational("YOUR_API_KEY")
 
 function logEnvVar(name) {
   const value = process.env[name]
-  ops.events.ingest({
+  ops.events.log({
     name: "Environment Variable Read",
     avatar: "🔑",
     content: `${name} = ${value}`

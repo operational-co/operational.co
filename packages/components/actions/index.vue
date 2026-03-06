@@ -150,8 +150,8 @@ export default {
   flex-wrap: wrap;
 
   .btn {
-    margin-right: var(--margin);
-    margin-bottom: var(--margin-sm);
+    margin-right: 0.375rem;
+    margin-bottom: 0.25rem;
 
     &.btn-primary {
       background-color: var(--color-primary);
@@ -162,8 +162,8 @@ export default {
     }
 
     > svg {
-      margin-left: calc(-1 * var(--margin));
-      margin-right: var(--margin);
+      margin-left: calc(-1 * 0.375rem);
+      margin-right: 0.375rem;
     }
   }
 
@@ -177,7 +177,7 @@ export default {
       font-size: var(--font-size-sm);
       height: initial;
       min-height: initial;
-      padding: 2px var(--spacer-sm);
+      padding: 2px 1rem;
 
       > svg {
         width: 16px;

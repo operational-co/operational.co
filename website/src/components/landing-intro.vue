@@ -350,9 +350,9 @@ export default {
 <style lang="scss">
 .c-landing-intro {
 	position: relative;
-	margin-top: calc(var(--spacer) * -2);
-	padding-top: calc(var(--spacer) * 3);
-	padding-bottom: calc(var(--spacer) * 3);
+	margin-top: calc(2rem * -2);
+	padding-top: calc(2rem * 3);
+	padding-bottom: calc(2rem * 3);
 	overflow-x: hidden;
 
 	> img {
@@ -401,7 +401,7 @@ export default {
 		display: inline-block;
 		position: relative;
 		margin-bottom: 1rem;
-		padding: var(--margin-lg);
+		padding: 0.75rem;
 		background-color: hsl(var(--hue-p), 74%, 45%);
 		font-size: var(--font-size);
 		border-radius: 26px;
@@ -481,7 +481,7 @@ export default {
 		margin-bottom: 1.5rem;
 		display: grid;
 		grid-template-columns: max-content max-content;
-		grid-column-gap: var(--margin-lg);
+		grid-column-gap: 0.75rem;
 		justify-content: center;
 	}
 

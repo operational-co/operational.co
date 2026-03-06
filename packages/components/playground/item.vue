@@ -33,10 +33,10 @@ export default {
 
 <style lang="scss">
 .c-playground-item {
-	padding: var(--margin);
+	padding: 0.375rem;
 	background-color: var(--color-bg-4);
 	border-radius: var(--border-radius);
-	margin-bottom: var(--margin);
+	margin-bottom: 0.375rem;
 
 	font-size: var(--font-size-sm);
 	line-height: 1.4;

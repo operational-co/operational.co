@@ -51,7 +51,7 @@ $payload = [
     ]
 ];
 
-$response = $ops->events->ingest($payload);
+$response = $ops->events->log($payload);
 echo 'Event sent with status: ' . $response->getStatusCode();
 ```
 

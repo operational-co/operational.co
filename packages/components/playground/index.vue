@@ -266,7 +266,7 @@ export default {
   grid-template-columns: var(--sidebar-width) var(--sidebar-width) 1fr;
   height: var(--height);
   //background-color: var(--color-bg-2);
-  //border-radius: calc(var(--margin) + var(--border-radius));
+  //border-radius: calc(0.375rem + var(--border-radius));
 
   overflow: hidden;
 
@@ -275,7 +275,7 @@ export default {
     height: 100%;
     background-color: var(--color-bg-2);
     backdrop-filter: blur(8px);
-    //border-radius: calc(var(--margin) + var(--border-radius));
+    //border-radius: calc(0.375rem + var(--border-radius));
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;
 
@@ -296,7 +296,7 @@ export default {
         width: 100%;
         overflow-x: auto;
         white-space: nowrap;
-        padding: var(--margin-sm) 0;
+        padding: 0.25rem 0;
 
         &::-webkit-scrollbar {
           height: 4px;
@@ -333,7 +333,7 @@ export default {
         cursor: pointer;
 
         &:not(:last-child) {
-          margin-right: var(--margin-sm);
+          margin-right: 0.25rem;
         }
 
         &:hover,

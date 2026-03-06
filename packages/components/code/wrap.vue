@@ -87,9 +87,9 @@ export default {
 .c-code-wrap {
   width: 100%;
   //margin-left: -100px;
-  margin-top: var(--margin-lg);
-  margin-bottom: var(--margin-lg);
-  // padding: var(--margin-lg);
+  margin-top: 0.75rem;
+  margin-bottom: 0.75rem;
+  // padding: 0.75rem;
 
   //border: var(--color-bg-3) solid 1px;
   //border-radius: var(--border-radius);
@@ -133,7 +133,7 @@ export default {
     display: block;
 
     .c-card {
-      margin-bottom: var(--margin-lg) !important;
+      margin-bottom: 0.75rem !important;
     }
   }
 }

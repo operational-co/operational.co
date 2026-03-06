@@ -48,7 +48,7 @@ export default {
 .card-cards {
   > div {
     &:not(:last-child) {
-      margin-bottom: var(--margin);
+      margin-bottom: 0.375rem;
     }
   }
 }

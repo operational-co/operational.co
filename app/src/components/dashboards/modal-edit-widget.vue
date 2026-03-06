@@ -60,7 +60,7 @@ export default {
 <style lang="scss">
 .m-edit-widget {
   .vfm__content {
-    padding: var(--spacer-sm);
+    padding: 1rem;
     width: 900px;
     height: 100%;
     overflow-y: auto;

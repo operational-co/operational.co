@@ -57,7 +57,7 @@ export default {
 
 <style lang="scss">
 .c-crm-item-expanded {
-  padding-top: var(--margin-lg);
+  padding-top: 0.75rem;
 
   &__inner {
   }

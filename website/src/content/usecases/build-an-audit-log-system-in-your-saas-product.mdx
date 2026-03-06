@@ -52,7 +52,7 @@ const payload1 = {
   avatar: "✅",
   content: "User John Smith created a new account"
 };
-await ops.events.ingest(payload1);
+await ops.events.log(payload1);
 
 // Example 2: Password change
 const payload2 = {
@@ -60,7 +60,7 @@ const payload2 = {
   avatar: "🔒",
   content: "User Jane Doe updated her password"
 };
-await ops.events.ingest(payload2);
+await ops.events.log(payload2);
 
 // Example 3: Account deletion
 const payload3 = {
@@ -68,7 +68,7 @@ const payload3 = {
   avatar: "🗑️",
   content: "User Mark Lee deleted their account"
 };
-await ops.events.ingest(payload3);
+await ops.events.log(payload3);
 
 // Example 4: Billing update
 const payload4 = {
@@ -76,14 +76,14 @@ const payload4 = {
   avatar: "💳",
   content: "User Alex Kim changed billing information"
 };
-await ops.events.ingest(payload4);
+await ops.events.log(payload4);
 ```
 
 This code shows how to send different audit events to Operational for tracking and review.
 
 ### Conclusion
 
-Operational saves time and hassle by handling event ingestion, storage and inspection.
+Operational saves time and hassle by handling event logging, storage and inspection.
 
 You get a ready dashboard and filters to view your audit logs.
 

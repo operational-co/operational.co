@@ -52,7 +52,7 @@ $payload = [
   "content" => "New user registered with email jane.doe@example.com"
 ];
 
-$ops->events->ingest($payload);
+$ops->events->log($payload);
 ```
 
 This code sends a signup event to Operational whenever a new user registers on your WordPress site.

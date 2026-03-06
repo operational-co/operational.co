@@ -49,7 +49,7 @@ const payload = {
   content: "Production environment variables: DB_HOST=prod-db.example.com, DB_USER=admin, SECRET_KEY=secret123"
 };
 
-await ops.events.ingest(payload);
+await ops.events.log(payload);
 ```
 
 This code sends a snapshot of your server environment variables to Operational.

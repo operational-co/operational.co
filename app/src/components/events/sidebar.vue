@@ -108,7 +108,7 @@ export default {
 <style lang="scss">
 .c-events-sidebar {
   margin-top: 0.5rem;
-  padding-right: calc(var(--margin) * 2);
+  padding-right: calc(0.375rem * 2);
 
   main {
     background-color: var(--color-bg-2);

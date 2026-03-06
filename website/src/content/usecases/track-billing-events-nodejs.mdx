@@ -13,7 +13,7 @@ Tracking billing events in your Node.js app helps you monitor payments, subscrip
 
 ### Tracking billing events with Operational
 
-Operational is an open-source event tracking tool. You can use it to ingest and view billing events from your app in a single dashboard.
+Operational is an open-source event tracking tool. You can use it to log and view billing events from your app in a single dashboard.
 
 ![Operational usage](https://operational.co/images/misc/ops-usage.jpg)
 
@@ -38,7 +38,7 @@ const payload = {
   "content": "New subscription for John Smith: Pro Plan."
 };
 
-await ops.events.ingest(payload);
+await ops.events.log(payload);
 ```
 
 This example tracks a new subscription event.
@@ -53,7 +53,7 @@ const payload = {
   "content": "Payment of $20.00 received from Jane Doe."
 };
 
-await ops.events.ingest(payload);
+await ops.events.log(payload);
 ```
 
 This example logs a successful payment.
@@ -68,7 +68,7 @@ const payload = {
   "content": "Refund of $20.00 issued to Jane Doe."
 };
 
-await ops.events.ingest(payload);
+await ops.events.log(payload);
 ```
 
 This example records a refund event.

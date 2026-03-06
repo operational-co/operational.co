@@ -165,12 +165,12 @@ export default {
 <style lang="scss">
 .c-events-toggle {
 	position: relative;
-	margin-left: var(--margin);
+	margin-left: 0.375rem;
 
 	width: 24px;
 	height: 24px;
 	cursor: pointer;
-	margin-left: var(--margin);
+	margin-left: 0.375rem;
 	user-select: none;
 
 	.fade-scale-enter-active,

@@ -315,7 +315,7 @@ export default {
 			z-index: 1;
 			display: inline-block;
 			font-weight: 500;
-			padding: var(--margin-sm) var(--margin-lg);
+			padding: 0.25rem 0.75rem;
 			opacity: 0.25;
 			transition: all var(--transition-time) var(--ease-out-quad);
 			cursor: pointer;
@@ -391,7 +391,7 @@ export default {
 		width: 180px;
 		height: 100%;
 		background-color: var(--color-bg-3);
-		padding: var(--margin) 0;
+		padding: 0.375rem 0;
 
 		display: flex;
 		flex-direction: column;
@@ -402,7 +402,7 @@ export default {
 			z-index: 1;
 			display: block;
 			font-weight: 500;
-			padding: var(--margin-sm) var(--margin-lg);
+			padding: 0.25rem 0.75rem;
 			opacity: 0.25;
 			transition: all var(--transition-time) var(--ease-out-quad);
 			cursor: pointer;

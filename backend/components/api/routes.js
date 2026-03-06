@@ -297,7 +297,6 @@ const llms = async (req, res) => {
 router.post("/identify", schemaMiddleware(identifySchema), identify);
 
 router.post(`/log`, preSchemaValidation, schemaMiddleware(ingestSchema), ingest);
-router.post(`/ingest`, schemaMiddleware(ingestSchema), ingest);
 
 router.post(
   `/widgets/:widgetId`,

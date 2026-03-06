@@ -1,6 +1,6 @@
 <template>
   <div :class="['c-mobile-footer', { active: showNav === true }]">
-    <router-link to="/settings">
+    <router-link to="/settings" @click="onFooterPress">
       <svg
         width="24"
         height="24"
@@ -25,7 +25,7 @@
       <span> Settings </span>
     </router-link>
 
-    <router-link to="/">
+    <router-link to="/" @click="onFooterPress">
       <svg
         width="24"
         height="24"
@@ -44,7 +44,7 @@
       <span> Events </span>
     </router-link>
 
-    <router-link to="/dashboards">
+    <router-link to="/dashboards" @click="onFooterPress">
       <svg
         width="24"
         height="24"
@@ -78,6 +78,7 @@
 <script>
 import PopupMenu from "./popup-menu.vue";
 import Constrain from "@operational.co/components/ui/constrain.vue";
+import { WebHaptics } from "web-haptics";
 
 import Avatar from "@operational.co/components/ui/avatar.vue";
 
@@ -91,6 +92,7 @@ export default {
   data: function () {
     return {
       init: false,
+      haptics: null,
       menuActive: false,
 
       lastScrollPosition: 0,
@@ -134,6 +136,17 @@ export default {
   },
 
   methods: {
+    onFooterPress: function () {
+      try {
+        if (!this.haptics) {
+          return;
+        }
+
+        const trigger = this.haptics.trigger.bind(this.haptics);
+
+        trigger([{ duration: 40 }]);
+      } catch (err) {}
+    },
     onDocs: function () {
       this.$store.app.showDocs();
     },
@@ -172,11 +185,16 @@ export default {
 
   mounted: function () {
     this.init = true;
+    this.haptics = new WebHaptics();
 
     this.addEventListeners();
   },
 
   beforeUnmount: function () {
+    if (this.haptics && this.haptics.destroy) {
+      this.haptics.destroy();
+    }
+
     this.removeEventListeners();
   },
 };
@@ -190,8 +208,8 @@ export default {
 
   &__testmode {
     display: inline-block;
-    padding: var(--margin) var(--margin-lg);
-    margin-left: var(--margin-lg);
+    padding: 0.375rem 0.75rem;
+    margin-left: 0.75rem;
     background-color: var(--color-bg-3);
     border-radius: var(--border-radius);
     font-family: var(--font-family-monospace);
@@ -207,7 +225,7 @@ export default {
     z-index: 1;
 
     > section {
-      padding: var(--margin) var(--margin-lg);
+      padding: 0.375rem 0.75rem;
 
       &:first-child {
         position: absolute;
@@ -248,7 +266,7 @@ export default {
 
       h1 {
         display: inline-block;
-        padding: var(--margin);
+        padding: 0.375rem;
         font-size: var(--font-size-lg);
         margin: 0;
         color: var(--color-font);
@@ -262,8 +280,8 @@ export default {
 
       span {
         display: inline-block;
-        padding: var(--margin-sm) var(--margin);
-        margin-left: var(--margin);
+        padding: 0.25rem 0.375rem;
+        margin-left: 0.375rem;
         font-size: var(--font-size-xs);
         font-weight: 600;
         font-family: var(--font-family-monospace);
@@ -287,8 +305,8 @@ export default {
       align-items: center;
       border-radius: 99px;
       margin-right: 0;
-      padding: var(--margin) var(--margin-lg);
-      padding-right: var(--margin);
+      padding: 0.375rem 0.75rem;
+      padding-right: 0.375rem;
       background-color: var(--color-bg-3);
       color: var(--color-font);
       transition: all var(--transition-time-sm) linear;
@@ -296,7 +314,7 @@ export default {
 
       > span {
         display: inline-block;
-        margin-right: var(--margin);
+        margin-right: 0.375rem;
         font-weight: 500;
         pointer-events: none;
         overflow: hidden;
@@ -328,8 +346,8 @@ export default {
       position: relative;
       display: inline-flex;
       align-items: center;
-      margin: 0 var(--margin);
-      padding: var(--margin) var(--spacer-sm);
+      margin: 0 0.375rem;
+      padding: 0.375rem 1rem;
       color: var(--color-font);
       transition: var(--transition);
       font-weight: 500;
@@ -371,7 +389,7 @@ export default {
     //background-color: hsla(206, 8%, 20%, 0.75);
     backdrop-filter: blur(4px);
     -webkit-backdrop-filter: blur(4px);
-    padding: var(--margin) var(--margin-lg);
+    padding: 0.375rem 0.75rem;
     transform: translateY(100%);
     transition: transform var(--transition-time) ease-out;
 
@@ -419,7 +437,7 @@ export default {
 
   @supports (-webkit-touch-callout: none) {
     &__mobile {
-      padding-bottom: var(--spacer);
+      padding-bottom: 2rem;
     }
   }
 }
@@ -427,6 +445,6 @@ export default {
 .is-ios .c-mobile-footer {
   height: 76px;
   align-items: flex-start;
-  padding-top: var(--margin-lg);
+  padding-top: 0.75rem;
 }
 </style>

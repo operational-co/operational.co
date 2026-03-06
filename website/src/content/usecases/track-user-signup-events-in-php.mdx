@@ -57,7 +57,7 @@ $payload = [
   'content' => 'New user John Smith signed up with email john@example.com'
 ];
 
-$ops->events->ingest($payload);
+$ops->events->log($payload);
 ```
 
 This snippet shows how to send a signup event when a new user registers.

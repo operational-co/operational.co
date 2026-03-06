@@ -54,21 +54,21 @@ const payload = {
   content: "Daily report job completed in 15 seconds"
 }
 
-await ops.events.ingest(payload)
+await ops.events.log(payload)
 ```
 
 The above example sends a success event for a daily report job. You can see it in the Operational dashboard.
 
 ```javascript
 // Failure event example
-await ops.events.ingest({
+await ops.events.log({
   name: "cronjob failure",
   avatar: "❌",
   content: "Daily report job failed due to timeout"
 })
 
 // Slow job alert example
-await ops.events.ingest({
+await ops.events.log({
   name: "cronjob slow",
   avatar: "🐢",
   content: "Daily report job took 300 seconds, exceeding threshold"

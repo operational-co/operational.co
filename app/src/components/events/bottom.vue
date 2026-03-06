@@ -10,7 +10,7 @@ export default {};
 
 <style lang="scss">
 .c-events-bottom {
-	margin: var(--spacer-sm) 0;
+	margin: 1rem 0;
 	position: relative;
 	//font-family: var(--font-family-monospace);
 	font-style: italic;
@@ -23,7 +23,7 @@ export default {};
 		z-index: 1;
 		display: inline-block;
 		margin: 0 auto;
-		padding: 0 var(--spacer-sm);
+		padding: 0 1rem;
 		background-color: var(--color-bg-1);
 	}
 
