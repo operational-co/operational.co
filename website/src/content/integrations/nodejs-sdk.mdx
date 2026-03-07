@@ -5,19 +5,17 @@ description: 'Operational.co Nodejs SDK'
 date: 2025-05-09
 ---
 
-# Nodejs SDK
-
 ## Installation
 
 Use npm to install Operational's nodejs SDK. Run this inside your project:
 
 ```bash
-npm install --save @operational.co/sdk
+npm install --save-exact @operational.co/sdk
 ```
 
-## Authorization
+## Initialize SDK
 
-Pass your api key like this:
+Pass your API key to the constructor:
 
 ```js
 import Operational from "@operational.co/sdk"
@@ -29,9 +27,73 @@ const apikey = ''; // <-- Enter your api key here
 const ops = new Operational(apikey);
 ```
 
-## Code examples
+## Constructor options
 
-Visit the [Playground](/playground) and select Nodejs SDK as the code language to generate code examples.
+You can pass `baseUrl`, `test`, and `debug` as constructor options.
+
+```js
+import Operational from "@operational.co/sdk";
+
+const ops = new Operational("API_KEY", {
+  baseUrl: "https://api.operational.co", // optional
+  test: false, // optional, when true events are sent as test events
+  debug: true, // optional, logs SDK errors to console
+});
+```
+
+## `events.ingest(event)`
+
+This is the main SDK function for sending events.
+
+```js
+import Operational from "@operational.co/sdk";
+
+const ops = new Operational("API_KEY");
+
+await ops.events.ingest({
+  name: "user signed up",
+  avatar: "✅",
+  category: "auth",
+  content: "New signup from landing page",
+});
+```
+
+You can also send structured rows:
+
+```js
+await ops.events.ingest({
+  name: "payment failed",
+  type: "rows",
+  category: "billing",
+  content: [
+    { label: "Invoice", content: "inv_2044" },
+    { label: "Amount", content: "$39.00" },
+    { label: "Reason", content: "card_declined" },
+  ],
+});
+```
+
+## Complete example
+
+```js
+import Operational from "@operational.co/sdk";
+
+const ops = new Operational("API_KEY", {
+  debug: true,
+});
+
+await ops.events.ingest({
+  name: "server started",
+  category: "server",
+  content: "api-west-2 booted",
+});
+```
+
+## Related docs
+
+1. [Log event API](/api/log-event)
+2. [Event parameters](/api/event-parameters)
+3. [Playground](/playground)
 
 ## For self hosters
 

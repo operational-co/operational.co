@@ -226,6 +226,88 @@ Component-level styling approach:
 - transitions/animations are simple and intentional (fade/slide, highlight flashes, jiggling promo visuals)
 - responsive behavior handled with media queries in each component
 
+## Component HTML/CSS authoring patterns (`/packages` + `/website`)
+Review scope used for this section:
+- `packages/components/**` and `website/src/components/**`
+- 115 Vue SFC component files + 1 Astro component file
+- 107 files use `<style lang="scss">`
+- 1 file uses scoped styles (`packages/components/form/input-upload.vue`)
+
+Template/HTML conventions:
+- Vue SFCs are the default component format in both folders.
+- Most templates use a single root wrapper with block classes and nested element classes.
+- Class naming is prefix-driven and BEM-like (`c-` for reusable components, `p-` for page wrappers, `d-` for landing/demo sections).
+- Component composition is slot-heavy in shared UI primitives (`<slot>`, named slots like `title`, `body`, `sidebar`, `pre-input`, `post-input`).
+- A few content components render trusted HTML/markdown using `v-html` (primarily docs/article rendering).
+
+CSS/SCSS conventions:
+- Styles are mostly global (non-scoped), relying on unique class prefixes to avoid clashes.
+- SCSS nesting is used consistently around block classes (`.c-x { &__y { ... } }`).
+- Shared design tokens are used for colors, typography, radius, and transition timing (`var(--color-*)`, `var(--font-size-*)`, `var(--border-radius*)`).
+- Spacing values in these component folders now lean on direct `rem` values for margin/padding/gap rather than spacing vars.
+- Layout primitives are mostly flex/grid (`display: flex` and `display: grid` are common across component files).
+- Responsive behavior is component-local with media queries, with breakpoints commonly around `576px`, `980px`, and larger layout breakpoints in landing/marketing components.
+
+Folder-specific style behavior:
+- `packages/components` acts as the shared UI system used by app + website, with reusable wrappers and form/card primitives.
+- `packages/components` styling is practical and component-contained, with minimal scoped CSS and no CSS modules.
+- `website/src/components` is mostly marketing/docs presentation components (hero blocks, landing sections, article pages, headers/footers, content widgets).
+- `website/src/components` uses stronger visual section styling and more page-level wrappers while following the same SCSS/naming conventions.
+- `website/src/components` mixes shared package components (for consistency) with website-specific presentation components.
+
+Practical rules to keep consistency:
+- Keep new component wrappers prefix-based (`c-`, page wrappers `p-`) and maintain BEM-like element naming.
+- Prefer local SCSS blocks in the component file; use `scoped` only when isolation is explicitly needed.
+- Keep spacing in `rem` for margins/paddings/gaps.
+- Keep responsive rules in the same component file near the related block styles.
+- Continue reusing shared components/tokens before adding one-off styles.
+
+## LLM implementation rules (Codex/agents)
+Use these as hard constraints when making HTML/CSS/component changes in this repo.
+
+1. Follow existing structure before inventing new structure.
+- Match the surrounding file's style, naming, and component composition.
+- Extend existing components/wrappers first (`PageApi`, `Constrain`, `Toc`, shared `@operational.co/components`).
+
+2. Keep class naming consistent with the repo.
+- Use prefixed classes: `c-` (component), `p-` (page), `d-` (section/demo).
+- Use BEM-like element naming (`block__element`, optional state classes like `.active`, `.expanded`).
+
+3. Keep styling in local SCSS blocks.
+- Default to `<style lang="scss">` in the component file.
+- Do not introduce CSS modules, Tailwind-style utility rewrites, or new styling frameworks.
+- Use `scoped` only when isolation is truly required.
+
+4. Preserve the design token system.
+- Use existing CSS variables for colors, typography, radius, shadows, and transitions.
+- Do not hardcode new color systems unless the feature explicitly requires it.
+- Reuse existing typography styles/classes/tokens as the default choice; only modify type styles when the feature clearly requires it.
+
+5. Keep spacing and sizing conventions aligned.
+- For margin/padding/gap/size values, prefer `rem`-based sizing.
+- Avoid introducing legacy spacing vars for layout spacing where rem values are now used.
+
+6. Keep responsive behavior component-local.
+- Add responsive rules in the same component SCSS block.
+- Prefer existing breakpoint patterns already used in repo (`576px`, `980px`, plus section-specific larger breakpoints).
+
+7. Keep DOM and templates pragmatic.
+- Keep one clear root wrapper for component templates.
+- Avoid unnecessary nesting and wrapper div inflation.
+- Prefer semantic elements when they fit existing patterns.
+
+8. Reuse existing interactive patterns.
+- Use existing button patterns/classes and motion timing conventions.
+- For menus/dropdowns/modals, align with current behavior patterns (state class toggles, outside click handling, escape-to-close where relevant).
+
+9. Do not silently break content/documentation flows.
+- For docs pages, preserve shared layout behavior (TOC/sidebar/content wrappers/prev-next flow).
+- New docs UI should integrate through shared wrappers, not one-off page hacks.
+
+10. Before finalizing, verify consistency.
+- Check neighboring components/pages for style parity.
+- Validate build/lint where possible and call out any environment-limited failures explicitly.
+
 ## Operational.co site positioning and messaging (live + source)
 Current messaging emphasizes:
 - "Monitor your product's critical events as they happen"

@@ -1,24 +1,21 @@
 ---
 import BaseLayout from "@/layouts/base.astro";
-import Constrain from "@operational.co/components/ui/constrain.vue"
-import Toc from "@operational.co/components/ui/toc.vue";
-import headings from "@/lib/get-headings.js";
-import * as Index from "@operational.co/content/selfhosted/introduction.mdx";
-const Content =Index.Content;
+import PageApi from "@/components/page-api.vue";
+import { getCollection, getEntry, render } from "astro:content";
+import { list } from "@/content/list.js";
+import { buildApiTocList } from "@/lib/api-docs.js";
 
-
-
+const post = await getEntry("selfhosted", "introduction");
+const { Content } = await render(post);
+const pageTitle = post.data.title;
+const apiEntries = await getCollection("api");
+const tocItems = buildApiTocList(list, apiEntries);
 ---
 
 <BaseLayout>
-  <Constrain size="lg">
-    <div slot="sidebar">
-      <Toc client:load pathname={Astro.url.pathname} headings={headings}></Toc>
+  <PageApi client:load pathname={Astro.url.pathname} title={pageTitle} tocItems={tocItems}>
+    <div class="c-page">
+      <Content />
     </div>
-    <div slot="default">
-      <div class="c-page">
-        <Content />
-      </div>
-    </div>
-  </Constrain>
+  </PageApi>
 </BaseLayout>

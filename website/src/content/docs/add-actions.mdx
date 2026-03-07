@@ -1,0 +1,88 @@
+---
+title: Actions
+slug: add-actions
+description: Add buttons to events so your team can act quickly.
+---
+
+import Item from "@operational.co/components/card/index.vue";
+
+Actions add buttons to an event card.
+When someone clicks a button, Operational sends a request to your server.
+
+```js
+const e = {
+  name: "high risk login detected",
+  avatar: "🚨",
+  category: "security",
+  actions: [
+    {
+      url: "https://api.your-app.com/ops/action",
+      buttonText: "Suspend account",
+      key: "suspend_account",
+      meta: { userId: "usr_123" },
+      expireIn: 120,
+    },
+    {
+      url: "https://app.your-app.com/admin/usr_123",
+      buttonText: "Open user profile",
+      external: true,
+    },
+  ],
+};
+```
+
+<Item client:only="vue"
+  item={{
+    name: "high risk login detected",
+    avatar: "🚨",
+    createdAt: "2026-02-28",
+    category: "security",
+    actions: [
+      {
+        url: "https://api.your-app.com/ops/action",
+        buttonText: "Suspend account",
+        key: "suspend_account"
+      },
+      {
+        url: "https://app.your-app.com/admin/usr_123",
+        buttonText: "Open user profile",
+        external: true
+      }
+    ]
+  }}
+></Item>
+
+A simple server handler:
+
+```js
+app.post("/ops/action", async (req, res) => {
+  const { event } = req.body;
+  if (event.key === "suspend_account") {
+    await suspendUser(event.meta.userId);
+  }
+  return res.status(200).json({ ok: true });
+});
+```
+
+<Item client:only="vue"
+  item={{
+    name: "high risk login detected",
+    avatar: "🚨",
+    createdAt: "2026-02-28",
+    category: "security",
+    actions: [
+      {
+        url: "https://api.your-app.com/ops/action",
+        buttonText: "Suspend account",
+        key: "suspend_account"
+      }
+    ]
+  }}
+></Item>
+
+Rules to remember:
+
+1. `url` and `buttonText` are required.
+2. `buttonText` must be 48 characters or less.
+3. `key` is required unless `external: true`.
+4. `expireIn` defaults to `10080` minutes (7 days).

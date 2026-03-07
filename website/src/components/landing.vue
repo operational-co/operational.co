@@ -452,7 +452,7 @@
           <article>
             <h3>Understand complex workflows</h3>
             <p>Chain events together to get a better understanding of your workflows.</p>
-            <a href="/api/contexts" class="btn btn-sm"> Learn more </a>
+            <a href="/docs/group-events-with-contexts" class="btn btn-sm"> Learn more </a>
           </article>
           <section>
             <img alt="Operational.co contexts" :src="`/images/index/feature3.jpg`" />

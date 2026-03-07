@@ -1,0 +1,51 @@
+---
+title: Setup PWA On Phone
+slug: setup-pwa-on-phone
+description: Install Operational as a phone app and receive push notifications.
+---
+
+import Item from "@operational.co/components/card/index.vue";
+
+A quick way to test push notifications:
+
+```js
+await ops.events.log({
+  name: "critical billing alert",
+  avatar: "🚨",
+  category: "billing",
+  notify: true,
+  content: "Stripe webhook failed for invoice inv_2044",
+});
+```
+
+<Item client:only="vue"
+  item={{
+    name: "critical billing alert",
+    avatar: "🚨",
+    createdAt: "2026-02-28",
+    category: "billing",
+    notify: true,
+    content: "Stripe webhook failed for invoice inv_2044"
+  }}
+></Item>
+
+## iPhone (Safari)
+
+1. Open `https://app.operational.co`.
+2. Tap the Share button.
+3. Tap `Add to Home Screen`.
+4. Open the app from your home screen.
+5. Allow notifications when asked.
+
+## Android (Chrome)
+
+1. Open `https://app.operational.co`.
+2. Tap menu (`⋮`) and choose `Install app` or `Add to Home screen`.
+3. Open the installed app.
+4. Allow notifications when asked.
+
+If notifications do not show up:
+
+1. Make sure your event has `notify: true`.
+2. Make sure phone notification permissions are on.
+3. Make sure your profile notification toggle is on.

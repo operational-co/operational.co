@@ -2,13 +2,12 @@
 title: Error handling
 slug: error-handling
 description: Understand how errors are handled in Operational's event api
+tags: ["API"]
 date: 2024-06-08
 ---
 
 import Item from "@operational.co/components/card/index.vue";
 import ApiItem from "@operational.co/components/ui/api-item.vue";
-
-# Error handling
 
 ### Response codes
 
@@ -18,7 +17,7 @@ Every time you make a request, you will get one of these status codes back.
   Event was created successfully.
 </ApiItem>
 <ApiItem client:load title="400" type="event wasn't created" required="">
-  Your event payload was deformed, or badly formatted. See the [api docs]("/api/introduction") for info.
+  Your event payload was deformed, or badly formatted. See the [log endpoint docs](/api/log-event) for info.
 </ApiItem>
 <ApiItem client:load title="401" type="Authentication failed" required="">
   Your API key was missing or invalid.

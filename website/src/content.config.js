@@ -14,21 +14,17 @@ const docs = defineCollection({
   }),
 });
 
-const docsnew = defineCollection({
-  loader: glob({ pattern: "*.mdx", base: "./../backend/src/content/docs-new" }),
-  schema: z.object({
-    title: z.string(),
-    slug: z.string(),
-    description: z.string().optional(),
-  }),
-});
-
 const api = defineCollection({
-  loader: glob({ pattern: "*.mdx", base: "./src/content/api" }),
+  loader: glob({ pattern: "*.{md,mdx}", base: "./src/content/api" }),
   schema: z.object({
     title: z.string(),
     slug: z.string(),
     description: z.string().optional(),
+    tags: z.array(z.string()).optional(),
+    generatedFromOpenapi: z.boolean().optional(),
+    method: z.string().optional(),
+    path: z.string().optional(),
+    operationId: z.string().optional(),
   }),
 });
 
@@ -88,7 +84,6 @@ const usecases = defineCollection({
 // 2. Export your collections
 export const collections = {
   docs,
-  docsnew,
   api,
   manual,
   selfhosted,

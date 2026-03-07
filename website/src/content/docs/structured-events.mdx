@@ -1,0 +1,157 @@
+---
+title: Structured Events
+slug: structured-events
+description: Send clear, rich events that are easy to read in production.
+---
+
+import Item from "@operational.co/components/card/index.vue";
+
+You can choose how an event is displayed with the `type` field.
+
+## Text (default)
+
+```js
+const e = {
+  name: "user upgraded",
+  avatar: "💳",
+  content: "Moved from Starter to Pro",
+};
+```
+
+<Item client:only="vue"
+  item={{
+    name: "user upgraded",
+    avatar: "💳",
+    createdAt: "2026-02-28",
+    content: "Moved from Starter to Pro"
+  }}
+></Item>
+
+## JSON
+
+```js
+const e = {
+  name: "new lead metadata",
+  avatar: "🧩",
+  type: "json",
+  content: {
+    source: "landing-page",
+    utmCampaign: "launch-2026",
+    score: 81,
+  },
+};
+```
+
+<Item client:only="vue"
+  item={{
+    name: "new lead metadata",
+    avatar: "🧩",
+    createdAt: "2026-02-28",
+    type: "json",
+    content: {
+      source: "landing-page",
+      utmCampaign: "launch-2026",
+      score: 81
+    }
+  }}
+></Item>
+
+## Image
+
+```js
+const e = {
+  name: "receipt captured",
+  avatar: "🧾",
+  type: "image",
+  content: "https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=1000",
+};
+```
+
+<Item client:only="vue"
+  item={{
+    name: "receipt captured",
+    avatar: "🧾",
+    createdAt: "2026-02-28",
+    type: "image",
+    content: "https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=1000"
+  }}
+></Item>
+
+## Rows
+
+```js
+const e = {
+  name: "payment failed",
+  avatar: "⚠️",
+  type: "rows",
+  content: [
+    { label: "User ID", content: "usr_123" },
+    { label: "Plan", content: "Pro" },
+    { label: "Amount", content: "$49.00" },
+    {
+      label: "Gateway response",
+      type: "json",
+      content: { code: "card_declined", retryable: true },
+    },
+  ],
+};
+```
+
+<Item client:only="vue"
+  item={{
+    name: "payment failed",
+    avatar: "⚠️",
+    createdAt: "2026-02-28",
+    type: "rows",
+    content: [
+      { label: "User ID", content: "usr_123" },
+      { label: "Plan", content: "Pro" },
+      { label: "Amount", content: "$49.00" },
+      {
+        label: "Gateway response",
+        type: "json",
+        content: { code: "card_declined", retryable: true }
+      }
+    ]
+  }}
+></Item>
+
+Notes:
+
+1. If you do not pass `type`, Operational uses `text`.
+2. Do not put `rows` inside `rows`.
+
+## Mixed rows example
+
+Rows are useful when one event needs multiple content blocks.
+
+```js
+const e = {
+  name: "new user onboarding",
+  avatar: "🧭",
+  type: "rows",
+  content: [
+    { label: "User", content: "anna@example.com" },
+    { label: "Plan", content: "Pro annual" },
+    {
+      label: "Metadata",
+      type: "json",
+      content: {
+        source: "pricing-page",
+        utmCampaign: "spring-launch",
+      },
+    },
+    {
+      label: "Welcome image",
+      type: "image",
+      content: "https://images.unsplash.com/photo-1521737604893-d14cc237f11d?w=1200",
+    },
+  ],
+};
+```
+
+For each row item, the common fields are:
+
+1. `type` (`text`, `json`, `image`)
+2. `label` (optional display label)
+3. `content` (string/object based on type)

@@ -1,11 +1,56 @@
 ---
-title: Introduction
+title: Get started
 slug: introduction
-description: Contributing to Operational.co
-date: 2025-03-01
+description: Sign up, create your first project, and get your API key to start logging events.
 ---
 
-import Item from "@operational.co/components/card/index.vue";
-import Code from "@operational.co/components/code/index.vue";
+Operational helps you track important server events in one place so you can debug issues faster, monitor workflows, and keep your team informed.
 
-# Other stuff
+## Create your Operational account
+
+Sign up at [operational.co](https://operational.co/).
+After signup, Operational will take you through onboarding.
+
+## Create your first project
+
+During onboarding, create your first project.
+Your events, teammates, and settings are scoped to this project.
+
+A common setup is:
+
+1. One project for production.
+2. One project for staging.
+
+## Get your API key
+
+After creating a project, copy the API key shown in your dashboard.
+Store it in your server environment variables:
+
+```js
+process.env.OPERATIONAL_API_KEY
+```
+
+## Send your first event
+
+You can send your first event from any server code path where something important happens.
+
+```js
+import Operational from "@operational.co/sdk";
+
+const ops = new Operational(process.env.OPERATIONAL_API_KEY);
+
+await ops.events.log({
+  name: "user signed up",
+  avatar: "✅",
+  category: "auth",
+  content: "New signup from website form",
+});
+```
+
+Operational then stores this event in your project timeline so you can search, inspect, and act on it.
+
+## What to do next
+
+1. Continue to [Send your first event](/docs/send-your-first-event) for request formats.
+2. Review [Structured events](/docs/structured-events) for richer payloads.
+3. Set up [PWA notifications](/manual/pwa) to get real-time alerts.

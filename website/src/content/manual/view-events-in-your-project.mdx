@@ -1,0 +1,46 @@
+---
+title: View Events In Your Project
+slug: view-events-in-your-project
+description: Search, filter, and inspect events in the Events screen.
+---
+
+import Item from "@operational.co/components/card/index.vue";
+
+Send a sample event first:
+
+```js
+await ops.events.log({
+  name: "user invited another user",
+  avatar: "🥳",
+  category: "team",
+  type: "rows",
+  content: [
+    { label: "Inviter", content: "sarah@acme.com" },
+    { label: "Invitee", content: "alex@acme.com" },
+    { label: "Project", content: "myapp-production" },
+  ],
+});
+```
+
+<Item client:only="vue"
+  item={{
+    name: "user invited another user",
+    avatar: "🥳",
+    createdAt: "2026-02-28",
+    category: "team",
+    type: "rows",
+    content: [
+      { label: "Inviter", content: "sarah@acme.com" },
+      { label: "Invitee", content: "alex@acme.com" },
+      { label: "Project", content: "myapp-production" }
+    ]
+  }}
+></Item>
+
+Now open the app and check your feed:
+
+1. Open the `Events` tab.
+2. Use search to find events by name or text.
+3. Click a category to filter results.
+4. Toggle `Test mode` if you want to view test events.
+5. Click an event card to expand details.

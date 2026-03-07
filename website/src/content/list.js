@@ -5,57 +5,54 @@ export const list = [
     baseSlug: "docs",
   },
   {
-    name: "Setup Operational",
-    slug: "setup-operational",
-    baseSlug: "docs",
-  },
-  {
-    name: "Guided setup",
-    slug: "docs-new",
+    name: "Setup",
+    slug: "docs",
     children: [
       {
-        name: "Introduction",
+        name: "Get started",
         slug: "introduction",
-      },
-      {
-        name: "Create project and API key",
-        slug: "create-project-and-api-key",
-      },
-      {
-        name: "Manage projects and teammates",
-        slug: "manage-projects-and-teammates",
       },
       {
         name: "Send your first event",
         slug: "send-your-first-event",
       },
       {
-        name: "Structured events",
+        name: "Structured Events",
         slug: "structured-events",
       },
       {
-        name: "Add actions",
+        name: "Actions",
         slug: "add-actions",
       },
       {
-        name: "Group events with contexts",
+        name: "Contexts",
         slug: "group-events-with-contexts",
-      },
-      {
-        name: "Categories and search",
-        slug: "categories-and-search",
-      },
-      {
-        name: "View events in your project",
-        slug: "view-events-in-your-project",
-      },
-      {
-        name: "Setup PWA on phone",
-        slug: "setup-pwa-on-phone",
       },
       {
         name: "Log limits and errors",
         slug: "log-limits-and-errors",
+      },
+    ],
+  },
+  {
+    name: "Events API",
+    slug: "api",
+    children: [
+      {
+        name: "Log event",
+        slug: "log-event",
+      },
+      {
+        name: "Event parameters",
+        slug: "event-parameters",
+      },
+      {
+        name: "Actions",
+        slug: "actions",
+      },
+      {
+        name: "Error handling",
+        slug: "error-handling",
       },
     ],
   },
@@ -84,6 +81,22 @@ export const list = [
         slug: "setup",
       },
       {
+        name: "Manage projects and teammates",
+        slug: "manage-projects-and-teammates",
+      },
+      {
+        name: "Categories and search",
+        slug: "categories-and-search",
+      },
+      {
+        name: "View events in your project",
+        slug: "view-events-in-your-project",
+      },
+      {
+        name: "Setup PWA on phone",
+        slug: "setup-pwa-on-phone",
+      },
+      {
         name: "Test mode",
         slug: "test-mode",
       },
@@ -108,44 +121,6 @@ export const list = [
       {
         name: "Wordpress plugin",
         slug: "wordpress-plugin",
-      },
-    ],
-  },
-  {
-    name: "Events API",
-    slug: "api",
-    children: [
-      {
-        name: "Introduction",
-        slug: "introduction",
-      },
-      {
-        name: "Send your first event",
-        slug: "send-your-first-event",
-      },
-      {
-        name: "Event parameters",
-        slug: "event-parameters",
-      },
-      {
-        name: "Structured Events",
-        slug: "structured-events",
-      },
-      {
-        name: "Actions",
-        slug: "actions",
-      },
-      {
-        name: "Contexts",
-        slug: "contexts",
-      },
-      {
-        name: "Categories",
-        slug: "categories",
-      },
-      {
-        name: "Error handling",
-        slug: "error-handling",
       },
     ],
   },

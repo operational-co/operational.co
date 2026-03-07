@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
-    "build": "astro build && pagefind --site dist",
+    "generate:api-docs": "node ./scripts/generate-api-docs.js",
+    "build": "npm run generate:api-docs && astro build && pagefind --site dist",
     "preview": "astro preview",
     "astro": "astro"
   },

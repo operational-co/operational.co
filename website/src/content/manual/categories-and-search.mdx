@@ -1,0 +1,77 @@
+---
+title: Categories And Search
+slug: categories-and-search
+description: Use categories and search together to keep high-volume event streams manageable.
+---
+
+import Item from "@operational.co/components/card/index.vue";
+
+Once you start receiving many events, your feed gets dense quickly.
+
+Use `category` to group events by workflow or system area.
+
+In Operational, categories show up in the left sidebar and filter dropdown, so your team can jump into slices like `billing`, `cron`, `error`, or `ai` without scanning everything.
+
+## Example 1: Billing incidents
+
+<Item client:only="vue"
+  item={{
+    name: "payment retry failed",
+    avatar: "💳",
+    createdAt: "2026-03-07",
+    category: "billing",
+    content: "Stripe retry failed for inv_2044"
+  }}
+></Item>
+
+```js
+await ops.events.log({
+  name: "payment retry failed",
+  avatar: "💳",
+  category: "billing",
+  content: "Stripe retry failed for inv_2044",
+});
+```
+
+## Example 2: Scheduled jobs
+
+```js
+await ops.events.log({
+  name: "nightly product sync finished",
+  avatar: "🕒",
+  category: "cron",
+  type: "rows",
+  content: [
+    { label: "Imported", content: 1284 },
+    { label: "Failed", content: 17 }
+  ]
+});
+```
+
+## Example 3: System failures
+
+```js
+await ops.events.log({
+  name: "ingestion timeout",
+  avatar: "🚨",
+  category: "error",
+  content: "queue ingestion timed out after 15s",
+});
+```
+
+## Search tips
+
+Use search with categories to narrow large timelines fast.
+
+1. First click a category like `billing`.
+2. Then search for a keyword like `retry` or `invoice`.
+3. Add another exact identifier from content (for example `inv_2044`) to get a small, actionable result set.
+
+This is especially useful when one project has thousands of mixed events per day.
+
+## Category conventions that scale
+
+1. Keep names short and predictable (`billing`, `error`, `cron`, `tracker`).
+2. Use `name` for action and `category` for grouping.
+3. Keep category length under 24 characters.
+4. Avoid one-off random categories, or your sidebar becomes noisy.

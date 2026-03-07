@@ -141,6 +141,7 @@ export default {
   &__item {
     position: relative;
     display: block;
+    margin: 0.125rem 0;
     padding: 0.25rem 0.75rem;
     color: var(--color-font);
     font-weight: 500;

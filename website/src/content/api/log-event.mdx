@@ -1,0 +1,92 @@
+---
+title: "Log event"
+slug: "log-event"
+description: "Create an event in Operational. Send either `name`, `content`, or both."
+tags:
+  - "API"
+generatedFromOpenapi: true
+method: "POST"
+path: "/api/v1/log"
+operationId: "logEvent"
+---
+Create an event in Operational. Send either `name`, `content`, or both.
+
+## Endpoint
+
+- Method: `POST`
+- Path: `/api/v1/log`
+
+## Authentication
+
+- `bearerAuth`
+
+## Request body
+
+Required: `true`
+
+### application/json
+
+Schema: `#/components/schemas/LogEventPayload`
+
+```json
+{
+  "name": "user signed up",
+  "avatar": ":)",
+  "content": "Someone signed up"
+}
+```
+
+### text/plain
+
+Schema type: `string`
+
+```txt
+:) user signed up
+```
+
+## Responses
+
+### 201
+
+Event created
+
+- text/plain: Schema type: `string`
+
+### 400
+
+Invalid payload
+
+- text/plain: Schema type: `string`
+
+### 401
+
+Authorization failed
+
+- text/plain: Schema type: `string`
+
+## Code samples
+
+### SDK (@operational.co/sdk)
+
+```javascript
+import Operational from "@operational.co/sdk";
+
+const ops = new Operational("API_KEY", {
+  // Optional: override per deployment
+  baseUrl: "https://api.your-domain.com",
+});
+
+await ops.events.log({
+  name: "user signed up",
+  avatar: ":)",
+});
+```
+
+### cURL
+
+```bash
+curl -X POST "https://api.your-domain.com/api/v1/log" \
+  -H "Authorization: Bearer API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"name":"user signed up","avatar":":)"}'
+```

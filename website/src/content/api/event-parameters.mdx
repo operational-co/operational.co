@@ -2,13 +2,12 @@
 title: Event parameters
 slug: event-parameters
 description: A list of all event api's parameters
+tags: ["API"]
 date: 2024-06-08
 ---
 
 import Item from "@operational.co/components/card/index.vue";
 import ApiItem from "@operational.co/components/ui/api-item.vue";
-
-# Event parameters
 
 Here are all event api's parameters. Only name is required, everything else is optional.
 
@@ -27,7 +26,7 @@ Here are all event api's parameters. Only name is required, everything else is o
   If a number is passed, it will be converted to a string.
 </ApiItem>
 <ApiItem client:load title="category" type="string" required="false">
-  Use this to group common events by a specific category, eg: error, user, billing, etc. Read more about categories [here.](/api/categories)
+  Use this to group common events by a specific category, eg: error, user, billing, etc. Read more about categories [here.](/manual/categories-and-search)
 </ApiItem>
 <ApiItem client:load title="content" type="string/json" required="false">
   Mixed content type, can be a string or JSON depending on what type is set.
@@ -45,10 +44,10 @@ Here are all event api's parameters. Only name is required, everything else is o
   Optional, boolean, defaults to false. If true, this event won't show up unless test mode is activated.
 </ApiItem>
 <ApiItem client:load title="contextId" type="string" required="false">
-  Defaults to null. Related to [contexts.](/api/contexts)
+  Defaults to null. Related to [contexts.](/docs/group-events-with-contexts)
 </ApiItem>
 <ApiItem client:load title="contextStart" type="boolean" required="false">
-  Defaults to false. Related to [contexts.](/api/contexts)
+  Defaults to false. Related to [contexts.](/docs/group-events-with-contexts)
 </ApiItem>
 
 <br />

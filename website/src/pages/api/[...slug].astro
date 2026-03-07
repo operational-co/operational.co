@@ -1,51 +1,59 @@
 ---
-// @ts-nocheck
 import BaseLayout from "@/layouts/base.astro";
-import {list, getItems} from "@/content/list.js";
+import { list } from "@/content/list.js";
+import { buildApiPrevNext, buildApiTocList } from "@/lib/api-docs.js";
 import Prevnext from "@operational.co/components/ui/prevnext.vue";
 import PageApi from "@/components/page-api.vue";
+import { getCollection, render } from "astro:content";
 
-import { getEntry, render } from 'astro:content';
+const apiEntries = await getCollection("api");
 
-const baseSlug = 'api'
+const currentSlug = Astro.params.slug;
+let post = null;
 
-const post = await getEntry(baseSlug, Astro.params.slug);
-const { Content } = await render(post);
+for (let i = 0; i < apiEntries.length; i++) {
+  const entry = apiEntries[i];
+  if (entry && entry.data && entry.data.slug === currentSlug) {
+    post = entry;
+    break;
+  }
+}
 
-
-const {listItem, prevListItem, nextListItem} = getItems(list, `${baseSlug}/${Astro.params.slug}`);
-if(!listItem) {
+if (!post) {
   return;
 }
 
-export const getStaticPaths = function() {
-  let items = [];
-  let baseSlug = 'api';
-  list.map((item) => {
-    if(item.slug === baseSlug && item.children) {
-      for(let i = 0 ; i < item.children.length; i++) {
-        const child = item.children[i];
-        items.push({
-          params : {
-            slug : `${child.slug}`
-          }
-        })
-      }
+const { Content } = await render(post);
+const pageTitle = post.data.title;
+const tocItems = buildApiTocList(list, apiEntries);
+const nav = buildApiPrevNext(apiEntries, currentSlug);
+
+export async function getStaticPaths() {
+  const entries = await getCollection("api");
+  const paths = [];
+
+  for (let i = 0; i < entries.length; i++) {
+    const entry = entries[i];
+    if (!entry || !entry.data || !entry.data.slug) {
+      continue;
     }
-  });
-  return items;
+
+    paths.push({
+      params: {
+        slug: entry.data.slug,
+      },
+    });
+  }
+
+  return paths;
 }
-
-let content = null;
-
 ---
 
 <BaseLayout>
-
-  <PageApi client:load pathname={Astro.url.pathname}>
+  <PageApi client:load pathname={Astro.url.pathname} title={pageTitle} tocItems={tocItems}>
     <div class="c-page">
       <Content />
-      <Prevnext prev={prevListItem} next={nextListItem} />
+      <Prevnext prev={nav.prev} next={nav.next} />
     </div>
   </PageApi>
 </BaseLayout>

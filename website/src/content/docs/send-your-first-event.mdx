@@ -1,0 +1,64 @@
+---
+title: Send Your First Event
+slug: send-your-first-event
+description: Send your first event with SDK or direct HTTP.
+---
+
+import Item from "@operational.co/components/card/index.vue";
+
+Operational receives events at `POST /api/v1/log`.
+
+Use the API key from the project you want to track.
+
+SDK example:
+
+```js
+import Operational from "@operational.co/sdk";
+
+const ops = new Operational(process.env.OPERATIONAL_API_KEY);
+
+await ops.events.log({
+  name: "user signed up",
+  avatar: "🎉",
+  content: "Signup from pricing page",
+});
+```
+
+<Item client:only="vue"
+  item={{
+    name: "user signed up",
+    avatar: "🎉",
+    createdAt: "2026-02-28",
+    content: "Signup from pricing page"
+  }}
+></Item>
+
+Direct HTTP example:
+
+```js
+const event = {
+  name: "user signed up",
+  avatar: "🎉",
+  content: "Signup from pricing page",
+};
+
+await fetch("https://api.operational.co/api/v1/log", {
+  method: "POST",
+  headers: {
+    "Authorization": `Bearer ${process.env.OPERATIONAL_API_KEY}`,
+    "Content-Type": "application/json",
+  },
+  body: JSON.stringify(event),
+});
+```
+
+<Item client:only="vue"
+  item={{
+    name: "user signed up",
+    avatar: "🎉",
+    createdAt: "2026-02-28",
+    content: "Signup from pricing page"
+  }}
+></Item>
+
+A successful request returns `201` with `success`.

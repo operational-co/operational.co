@@ -23,7 +23,7 @@
 <script>
 import Constrain from "@operational.co/components/ui/constrain.vue";
 import Subtitle from "./ui/subtitle.vue";
-import Toc from "@operational.co/components/ui/toc.vue";
+import Toc from "@/components/ui/toc.vue";
 import PageHeader from "./page-header.vue";
 
 export default {
