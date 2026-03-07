@@ -35,7 +35,7 @@ import MetricComponent from "#components/metric/index.js";
 import Website from "#components/website/index.js";
 
 import loggerMiddleware from "#components/middleware/logger.js";
-import { buildApiV1LogLlmsMarkdown } from "#components/api/openapi.js";
+import { buildApiV1LogLlmsMarkdown, buildApiV1LogOpenApi } from "#components/api/openapi.js";
 
 import express from "express";
 import path from "path";
@@ -100,7 +100,7 @@ async function setupServer() {
         allowAll = true;
       }
     }
-    const allowedPaths = ["/api/v1/log"];
+    const allowedPaths = ["/api/v1/log", "/api/v1/openapi.json", "/openapi.json"];
 
     const origin = req.headers.origin;
 
@@ -186,12 +186,18 @@ async function setupServer() {
   app.use("/dashboards", dashboardsRoutes);
 
   if (!config.SELFHOSTED) {
+    const openapi = (req, res) => {
+      const spec = buildApiV1LogOpenApi(req);
+      return res.status(200).json(spec);
+    };
+
     const llms = async (req, res) => {
       const markdown = await buildApiV1LogLlmsMarkdown(req);
       res.setHeader("Content-Type", "text/plain; charset=utf-8");
       return res.status(200).send(markdown);
     };
 
+    app.get("/openapi.json", openapi);
     app.get("/llms.txt", llms);
     app.get("/llm.txt", (req, res) => res.redirect(308, "/llms.txt"));
   }

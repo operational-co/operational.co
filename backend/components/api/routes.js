@@ -305,7 +305,6 @@ router.post(
   dashboardWidgetPush,
 );
 
-// Only expose OpenAPI in hosted/commercial mode.
 if (!config.SELFHOSTED) {
   router.get("/openapi.json", openapi);
   router.get("/llms.txt", llms);
