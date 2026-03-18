@@ -1,10 +1,9 @@
 ---
-import { getCollection } from 'astro:content';
 import BaseLayout from "@/layouts/base.astro";
 
-import helper from "@/lib/helper.js";
+import { getPublishedBlogPosts } from "@/lib/blog.js";
 
-const posts= await helper.common();
+const posts = await getPublishedBlogPosts();
 
 import Articles from "@/components/articles.vue";
 import PageHeader from "@/components/page-header.vue"

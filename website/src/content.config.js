@@ -81,6 +81,25 @@ const usecases = defineCollection({
   }),
 });
 
+const blog = defineCollection({
+  loader: glob({ pattern: "*.md", base: "./src/content/blog" }),
+  schema: z.object({
+    id: z.number(),
+    status: z.string(),
+    sort: z.number().nullable().optional(),
+    date_created: z.string().nullable().optional(),
+    date_updated: z.string().nullable().optional(),
+    title: z.string(),
+    subtitle: z.string().nullable().optional(),
+    slug: z.string(),
+    category: z.string().nullable().optional(),
+    banner: z.string().nullable().optional(),
+    banner_og: z.string().nullable().optional(),
+    banner_id: z.string().nullable().optional(),
+    banner_og_id: z.string().nullable().optional(),
+  }),
+});
+
 // 2. Export your collections
 export const collections = {
   docs,
@@ -90,4 +109,5 @@ export const collections = {
   integrations,
   pages,
   usecases,
+  blog,
 };

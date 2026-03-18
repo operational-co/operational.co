@@ -17,8 +17,6 @@
 </template>
 
 <script>
-import helper from "@/lib/helper.js";
-
 import Constrain from "@operational.co/components/ui/constrain.vue";
 import Toc from "@/components/article-toc.vue";
 import ArticleRelated from "@/components/article-related.vue";

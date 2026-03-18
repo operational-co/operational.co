@@ -3,9 +3,9 @@ import BaseHead from '@/components/base-head.astro';
 import Header from '@/components/app/header.vue';
 import Footer from '@/components/app/footer.vue';
 import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
-import helper from "@/lib/helper.js";
+import { getPublishedBlogPosts } from "@/lib/blog.js";
 
-const posts= await helper.common();
+const posts = await getPublishedBlogPosts();
 
 import "@operational.co/styles/main.scss";
 

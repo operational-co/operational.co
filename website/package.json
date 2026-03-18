@@ -6,6 +6,7 @@
     "dev": "astro dev",
     "start": "astro dev",
     "generate:api-docs": "node ./scripts/generate-api-docs.js",
+    "sync:blog": "node ./scripts/sync-blog-from-directus.js",
     "build": "npm run generate:api-docs && astro build && pagefind --site dist",
     "preview": "astro preview",
     "astro": "astro"

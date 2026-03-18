@@ -5,7 +5,7 @@
         <img
           class="c-article-header__img"
           v-if="post.banner"
-          :src="`https://writings.operational.co/assets/${post.banner}?format=webp&quality=70`"
+          :src="post.banner"
         />
         <h1>
           {{ post.title }}
@@ -20,8 +20,6 @@
 </template>
 
 <script>
-import helper from "@/lib/helper.js";
-
 import edjsParser from "editorjs-parser";
 
 import Constrain from "@operational.co/components/ui/constrain.vue";

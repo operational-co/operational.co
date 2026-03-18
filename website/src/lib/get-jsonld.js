@@ -85,6 +85,24 @@ function formatDate(isoDateString) {
   return formattedDate;
 }
 
+function resolveBlogImageUrl(value) {
+  if (!value) {
+    return null;
+  }
+
+  const imageValue = String(value);
+
+  if (imageValue.startsWith("http://") || imageValue.startsWith("https://")) {
+    return imageValue;
+  }
+
+  if (imageValue.startsWith("/")) {
+    return `https://operational.co${imageValue}`;
+  }
+
+  return `https://writings.operational.co/assets/${imageValue}?format=jpeg&quality=70`;
+}
+
 /**
  * type is the type of the json ld generated, eg post, page, etc
  */
@@ -178,7 +196,7 @@ function getUsecaseJsonLd(post) {
 function getPostJsonLd(post) {
   let title = post.title;
   let subtitle = post.subtitle;
-  let bannerUrl = `https://writings.operational.co/assets/${post.banner_og || post.banner}?format=jpeg&quality=70`;
+  let bannerUrl = resolveBlogImageUrl(post.banner_og || post.banner);
   let authorName = "Shash";
   let authorUrl = "https://x.com/shash122tfu";
   let publisherName = "Operational";
@@ -214,10 +232,6 @@ function getPostJsonLd(post) {
     },
     description: subtitle,
     articleSection: headings,
-    image: {
-      "@type": "ImageObject",
-      url: bannerUrl,
-    },
     url: pageUrl,
     isPartOf: {
       "@type": "Blog",
@@ -229,6 +243,13 @@ function getPostJsonLd(post) {
     },
     about: sections,
   };
+
+  if (bannerUrl) {
+    json.image = {
+      "@type": "ImageObject",
+      url: bannerUrl,
+    };
+  }
 
   return json;
 }

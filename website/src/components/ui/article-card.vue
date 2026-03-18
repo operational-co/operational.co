@@ -4,7 +4,7 @@
       <img
         class="c-article-card__img"
         v-if="post.banner"
-        :src="`https://writings.operational.co/assets/${post.banner}?format=webp&quality=70`"
+        :src="post.banner"
       />
       <div class="c-article-card__footer">
         <h2 class="h4">
