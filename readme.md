@@ -81,3 +81,33 @@ Operational itself is a monorepo of 3 repos:
 
 - /website astrojs marketing website
 - /packages folder has public npm packages which are shared across all repos.
+
+## Bootstrap article
+
+Use the article bootstrap command to create a new draft blog post and its banner assets.
+
+Required env var:
+
+- `OPENROUTER_API_KEY`
+
+The command reads `OPENROUTER_API_KEY` from `website/.env` first, then falls back to your shell environment.
+
+Examples:
+
+- `npm --workspace website run bootstrap-article -- --title="My Article Title"`
+- `npm --workspace website run bootstrap-article -- --slug="my-article-slug"`
+- `npm --workspace website run bootstrap-article -- --title="My Article Title" --slug="my-article-slug"`
+
+What it creates:
+
+- `website/src/content/blog/{slug}.md`
+- `website/public/images/blog/{slug}/banner.png`
+- `website/public/images/blog/{slug}/banner-og.jpg`
+
+Behavior:
+
+- If only `title` is passed, the script slugifies it and uses that for the article slug.
+- If only `slug` is passed, the script de-slugs it into a readable title.
+- If both are passed, the script keeps the provided title and slug.
+- The article is created as a draft with starter content.
+- The script stops without overwriting anything if the target article already exists.

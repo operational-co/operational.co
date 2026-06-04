@@ -3,6 +3,7 @@
   "type": "module",
   "version": "0.0.1",
   "scripts": {
+    "bootstrap-article": "node ./scripts/bootstrap-article.js",
     "dev": "astro dev",
     "start": "astro dev",
     "generate:api-docs": "node ./scripts/generate-api-docs.js",
