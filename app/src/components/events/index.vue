@@ -6,7 +6,7 @@
     <Constrain size="xx">
       <section class="c-events__header">
         <h3>Events</h3>
-        <Toggle :listening="listening" @onToggle="onToggle"></Toggle>
+        <Toggle :listening="effectiveListening" @onToggle="onToggle"></Toggle>
         <TestMode></TestMode>
       </section>
       <div class="c-events__inner">
@@ -128,6 +128,10 @@ export default {
   watch: {
     lock: function () {},
     query: function () {
+      if (!this.hasActiveSearch) {
+        this.listening = true;
+      }
+
       this.processQuery();
     },
     showArchive: function () {
@@ -139,6 +143,12 @@ export default {
   },
 
   computed: {
+    hasActiveSearch: function () {
+      return typeof this.query === "string" && this.query.trim().length > 0;
+    },
+    effectiveListening: function () {
+      return this.listening && !this.hasActiveSearch;
+    },
     testMode: function () {
       return this.$store.app.testMode;
     },
@@ -512,8 +522,7 @@ export default {
     },
     startInterval() {
       this.intervalId = setInterval(() => {
-        if (!this.listening) {
-        } else {
+        if (this.effectiveListening) {
           this.$store.events.getLatest();
         }
       }, this.listeningInterval);

@@ -4,10 +4,10 @@
       <!-- <Background></Background> -->
       <Constrain size="sm">
         <div class="text-center">
-          <h1>Monitor your product’s critical events as they happen</h1>
+          <h1>Know what’s happening inside your SaaS.</h1>
           <p class="article-text">
-            Operational sends alerts in a live timeline<br />
-            so you always know what’s going on.
+            Operational gives you a live feed of signups, payments, cancellations, webhooks, jobs
+            and errors, as they happen.
           </p>
         </div>
 

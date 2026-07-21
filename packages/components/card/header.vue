@@ -231,7 +231,7 @@ export default {
       text-overflow: ellipsis;
 
       &:first-child {
-        min-width: 64px;
+        min-width: 73px;
         overflow: initial;
         text-overflow: initial;
         opacity: 0.6;

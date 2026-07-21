@@ -126,6 +126,7 @@ export const useEventsStore = defineStore(config.name, {
       muted: false,
 
       latestLock: false,
+      latestParamsVersion: 0,
     };
   },
   getters: {
@@ -145,6 +146,8 @@ export const useEventsStore = defineStore(config.name, {
     },
 
     reset: function () {
+      this.latestParamsVersion += 1;
+
       const payload = {
         skip: 0,
         take: 20,
@@ -168,6 +171,8 @@ export const useEventsStore = defineStore(config.name, {
     },
 
     setParams: async function (params, refresh = false) {
+      this.latestParamsVersion += 1;
+
       if (typeof params.skip === "number") {
         this.skip = params.skip;
       }
@@ -232,41 +237,53 @@ export const useEventsStore = defineStore(config.name, {
         return;
       }
 
-      this.latestLock = true;
       let events = this.resources;
 
       events = toRaw(events);
 
-      if (!events) {
+      if (!events || !events.length) {
         return;
       }
 
-      if (!events.length) {
+      if (typeof this.query === "string" && this.query.trim().length > 0) {
         return;
       }
 
-      let firstEvent = events[0];
+      this.latestLock = true;
+      const latestParamsVersion = this.latestParamsVersion;
 
-      const cursor = firstEvent.id;
+      try {
+        let firstEvent = events[0];
 
-      const params = {
-        cursor: cursor,
-        category: this.category,
-      };
+        const cursor = firstEvent.id;
 
-      let newEvents = await api.latest(params).catch((err) => {});
+        const params = {
+          cursor: cursor,
+          category: this.category,
+        };
 
-      if (!newEvents) {
-        newEvents = [];
+        let newEvents = await api.latest(params).catch((err) => {});
+
+        if (latestParamsVersion !== this.latestParamsVersion) {
+          return;
+        }
+
+        if (typeof this.query === "string" && this.query.trim().length > 0) {
+          return;
+        }
+
+        if (!newEvents) {
+          newEvents = [];
+        }
+
+        newEvents = newEvents.reverse();
+
+        if (newEvents.length > 0) {
+          this.resources.unshift(...newEvents);
+        }
+      } finally {
+        this.latestLock = false;
       }
-
-      newEvents = newEvents.reverse();
-
-      if (newEvents && newEvents.length > 0) {
-        this.resources.unshift(...newEvents);
-      }
-
-      this.latestLock = false;
     },
 
     refresh: async function () {
