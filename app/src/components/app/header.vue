@@ -55,7 +55,7 @@
 
           <span>Dashboards</span>
         </router-link> -->
-        <router-link to="/settings"> <span>Settings</span> </router-link>
+        <!-- <router-link to="/settings"> <span>Settings</span> </router-link> -->
         <router-link to="/playground">
           <svg
             width="24"
