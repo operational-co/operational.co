@@ -185,6 +185,83 @@ class User extends Model {
   }
 
   async getPie(userId) {
+    const baseUser = await prisma.user.findUnique({
+      where: {
+        id: userId,
+      },
+      select: {
+        id: true,
+        email: true,
+        createdAt: true,
+        primaryWorkspace: true,
+        avatar: true,
+        firstName: true,
+        lastName: true,
+        activated: true,
+        onboarded: true,
+        onboardingStep: true,
+        activationCode: true,
+        settings: true,
+        status: true,
+        timezone: true,
+      },
+    });
+
+    if (!baseUser) {
+      return;
+    }
+
+    let primaryMembership = null;
+    if (baseUser.primaryWorkspace) {
+      primaryMembership = await prisma.workspaceUser.findUnique({
+        where: {
+          userId_workspaceId: {
+            userId: userId,
+            workspaceId: baseUser.primaryWorkspace,
+          },
+        },
+      });
+    }
+
+    if (!primaryMembership) {
+      const memberships = await prisma.workspaceUser.findMany({
+        where: {
+          userId: userId,
+          workspace: {
+            status: {
+              not: "DELETED",
+            },
+          },
+        },
+        include: {
+          workspace: true,
+        },
+        orderBy: [{ createdAt: "asc" }, { id: "asc" }],
+      });
+
+      const workspaces = [];
+      for (let i = 0; i < memberships.length; i++) {
+        const workspace = memberships[i].workspace;
+        workspaces.push({
+          id: workspace.id,
+          name: workspace.name,
+          adminId: workspace.adminId,
+          status: workspace.status,
+        });
+      }
+
+      return {
+        ...baseUser,
+        primaryWorkspace: null,
+        notify: false,
+        pushSubscription: null,
+        workspaces: workspaces,
+        workspace: null,
+        activated: !!baseUser.activated,
+        onboarded: !!baseUser.onboarded,
+      };
+    }
+
     let arr = [
       "u.id",
       "u.email",
@@ -228,10 +305,12 @@ class User extends Model {
 			) AS apiKeys,
 			(
         SELECT JSON_ARRAYAGG(
-            JSON_OBJECT(
-                'id', AssociatedWorkspace.id,
-                'name', AssociatedWorkspace.name
-            )
+                JSON_OBJECT(
+                    'id', AssociatedWorkspace.id,
+                    'name', AssociatedWorkspace.name,
+                    'adminId', AssociatedWorkspace.adminId,
+                    'status', AssociatedWorkspace.status
+                )
         )
         FROM WorkspaceUser wua
         LEFT JOIN Workspace AssociatedWorkspace ON wua.workspaceId = AssociatedWorkspace.id

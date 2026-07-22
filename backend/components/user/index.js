@@ -24,6 +24,23 @@ const stripe = Stripe(`${config.stripe.TEST_SECRET}`);
 const component = {
   async switchWorkspace(user, newWorkspace, sid) {
     newWorkspace = parseInt(newWorkspace);
+
+    const membership = await prisma.workspaceUser.findFirst({
+      where: {
+        userId: user.id,
+        workspaceId: newWorkspace,
+        workspace: {
+          status: {
+            not: "DELETED",
+          },
+        },
+      },
+    });
+
+    if (!membership) {
+      throw new Error("Project not found");
+    }
+
     user = await User.client.update({
       where: {
         id: user.id,

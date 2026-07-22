@@ -19,12 +19,31 @@ import Key from "#services/key/index.js";
 import Email from "#services/email/index.js";
 import Billing from "#services/billing/index.js";
 import Session from "#services/session/index.js";
+import Db from "#services/db/index.js";
 import { customAlphabet } from "nanoid";
 import ops from "#lib/ops.js";
 
 const nanoid = customAlphabet("1234567890abcdefghijklmnopqrstuvwxyz", 24);
 
 import moment from "moment";
+
+function createHttpError(status, message) {
+  const error = new Error(message);
+  error.status = status;
+  return error;
+}
+
+function hasWorkspaceMember(workspace, userId) {
+  const users = workspace.users || [];
+
+  for (let i = 0; i < users.length; i++) {
+    if (users[i].userId === userId) {
+      return true;
+    }
+  }
+
+  return false;
+}
 
 const component = {
   async removeExpiringInvites() {
@@ -363,6 +382,7 @@ const component = {
     let workspace = await Workspace.client.create({
       data: {
         name: form.name,
+        adminId: form.userId,
         status: "NORMAL",
       },
     });
@@ -393,7 +413,7 @@ const component = {
       await Session.invalidate(session.sid);
     }
 
-    const user = await prisma.User.update({
+    const user = await prisma.user.update({
       where: {
         id: form.userId,
       },
@@ -412,6 +432,273 @@ const component = {
     await Email.onNewWorkspace(form.userId, workspace);
 
     return jwt;
+  },
+
+  async deleteWorkspace(workspaceId, userId) {
+    workspaceId = Number(workspaceId);
+
+    const workspace = await prisma.workspace.findUnique({
+      where: {
+        id: workspaceId,
+      },
+      include: {
+        users: {
+          include: {
+            user: true,
+          },
+        },
+      },
+    });
+
+    if (!workspace || !hasWorkspaceMember(workspace, userId)) {
+      throw createHttpError(404, "Project not found");
+    }
+
+    if (workspace.adminId !== userId) {
+      throw createHttpError(403, "Only the project owner can delete this project");
+    }
+
+    if (workspace.status === "DEMO") {
+      throw createHttpError(403, "Demo projects cannot be deleted");
+    }
+
+    const replacementWorkspace = await prisma.workspace.findFirst({
+      where: {
+        adminId: userId,
+        id: {
+          not: workspaceId,
+        },
+        status: {
+          not: "DELETED",
+        },
+      },
+      orderBy: [{ createdAt: "asc" }, { id: "asc" }],
+    });
+
+    if (!replacementWorkspace) {
+      throw createHttpError(409, "Create another project before deleting this one");
+    }
+
+    if (workspace.status !== "DELETED") {
+      const owner = await prisma.user.findUnique({
+        where: {
+          id: userId,
+        },
+      });
+
+      try {
+        await Email.onWorkspaceDelete(owner, workspace);
+      } catch (err) {
+        throw createHttpError(502, "The project deletion email could not be sent");
+      }
+
+      await prisma.workspace.update({
+        where: {
+          id: workspaceId,
+        },
+        data: {
+          status: "DELETED",
+        },
+      });
+
+      await Key.buildCache();
+    }
+
+    try {
+      await Billing.deleteCustomer(workspace.customerId);
+
+      if (config.EVENT_STORE === "clickhouse") {
+        await Db.removeWorkspaceEvents(workspaceId);
+      }
+    } catch (err) {
+      console.log(err);
+      throw createHttpError(502, "Project resources could not be deleted");
+    }
+
+    const primaryWorkspaceUpdates = [];
+    const affectedUserIds = [];
+
+    for (let i = 0; i < workspace.users.length; i++) {
+      const workspaceUser = workspace.users[i];
+      const member = workspaceUser.user;
+
+      if (member.primaryWorkspace !== workspaceId) {
+        continue;
+      }
+
+      let primaryWorkspace = null;
+
+      if (member.id === userId) {
+        primaryWorkspace = replacementWorkspace.id;
+      } else {
+        const fallbackMembership = await prisma.workspaceUser.findFirst({
+          where: {
+            userId: member.id,
+            workspaceId: {
+              not: workspaceId,
+            },
+            workspace: {
+              status: {
+                not: "DELETED",
+              },
+            },
+          },
+          include: {
+            workspace: true,
+          },
+          orderBy: [{ createdAt: "asc" }, { id: "asc" }],
+        });
+
+        if (fallbackMembership) {
+          primaryWorkspace = fallbackMembership.workspaceId;
+        }
+      }
+
+      primaryWorkspaceUpdates.push({
+        userId: member.id,
+        primaryWorkspace: primaryWorkspace,
+      });
+      affectedUserIds.push(member.id);
+    }
+
+    const affectedSessions = await prisma.session.findMany({
+      where: {
+        userId: {
+          in: affectedUserIds,
+        },
+      },
+      select: {
+        sid: true,
+      },
+    });
+
+    const sessionIds = [];
+    for (let i = 0; i < affectedSessions.length; i++) {
+      sessionIds.push(affectedSessions[i].sid);
+    }
+
+    await prisma.$transaction(
+      async function (transaction) {
+        for (let i = 0; i < primaryWorkspaceUpdates.length; i++) {
+          const update = primaryWorkspaceUpdates[i];
+
+          await transaction.user.update({
+            where: {
+              id: update.userId,
+            },
+            data: {
+              primaryWorkspace: update.primaryWorkspace,
+            },
+          });
+        }
+
+        if (config.EVENT_STORE === "mysql") {
+          await transaction.events.deleteMany({
+            where: {
+              workspaceId: workspaceId,
+            },
+          });
+        }
+
+        const dashboards = await transaction.dashboard.findMany({
+          where: {
+            workspaceId: workspaceId,
+          },
+          select: {
+            id: true,
+          },
+        });
+
+        const dashboardIds = [];
+        for (let i = 0; i < dashboards.length; i++) {
+          dashboardIds.push(dashboards[i].id);
+        }
+
+        const widgets = await transaction.widget.findMany({
+          where: {
+            dashboardId: {
+              in: dashboardIds,
+            },
+          },
+          select: {
+            id: true,
+          },
+        });
+
+        const widgetIds = [];
+        for (let i = 0; i < widgets.length; i++) {
+          widgetIds.push(widgets[i].id);
+        }
+
+        await transaction.widgetPoint.deleteMany({
+          where: {
+            widgetId: {
+              in: widgetIds,
+            },
+          },
+        });
+        await transaction.widget.deleteMany({
+          where: {
+            dashboardId: {
+              in: dashboardIds,
+            },
+          },
+        });
+        await transaction.dashboard.deleteMany({ where: { workspaceId: workspaceId } });
+        await transaction.categoryRecomputeQueue.deleteMany({
+          where: { workspaceId: workspaceId },
+        });
+        await transaction.invoice.deleteMany({ where: { workspaceId: workspaceId } });
+        await transaction.coupon.deleteMany({ where: { workspaceId: workspaceId } });
+        await transaction.apikey.deleteMany({ where: { workspaceId: workspaceId } });
+        await transaction.category.deleteMany({ where: { workspaceId: workspaceId } });
+        await transaction.metric.deleteMany({ where: { workspaceId: workspaceId } });
+        await transaction.invite.deleteMany({ where: { workspaceId: workspaceId } });
+
+        if (sessionIds.length > 0) {
+          await transaction.push.deleteMany({
+            where: {
+              sid: {
+                in: sessionIds,
+              },
+            },
+          });
+        }
+
+        if (affectedUserIds.length > 0) {
+          await transaction.session.deleteMany({
+            where: {
+              userId: {
+                in: affectedUserIds,
+              },
+            },
+          });
+        }
+
+        await transaction.workspaceUser.deleteMany({ where: { workspaceId: workspaceId } });
+        await transaction.workspace.delete({ where: { id: workspaceId } });
+      },
+      {
+        maxWait: 10000,
+        timeout: 60000,
+      },
+    );
+
+    await Session.buildCache();
+    await Key.buildCache();
+
+    const user = await prisma.user.findUnique({
+      where: {
+        id: userId,
+      },
+    });
+    const session = await Session.generate(user);
+    const jwt = generateJwt(session.sid);
+
+    return {
+      jwt: jwt,
+      primaryWorkspace: user.primaryWorkspace,
+    };
   },
 
   /**

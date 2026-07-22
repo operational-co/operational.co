@@ -12,10 +12,11 @@
   cursor: pointer;
   user-select: none;
   color: var(--color-font);
+  corner-shape: squircle;
 
   border-radius: var(--input-radius);
 
-  transition: all 120ms linear;
+  transition: all 100ms linear;
 
   /* Button/Default */
   box-shadow:

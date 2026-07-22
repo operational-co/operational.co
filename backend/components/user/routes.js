@@ -139,7 +139,15 @@ const switchWorkspace = async (req, res) => {
 
   const sid = res.locals.sid;
 
-  let jwt = await component.switchWorkspace(res.locals.user, newWorkspace, sid);
+  let jwt = null;
+
+  try {
+    jwt = await component.switchWorkspace(res.locals.user, newWorkspace, sid);
+  } catch (err) {
+    return res.status(404).send({
+      message: err.message || "Project not found",
+    });
+  }
 
   res.header("x-token", jwt);
 

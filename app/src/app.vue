@@ -10,12 +10,13 @@
 
     <Header v-if="isAuth"></Header>
 
-    <MobileFooter v-if="isAuth"></MobileFooter>
+    <MobileFooter v-if="isAuth && workspace"></MobileFooter>
 
     <!-- <Sidebar v-if="isAuth"></Sidebar> -->
 
     <div class="c-app__body">
-      <router-view v-if="isAuth" v-slot="{ Component }">
+      <ProjectEmpty v-if="isAuth && !workspace"></ProjectEmpty>
+      <router-view v-else-if="isAuth" v-slot="{ Component }">
         <transition name="fade-slide" mode="out-in">
           <component :is="Component"></component>
         </transition>
@@ -74,6 +75,7 @@ import Message from "@/components/message/index.vue";
 import TestMode from "@/components/app/test-mode.vue";
 import Blurb from "@/components/app/blurb.vue";
 import DemoBlurb from "@/components/app/demo-blurb.vue";
+import ProjectEmpty from "@/components/app/project-empty.vue";
 
 import Nprogress from "@/lib/nprogress.js";
 
@@ -106,6 +108,7 @@ export default {
     TestMode,
     Blurb,
     DemoBlurb,
+    ProjectEmpty,
   },
 
   data: function () {

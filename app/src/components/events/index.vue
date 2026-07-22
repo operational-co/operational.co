@@ -64,7 +64,7 @@
       @onClose="modalConfirmActive = false"
     >
     </ModalConfirm>
-    <ModalView :active="modalView" :eventId="modalView" :onClose="(modalView = false)"></ModalView>
+    <ModalView :active="!!modalView" :eventId="modalView" @onClose="modalView = false"></ModalView>
   </div>
 </template>
 
@@ -351,6 +351,9 @@ export default {
         return;
       }
 
+      this.modalView = eventId;
+
+      /*
       let event = null;
 
       for (let i = 0; i < this.items.length; i++) {
@@ -368,6 +371,7 @@ export default {
       }
 
       this.scrollToEvent(event);
+      */
     },
     async onBottomReached() {
       if (this.lock) {

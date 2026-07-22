@@ -4,6 +4,7 @@
 			@onEventNameSearch="onEventNameSearch"
 			:item="item"
 			@onConfirmAction="onConfirmAction"
+			@onCopyPermalink="onCopyPermalink"
 		></Card>
 	</div>
 </template>
@@ -33,6 +34,9 @@ export default {
 	},
 
 	methods: {
+		onCopyPermalink: function () {
+			this.$store.app.sendNotification(`Notification's permalink is copied`);
+		},
 		onEventNameSearch: function (name) {
 			this.$emit("onEventNameSearch", name);
 		},

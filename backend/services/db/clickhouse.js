@@ -315,6 +315,23 @@ WHERE workspaceId = '${params.workspaceId}'
 
   async removeOldEvents() {},
 
+  async removeWorkspaceEvents(workspaceId) {
+    const ch = Clickhouse.getCh();
+
+    await ch.command({
+      query: `
+        ALTER TABLE Events
+        DELETE WHERE workspaceId = {workspaceId:UInt32}
+        SETTINGS mutations_sync = 2
+      `,
+      query_params: {
+        workspaceId: Number(workspaceId),
+      },
+    });
+
+    return true;
+  },
+
   async removeTestEvents() {
     const ch = Clickhouse.getCh();
     const currentDate = moment().utc();

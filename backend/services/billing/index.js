@@ -304,6 +304,23 @@ class Billing {
       throw err;
     }
   }
+
+  async deleteCustomer(customerId) {
+    if (!customerId) {
+      return true;
+    }
+
+    try {
+      await this.stripe.customers.del(customerId);
+      return true;
+    } catch (err) {
+      if (err && err.code === "resource_missing") {
+        return true;
+      }
+
+      throw err;
+    }
+  }
 }
 
 export default new Billing();

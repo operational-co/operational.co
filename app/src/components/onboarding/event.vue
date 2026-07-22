@@ -37,7 +37,7 @@ ops.events.ingest({
 				</p>
 				<p v-else>Event received! Onwards and upwards.</p>
 
-				<Card v-if="item" :item="item"></Card>
+				<Card v-if="item" :item="item" @onCopyPermalink="onCopyPermalink"></Card>
 
 				<button
 					v-if="eventReceived"
@@ -90,6 +90,9 @@ export default {
 	},
 
 	methods: {
+		onCopyPermalink: function () {
+			this.$store.app.sendNotification(`Notification's permalink is copied`);
+		},
 		async hasEventBeenReceived(bypass = false) {
 			if (bypass) {
 				this.eventReceived = true;

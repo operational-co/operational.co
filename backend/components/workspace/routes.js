@@ -105,6 +105,32 @@ const create = async (req, res) => {
   }
 };
 
+const deleteWorkspace = async (req, res) => {
+  const workspaceId = Number(req.params.id);
+
+  if (!Number.isInteger(workspaceId)) {
+    return res.status(400).send({
+      message: "Invalid project id",
+    });
+  }
+
+  try {
+    const data = await component.deleteWorkspace(workspaceId, res.locals.user.id);
+
+    res.header("x-token", data.jwt);
+
+    return res.status(200).send({
+      primaryWorkspace: data.primaryWorkspace,
+    });
+  } catch (err) {
+    console.log(err);
+
+    return res.status(err.status || 500).send({
+      message: err.message || "Project could not be deleted",
+    });
+  }
+};
+
 const invite = async (req, res) => {
   const form = {
     firstName: req.body.firstName || req.body.name,
@@ -281,6 +307,8 @@ router.post("/remove-user", middlewareAuth, middlewareSchema(removeUserSchema), 
 router.post("/", middlewareAuth, middlewareSchema(createSchema), create);
 
 router.put("/", middlewareAuth, upload.single("avatar"), middlewareSchema(updateSchema), update);
+
+router.delete("/:id", middlewareAuth, deleteWorkspace);
 
 // Export the router
 export default router;

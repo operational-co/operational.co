@@ -121,6 +121,7 @@ class Email {
       console.log(`Email saved to file: ${filePath}`);
     } catch (error) {
       console.error("Error saving email to file:", error.message);
+      throw error;
     }
   }
 
@@ -179,7 +180,7 @@ class Email {
         throw err;
       }
     } else {
-      this.saveEmailToFile(payload);
+      await this.saveEmailToFile(payload);
       response = true;
     }
 
@@ -285,6 +286,27 @@ class Email {
       Hi ${user.firstName},
 
       Your project "${workspace.name}" has been created!
+
+      Shash
+      Founder, Operational
+    `;
+
+    return await this.send({
+      subject,
+      to: user.email,
+      text,
+    });
+  }
+
+  async onWorkspaceDelete(user, workspace) {
+    const subject = `Operational - Project deletion requested`;
+
+    const text = `
+      Hi ${user.firstName},
+
+      Your project "${workspace.name}" has been set for deletion and will now be removed completely, along with all of its associated data.
+
+      This action cannot be undone.
 
       Shash
       Founder, Operational

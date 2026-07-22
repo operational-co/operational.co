@@ -54,6 +54,16 @@ const api = {
     }
   },
 
+  deleteProject: async function (workspaceId) {
+    try {
+      const res = await http.delete(`/workspace/${workspaceId}`);
+
+      return res.data || null;
+    } catch (err) {
+      throw err;
+    }
+  },
+
   inviteUser: async function (form) {
     try {
       const res = await http.post("/workspace/invite-user", form);
@@ -181,6 +191,10 @@ export const useWorkspaceStore = defineStore(config.name, {
       }
 
       return res;
+    },
+
+    deleteProject: async function (workspaceId) {
+      return await api.deleteProject(workspaceId);
     },
 
     updatePassword: async function (form = {}) {

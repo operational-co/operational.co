@@ -7,9 +7,11 @@
       <span v-if="processing" class="c-spinner"></span>
       <Card
         v-if="event"
+        :initialExpand="true"
         @onEventNameSearch="onEventNameSearch"
         :item="event"
         @onConfirmAction="onConfirmAction"
+        @onCopyPermalink="onCopyPermalink"
       ></Card>
     </article>
   </Modal>
@@ -58,6 +60,9 @@ export default {
   computed: {},
 
   methods: {
+    onCopyPermalink: function () {
+      this.$store.app.sendNotification(`Notification's permalink is copied`);
+    },
     async loadEvent(eventId) {
       this.processing = true;
 
@@ -82,6 +87,10 @@ export default {
 
 <style lang="scss">
 .modal-view {
+  align-items: stretch;
+  justify-content: flex-end;
+  padding: 0;
+
   .c-spinner {
     margin-left: 0;
   }
@@ -91,7 +100,11 @@ export default {
   }
 
   .vfm__content {
-    width: 420px;
+    width: 400px;
+    height: 100%;
+    margin: 0;
+    overflow-y: auto;
+    border-radius: 0;
 
     h3 {
       padding-right: 64px;
@@ -108,9 +121,9 @@ export default {
     margin-bottom: 1rem;
   }
 
-  @media screen and (max-width: 460px) {
+  @media screen and (max-width: 576px) {
     .vfm__content {
-      //width: calc(100% - 48px);
+      width: 80%;
     }
   }
 }

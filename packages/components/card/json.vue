@@ -158,7 +158,7 @@ export default {
     width: 100%;
     padding: 4px;
     margin-bottom: 0;
-    font-size: var(--font-size-sm);
+    font-size: var(--font-size-xs);
     font-family: "Jetbrains Mono";
   }
 

@@ -300,6 +300,14 @@ const mysql = {
     }
   },
 
+  async removeWorkspaceEvents(workspaceId) {
+    return await prisma.events.deleteMany({
+      where: {
+        workspaceId: Number(workspaceId),
+      },
+    });
+  },
+
   async getCategories(params) {
     let tableName = "Events";
     const limit = params.limit || 10000;

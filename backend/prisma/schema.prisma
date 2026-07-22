@@ -275,7 +275,7 @@ model CategoryRecomputeQueue {
 model Coupon {
   id Int @id @default(autoincrement())
 
-  workspace   Workspace? @relation("coupons", fields: [workspaceId], references: [id])
+  workspace   Workspace? @relation("coupons", fields: [workspaceId], references: [id], onDelete: Cascade)
   workspaceId Int?
 
   // Unique code to identify this coupon, eg
@@ -318,7 +318,7 @@ model Invoice {
   subTotal Decimal? @db.Decimal(10, 2) // Example: up to 10 digits with 2 decimal places
   total    Decimal? @db.Decimal(10, 2) // Example: up to 10 digits with 2 decimal places
 
-  workspace   Workspace? @relation("invoices", fields: [workspaceId], references: [id])
+  workspace   Workspace? @relation("invoices", fields: [workspaceId], references: [id], onDelete: Cascade)
   workspaceId Int?
 
   periodStart DateTime?
@@ -340,7 +340,7 @@ model Dashboard {
 
   name String @default("Default")
 
-  workspace   Workspace? @relation("dashboards", fields: [workspaceId], references: [id])
+  workspace   Workspace? @relation("dashboards", fields: [workspaceId], references: [id], onDelete: Cascade)
   workspaceId Int?
 
   widgets Widget[]

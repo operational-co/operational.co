@@ -29,6 +29,25 @@
         />
       </svg>
     </div> -->
+    <div
+      class="c-card-header__link"
+      role="button"
+      tabindex="0"
+      title="Copy permalink"
+      aria-label="Copy permalink"
+      @click.stop.prevent="onCopyPermalink"
+      @keydown.enter.stop.prevent="onCopyPermalink"
+      @keydown.space.stop.prevent="onCopyPermalink"
+    >
+      <svg width="24" height="24" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none">
+        <path
+          fill-rule="evenodd"
+          clip-rule="evenodd"
+          d="M18.5345 5.46548C16.5805 3.51151 13.4125 3.51151 11.4586 5.46548L11.4539 5.47013L10.7024 6.21174C10.3094 6.59969 9.67621 6.59553 9.28826 6.20244C8.90031 5.80936 8.90447 5.17621 9.29756 4.78826L10.0468 4.04885C12.782 1.31624 17.2145 1.31705 19.9487 4.05127C22.683 6.78551 22.6838 11.2181 19.9511 13.9533C19.9503 13.9541 19.9495 13.9549 19.9487 13.9557L19.2117 14.7024C18.8238 15.0955 18.1906 15.0997 17.7976 14.7117C17.4045 14.3238 17.4003 13.6906 17.7883 13.2976L18.5345 12.5414C20.4885 10.5875 20.4885 7.41946 18.5345 5.46548ZM6.20244 9.28826C6.59553 9.67621 6.59969 10.3094 6.21174 10.7024L5.46549 11.4586C3.51152 13.4125 3.51151 16.5805 5.46548 18.5345C7.41946 20.4885 10.5875 20.4885 12.5414 18.5345L12.5461 18.5299L13.2976 17.7883C13.6906 17.4003 14.3238 17.4045 14.7117 17.7976C15.0997 18.1906 15.0955 18.8238 14.7024 19.2117L13.9557 19.9487C13.9549 19.9495 13.954 19.9503 13.9532 19.9511C11.218 22.6838 6.78549 22.6829 4.05127 19.9487C1.31705 17.2145 1.31624 12.782 4.04886 10.0467L4.78826 9.29756C5.17621 8.90447 5.80936 8.90031 6.20244 9.28826ZM14.7071 9.29289C15.0976 9.68342 15.0976 10.3166 14.7071 10.7071L10.7071 14.7071C10.3166 15.0976 9.68342 15.0976 9.29289 14.7071C8.90237 14.3166 8.90237 13.6834 9.29289 13.2929L13.2929 9.29289C13.6834 8.90237 14.3166 8.90237 14.7071 9.29289Z"
+          fill="currentColor"
+        />
+      </svg>
+    </div>
     <div class="c-card-header__expand">
       <template v-if="expandable">
         <svg v-if="!expand" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -89,6 +108,14 @@ export default {
     onClick: function () {
       this.$emit("onToggleExpand");
     },
+    onCopyPermalink: async function () {
+      let url = new URL("/", window.location.origin);
+      url.searchParams.set("eventId", this.item.id);
+      url.searchParams.set("workspaceId", this.item.workspaceId);
+
+      await navigator.clipboard.writeText(url.href);
+      this.$emit("onCopyPermalink", url.href);
+    },
     isUrl: function (url) {
       try {
         url = new URL(url);
@@ -105,8 +132,8 @@ export default {
 <style lang="scss">
 .c-card-header {
   display: grid;
-  grid-template-columns: max-content 1fr max-content;
-  grid-column-gap: 0.75rem;
+  grid-template-columns: max-content 1fr max-content max-content;
+  grid-column-gap: 0.5rem;
   padding: 0.75rem;
   user-select: none;
 
@@ -187,6 +214,29 @@ export default {
     opacity: 0.25;
 
     transition: all var(--transition-time) ease-out;
+  }
+
+  &__link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    font-size: var(--font-size-lg);
+    font-weight: 500;
+    overflow: hidden;
+    user-select: none;
+    cursor: pointer;
+
+    opacity: 0.25;
+
+    transition: all var(--transition-time) ease-out;
+
+    &:hover,
+    &:active {
+      opacity: 1;
+    }
   }
 
   &__expand {
@@ -274,7 +324,7 @@ export default {
   }
 
   @media screen and (max-width: 940px) {
-    grid-template-columns: max-content 1fr max-content;
+    grid-template-columns: max-content 1fr max-content max-content;
     grid-column-gap: 8px;
     font-size: var(--font-size-sm);
     padding: 6px;

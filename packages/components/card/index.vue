@@ -1,6 +1,12 @@
 <template>
   <div :class="['c-card', { context: item.contexts && item.contexts.length > 0 }, { expand: showBody === true }]">
-    <Header :expand="expand" :expandable="expandable" @onToggleExpand="onToggleExpand" :item="item"></Header>
+    <Header
+      :expand="expand"
+      :expandable="expandable"
+      @onToggleExpand="onToggleExpand"
+      @onCopyPermalink="onCopyPermalink"
+      :item="item"
+    ></Header>
     <div class="c-card__body">
       <Resolve :payload="item" v-if="item.content"></Resolve>
       <div class="c-card__spacer" v-if="item.content && item.actions"></div>
@@ -94,6 +100,9 @@ export default {
   methods: {
     onToggleExpand: function () {
       this.expand = !this.expand;
+    },
+    onCopyPermalink: function (permalink) {
+      this.$emit("onCopyPermalink", permalink);
     },
     onEventNameSearch: function (name) {
       this.$emit("onEventNameSearch", name);

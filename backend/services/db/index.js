@@ -106,6 +106,11 @@ class Db {
     return await db.removeOldEvents();
   }
 
+  async removeWorkspaceEvents(workspaceId) {
+    const db = this.getDbInstance();
+    return await db.removeWorkspaceEvents(workspaceId);
+  }
+
   async getCategories(params) {
     const db = this.getDbInstance();
     return await db.getCategories(params);
