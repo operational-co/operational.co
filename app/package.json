@@ -41,7 +41,7 @@
     "uuid": "10.0.0",
     "vee-validate": "4.9.4",
     "vite-plugin-pwa": "0.17.2",
-    "vue": "3.3.4",
+    "vue": "3.5.40",
     "vue-final-modal": "4.5.3",
     "vue-grid-layout": "2.4.0",
     "vue-mention": "2.0.0-alpha.3",

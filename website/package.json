@@ -34,6 +34,7 @@
     "rehype-slug": "6.0.0",
     "remark-toc": "9.0.0",
     "sass": "1.77.8",
+    "vue": "3.5.40",
     "vue3-carousel": "0.14.0"
   }
 }
