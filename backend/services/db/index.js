@@ -25,21 +25,50 @@ class Db {
   }
 
   cleanParams(params) {
-    if (params.skip) {
-      params.skip = parseInt(params.skip);
-      if (isNaN(params.skip)) {
-        params.skip = 0;
-      }
+    params = params || {};
+
+    let skip = Number.parseInt(params.skip, 10);
+    if (!Number.isInteger(skip) || skip < 0) {
+      skip = 0;
     }
 
+    let take = Number.parseInt(params.take, 10);
+    if (!Number.isInteger(take) || take < 1) {
+      take = config.events.take;
+    }
+    take = Math.min(take, 101);
+
+    let mentions = params.mentions;
+    if (!Array.isArray(mentions)) {
+      mentions = mentions == null || mentions === "" ? [] : [mentions];
+    }
+    mentions = mentions
+      .map((item) => String(item || "").trim())
+      .filter((item, index, items) => item && items.indexOf(item) === index);
+
+    const toBoolean = function (value, fallback = false) {
+      if (value === true || value === "true" || value === 1 || value === "1") {
+        return true;
+      }
+      if (value === false || value === "false" || value === 0 || value === "0") {
+        return false;
+      }
+      return fallback;
+    };
+
     let newParams = {
-      skip: params.skip || 0,
-      take: config.events.take,
-      query: params.query || "",
-      category: params.category || "",
-      test: !!params.test || false,
-      workspaceId: params.workspaceId,
+      skip,
+      take,
+      query: String(params.query || "").trim().slice(0, 1000),
+      category: String(params.category || "").trim().slice(0, 191),
+      test: toBoolean(params.test),
+      workspaceId: Number(params.workspaceId),
       cursor: params.cursor || undefined,
+      mentions,
+      muted: toBoolean(params.muted),
+      contextId: String(params.contextId || "").trim().slice(0, 191),
+      hasContextStart: Object.prototype.hasOwnProperty.call(params, "contextStart"),
+      contextStart: toBoolean(params.contextStart),
     };
 
     return newParams;
@@ -77,9 +106,9 @@ class Db {
     return await db.findContexts(params);
   }
 
-  async findOne(id, testMode = false) {
+  async findOne(id, testMode = false, workspaceId) {
     const db = this.getDbInstance();
-    return await db.findOne(id, testMode);
+    return await db.findOne(id, testMode, workspaceId);
   }
 
   async updateOne(payload, testMode = false) {

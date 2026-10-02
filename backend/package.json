@@ -10,7 +10,7 @@
     "start": "npx prisma generate && node index.js"
   },
   "engines": {
-    "node": ">=18.18 <=22"
+    "node": ">=20 <=22"
   },
   "nodemon": {
     "watch": [
@@ -25,6 +25,8 @@
     "@aws-sdk/client-s3": "3.596.0",
     "@clickhouse/client": "1.4.0",
     "@faker-js/faker": "8.4.1",
+    "@modelcontextprotocol/node": "2.0.0",
+    "@modelcontextprotocol/server": "2.0.0",
     "@operational.co/components": "*",
     "@operational.co/lib": "*",
     "@operational.co/sdk": "*",
@@ -57,7 +59,8 @@
     "stripe": "15.10.0",
     "systeminformation": "5.25.11",
     "uuid": "10.0.0",
-    "web-push": "3.6.6"
+    "web-push": "3.6.6",
+    "zod": "4.6.5"
   },
   "imports": {
     "#services/*": "./services/*",

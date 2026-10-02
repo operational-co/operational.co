@@ -154,6 +154,9 @@ class Ingestion {
     let test = payload.test || false;
     test = !!test;
 
+    let muted = payload.muted || false;
+    muted = !!muted;
+
     let avatar = payload.avatar || null;
 
     if (typeof avatar !== "string") {
@@ -186,6 +189,7 @@ class Ingestion {
       actions: payload.actions || null,
       _apikey: apikey,
       notify,
+      muted,
       test,
       category,
       contextId,
@@ -465,6 +469,7 @@ class Ingestion {
       "content",
       "actions",
       "notify",
+      "muted",
       "test",
       "contextId",
       "contextType",

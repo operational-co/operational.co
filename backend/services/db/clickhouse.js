@@ -4,84 +4,91 @@ import { performance } from "perf_hooks";
 import Clickhouse from "#services/clickhouse/index.js";
 
 const clickhouse = {
-  async find(params) {
-    const table = "Events";
-    const ch = Clickhouse.getCh();
-    const take = config.events.take;
-    let where = [`workspaceId = '${params.workspaceId}'`, `contextType = 0`];
+  buildEventQuery(params, direction = "older") {
+    const where = [
+      "workspaceId = {workspaceId:UInt32}",
+      `contextType = ${params.hasContextStart ? (params.contextStart ? 0 : 1) : 0}`,
+      "test = {test:UInt8}",
+      "muted = {muted:UInt8}",
+    ];
+    const queryParams = {
+      workspaceId: Number(params.workspaceId),
+      test: params.test ? 1 : 0,
+      muted: params.muted ? 1 : 0,
+    };
 
-    if (params.test) {
-      where.push(`test = 1`);
-    } else {
-      where.push(`test = 0`);
-    }
-
-    if (params.query && typeof params.query === "string") {
-      let q = params.query.toLowerCase();
-      where.push(`lowerUTF8(searchable) LIKE '%${q}%'`);
+    if (params.query) {
+      where.push("positionCaseInsensitiveUTF8(ifNull(searchable, ''), {search:String}) > 0");
+      queryParams.search = params.query;
     }
 
     if (params.category) {
-      where.push(`category = '${params.category}'`);
+      where.push("category = {category:String}");
+      queryParams.category = params.category;
     }
 
-    if (params.cursor) {
-      let initialEvent = await this.findOne(params.cursor, params.test);
-      let clause = `(createdAt < '${initialEvent.createdAt}')`;
-      where.push(clause);
+    if (params.mentions && params.mentions.length) {
+      where.push("userId IN {mentions:Array(String)}");
+      queryParams.mentions = params.mentions;
     }
 
-    where = `WHERE ${where.join(" AND ")}`;
+    if (params.contextId) {
+      where.push("contextId = {contextId:String}");
+      queryParams.contextId = params.contextId;
+    }
 
-    let query = `SELECT DISTINCT ON (id) * FROM ${table} ${where} ORDER BY createdAt DESC LIMIT ${take}`;
+    if (params.cursorCreatedAt) {
+      const operator = direction === "newer" ? ">" : "<";
+      const idOperator = direction === "newer" ? ">" : "<";
+      where.push(
+        `(createdAt ${operator} toDateTime64({cursorCreatedAt:String}, 3) OR (createdAt = toDateTime64({cursorCreatedAt:String}, 3) AND id ${idOperator} {cursorId:String}))`,
+      );
+      queryParams.cursorCreatedAt = params.cursorCreatedAt;
+      queryParams.cursorId = params.cursorId;
+    }
 
-    const resultSet = await ch.query({
-      query: query,
-      format: "JSONEachRow",
-    });
+    return {
+      where: where.join(" AND "),
+      queryParams,
+    };
+  },
 
-    // const explainSet = await ch.query({
-    // 	query: `EXPLAIN ${query}`,
-    // 	format: "JSON",
-    // });
-
-    // const explainResults = await explainSet.json();
-
-    const results = await resultSet.json();
-
-    let contexts = [];
+  async attachContexts(results, workspaceId, testMode) {
+    const contextIds = [];
 
     for (let i = 0; i < results.length; i++) {
-      let res = results[i];
-
-      if (res.contextId) {
-        contexts.push(res.contextId);
+      const item = results[i];
+      if (
+        Number(item.contextType) === 0 &&
+        item.contextId &&
+        !contextIds.includes(item.contextId)
+      ) {
+        contextIds.push(item.contextId);
       }
     }
 
-    if (contexts.length > 0) {
-      contexts = await this.findContexts(
-        {
-          contexts: contexts,
-          workspaceId: params.workspaceId,
-        },
-        params.test,
-      );
+    if (!contextIds.length) {
+      return results;
+    }
 
-      if (contexts.length > 0) {
-        for (let i = 0; i < results.length; i++) {
-          let res = results[i];
+    const contexts = await this.findContexts(
+      {
+        contexts: contextIds,
+        workspaceId,
+      },
+      testMode,
+    );
 
-          res.contexts = [];
+    for (let i = 0; i < results.length; i++) {
+      const item = results[i];
+      if (!item.contextId || Number(item.contextType) !== 0) {
+        continue;
+      }
 
-          // interpolate contexts into res;
-          if (res.contextId) {
-            for (let j = 0; j < contexts.length; j++) {
-              if (contexts[j].contextId === res.contextId) {
-                res.contexts.push(contexts[j]);
-              }
-            }
-          }
+      item.contexts = [];
+      for (let j = 0; j < contexts.length; j++) {
+        if (contexts[j].contextId === item.contextId) {
+          item.contexts.push(contexts[j]);
         }
       }
     }
@@ -89,87 +96,71 @@ const clickhouse = {
     return results;
   },
 
+  async find(params) {
+    const table = "Events";
+    const ch = Clickhouse.getCh();
+    const take = params.take || config.events.take;
+
+    if (params.cursor) {
+      const initialEvent = await this.findOne(
+        params.cursor,
+        params.test,
+        params.workspaceId,
+        false,
+      );
+      if (!initialEvent) {
+        return [];
+      }
+      params.cursorCreatedAt = moment
+        .utc(initialEvent.createdAt)
+        .format("YYYY-MM-DD HH:mm:ss.SSS");
+      params.cursorId = initialEvent.id;
+    }
+
+    const filter = this.buildEventQuery(params, "older");
+    const query = `SELECT DISTINCT ON (id) * FROM ${table} WHERE ${filter.where} ORDER BY createdAt DESC, id DESC LIMIT ${take} OFFSET ${params.skip || 0}`;
+
+    const resultSet = await ch.query({
+      query,
+      query_params: filter.queryParams,
+      format: "JSONEachRow",
+    });
+    const results = await resultSet.json();
+    return await this.attachContexts(results, params.workspaceId, params.test);
+  },
+
   async findLatest(params) {
     const table = "Events";
     const ch = Clickhouse.getCh();
-    const take = config.events.take;
-    let where = [`workspaceId = '${params.workspaceId}'`, `contextType = 0`];
-
-    if (params.test) {
-      where.push(`test = 1`);
-    } else {
-      where.push(`test = 0`);
-    }
-
-    if (params.query && typeof params.query === "string") {
-      let q = params.query.toLowerCase();
-      where.push(`lowerUTF8(searchable) LIKE '%${q}%'`);
-    }
-
-    if (params.category) {
-      where.push(`category = '${params.category}'`);
-    }
+    const take = params.take || config.events.take;
 
     if (params.cursor) {
-      let initialEvent = await this.findOne(params.cursor);
-
-      if (initialEvent) {
-        let clause = `(createdAt > '${initialEvent.createdAt}')`;
-        where.push(clause);
-      } else {
-        console.log(params.cursor);
+      const initialEvent = await this.findOne(
+        params.cursor,
+        params.test,
+        params.workspaceId,
+        false,
+      );
+      if (!initialEvent) {
+        return [];
       }
+      params.cursorCreatedAt = moment
+        .utc(initialEvent.createdAt)
+        .format("YYYY-MM-DD HH:mm:ss.SSS");
+      params.cursorId = initialEvent.id;
     }
 
-    where = `WHERE ${where.join(" AND ")}`;
-
-    let query = `SELECT DISTINCT ON (id) * FROM ${table} ${where} ORDER BY createdAt ASC LIMIT ${take}`;
+    const filter = this.buildEventQuery(params, "newer");
+    const query = `SELECT DISTINCT ON (id) * FROM ${table} WHERE ${filter.where} ORDER BY createdAt ASC, id ASC LIMIT ${take} OFFSET ${params.skip || 0}`;
 
     const resultSet = await ch.query({
-      query: query,
+      query,
+      query_params: filter.queryParams,
       format: "JSONEachRow",
     });
 
     const results = await resultSet.json();
-
-    let contexts = [];
-
-    for (let i = 0; i < results.length; i++) {
-      let res = results[i];
-
-      if (res.contextId) {
-        contexts.push(res.contextId);
-      }
-    }
-
-    if (contexts.length > 0) {
-      contexts = await this.findContexts(
-        {
-          contexts: contexts,
-          workspaceId: params.workspaceId,
-        },
-        params.test,
-      );
-
-      if (contexts.length > 0) {
-        for (let i = 0; i < results.length; i++) {
-          let res = results[i];
-
-          res.contexts = [];
-
-          // interpolate contexts into res;
-          if (res.contextId) {
-            for (let j = 0; j < contexts.length; j++) {
-              if (contexts[j].contextId === res.contextId) {
-                res.contexts.push(contexts[j]);
-              }
-            }
-          }
-        }
-      }
-    }
-
-    return results;
+    return await this.attachContexts(results, params.workspaceId, params.test);
   },
 
   async getCategories(params) {
@@ -203,22 +194,21 @@ WHERE workspaceId = '${params.workspaceId}'
 
   async findContexts(params, testMode = false) {
     const ch = Clickhouse.getCh();
-    let take = 100;
+    const contexts = Array.isArray(params.contexts) ? params.contexts : [];
 
-    let contexts = params.contexts.map((ctx) => {
-      return `'${ctx}'`;
-    });
+    if (!contexts.length || !params.workspaceId) {
+      return [];
+    }
 
-    let contextIds = `contextId IN (${contexts.join(",")})`;
-
-    let where = [`workspaceId = '${params.workspaceId}'`, `contextType = 1`, contextIds];
-
-    where = `WHERE ${where.join(" AND ")}`;
-
-    let query = `SELECT DISTINCT ON (id) * FROM Events ${where} ORDER BY createdAt ASC LIMIT ${take}`;
+    const query = `SELECT DISTINCT ON (id) * FROM Events WHERE workspaceId = {workspaceId:UInt32} AND contextType = 1 AND test = {test:UInt8} AND contextId IN {contextIds:Array(String)} ORDER BY createdAt ASC, id ASC LIMIT 500`;
 
     const resultSet = await ch.query({
-      query: query,
+      query,
+      query_params: {
+        workspaceId: Number(params.workspaceId),
+        test: testMode ? 1 : 0,
+        contextIds: contexts,
+      },
       format: "JSONEachRow",
     });
 
@@ -227,18 +217,39 @@ WHERE workspaceId = '${params.workspaceId}'
     return results;
   },
 
-  async findOne(id, testMode = false) {
+  async findOne(id, testMode = false, workspaceId, includeContexts = true) {
     const ch = Clickhouse.getCh();
-    let query = `SELECT * FROM Events WHERE id = '${id}'`;
+    const where = ["id = {id:String}", "test = {test:UInt8}"];
+    const queryParams = {
+      id: String(id || ""),
+      test: testMode ? 1 : 0,
+    };
+
+    if (workspaceId != null && workspaceId !== "") {
+      where.push("workspaceId = {workspaceId:UInt32}");
+      queryParams.workspaceId = Number(workspaceId);
+    }
+
+    const query = `SELECT DISTINCT ON (id) * FROM Events WHERE ${where.join(" AND ")} ORDER BY version DESC LIMIT 1`;
     const resultSet = await ch.query({
-      query: query,
+      query,
+      query_params: queryParams,
       format: "JSONEachRow",
     });
 
     const dataset = await resultSet.json();
 
     if (dataset[0]) {
-      return dataset[0];
+      if (!includeContexts) {
+        return dataset[0];
+      }
+
+      const results = await this.attachContexts(
+        [dataset[0]],
+        dataset[0].workspaceId,
+        testMode,
+      );
+      return results[0] || null;
     } else {
       return null;
     }
@@ -249,6 +260,7 @@ WHERE workspaceId = '${params.workspaceId}'
     if (payload._id) {
       delete payload._id;
     }
+    delete payload.contexts;
 
     payload.version++;
 

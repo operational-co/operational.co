@@ -29,3 +29,15 @@
 - public contains files that are exposed by the router for public viewing(eg, logos, banners, etc). Used as filestorage if r2 isn't specified
 - services contain self-contained logic bits, eg email(handles email sending), storage(handles file storage), etc.
 - test is temporarily for now
+
+## MCP server
+
+The authenticated, read-only MCP endpoint is `POST /mcp`. OAuth discovery is exposed at the standard `/.well-known/oauth-authorization-server` and `/.well-known/oauth-protected-resource/mcp` URLs.
+
+Available tools:
+
+- `operational_events_context`
+- `operational_find_events`
+- `operational_get_event`
+
+Production deployments must set public `API_URL` and `APP_URL` values. Set `MCP_OAUTH_SECRET` to a stable random secret; it falls back to `SECRET` when omitted. Run the Prisma migration before enabling MCP.

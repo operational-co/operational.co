@@ -101,6 +101,46 @@ const api = {
       throw err;
     }
   },
+  surrounding: async function (params = {}) {
+    params = JSON.parse(JSON.stringify(params));
+    const eventId = params.id;
+    delete params.id;
+
+    const options = {
+      params: {
+        ...params,
+      },
+    };
+
+    try {
+      const res = await http.get(`/events/${eventId}/surrounding`, options);
+      return res.data || null;
+    } catch (err) {
+      throw err;
+    }
+  },
+};
+
+const mergeEvents = function (groups) {
+  const items = [];
+  const ids = {};
+
+  for (let i = 0; i < groups.length; i++) {
+    const group = groups[i] || [];
+
+    for (let j = 0; j < group.length; j++) {
+      const item = group[j];
+
+      if (!item || !item.id || ids[item.id]) {
+        continue;
+      }
+
+      ids[item.id] = true;
+      items.push(item);
+    }
+  }
+
+  return items;
 };
 
 const config = {
@@ -127,6 +167,17 @@ export const useEventsStore = defineStore(config.name, {
 
       latestLock: false,
       latestParamsVersion: 0,
+
+      mode: "latest",
+      anchorEventId: null,
+      surroundingMuted: false,
+      surroundingPageSize: 20,
+      hasNewer: false,
+      hasOlder: false,
+      loadingNewer: false,
+      loadingOlder: false,
+      surroundingRequestVersion: 0,
+      savedTimeline: null,
     };
   },
   getters: {
@@ -147,6 +198,7 @@ export const useEventsStore = defineStore(config.name, {
 
     reset: function () {
       this.latestParamsVersion += 1;
+      this.surroundingRequestVersion += 1;
 
       const payload = {
         skip: 0,
@@ -164,6 +216,14 @@ export const useEventsStore = defineStore(config.name, {
       };
 
       this.resources = [];
+      this.mode = "latest";
+      this.anchorEventId = null;
+      this.surroundingMuted = false;
+      this.hasNewer = false;
+      this.hasOlder = false;
+      this.loadingNewer = false;
+      this.loadingOlder = false;
+      this.savedTimeline = null;
     },
 
     clear: function () {
@@ -232,6 +292,10 @@ export const useEventsStore = defineStore(config.name, {
     },
 
     getLatest: async function () {
+      if (this.mode === "surrounding") {
+        return;
+      }
+
       if (this.latestLock) {
         console.log("Denied because of lock");
         return;
@@ -360,6 +424,187 @@ export const useEventsStore = defineStore(config.name, {
       return event;
     },
 
+    showSurrounding: async function (eventId, scrollTop = 0) {
+      if (!eventId) {
+        return null;
+      }
+
+      if (this.mode !== "surrounding") {
+        this.savedTimeline = {
+          resources: this.resources.slice(),
+          skip: this.skip,
+          take: this.take,
+          cursor: this.cursor,
+          query: this.query,
+          category: this.category,
+          mentions: this.mentions.slice(),
+          muted: this.muted,
+          scrollTop,
+        };
+      }
+
+      this.latestParamsVersion += 1;
+      this.surroundingRequestVersion += 1;
+
+      const requestVersion = this.surroundingRequestVersion;
+      this.mode = "surrounding";
+      this.anchorEventId = eventId;
+      this.hasNewer = false;
+      this.hasOlder = false;
+      this.loadingNewer = false;
+      this.loadingOlder = false;
+
+      const result = await api
+        .surrounding({
+          id: eventId,
+          take: this.surroundingPageSize,
+        })
+        .catch((err) => null);
+
+      if (requestVersion !== this.surroundingRequestVersion) {
+        return null;
+      }
+
+      if (!result || !result.anchor) {
+        this.leaveSurrounding();
+        return false;
+      }
+
+      this.anchorEventId = result.anchor.id;
+      this.surroundingMuted = !!result.anchor.muted;
+      this.hasNewer = !!result.hasNewer;
+      this.hasOlder = !!result.hasOlder;
+      this.resources = mergeEvents([
+        result.newer,
+        [result.anchor],
+        result.older,
+      ]);
+
+      return result;
+    },
+
+    loadSurroundingNewer: async function () {
+      if (
+        this.mode !== "surrounding" ||
+        this.loadingNewer ||
+        !this.hasNewer ||
+        !this.resources.length
+      ) {
+        return [];
+      }
+
+      this.loadingNewer = true;
+      const requestVersion = this.surroundingRequestVersion;
+      const firstEvent = this.resources[0];
+
+      try {
+        let events = await api
+          .latest({
+            cursor: firstEvent.id,
+            muted: this.surroundingMuted,
+          })
+          .catch((err) => null);
+
+        if (
+          requestVersion !== this.surroundingRequestVersion ||
+          this.mode !== "surrounding"
+        ) {
+          return [];
+        }
+
+        if (!events) {
+          return [];
+        }
+
+        this.hasNewer = events.length > this.surroundingPageSize;
+        events = events.slice(0, this.surroundingPageSize).reverse();
+        this.resources = mergeEvents([events, this.resources]);
+
+        return events;
+      } finally {
+        if (requestVersion === this.surroundingRequestVersion) {
+          this.loadingNewer = false;
+        }
+      }
+    },
+
+    loadSurroundingOlder: async function () {
+      if (
+        this.mode !== "surrounding" ||
+        this.loadingOlder ||
+        !this.hasOlder ||
+        !this.resources.length
+      ) {
+        return [];
+      }
+
+      this.loadingOlder = true;
+      const requestVersion = this.surroundingRequestVersion;
+      const lastEvent = this.resources[this.resources.length - 1];
+
+      try {
+        let events = await api
+          .refresh({
+            cursor: lastEvent.id,
+            muted: this.surroundingMuted,
+          })
+          .catch((err) => null);
+
+        if (
+          requestVersion !== this.surroundingRequestVersion ||
+          this.mode !== "surrounding"
+        ) {
+          return [];
+        }
+
+        if (!events) {
+          return [];
+        }
+
+        this.hasOlder = events.length > this.surroundingPageSize;
+        events = events.slice(0, this.surroundingPageSize);
+        this.resources = mergeEvents([this.resources, events]);
+
+        return events;
+      } finally {
+        if (requestVersion === this.surroundingRequestVersion) {
+          this.loadingOlder = false;
+        }
+      }
+    },
+
+    leaveSurrounding: function () {
+      this.latestParamsVersion += 1;
+      this.surroundingRequestVersion += 1;
+
+      const savedTimeline = this.savedTimeline;
+
+      this.mode = "latest";
+      this.anchorEventId = null;
+      this.surroundingMuted = false;
+      this.hasNewer = false;
+      this.hasOlder = false;
+      this.loadingNewer = false;
+      this.loadingOlder = false;
+      this.savedTimeline = null;
+
+      if (!savedTimeline) {
+        this.resources = [];
+        return null;
+      }
+
+      this.resources = savedTimeline.resources;
+      this.skip = savedTimeline.skip;
+      this.take = savedTimeline.take;
+      this.cursor = savedTimeline.cursor;
+      this.query = savedTimeline.query;
+      this.category = savedTimeline.category;
+      this.mentions = savedTimeline.mentions;
+      this.muted = savedTimeline.muted;
+
+      return savedTimeline;
+    },
+
     doAction: async function (action) {
       let event = null;
 
@@ -396,6 +641,16 @@ export const useEventsStore = defineStore(config.name, {
           return r;
         }
       });
+
+      if (this.savedTimeline) {
+        this.savedTimeline.resources = this.savedTimeline.resources.map((r) => {
+          if (r.id === res.id) {
+            return res;
+          }
+
+          return r;
+        });
+      }
 
       return true;
     },

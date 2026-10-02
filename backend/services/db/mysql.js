@@ -4,34 +4,12 @@ import moment from "moment";
 import config from "#lib/config.js";
 
 const mysql = {
-  escapeSqlValue(value = "") {
-    return String(value).replace(/\\/g, "\\\\").replace(/'/g, "''");
-  },
-
   escapeLikeValue(value = "") {
-    return this.escapeSqlValue(value).replace(/%/g, "\\%").replace(/_/g, "\\_");
+    return String(value).replace(/\\/g, "\\\\").replace(/%/g, "\\%").replace(/_/g, "\\_");
   },
 
   async cleanParams(params) {
-    let skip = params.skip || 0;
-    let take = params.take || 20;
-    let query = params.query || "";
-    let test = params.test || false;
-    let cursor = params.cursor || null;
-    let category = params.category || null;
-    let workspaceId = params.workspaceId || undefined;
-
-    let newParams = {
-      skip,
-      take,
-      query,
-      test,
-      cursor,
-      category,
-      workspaceId,
-    };
-
-    return newParams;
+    return params || {};
   },
 
   async getResults(sql) {
@@ -49,219 +27,172 @@ const mysql = {
     return results;
   },
 
-  async find(params) {
-    params = await this.cleanParams(params);
+  getEventSelect() {
+    return {
+      id: true,
+      workspaceId: true,
+      userId: true,
+      name: true,
+      actions: true,
+      avatar: true,
+      content: true,
+      type: true,
+      muted: true,
+      test: true,
+      notify: true,
+      searchable: true,
+      contextId: true,
+      contextType: true,
+      createdAt: true,
+      errors: true,
+      category: true,
+    };
+  },
 
-    let tableName = "Events";
-    let mode = `BOOLEAN`;
-    let testMode = "";
+  buildWhere(params) {
+    const where = {
+      workspaceId: Number(params.workspaceId),
+      contextType: params.hasContextStart ? (params.contextStart ? 0 : 1) : 0,
+      test: !!params.test,
+      muted: !!params.muted,
+    };
 
-    if (params.test) {
-      testMode = `AND e.test = 1`;
-    }
-
-    let select = `
-		SELECT
-			b.id,
-      b.name,
-      b.createdAt,
-      b.workspaceId,
-      b.content,
-      b.type,
-      b.actions,
-      b.avatar,
-      b.test,
-			b.errors,
-			b.category,
-			b.contextId,
-			b.contextType,
-
-			(
-		    CASE 
-		      WHEN b.contextId IS NOT NULL THEN (
-		        SELECT JSON_ARRAYAGG(
-		          JSON_OBJECT(
-		            'id', e.id,
-		            'name', e.name,
-		            'createdAt', e.createdAt,
-		            'content', e.content,
-		            'type', e.type,
-		            'actions', e.actions,
-		            'avatar', e.avatar,
-		            'test', e.test,
-		            'errors', e.errors,
-		            'category', e.category,
-		            'contextId', e.contextId,
-		            'contextType', e.contextType
-		          )
-		        )
-		        FROM ${tableName} e
-		        WHERE
-		          e.workspaceId = b.workspaceId
-		          AND e.contextType = 1
-		          AND e.contextId = b.contextId
-							${testMode}
-		      )
-		      ELSE NULL
-		    END
-		  ) AS contexts
-		`;
-
-    let where = [`workspaceId = ${params.workspaceId}`, `contextType = 0`];
-
-    if (params.test) {
-      where.push(`test = 1`);
-    } else {
-      where.push(`test = 0`);
-    }
-
-    if (params.query && typeof params.query === "string") {
-      const q = params.query.toLowerCase().trim();
-      if (q) {
-        const escapedQuery = this.escapeLikeValue(q);
-        where.push(`LOWER(COALESCE(b.searchable, '')) LIKE '%${escapedQuery}%' ESCAPE '\\\\'`);
-      }
+    if (params.query) {
+      where.searchable = {
+        contains: this.escapeLikeValue(params.query),
+      };
     }
 
     if (params.category) {
-      const escapedCategory = this.escapeSqlValue(params.category);
-      where.push(`category = '${escapedCategory}'`);
+      where.category = params.category;
     }
 
-    if (params.cursor) {
-      let initialEvent = await this.findOne(params.cursor);
+    if (params.mentions && params.mentions.length) {
+      where.userId = {
+        in: params.mentions,
+      };
+    }
 
-      const createdAt = new Date(initialEvent.createdAt)
-        .toISOString()
-        .replace("T", " ")
-        .replace("Z", "");
+    if (params.contextId) {
+      where.contextId = params.contextId;
+    }
 
-      if (initialEvent) {
-        let clause = `(createdAt < '${createdAt}')`;
-        where.push(clause);
-      } else {
-        //console.log(params.cursor);
+    return where;
+  },
+
+  async attachContexts(results, workspaceId, testMode) {
+    const contextIds = [];
+
+    for (let i = 0; i < results.length; i++) {
+      const item = results[i];
+      if (
+        item.contextType === 0 &&
+        item.contextId &&
+        !contextIds.includes(item.contextId)
+      ) {
+        contextIds.push(item.contextId);
       }
     }
 
-    where = `WHERE ${where.join(" AND ")}`;
+    if (!contextIds.length) {
+      return results;
+    }
 
-    let orderBy = `
-    ORDER BY b.createdAt DESC
-		`;
+    const contexts = await this.findContexts(
+      {
+        contexts: contextIds,
+        workspaceId,
+      },
+      testMode,
+    );
 
-    let sql = `
-			${select}
-    FROM ${tableName} b
-		${where} 
-		${orderBy}
-		LIMIT ${params.take} OFFSET ${params.skip};
-		`;
+    for (let i = 0; i < results.length; i++) {
+      const item = results[i];
+      if (!item.contextId || item.contextType !== 0) {
+        continue;
+      }
 
-    sql = format(sql, {
-      language: "mysql",
-      tabWidth: 2,
-      linesBetweenQueries: 2,
-    });
-
-    //console.log(sql);
-    console.time("sql");
-    let results = await this.getResults(sql);
-    console.timeEnd("sql");
-    //console.log(results);
-
-    results = await this.cleanResults(results);
+      item.contexts = [];
+      for (let j = 0; j < contexts.length; j++) {
+        if (contexts[j].contextId === item.contextId) {
+          item.contexts.push(contexts[j]);
+        }
+      }
+    }
 
     return results;
   },
 
-  async findLatest(params) {
+  async find(params) {
     params = await this.cleanParams(params);
-
-    let tableName = "Events";
-    let mode = `BOOLEAN`;
-
-    let select = `
-		SELECT
-			b.id,
-      b.name,
-      b.createdAt,
-      b.workspaceId,
-      b.content,
-      b.type,
-      b.actions,
-      b.avatar,
-      b.test,
-			b.errors,
-			b.category,
-			b.contextId,
-			b.contextType
-		`;
-
-    let where = [`workspaceId = ${params.workspaceId}`, `contextType = 0`];
-
-    if (params.test) {
-      where.push(`test = 1`);
-    } else {
-      where.push(`test = 0`);
-    }
-
-    if (params.query && typeof params.query === "string") {
-      const q = params.query.toLowerCase().trim();
-      if (q) {
-        const escapedQuery = this.escapeLikeValue(q);
-        where.push(`LOWER(COALESCE(b.searchable, '')) LIKE '%${escapedQuery}%' ESCAPE '\\\\'`);
-      }
-    }
-
-    if (params.category) {
-      const escapedCategory = this.escapeSqlValue(params.category);
-      where.push(`category = '${escapedCategory}'`);
-    }
+    const where = this.buildWhere(params);
 
     if (params.cursor) {
-      let initialEvent = await this.findOne(params.cursor);
+      const initialEvent = await this.findOne(
+        params.cursor,
+        params.test,
+        params.workspaceId,
+        false,
+      );
 
-      const createdAt = new Date(initialEvent.createdAt)
-        .toISOString()
-        .replace("T", " ")
-        .replace("Z", "");
-
-      if (initialEvent) {
-        let clause = `(createdAt > '${createdAt}')`;
-        where.push(clause);
-      } else {
-        console.log(params.cursor);
+      if (!initialEvent) {
+        return [];
       }
+
+      where.OR = [
+        { createdAt: { lt: initialEvent.createdAt } },
+        {
+          createdAt: initialEvent.createdAt,
+          id: { lt: initialEvent.id },
+        },
+      ];
     }
 
-    where = `WHERE ${where.join(" AND ")}`;
-
-    let orderBy = `
-    ORDER BY b.createdAt ASC
-		`;
-
-    let sql = `
-			${select}
-    FROM ${tableName} b
-		${where} 
-		${orderBy}
-		LIMIT ${params.take} OFFSET ${params.skip};
-		`;
-
-    sql = format(sql, {
-      language: "mysql",
-      tabWidth: 2,
-      linesBetweenQueries: 2,
+    const results = await prisma.events.findMany({
+      where,
+      select: this.getEventSelect(),
+      orderBy: [{ createdAt: "desc" }, { id: "desc" }],
+      skip: params.skip,
+      take: params.take,
     });
 
-    //console.log(sql);
+    return await this.attachContexts(results, params.workspaceId, params.test);
+  },
 
-    let results = await this.getResults(sql);
+  async findLatest(params) {
+    params = await this.cleanParams(params);
+    const where = this.buildWhere(params);
 
-    results = await this.cleanResults(results);
+    if (params.cursor) {
+      const initialEvent = await this.findOne(
+        params.cursor,
+        params.test,
+        params.workspaceId,
+        false,
+      );
 
-    return results;
+      if (!initialEvent) {
+        return [];
+      }
+
+      where.OR = [
+        { createdAt: { gt: initialEvent.createdAt } },
+        {
+          createdAt: initialEvent.createdAt,
+          id: { gt: initialEvent.id },
+        },
+      ];
+    }
+
+    const results = await prisma.events.findMany({
+      where,
+      select: this.getEventSelect(),
+      orderBy: [{ createdAt: "asc" }, { id: "asc" }],
+      skip: params.skip,
+      take: params.take,
+    });
+
+    return await this.attachContexts(results, params.workspaceId, params.test);
   },
 
   async getEventCount(payload) {
@@ -397,19 +328,61 @@ WHERE workspaceId = ${params.workspaceId}
     return results;
   },
 
-  async findOne(id) {
-    const tableName = "Events";
-    const query = `SELECT * FROM ${tableName} WHERE id = "${id}" LIMIT 1`;
+  async findContexts(params, testMode = false) {
+    const contextIds = Array.isArray(params.contexts) ? params.contexts : [];
 
-    const res = await prisma.$queryRawUnsafe(query);
-    return res[0] || null;
+    if (!contextIds.length || !params.workspaceId) {
+      return [];
+    }
+
+    return await prisma.events.findMany({
+      where: {
+        workspaceId: Number(params.workspaceId),
+        contextType: 1,
+        contextId: {
+          in: contextIds,
+        },
+        test: !!testMode,
+      },
+      select: this.getEventSelect(),
+      orderBy: [{ createdAt: "asc" }, { id: "asc" }],
+      take: 500,
+    });
+  },
+
+  async findOne(id, testMode = false, workspaceId, includeContexts = true) {
+    const where = {
+      id: String(id || ""),
+      test: !!testMode,
+    };
+
+    if (workspaceId != null && workspaceId !== "") {
+      where.workspaceId = Number(workspaceId);
+    }
+
+    const result = await prisma.events.findFirst({
+      where,
+      select: this.getEventSelect(),
+    });
+
+    if (!result) {
+      return null;
+    }
+
+    if (!includeContexts) {
+      return result;
+    }
+
+    const results = await this.attachContexts([result], result.workspaceId, result.test);
+    return results[0] || null;
   },
 
   async updateOne(payload) {
     let id = payload.id;
     delete payload.id;
+    delete payload.contexts;
 
-    let res = await prisma.Events.update({
+    let res = await prisma.events.update({
       where: {
         id,
       },

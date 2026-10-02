@@ -7,11 +7,15 @@ import config from "#lib/config.js";
 // Create a new router instance
 const router = express.Router();
 
+const headerIsTrue = function (value) {
+	return value === true || value === "true" || value === 1 || value === "1";
+};
+
 const action = async (req, res) => {
 	let params = {};
 
-	const testMode = req.headers["x-test"] || false;
-	params.testMode = !!testMode;
+	params.testMode = headerIsTrue(req.headers["x-test"]);
+	params.workspaceId = res.locals.user.primaryWorkspace;
 
 	try {
 		let event = await component.doAction(
@@ -46,8 +50,9 @@ const get = async (req, res) => {
 		...req.query,
 	};
 
-	const testMode = req.headers["x-test"] || false;
-	params.test = !!testMode;
+	if (req.headers["x-test"] != null) {
+		params.test = headerIsTrue(req.headers["x-test"]);
+	}
 
 	if (params["mentions[]"]) {
 		params.mentions = params["mentions[]"];
@@ -69,8 +74,9 @@ const getLatest = async (req, res) => {
 		...req.query,
 	};
 
-	const testMode = req.headers["x-test"] || false;
-	params.test = !!testMode;
+	if (req.headers["x-test"] != null) {
+		params.test = headerIsTrue(req.headers["x-test"]);
+	}
 
 	if (params["mentions[]"]) {
 		params.mentions = params["mentions[]"];
@@ -88,13 +94,14 @@ const getLatest = async (req, res) => {
 };
 
 const getOne = async (req, res) => {
-	console.log("trigger");
 	let params = {
 		...req.query,
+		id: req.params.id,
 	};
 
-	const testMode = req.headers["x-test"] || false;
-	params.test = !!testMode;
+	if (req.headers["x-test"] != null) {
+		params.test = headerIsTrue(req.headers["x-test"]);
+	}
 
 	if (params["mentions[]"]) {
 		params.mentions = params["mentions[]"];
@@ -109,6 +116,31 @@ const getOne = async (req, res) => {
 	});
 
 	return res.send(event);
+};
+
+const getSurrounding = async (req, res) => {
+	let params = {
+		...req.query,
+		id: req.params.id,
+	};
+
+	if (req.headers["x-test"] != null) {
+		params.test = headerIsTrue(req.headers["x-test"]);
+	}
+
+	params.workspaceId = res.locals.user.primaryWorkspace;
+
+	const events = await component.findSurrounding(params).catch((err) => {
+		throw err;
+	});
+
+	if (!events) {
+		return res.status(404).send({
+			message: "Event not found",
+		});
+	}
+
+	return res.send(events);
 };
 
 const actionSchema = {
@@ -196,6 +228,8 @@ router.get(
 router.get("/", middlewareAuth, middlewareSchema(getSchema), get);
 
 router.post("/action", middlewareAuth, middlewareSchema(actionSchema), action);
+
+router.get("/:id/surrounding", middlewareAuth, getSurrounding);
 
 router.get("/:id", middlewareAuth, middlewareSchema(getOneSchema), getOne);
 

@@ -19,16 +19,10 @@ import ModalClose from "./modal-close.vue";
 import { VueFinalModal } from "vue-final-modal";
 
 export default {
-  components: {
-    ModalClose,
-    VueFinalModal
-  },
+  components: { ModalClose, VueFinalModal },
 
   data: function () {
-    return {
-      modalActive: false,
-      title: "Test modal"
-    };
+    return { modalActive: false, title: "Test modal" };
   },
 
   watch: {
@@ -41,22 +35,10 @@ export default {
   },
 
   props: {
-    klass: {
-      type: String,
-      default: ""
-    },
-    type: {
-      type: String,
-      default: ""
-    },
-    active: {
-      type: Boolean,
-      default: false
-    },
-    closeable: {
-      type: Boolean,
-      default: true
-    }
+    klass: { type: String, default: "" },
+    type: { type: String, default: "" },
+    active: { type: Boolean, default: false },
+    closeable: { type: Boolean, default: true }
   },
 
   computed: {

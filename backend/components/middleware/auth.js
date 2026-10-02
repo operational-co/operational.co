@@ -36,7 +36,7 @@ async function auth(req, res, next) {
 
 	if (!decoded) {
 		console.log("Unauthorized - invalid signature");
-		res.status(401).send({ error: "Unauthorized - invalid signature" });
+		return res.status(401).send({ error: "Unauthorized - invalid signature" });
 	}
 
 	const sid = decoded.sid;

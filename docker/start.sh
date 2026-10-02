@@ -8,16 +8,17 @@ echo "🤖 Operational DockerFile setup"
 # Function to print environment variables
 print_env_vars() {
   echo "🔧 Environment Variables:"
-  echo "  DATABASE_URL=$DATABASE_URL" 
+  if [ -n "$DATABASE_URL" ]; then echo "  DATABASE_URL=[set]"; else echo "  DATABASE_URL=[unset]"; fi
   echo "  VITE_API_URL=$VITE_API_URL"
   echo "  VITE_PUSH_SERVER_KEY=$VITE_PUSH_SERVER_KEY"
   echo "  APP_URL=$APP_URL"
   echo "  VAPID_EMAIL=$VAPID_EMAIL"
   echo "  VAPID_PUBLIC_KEY=$VAPID_PUBLIC_KEY"
-  echo "  VAPID_PRIVATE_KEY=$VAPID_PRIVATE_KEY"
-  echo "  RESEND=$RESEND"
+  if [ -n "$VAPID_PRIVATE_KEY" ]; then echo "  VAPID_PRIVATE_KEY=[set]"; else echo "  VAPID_PRIVATE_KEY=[unset]"; fi
+  if [ -n "$RESEND" ]; then echo "  RESEND=[set]"; else echo "  RESEND=[unset]"; fi
   echo "  PORT=$PORT"
-  echo "  SECRET=$SECRET"
+  if [ -n "$SECRET" ]; then echo "  SECRET=[set]"; else echo "  SECRET=[unset]"; fi
+  if [ -n "$MCP_OAUTH_SECRET" ]; then echo "  MCP_OAUTH_SECRET=[set]"; else echo "  MCP_OAUTH_SECRET=[unset; uses SECRET]"; fi
   echo "  ADMIN_EMAIL=$ADMIN_EMAIL"
   echo "  REMOVE_EVENTS_AFTER=$REMOVE_EVENTS_AFTER"
   echo "  REMOVE_TEST_EVENTS_AFTER=$REMOVE_TEST_EVENTS_AFTER"
@@ -57,7 +58,7 @@ cd /monorepo/backend
 # Generate SECRET if needed
 if [ -z "$SECRET" ]; then
   export SECRET=$(openssl rand -base64 32)
-  echo "🔐 Generated SECRET: $SECRET"
+  echo "🔐 Generated SECRET for this container"
 else
   echo "🔐 Using provided SECRET"
 fi

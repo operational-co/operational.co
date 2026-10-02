@@ -26,6 +26,8 @@ import Playground from "../components/pages/playground.vue";
 import Offline from "../components/pages/offline.vue";
 
 import Styleguide from "../components/pages/styleguide.vue";
+import OauthConsent from "../components/pages/oauth-consent.vue";
+import Mcp from "../components/pages/mcp.vue";
 
 import { useUserStore } from "@/store/user.js";
 import { useAppStore } from "@/store/app.js";
@@ -134,6 +136,19 @@ const routes = [
     path: "/styleguide",
     name: "Styleguide",
     component: Styleguide,
+  },
+  {
+    path: "/mcp",
+    name: "MCP",
+    component: Mcp,
+  },
+  {
+    path: "/oauth/authorize",
+    name: "OAuth authorization",
+    component: OauthConsent,
+    meta: {
+      standalone: true,
+    },
   },
 ];
 

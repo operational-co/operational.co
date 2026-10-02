@@ -6,25 +6,51 @@
     <Constrain size="xx">
       <section class="c-events__header">
         <h3>Events</h3>
-        <Toggle :listening="effectiveListening" @onToggle="onToggle"></Toggle>
-        <TestMode></TestMode>
+        <Toggle
+          v-if="!surroundingMode"
+          :listening="effectiveListening"
+          @onToggle="onToggle"
+        ></Toggle>
+        <TestMode v-if="!surroundingMode"></TestMode>
       </section>
-      <div class="c-events__inner">
-        <Sidebar @onCategorySelected="onCategorySelected"></Sidebar>
+      <section class="c-events__surrounding" v-if="surroundingMode">
+        <span>
+          Viewing events around {{ anchorDate }}. Search and category filters are paused.
+        </span>
+        <button class="btn" type="button" @click="onReturnLatest">Return to latest</button>
+      </section>
+      <div :class="['c-events__inner', { around: surroundingMode }]">
+        <Sidebar
+          v-if="!surroundingMode"
+          @onCategorySelected="onCategorySelected"
+        ></Sidebar>
         <main @click="onListClick">
           <Search
+            v-if="!surroundingMode"
             ref="search"
             v-model:value="query"
             v-model:archive="showArchive"
             @onClear="onClear"
             @onCategorySelected="onCategorySelected"
           ></Search>
+          <div
+            class="c-events__sentinel"
+            ref="surroundingTop"
+            v-if="surroundingMode"
+          ></div>
           <transition-group name="list" tag="div">
             <div
               :class="[
                 'c-events__wrapper',
                 { date: item && item.type === 'date' },
                 { log: item && item.type !== 'date' },
+                {
+                  anchor:
+                    surroundingMode &&
+                    item &&
+                    item.type !== 'date' &&
+                    item.id === anchorEventId,
+                },
               ]"
               :data-id="item.id"
               v-for="(item, i) in computedItems"
@@ -45,8 +71,14 @@
               </div>
             </div>
           </transition-group>
-          <Bottom v-if="hasEnded && items.length > 0"></Bottom>
+          <div
+            class="c-events__sentinel"
+            ref="surroundingBottom"
+            v-if="surroundingMode"
+          ></div>
+          <Bottom v-if="!surroundingMode && hasEnded && items.length > 0"></Bottom>
           <Empty
+            v-if="!surroundingMode"
             :items="items"
             :loaded="loaded"
             :query="query"
@@ -64,7 +96,12 @@
       @onClose="modalConfirmActive = false"
     >
     </ModalConfirm>
-    <ModalView :active="!!modalView" :eventId="modalView" @onClose="modalView = false"></ModalView>
+    <ModalView
+      :active="!!modalView"
+      :eventId="modalView"
+      @onClose="modalView = false"
+      @onShowSurrounding="onModalShowSurrounding"
+    ></ModalView>
   </div>
 </template>
 
@@ -122,12 +159,19 @@ export default {
 
       intervalId: null,
       listeningInterval: 4000,
+
+      surroundingObserver: null,
+      latestHasEnded: false,
     };
   },
 
   watch: {
     lock: function () {},
     query: function () {
+      if (this.surroundingMode) {
+        return;
+      }
+
       if (!this.hasActiveSearch) {
         this.listening = true;
       }
@@ -135,10 +179,31 @@ export default {
       this.processQuery();
     },
     showArchive: function () {
+      if (this.surroundingMode) {
+        return;
+      }
+
       this.processQuery();
     },
     testMode: function () {
+      if (this.surroundingMode) {
+        return;
+      }
+
       this.onClear();
+    },
+    "$route.query.around": function (eventId) {
+      if (!this.loaded) {
+        return;
+      }
+
+      if (eventId) {
+        if (!this.surroundingMode || eventId !== this.anchorEventId) {
+          this.onShowSurrounding(eventId, false);
+        }
+      } else if (this.surroundingMode) {
+        this.leaveSurrounding(false);
+      }
     },
   },
 
@@ -147,7 +212,24 @@ export default {
       return typeof this.query === "string" && this.query.trim().length > 0;
     },
     effectiveListening: function () {
-      return this.listening && !this.hasActiveSearch;
+      return this.listening && !this.hasActiveSearch && !this.surroundingMode;
+    },
+    surroundingMode: function () {
+      return this.$store.events.mode === "surrounding";
+    },
+    anchorEventId: function () {
+      return this.$store.events.anchorEventId;
+    },
+    anchorDate: function () {
+      for (let i = 0; i < this.items.length; i++) {
+        const item = this.items[i];
+
+        if (item.id === this.anchorEventId) {
+          return moment(item.createdAt).format("MMM Do, h:mm a");
+        }
+      }
+
+      return "selected event";
     },
     testMode: function () {
       return this.$store.app.testMode;
@@ -226,6 +308,10 @@ export default {
 
   methods: {
     onListClick: function () {
+      if (this.surroundingMode) {
+        return;
+      }
+
       if (this.listening) {
         this.listening = false;
       }
@@ -238,15 +324,27 @@ export default {
       }
     },
     onCategorySelected: function (e) {
+      if (this.surroundingMode) {
+        return;
+      }
+
       console.log(e);
       this.category = e;
       this.processQuery();
     },
     onEventNameSearch: function (name) {
+      if (this.surroundingMode || !this.$refs.search) {
+        return;
+      }
+
       this.$store.app.sendNotification(`Searching for "${name}"`);
       this.$refs.search.setValue(name);
     },
     processQuery: function () {
+      if (this.surroundingMode) {
+        return;
+      }
+
       console.log("processing query");
       let params = {};
       params.query = this.query;
@@ -269,7 +367,175 @@ export default {
       this.currentAction = e;
       this.modalConfirmActive = true;
     },
+    onModalShowSurrounding: function (eventId) {
+      this.modalView = false;
+      this.onShowSurrounding(eventId);
+    },
+    onShowSurrounding: async function (eventId, updateRoute = true) {
+      if (!eventId) {
+        return;
+      }
+
+      const container = document.querySelector(".c-app__body");
+      const scrollTop = container ? container.scrollTop : 0;
+
+      if (!this.surroundingMode) {
+        this.latestHasEnded = this.hasEnded;
+      }
+
+      this.removeSurroundingObserver();
+      this.$store.app.setLoading(true);
+
+      const result = await this.$store.events.showSurrounding(eventId, scrollTop);
+
+      if (result === null) {
+        return;
+      }
+
+      this.$store.app.setLoading(false);
+
+      if (!result) {
+        this.$store.app.sendNotification("Event could not be found");
+
+        if (this.$route.query.around) {
+          const failedQuery = {
+            ...this.$route.query,
+          };
+          delete failedQuery.around;
+          this.$router.replace({
+            path: this.$route.path,
+            query: failedQuery,
+          });
+        }
+
+        return;
+      }
+
+      this.hasEnded = false;
+      await this.scrollToEvent(result.anchor, true);
+      this.setupSurroundingObserver();
+
+      if (updateRoute && this.$route.query.around !== result.anchor.id) {
+        const query = {
+          ...this.$route.query,
+          around: result.anchor.id,
+        };
+        delete query.eventId;
+
+        this.$router.push({
+          path: this.$route.path,
+          query,
+        });
+      }
+    },
+    onReturnLatest: function () {
+      this.leaveSurrounding(true);
+    },
+    leaveSurrounding: async function (updateRoute = true) {
+      this.removeSurroundingObserver();
+      this.$store.app.setLoading(false);
+
+      const savedTimeline = this.$store.events.leaveSurrounding();
+      this.hasEnded = this.latestHasEnded;
+
+      if (savedTimeline) {
+        await this.$nextTick();
+        const container = document.querySelector(".c-app__body");
+
+        if (container) {
+          container.scrollTop = savedTimeline.scrollTop || 0;
+        }
+      } else {
+        await this.loadInit();
+      }
+
+      if (updateRoute && this.$route.query.around) {
+        const query = {
+          ...this.$route.query,
+        };
+        delete query.around;
+
+        this.$router.replace({
+          path: this.$route.path,
+          query,
+        });
+      }
+    },
+    setupSurroundingObserver: function () {
+      this.removeSurroundingObserver();
+
+      this.$nextTick(() => {
+        if (!this.surroundingMode) {
+          return;
+        }
+
+        const container = document.querySelector(".c-app__body");
+        const top = this.$refs.surroundingTop;
+        const bottom = this.$refs.surroundingBottom;
+
+        if (!container || !top || !bottom) {
+          return;
+        }
+
+        this.surroundingObserver = new IntersectionObserver(
+          (entries) => {
+            for (let i = 0; i < entries.length; i++) {
+              const entry = entries[i];
+
+              if (!entry.isIntersecting) {
+                continue;
+              }
+
+              if (entry.target === top) {
+                this.loadSurroundingNewer();
+              }
+
+              if (entry.target === bottom) {
+                this.loadSurroundingOlder();
+              }
+            }
+          },
+          {
+            root: container,
+            rootMargin: "600px 0px",
+          },
+        );
+
+        this.surroundingObserver.observe(top);
+        this.surroundingObserver.observe(bottom);
+      });
+    },
+    removeSurroundingObserver: function () {
+      if (this.surroundingObserver) {
+        this.surroundingObserver.disconnect();
+        this.surroundingObserver = null;
+      }
+    },
+    loadSurroundingNewer: async function () {
+      const container = document.querySelector(".c-app__body");
+
+      if (!container) {
+        return;
+      }
+
+      const previousHeight = container.scrollHeight;
+      const events = await this.$store.events.loadSurroundingNewer();
+
+      if (!events || !events.length) {
+        return;
+      }
+
+      await this.$nextTick();
+      container.scrollTop += container.scrollHeight - previousHeight;
+    },
+    loadSurroundingOlder: async function () {
+      await this.$store.events.loadSurroundingOlder();
+    },
     onRefresh: function () {
+      if (this.surroundingMode) {
+        return;
+      }
+
       this.onClearButKeepSearchAndCategory();
     },
     onConfirm: function (e) {
@@ -411,29 +677,39 @@ export default {
       await new Promise((r) => setTimeout(r, 100));
       this.lock = false;
     },
-    scrollToEvent: function (event) {
+    scrollToEvent: async function (event, center = false) {
+      await this.$nextTick();
+
       const dataId = event.id;
       const element = document.querySelector(`[data-id="${dataId}"]`);
       const container = document.querySelector(".c-app__body");
 
-      if (!element) {
+      if (!element || !container) {
         return;
       }
 
+      let top = element.offsetTop - 56;
+
+      if (center) {
+        top = element.offsetTop - container.clientHeight / 2 + element.offsetHeight / 2;
+      }
+
+      container.scrollTo({
+        top: Math.max(0, top),
+        behavior: "auto",
+      });
+
+      element.classList.add("flash-highlight");
+
       setTimeout(() => {
-        container.scrollTo({
-          top: element.offsetTop - 56,
-          behaviour: "smooth",
-        });
-
-        element.classList.add("flash-highlight");
-
-        setTimeout(() => {
-          element.classList.remove("flash-highlight");
-        }, 1500);
-      }, 200);
+        element.classList.remove("flash-highlight");
+      }, 1500);
     },
     handleScroll() {
+      if (this.surroundingMode) {
+        return;
+      }
+
       if (this.hasEnded) {
         return;
       }
@@ -460,6 +736,10 @@ export default {
       this.touchstartY = e.touches[0].clientY;
     },
     onTouchMove(e) {
+      if (this.surroundingMode) {
+        return;
+      }
+
       const touchY = e.touches[0].clientY;
       const touchDiff = touchY - this.touchstartY;
       //console.log(touchDiff, window.screenY);
@@ -545,12 +825,18 @@ export default {
 
     await this.loadInit();
 
+    if (this.$route.query.around) {
+      await this.onShowSurrounding(this.$route.query.around, false);
+    }
+
     this.addEventListeners();
 
     this.startInterval();
   },
 
   beforeUnmount() {
+    this.removeSurroundingObserver();
+
     this.removeEventListeners();
 
     this.stopInterval();
@@ -640,6 +926,12 @@ export default {
         animation: flash-bg 1.5s ease-in-out;
       }
     }
+
+    &.anchor {
+      .c-card {
+        box-shadow: 0 0 0 2px hsl(var(--hue-p), 50%, 45%);
+      }
+    }
   }
 
   &__header {
@@ -662,6 +954,31 @@ export default {
   &__inner {
     display: grid;
     grid-template-columns: 240px 1fr;
+
+    &.around {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  &__surrounding {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    margin: 0.75rem 0;
+    padding: 0.75rem;
+    background-color: var(--color-bg-2);
+    border-radius: var(--border-radius);
+    font-size: var(--font-size-sm);
+
+    .btn {
+      flex: none;
+    }
+  }
+
+  &__sentinel {
+    width: 100%;
+    height: 1px;
   }
 
   &__date {
@@ -728,6 +1045,11 @@ export default {
 
     .c-events-sidebar {
       display: none;
+    }
+
+    &__surrounding {
+      align-items: stretch;
+      flex-direction: column;
     }
   }
 }

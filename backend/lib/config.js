@@ -49,6 +49,7 @@ const config = {
   PORT: process.env.PORT || 2000,
   HOST: "0.0.0.0",
   SECRET: process.env.SECRET,
+  MCP_OAUTH_SECRET: process.env.MCP_OAUTH_SECRET || process.env.SECRET,
 
   DATABASE_URL: process.env.DATABASE_URL,
   CLICKHOUSE_URL: process.env.CLICKHOUSE_URL,

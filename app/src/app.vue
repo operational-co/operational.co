@@ -8,14 +8,17 @@
 
     <!-- <TestMode></TestMode> -->
 
-    <Header v-if="isAuth"></Header>
+    <Header v-if="isAuth && !standaloneRoute"></Header>
 
-    <MobileFooter v-if="isAuth && workspace"></MobileFooter>
+    <MobileFooter v-if="isAuth && workspace && !standaloneRoute"></MobileFooter>
 
     <!-- <Sidebar v-if="isAuth"></Sidebar> -->
 
     <div class="c-app__body">
-      <ProjectEmpty v-if="isAuth && !workspace"></ProjectEmpty>
+      <router-view v-if="standaloneRoute" v-slot="{ Component }">
+        <component :is="Component"></component>
+      </router-view>
+      <ProjectEmpty v-else-if="isAuth && !workspace"></ProjectEmpty>
       <router-view v-else-if="isAuth" v-slot="{ Component }">
         <transition name="fade-slide" mode="out-in">
           <component :is="Component"></component>
@@ -162,6 +165,9 @@ export default {
   },
 
   computed: {
+    standaloneRoute: function () {
+      return !!this.$route.meta.standalone;
+    },
     isSelfHosted: function () {
       const condition = this.$store.app.isSelfHosted;
       return condition;
@@ -266,8 +272,10 @@ export default {
         $crisp.push(["do", "chat:hide"]);
       }
 
-      // Also redirect to home
-      this.$router.push("/");
+      // Preserve OAuth request parameters while the login modal is open.
+      if (!this.standaloneRoute) {
+        this.$router.push("/");
+      }
 
       if ("serviceWorker" in navigator && "PushManager" in window) {
         const registration = await navigator.serviceWorker.ready;

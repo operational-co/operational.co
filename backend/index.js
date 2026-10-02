@@ -24,6 +24,7 @@ import websiteRoutes from "#components/website/routes.js";
 import metricRoutes from "#components/metric/routes.js";
 import invoiceRoutes from "#components/invoice/routes.js";
 import dashboardsRoutes from "#components/dashboards/routes.js";
+import mcpRoutes from "#components/mcp/routes.js";
 
 import User from "#components/user/index.js";
 import UserModel from "#components/user/model.js";
@@ -168,6 +169,8 @@ async function setupServer() {
   );
 
   app.use(loggerMiddleware);
+
+  app.use("/", mcpRoutes);
 
   app.use("/api/v1", apiRoutes);
 

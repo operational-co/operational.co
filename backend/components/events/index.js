@@ -12,9 +12,54 @@ const component = {
 	},
 
 	async findOne(params) {
-		const event = await Events.findById(params.id, params.test);
+		const event = await Events.findById(params.id, params.test, params.workspaceId);
 
 		return event;
+	},
+
+	async findSurrounding(params) {
+		let take = Number.parseInt(params.take, 10);
+
+		if (!Number.isInteger(take) || take < 1) {
+			take = 20;
+		}
+
+		take = Math.min(take, 40);
+
+		const anchor = await Events.findById(
+			params.id,
+			params.test,
+			params.workspaceId,
+		);
+
+		if (!anchor || Number(anchor.contextType) !== 0) {
+			return null;
+		}
+
+		const eventParams = {
+			workspaceId: params.workspaceId,
+			test: params.test,
+			muted: anchor.muted,
+			cursor: anchor.id,
+			take: take + 1,
+		};
+
+		let older = await Events.find(eventParams);
+		let newer = await Events.findLatest(eventParams);
+
+		const hasOlder = older.length > take;
+		const hasNewer = newer.length > take;
+
+		older = older.slice(0, take);
+		newer = newer.slice(0, take).reverse();
+
+		return {
+			anchor,
+			newer,
+			older,
+			hasNewer,
+			hasOlder,
+		};
 	},
 
 	async findLatest(params) {
@@ -32,7 +77,7 @@ const component = {
 	async doAction(action, event, params = {}) {
 		const testMode = params.testMode;
 		// first, verify if event exists(sanity check)
-		event = await Events.findById(event.id, event._id, testMode).catch(
+		event = await Events.findById(event.id, testMode, params.workspaceId).catch(
 			(err) => {
 				throw err;
 			},
