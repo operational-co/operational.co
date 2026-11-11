@@ -45,6 +45,10 @@ There are two ways to start using Operational:
 
 📚 Explore our [documentation](https://operational.co/docs/start-here) to learn more about setup and usage.
 
+## ☁️ One-Click Deploy
+
+[![Deploy on RepoCloud](https://d16t0pc4846x52.cloudfront.net/deploylobe.svg)](https://repocloud.io/details/Operational/)
+
 <hr>
 
 ## 🪄 Highlights
